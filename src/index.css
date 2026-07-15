@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+body,
+#root {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  background: #0B0F19;
+}
+.leaflet-control-attribution {
+  display: none !important;
+}
+
+body {
+  overflow-x: hidden;
+}
