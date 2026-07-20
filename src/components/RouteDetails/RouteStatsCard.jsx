@@ -8,6 +8,8 @@ const cards = [
     value: "72%",
     subtitle: "118 km Remaining",
     title: "Trip Progress",
+    bgIcon: "bg-[#FDBB24]/10 border border-[#FDBB24]/20",
+    colorIcon: "text-[#FDBB24]",
     showArrow: false,
   },
   {
@@ -16,6 +18,8 @@ const cards = [
     value: "52 km/h",
     subtitle: "Average: 48 km/h",
     title: "Current Speed",
+    bgIcon: "bg-[#FDBB24]/10 border border-[#FDBB24]/20",
+    colorIcon: "text-[#FDBB24]",
     showArrow: true,
   },
   {
@@ -24,6 +28,8 @@ const cards = [
     value: "1h 24m",
     subtitle: "Expected at 11:25 AM",
     title: "ETA",
+    bgIcon: "bg-[#FDBB24]/10 border border-[#FDBB24]/20",
+    colorIcon: "text-[#FDBB24]",
     showArrow: true,
   },
   {
@@ -32,6 +38,8 @@ const cards = [
     value: "186 km",
     subtitle: "118 km Remaining",
     title: "Distance Travelled",
+    bgIcon: "bg-[#FDBB24]/10 border border-[#FDBB24]/20",
+    colorIcon: "text-[#FDBB24]",
     showArrow: true,
   },
   {
@@ -40,49 +48,49 @@ const cards = [
     value: "2h 18m",
     subtitle: "Started at 08:42 AM",
     title: "Trip Duration",
+    bgIcon: "bg-[#FDBB24]/10 border border-[#FDBB24]/20",
+    colorIcon: "text-[#FDBB24]",
     showArrow: true,
   },
 ];
 
-export default function RouteStatsCards() {
+export default function StatsCards() {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5 mt-0 pt-0 select-none w-full">
+    <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-3 lg:grid-cols-5 gap-2 mt-0 pt-0 select-none w-full shrink-0">
       {cards.map((card, index) => {
         const Icon = card.icon;
 
         return (
           <div
             key={index}
-            className="bg-[#16161a] border border-[#232329] rounded-xl p-3 flex flex-col justify-between hover:border-[#2e2e36] transition-all relative overflow-hidden group cursor-pointer w-full"
+            className="bg-[#121214] border border-[#1d1d20] rounded-lg p-2 flex flex-col justify-between hover:border-[#27272a] transition-all relative overflow-hidden group cursor-pointer w-full"
           >
-            {/* Top Row: Compact Gold/Yellow tinted icons and counts */}
-            <div className="flex items-center gap-3">
-              {/* Icon Container matching the image's deep dark gold/mustard shade */}
-              <div className="w-9 h-9 rounded-lg bg-[#FDBB24]/10 border border-[#FDBB24]/20 flex items-center justify-center shrink-0">
-                <Icon size={16} className="text-[#FDBB24]" />
+            {/* Top Row (Design exact same as before) */}
+            <div className="flex items-center gap-1.5 min-w-0">
+              <div className={`w-7 h-7 rounded-md ${card.bgIcon} flex items-center justify-center shrink-0`}>
+                <Icon size={12} className={card.colorIcon} />
               </div>
 
-              {/* Value & Subtitle */}
-              <div className="leading-tight min-w-0">
-                <h2 className="text-[15px] font-bold text-zinc-100 tracking-tight">
+              <div className="leading-none min-w-0">
+                <h2 className="text-[14px] font-bold text-white tracking-tight">
                   {card.value}
                 </h2>
-                <p className="text-[10px] text-zinc-500 font-medium truncate mt-0.5">
+                <p className="text-[8.5px] text-[#71717a] truncate mt-0.5">
                   {card.subtitle}
                 </p>
               </div>
             </div>
 
-            {/* Footer Row: Clean separation with specific gold variant title */}
-            <div className="flex items-center justify-between w-full pt-2 mt-3 border-t border-zinc-800/40">
-              <span className="text-[10.5px] font-bold text-[#bfa141] tracking-wide">
+            {/* Footer Row (Design exact same as before) */}
+            <div className="flex items-center justify-between w-full pt-1 mt-1 border-t border-[#1d1d20]/30">
+              <span className="text-[9px] font-semibold text-[#bfa141] tracking-wide">
                 {card.title}
               </span>
 
               {card.showArrow && (
                 <ArrowRight
-                  size={12}
-                  className="text-[#bfa141] group-hover:translate-x-0.5 transition-transform stroke-[2.5]"
+                  size={10}
+                  className="text-[#bfa141] group-hover:translate-x-0.5 transition-transform"
                 />
               )}
             </div>

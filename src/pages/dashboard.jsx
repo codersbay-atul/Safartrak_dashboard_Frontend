@@ -8,10 +8,11 @@ import LivePosition from "../components/Dashboard/LivePostion";
 import VehicleDetails from "../components/Dashboard/VehicleDetails";
 import RouteDashboardHeader from "../components/RouteDetails/RouteDashboardHeader";
 import RouteStatsCards from "../components/RouteDetails/RouteStatsCard";
-
-// Humare naye components import karenge
-import FleetDistanceChart from "../components/Analytics/FleetDistanceChart"; 
 import PerformanceSummary from "../components/Analytics/PerformanceSummary"; 
+import FleetPerformanceChart from "../components/Analytics/FleetPerformanceChart";
+import VehicleRouteDetails from "../components/RouteDetails/VehicleRouteDetails";
+import AnalyticsHeader from "../components/Analytics/AnalyticsHeader";
+import AnalyticsStatsCard from "../components/Analytics/AnalyticsStatsCard";
 
 export default function Dashboard() {
   // Tab Management State
@@ -27,6 +28,11 @@ export default function Dashboard() {
     return savedRouteView === "true";
   }); 
 
+  // State to control when the details panel should actually be visible
+  const [showDetailsPanel, setShowDetailsPanel] = useState(() => {
+    return localStorage.getItem("showDetailsPanel") === "true";
+  });
+
   useEffect(() => {
     if (selectedVehicle) {
       localStorage.setItem("selectedVehicle", JSON.stringify(selectedVehicle));
@@ -39,20 +45,31 @@ export default function Dashboard() {
     localStorage.setItem("isRouteView", isRouteView);
   }, [isRouteView]);
 
+  // Sync details panel state with localStorage
+  useEffect(() => {
+    localStorage.setItem("showDetailsPanel", showDetailsPanel);
+  }, [showDetailsPanel]);
+
+  // Handle auto-closing route views when navigating to other sidebar tabs
+  useEffect(() => {
+    if (activeTab !== "Dashboard") {
+      setIsRouteView(false);
+    }
+  }, [activeTab]);
+
   // Dynamic Workspace Content Renderer
   const renderWorkspace = () => {
     switch (activeTab) {
       case "Dashboard":
-        // Purana Dashboard & Route View Code bilkul unaltered rahega
         return isRouteView ? (
-          // PAGE 2: ROUTE DETAILS VIEW
+          // PAGE 2: ROUTE DETAILS VIEW (Continuous dynamic track route layout)
           <div className="flex-1 flex flex-col gap-3 overflow-hidden min-h-0">
             <div className="shrink-0 flex items-center gap-3">
               <button 
                 onClick={() => setIsRouteView(false)}
                 className="px-2.5 py-1 text-[11px] font-bold bg-[#18181b] border border-[#27272a] hover:bg-[#27272a] rounded-md transition-colors cursor-pointer text-[#a1a1aa] hover:text-white"
               >
-                ← Back
+                &larr; Back
               </button>
               <div className="flex-1">
                 <RouteDashboardHeader />
@@ -68,18 +85,19 @@ export default function Dashboard() {
                 <LivePosition selectedVehicle={selectedVehicle} showRoutePath={true} />
               </div>
               <div className="w-[320px] xl:w-87.5 shrink-0 h-full min-h-0 overflow-hidden">
-                <VehicleDetails 
+                <VehicleRouteDetails 
                   vehicle={selectedVehicle} 
                   onClose={() => {
                     setSelectedVehicle(null);
                     setIsRouteView(false);
+                    setShowDetailsPanel(false);
                   }} 
                 />
               </div>
             </div>
           </div>
         ) : (
-          // PAGE 1: VEHICLE DIRECTORY VIEW
+          // PAGE 1: VEHICLE DIRECTORY VIEW (Normal Directory layout)
           <div className="flex-1 flex flex-col gap-3 overflow-hidden min-h-0">
             <div className="shrink-0">
               <DashboardHeader />
@@ -89,19 +107,33 @@ export default function Dashboard() {
             </div>
 
             <div className="flex flex-row gap-3.5 items-stretch w-full flex-1 min-h-0 overflow-hidden">
-              <div className="w-90 xl:w-95 shrink-0 h-full min-h-0 overflow-hidden">
-                <VehicleList onSelectVehicle={(v) => setSelectedVehicle(v)} />
+              {/* Vehicle List Section */}
+              <div className={`h-full min-h-0 overflow-hidden transition-all duration-300
+                ${selectedVehicle && showDetailsPanel 
+                  ? "flex-1 min-w-0" 
+                  : "w-90 xl:w-95 shrink-0"}`}>
+                <VehicleList 
+                  onSelectVehicle={(v) => {
+                    setSelectedVehicle(v);
+                    setShowDetailsPanel(true);
+                  }} 
+                />
               </div>
 
+              {/* Map Section */}
               <div className="flex-1 min-w-0 h-full min-h-0 overflow-hidden">
-                <LivePosition selectedVehicle={selectedVehicle} />
+                <LivePosition selectedVehicle={selectedVehicle} showRoutePath={false} />
               </div>
 
-              {selectedVehicle && (
+              {/* Vehicle Details Panel */}
+              {selectedVehicle && showDetailsPanel && (
                 <div className="w-75 xl:w-[320px] shrink-0 h-full min-h-0 overflow-hidden animate-in slide-in-from-right-5 duration-300">
                   <VehicleDetails 
                     vehicle={selectedVehicle} 
-                    onClose={() => setSelectedVehicle(null)} 
+                    onClose={() => {
+                      setSelectedVehicle(null);
+                      setShowDetailsPanel(false);
+                    }} 
                     onViewRoute={() => setIsRouteView(true)} 
                   />
                 </div>
@@ -111,14 +143,27 @@ export default function Dashboard() {
         );
 
       case "Analytics":
-        // Naya extracted components layout jo click karne par seamless load hoga
         return (
-          <div className="flex flex-col lg:flex-row gap-4 w-full h-full min-h-0 overflow-y-auto">
-            <div className="flex-1 min-w-0 h-full">
-              <FleetDistanceChart />
+          // FIX: Added DashboardHeader, responsive stats grid wrapper, and charts section inside Analytics tab
+          <div className="flex-1 flex flex-col gap-3.5 min-h-0 overflow-y-auto lg:overflow-hidden pr-0.5">
+            {/* Header section explicitly handled first */}
+            <div className="shrink-0">
+              <AnalyticsHeader/>
             </div>
-            <div className="w-full lg:w-[380px] xl:w-[420px] shrink-0">
-              <PerformanceSummary />
+            
+            {/* Standard Dashboard Stats Cards for continuous performance alignment */}
+            <div className="shrink-0">
+              <AnalyticsStatsCard/>
+            </div>
+
+            {/* Graphics Chart Panels Grid Wrapper */}
+            <div className="flex flex-col lg:flex-row gap-3.5 w-full flex-1 min-h-0 items-stretch">
+              <div className="flex-1 min-w-0 bg-[#16161a] border border-[#1f1f23] rounded-xl p-3 h-full min-h-[300px] lg:min-h-0">
+                <FleetPerformanceChart />
+              </div>
+              <div className="w-full lg:w-[360px] xl:w-[400px] shrink-0 h-full">
+                <PerformanceSummary />
+              </div>
             </div>
           </div>
         );
@@ -135,7 +180,7 @@ export default function Dashboard() {
   return (
     <div className="flex h-screen w-screen bg-[#09090b] text-white overflow-hidden select-none">
       
-      {/* 1. SIDEBAR (Sidebar ko state variables bypass kar rahe hain) */}
+      {/* 1. SIDEBAR */}
       <div className="h-full shrink-0 z-50 bg-[#121214]">
         <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
       </div>
@@ -143,7 +188,7 @@ export default function Dashboard() {
       {/* MAIN WORKSPACE */}
       <div className="flex flex-1 flex-col min-w-0 h-full overflow-hidden">
         
-        {/* 2. NAVBAR (Always static inside the workflow) */}
+        {/* 2. NAVBAR */}
         <Navbar isRouteView={isRouteView} activeTab={activeTab} />
 
         {/* 3. DYNAMIC INSIDE WORKSPACE RENDERER */}

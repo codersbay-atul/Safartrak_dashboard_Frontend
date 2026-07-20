@@ -18,7 +18,7 @@ const cards = [
     dotColor: "bg-[#00b4d8]",
     value: "41",
     subtitle: "69% of Total Fleet",
-    title: "Active Vehicles",
+    title: "Active",
     bgIcon: "bg-[#032d1d] border border-[#054d31]",
     colorIcon: "text-[#10b981]",
     showArrow: true,
@@ -49,7 +49,7 @@ const cards = [
     id: "no-gps",
     icon: Ban,
     value: "3",
-    subtitle: "Last Sync: 12 sec ago",
+    subtitle: "Last Sync: 12s ago",
     title: "No GPS",
     bgIcon: "bg-[#0c1a30] border border-[#14325c]",
     colorIcon: "text-[#3b82f6]",
@@ -59,47 +59,44 @@ const cards = [
 
 export default function StatsCards() {
   return (
-    // mt-0 se vertical alignment bilkul upar ho jayegi aur spacing tight ho gayi hai
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5 mt-0 pt-0 select-none w-full">
+    <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-3 lg:grid-cols-5 gap-2 mt-0 pt-0 select-none w-full shrink-0">
       {cards.map((card, index) => {
         const Icon = card.icon;
 
         return (
           <div
             key={index}
-            className="bg-[#121214] border border-[#1d1d20] rounded-xl p-2.5 flex flex-col justify-between hover:border-[#27272a] transition-all relative overflow-hidden group cursor-pointer w-full"
+            className="bg-[#121214] border border-[#1d1d20] rounded-lg p-2 flex flex-col justify-between hover:border-[#27272a] transition-all relative overflow-hidden group cursor-pointer w-full"
           >
-            {/* Top Row: Compact icons and counts */}
-            <div className="flex items-center gap-2">
-              {/* Icon Container (Shrinked to w-8 h-8) */}
-              <div className={`w-8 h-8 rounded-lg ${card.bgIcon} flex items-center justify-center shrink-0`}>
+            {/* Top Row */}
+            <div className="flex items-center gap-1.5 min-w-0">
+              <div className={`w-7 h-7 rounded-md ${card.bgIcon} flex items-center justify-center shrink-0`}>
                 {card.isDot ? (
-                  <span className={`w-2 h-2 rounded-full ${card.dotColor}`} />
+                  <span className={`w-1.5 h-1.5 rounded-full ${card.dotColor}`} />
                 ) : (
-                  <Icon size={14} className={card.colorIcon} />
+                  <Icon size={12} className={card.colorIcon} />
                 )}
               </div>
 
-              {/* Value & Subtitle with tight leading */}
               <div className="leading-none min-w-0">
-                <h2 className="text-[16px] font-bold text-white tracking-tight">
+                <h2 className="text-[14px] font-bold text-white tracking-tight">
                   {card.value}
                 </h2>
-                <p className="text-[9.5px] text-[#71717a] truncate mt-0.5">
+                <p className="text-[8.5px] text-[#71717a] truncate mt-0.5">
                   {card.subtitle}
                 </p>
               </div>
             </div>
 
-            {/* Footer Row: Space adjusted from pt-1.5 to pt-1 */}
+            {/* Footer Row */}
             <div className="flex items-center justify-between w-full pt-1 mt-1 border-t border-[#1d1d20]/30">
-              <span className="text-[10px] font-semibold text-[#a16207] tracking-wide">
+              <span className="text-[9px] font-semibold text-[#a16207] tracking-wide">
                 {card.title}
               </span>
 
               {card.showArrow && (
                 <ArrowRight
-                  size={11}
+                  size={10}
                   className="text-[#a16207] group-hover:translate-x-0.5 transition-transform"
                 />
               )}

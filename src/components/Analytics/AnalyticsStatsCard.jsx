@@ -5,33 +5,33 @@ const cards = [
   {
     id: "trip-progress",
     icon: Truck,
-    value: "72%",
-    subtitle: "118 km Remaining",
-    title: "Trip Progress",
+    value: "3,248 km",
+    subtitle: "+8.4% vs previous period",
+    title: "Fleet Distance",
     showArrow: false,
   },
   {
     id: "current-speed",
     icon: Gauge,
-    value: "52 km/h",
-    subtitle: "Average: 48 km/h",
-    title: "Current Speed",
+    value: "186 hrs",
+    subtitle: "+5.2% vs previous period",
+    title: "Running Time",
     showArrow: true,
   },
   {
     id: "eta",
     icon: Clock,
-    value: "1h 24m",
-    subtitle: "Expected at 11:25 AM",
-    title: "ETA",
+    value: "42 hrs",
+    subtitle: "-12% vs previous period",
+    title: "Idle Time",
     showArrow: true,
   },
   {
     id: "distance-travelled",
     icon: Route,
-    value: "186 km",
-    subtitle: "118 km Remaining",
-    title: "Distance Travelled",
+    value: "18 hrs",
+    subtitle: "-4.8% vs previous period",
+    title: "Halt Time",
     showArrow: true,
   },
   {
@@ -44,7 +44,7 @@ const cards = [
   },
 ];
 
-export default function RouteStatsCards() {
+export default function AnalyticsStatsCard() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5 mt-0 pt-0 select-none w-full">
       {cards.map((card, index) => {

@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+/* =========================
+    Global
+========================= */
+
 body,
 #root {
   width: 100%;
@@ -7,10 +11,90 @@ body,
   margin: 0;
   background: #0B0F19;
 }
+
+body {
+  overflow-x: hidden;
+}
+
 .leaflet-control-attribution {
   display: none !important;
 }
 
-body {
+/* =========================
+    Premium Scrollbar (For Vehicle List, etc.)
+========================= */
+
+.custom-scrollbar {
+  overflow-y: auto;
   overflow-x: hidden;
+
+  /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(156, 163, 175, 0.25) transparent;
+}
+
+/* Width */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+/* Hide arrows (Ensures no arrow is displayed anywhere) */
+.custom-scrollbar::-webkit-scrollbar-button,
+.custom-scrollbar::-webkit-scrollbar-button:single-button,
+.custom-scrollbar::-webkit-scrollbar-button:double-button,
+.custom-scrollbar::-webkit-scrollbar-button:start,
+.custom-scrollbar::-webkit-scrollbar-button:end {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* Transparent Track */
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent !important;
+
+  /* Makes scrollbar look shorter and vertically centered */
+  margin-block: 45px;
+  border-radius: 999px;
+}
+
+/* Thumb - Default state is subtle and merges with dark bg */
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(156, 163, 175, 0.15); /* Clean, ultra-subtle grey */
+  transition: background .25s ease;
+
+  /* Minimum height of the scrollbar pill */
+  min-height: 35px;
+}
+
+/* Hover - Glow-free premium grey highlight */
+.custom-scrollbar:hover::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.35);
+}
+
+/* Active drag state */
+.custom-scrollbar::-webkit-scrollbar-thumb:active {
+  background: rgba(156, 163, 175, 0.55);
+}
+
+/* Corner */
+.custom-scrollbar::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* =========================
+    Clean No-Scrollbar (For Sidebar navigation)
+========================= */
+
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;  /* Chrome, Safari, Opera */
+  width: 0 !important;
+  height: 0 !important;
 }
