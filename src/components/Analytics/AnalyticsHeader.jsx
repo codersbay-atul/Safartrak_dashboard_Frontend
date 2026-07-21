@@ -18,7 +18,6 @@ export default function AnalyticsHeader() {
       {/* Right Actions Area */}
       <div className="flex flex-wrap items-center gap-2 w-full md:w-auto shrink-0 justify-start sm:justify-end">
         
-        {/* Search Bar - Icon on Right side */}
         <div className="relative flex-1 sm:flex-initial min-w-36">
           <input
             type="text"
@@ -31,7 +30,7 @@ export default function AnalyticsHeader() {
           />
         </div>
 
-        {/* Dropdown Selector */}
+       
         <div className="relative flex-1 sm:flex-initial">
           <button className="w-full sm:w-auto flex items-center justify-between gap-4 px-3 py-1 text-[10.5px] rounded-2xl bg-[#18181b]/40 border border-[#27272a] text-[#d4d4d8] hover:border-zinc-600 transition-colors cursor-pointer">
             <span>All Vehicles (59)</span>
@@ -39,7 +38,7 @@ export default function AnalyticsHeader() {
           </button>
         </div>
 
-        {/* Export Data Button (Yellow Filled) */}
+      
         <button className="flex items-center justify-center gap-1.5 flex-1 sm:flex-initial px-3 py-1 rounded-md bg-[#FDBB24] text-black font-bold text-[10.5px] hover:bg-[#E9AE17] transition-colors shadow-sm whitespace-nowrap cursor-pointer">
           Export Data
           <Download size={12} strokeWidth={2.5} />

@@ -55,9 +55,8 @@ export default function AnalyticsStatsCard() {
             key={index}
             className="bg-[#16161a] border border-[#232329] rounded-xl p-3 flex flex-col justify-between hover:border-[#2e2e36] transition-all relative overflow-hidden group cursor-pointer w-full"
           >
-            {/* Top Row: Compact Gold/Yellow tinted icons and counts */}
+          
             <div className="flex items-center gap-3">
-              {/* Icon Container matching the image's deep dark gold/mustard shade */}
               <div className="w-9 h-9 rounded-lg bg-[#FDBB24]/10 border border-[#FDBB24]/20 flex items-center justify-center shrink-0">
                 <Icon size={16} className="text-[#FDBB24]" />
               </div>
@@ -73,7 +72,7 @@ export default function AnalyticsStatsCard() {
               </div>
             </div>
 
-            {/* Footer Row: Clean separation with specific gold variant title */}
+        
             <div className="flex items-center justify-between w-full pt-2 mt-3 border-t border-zinc-800/40">
               <span className="text-[10.5px] font-bold text-[#bfa141] tracking-wide">
                 {card.title}

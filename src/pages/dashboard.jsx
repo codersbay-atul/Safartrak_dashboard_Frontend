@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Sidebar from "../components/Sidebar";
-import Navbar from "../components/Navbar";
+import Sidebar from "../layouts/Sidebar";
+import Navbar from "../layouts/Navbar";
 import DashboardHeader from "../components/Dashboard/DashboardHeader";
 import StatsCard from "../components/Dashboard/StatsCard";
 import VehicleList from "../components/Dashboard/VehicleList";
@@ -45,24 +45,24 @@ export default function Dashboard() {
     localStorage.setItem("isRouteView", isRouteView);
   }, [isRouteView]);
 
-  // Sync details panel state with localStorage
+
   useEffect(() => {
     localStorage.setItem("showDetailsPanel", showDetailsPanel);
   }, [showDetailsPanel]);
 
-  // Handle auto-closing route views when navigating to other sidebar tabs
+
   useEffect(() => {
     if (activeTab !== "Dashboard") {
       setIsRouteView(false);
     }
   }, [activeTab]);
 
-  // Dynamic Workspace Content Renderer
+
   const renderWorkspace = () => {
     switch (activeTab) {
       case "Dashboard":
         return isRouteView ? (
-          // PAGE 2: ROUTE DETAILS VIEW (Continuous dynamic track route layout)
+         
           <div className="flex-1 flex flex-col gap-3 overflow-hidden min-h-0">
             <div className="shrink-0 flex items-center gap-3">
               <button 
@@ -97,7 +97,6 @@ export default function Dashboard() {
             </div>
           </div>
         ) : (
-          // PAGE 1: VEHICLE DIRECTORY VIEW (Normal Directory layout)
           <div className="flex-1 flex flex-col gap-3 overflow-hidden min-h-0">
             <div className="shrink-0">
               <DashboardHeader />
@@ -144,19 +143,16 @@ export default function Dashboard() {
 
       case "Analytics":
         return (
-          // FIX: Added DashboardHeader, responsive stats grid wrapper, and charts section inside Analytics tab
           <div className="flex-1 flex flex-col gap-3.5 min-h-0 overflow-y-auto lg:overflow-hidden pr-0.5">
-            {/* Header section explicitly handled first */}
+            
             <div className="shrink-0">
               <AnalyticsHeader/>
             </div>
             
-            {/* Standard Dashboard Stats Cards for continuous performance alignment */}
             <div className="shrink-0">
               <AnalyticsStatsCard/>
             </div>
 
-            {/* Graphics Chart Panels Grid Wrapper */}
             <div className="flex flex-col lg:flex-row gap-3.5 w-full flex-1 min-h-0 items-stretch">
               <div className="flex-1 min-w-0 bg-[#16161a] border border-[#1f1f23] rounded-xl p-3 h-full min-h-[300px] lg:min-h-0">
                 <FleetPerformanceChart />

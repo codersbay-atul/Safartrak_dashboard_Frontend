@@ -4,7 +4,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { Layers, LocateFixed, Maximize2, Plus, Minus } from "lucide-react";
 
-// 1. ACTIVE LIVE TRUCK (Sleek Golden Semi-Truck SVG with Radar Aura)
+
 const activeTruckIcon = L.divIcon({
   className: "custom-leaflet-marker",
   html: `
@@ -27,7 +27,6 @@ const activeTruckIcon = L.divIcon({
   iconAnchor: [24, 24],
 });
 
-// 2. HIGH-TECH DESTINATION TERMINAL BEACON
 const destinationIcon = L.divIcon({
   className: "custom-leaflet-marker",
   html: `
@@ -45,7 +44,7 @@ const destinationIcon = L.divIcon({
   iconAnchor: [19, 38]
 });
 
-// 3. AMBIENT MOVING TRUCK
+
 const ambientMovingIcon = L.divIcon({
   className: "custom-leaflet-marker",
   html: `
@@ -124,7 +123,7 @@ export default function LiveMap({ selectedVehicle, showRoutePath }) {
           attribution='&copy; OpenStreetMap'
         />
         
-        {/* CONDITION-DRIVEN RENDERING (Exact original design is kept 100% intact) */}
+     
         {showRoutePath ? (
           <>
             <Polyline 
@@ -153,9 +152,7 @@ export default function LiveMap({ selectedVehicle, showRoutePath }) {
         )}
       </MapContainer>
 
-      {/* ==========================================
-          2. DYNAMIC HUD PANELS (Now tied strictly to showRoutePath toggle)
-          ========================================== */}
+     
       {showRoutePath ? (
         <>
           {/* Top Right Mini HUD */}

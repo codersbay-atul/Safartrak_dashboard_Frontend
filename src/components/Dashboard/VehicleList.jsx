@@ -29,7 +29,6 @@ export default function VehicleList({ onSelectVehicle }) {
         Vehicle List
       </h3>
 
-      {/* Filter Badges - Touch Target & Scroll Optimized for Mobile */}
       <div className="flex items-center gap-1 overflow-x-auto pb-1.5 mb-2 shrink-0 no-scrollbar flex-nowrap sm:flex-wrap">
         {filters.map((filter) => (
           <button

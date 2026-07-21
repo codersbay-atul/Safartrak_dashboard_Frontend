@@ -16,7 +16,7 @@ import {
   Calendar 
 } from 'lucide-react';
 
-// FIX 1: Sidebar tab mapping system register kiya taaki icons dynamic response dein
+
 const iconMap = {
   "Dashboard": LayoutDashboard,
   "Analytics": BarChart3,
@@ -34,25 +34,23 @@ const iconMap = {
 };
 
 export default function Navbar({ activeTab, isRouteView }) {
-  // Current tab ke icon ko map se uthaya, agar kuch na mile toh fallback default dashboard icon
   const ActiveIcon = iconMap[activeTab] || LayoutDashboard;
 
   return (
     <header className="flex items-center justify-between px-3 sm:px-6 py-2.5 border-b border-[#1f1f23] bg-[#09090b] sticky top-0 z-30 select-none">
       
-      {/* Left Side: Breadcrumb & Menu Button Spacer */}
       <div className="flex items-center gap-2 text-[11px] text-[#a1a1aa] font-medium tracking-wide min-w-0">
         
-        {/* Mobile menu spacer - Toggle button ke liye space reserve rakhega */}
+      
         <div className="w-10 h-1 shrink-0 lg:hidden" />
 
-        {/* FIX 2: Dynamic matching wrapper logic inject kiya dynamically icons toggle karne ke liye */}
+       
         <ActiveIcon size={14} className="text-[#71717a] shrink-0 transition-all duration-200" />
         
-        {/* Dynamic Text Logic */}
+        
         <div className="flex items-center gap-1.5 min-w-0">
           
-          {/* CASE 1: Agar Dashboard active hai aur Route details view open hai */}
+      
           {activeTab === "Dashboard" && isRouteView ? (
             <>
               <span className="text-[#71717a] cursor-pointer">Dashboard</span>
@@ -62,7 +60,7 @@ export default function Navbar({ activeTab, isRouteView }) {
               </span>
             </>
           ) : (
-            /* CASE 2: Jab normal Dashboard ho ya sidebar ka koi aur feature (Analytics, Reports) active ho */
+           
             <span className="text-white font-semibold truncate">
               {activeTab || "Dashboard"}
             </span>

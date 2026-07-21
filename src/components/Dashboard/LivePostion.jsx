@@ -18,7 +18,7 @@ export default function LivePosition({ selectedVehicle, showRoutePath }) {
 
       {/* 2. Map Container */}
       <div className="flex-1 min-h-0 w-full h-full relative overflow-hidden bg-[#161619]">
-        {/* Yahan prop forward ho raha hai map engine ko control karne ke liye */}
+       
         <LiveMap selectedVehicle={selectedVehicle} showRoutePath={showRoutePath} />
       </div>
 

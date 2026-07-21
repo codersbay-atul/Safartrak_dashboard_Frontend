@@ -5,7 +5,7 @@ export default function SearchInput({
   placeholder = "Search...",
   value,
   onChange,
-  iconPosition = "right", // 'left' or 'right' as seen on active mockups
+  iconPosition = "right", 
   className = "",
   containerClassName = "",
   ...props
