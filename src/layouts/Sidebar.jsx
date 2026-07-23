@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   LayoutDashboard,
   BarChart3,
@@ -19,6 +20,26 @@ import {
 
 export default function Sidebar({ activeTab, setActiveTab }) {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Route path mapping table
+  const routeMap = {
+    "Dashboard": "/",
+    "Analytics": "/analytics",
+    // Inki future routes create kar sakte ho:
+    "Reports": "/reports",
+    "Mobilize / Immobilize": "/mobilize",
+    "Alerts": "/alerts",
+    "Area of Interest (AOI)": "/aoi",
+    "Routes": "/routes",
+    "Trips": "/trips",
+    "Activity": "/activity",
+    "Vehicles": "/vehicles",
+    "Drivers": "/drivers",
+    "Vehicle Details": "/vehicle-details",
+    "Users": "/users",
+  };
 
   const sections = [
     {
@@ -56,6 +77,20 @@ export default function Sidebar({ activeTab, setActiveTab }) {
     },
   ];
 
+  const handleNavigation = (label) => {
+    // 1. Agar state handler pass hua ho toh use update karo
+    if (setActiveTab) {
+      setActiveTab(label);
+    }
+
+    // 2. Real React Router Navigation
+    const path = routeMap[label] || "/";
+    navigate(path);
+
+    // 3. Mobile drawer close karo
+    setIsOpen(false);
+  };
+
   return (
     <>
       {/* 1. Mobile Menu Open Toggle Button */}
@@ -83,13 +118,11 @@ export default function Sidebar({ activeTab, setActiveTab }) {
         className={`fixed lg:static top-0 left-0 z-45 w-61.25 h-screen bg-[#17171C] border-r border-[#2A2A2F] flex flex-col justify-between overflow-hidden select-none py-3 transition-transform duration-300 ease-in-out
           ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}
       >
-        
         {/* Top Header & Navigation Container */}
         <div className="flex flex-col flex-1 min-h-0">
-          
           {/* Brand Logo */}
           <div className="h-8 flex items-center justify-between px-4 mb-2 shrink-0">
-            <h1 className="text-[20px] font-semibold tracking-tight text-white">
+            <h1 className="text-[20px] font-semibold tracking-tight text-white cursor-pointer" onClick={() => navigate("/")}>
               Safar<span className="text-[#F6B100]">Trak</span>
             </h1>
 
@@ -108,7 +141,6 @@ export default function Sidebar({ activeTab, setActiveTab }) {
           <div className="px-4 overflow-hidden flex-1 flex flex-col justify-between">
             {sections.map((section) => (
               <div key={section.title} className="flex flex-col gap-0.5">
-                
                 {/* Category Title */}
                 <h4 className="text-[9px] font-bold tracking-wider uppercase text-[#71717A] mb-0.5">
                   {section.title}
@@ -117,21 +149,20 @@ export default function Sidebar({ activeTab, setActiveTab }) {
                 {/* Navigation buttons */}
                 <div className="space-y-0.5">
                   {section.items.map((item) => {
-                    const isItemActive = item.label === activeTab;
+                    // Check active state via URL path or prop
+                    const targetPath = routeMap[item.label];
+                    const isItemActive =
+                      activeTab === item.label ||
+                      (targetPath && location.pathname === targetPath);
 
                     return (
                       <button
                         key={item.label}
-                        onClick={() => {
-                          if (setActiveTab) {
-                            setActiveTab(item.label);
-                          }
-                          setIsOpen(false);
-                        }}
+                        onClick={() => handleNavigation(item.label)}
                         className={`relative w-full h-7 flex items-center gap-2.5 rounded-md pl-3 transition cursor-pointer
                           ${
                             isItemActive
-                              ? "bg-[#18181B] text-white font-semibold border border-zinc-800/60" 
+                              ? "bg-[#18181B] text-white font-semibold border border-zinc-800/60"
                               : "text-[#D4D4D8] hover:bg-[#232328]/70"
                           }`}
                       >
@@ -140,10 +171,12 @@ export default function Sidebar({ activeTab, setActiveTab }) {
                           <span className="absolute left-0 top-1 h-5 w-0.75 rounded-r bg-[#F6B100]" />
                         )}
 
-                        <item.icon 
-                          size={13} 
-                          className={isItemActive ? "text-[#F6B100]" : "text-[#D4D4D8]"} 
-                          strokeWidth={isItemActive ? 2.5 : 2} 
+                        <item.icon
+                          size={13}
+                          className={
+                            isItemActive ? "text-[#F6B100]" : "text-[#D4D4D8]"
+                          }
+                          strokeWidth={isItemActive ? 2.5 : 2}
                         />
 
                         <span className="text-[10.5px] font-medium truncate">
@@ -153,7 +186,6 @@ export default function Sidebar({ activeTab, setActiveTab }) {
                     );
                   })}
                 </div>
-
               </div>
             ))}
           </div>
@@ -173,7 +205,6 @@ export default function Sidebar({ activeTab, setActiveTab }) {
             <Headphones size={14} className="text-[#A1A1AA]" />
           </div>
         </div>
-
       </aside>
     </>
   );

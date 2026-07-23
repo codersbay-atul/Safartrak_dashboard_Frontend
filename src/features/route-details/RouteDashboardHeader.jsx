@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Search } from "lucide-react";
-import Dropdown from "../Ui/DropDown"
+import Dropdown from "../../components/Ui/DropDown"; // Path verify kar lena (Ui vs ui)
 
 export default function RouteDashboardHeader({ onFilterChange, onSearch }) {
   const [timeFilter, setTimeFilter] = useState("24h");
@@ -35,7 +35,6 @@ export default function RouteDashboardHeader({ onFilterChange, onSearch }) {
     { label: "Express Delivery", value: "express" },
   ];
 
-  // Helper handler
   const handleSelect = (key, value, setter) => {
     setter(value);
     if (onFilterChange) {
@@ -43,26 +42,28 @@ export default function RouteDashboardHeader({ onFilterChange, onSearch }) {
     }
   };
 
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+    if (onSearch) onSearch(e.target.value);
+  };
+
   return (
-    <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 w-full select-none py-2 px-3 bg-[#121214] border border-[#1f1f23]/60 rounded-xl text-white">
-      
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 w-full select-none mt-0 pt-0 shrink-0">
       {/* Left Info Area */}
       <div className="min-w-0">
-        <h1 className="text-sm sm:text-[14px] font-bold text-white tracking-tight leading-tight">
+        <h1 className="text-[15px] sm:text-[17px] font-bold text-white tracking-tight leading-tight">
           Current Route
         </h1>
-        <p className="mt-0.5 text-[9.5px] text-[#71717a] leading-normal truncate">
+        <p className="text-[9px] sm:text-[10px] text-[#a1a1aa] leading-normal truncate max-w-xs sm:max-w-xl">
           Track the selected vehicle's current trip and route progress.
         </p>
       </div>
 
       {/* Right Actions Area */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 shrink-0 w-full md:w-auto">
+      <div className="flex items-center gap-1.5 w-full sm:w-auto shrink-0 justify-between sm:justify-end flex-wrap sm:flex-nowrap">
         
         {/* Custom Dropdown Filters */}
-        <div className="grid grid-cols-2 sm:flex sm:items-center gap-1.5 flex-1 sm:flex-initial">
-          
-          {/* Time Filter */}
+        <div className="flex items-center gap-1 shrink-0 flex-wrap sm:flex-nowrap">
           <Dropdown
             label="Time"
             options={timeOptions}
@@ -70,7 +71,6 @@ export default function RouteDashboardHeader({ onFilterChange, onSearch }) {
             onSelect={(val) => handleSelect("time", val, setTimeFilter)}
           />
 
-          {/* Region Filter */}
           <Dropdown
             label="Region"
             options={regionOptions}
@@ -78,7 +78,6 @@ export default function RouteDashboardHeader({ onFilterChange, onSearch }) {
             onSelect={(val) => handleSelect("region", val, setRegionFilter)}
           />
 
-          {/* Status Filter */}
           <Dropdown
             label="Status"
             options={statusOptions}
@@ -86,31 +85,26 @@ export default function RouteDashboardHeader({ onFilterChange, onSearch }) {
             onSelect={(val) => handleSelect("status", val, setStatusFilter)}
           />
 
-          {/* Fleet Filter */}
           <Dropdown
             label="Fleet"
             options={fleetOptions}
             selectedValue={fleetFilter}
             onSelect={(val) => handleSelect("fleet", val, setFleetFilter)}
           />
-
         </div>
 
-        {/* Search Bar */}
-        <div className="relative w-full sm:w-auto min-w-[130px]">
+        {/* Search Bar Input */}
+        <div className="relative flex-1 sm:flex-initial min-w-0 sm:min-w-[150px]">
+          <Search
+            size={11}
+            className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#71717a] pointer-events-none"
+          />
           <input
             type="text"
             value={searchQuery}
-            onChange={(e) => {
-              setSearchQuery(e.target.value);
-              if (onSearch) onSearch(e.target.value);
-            }}
+            onChange={handleSearchChange}
             placeholder="Search Vehicle..."
-            className="w-full sm:w-36 md:w-40 pl-3 pr-8 py-1.5 text-[10px] sm:text-[10.5px] rounded-full bg-[#161619]/20 border border-[#27272a] placeholder-[#71717a] focus:outline-none focus:border-[#FDBB24] text-white transition-all"
-          />
-          <Search
-            size={11}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#71717a]"
+            className="w-full pl-7 pr-2.5 py-1 text-[10px] rounded-lg bg-[#18181b] border border-[#27272a] placeholder-[#71717a] focus:outline-none focus:border-[#FDBB24] text-white transition-all"
           />
         </div>
 

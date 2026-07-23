@@ -2,7 +2,7 @@ import React from 'react';
 import { ChevronRight } from 'lucide-react';
 import LiveMap from "./LiveMap"; 
 
-export default function LivePosition({ selectedVehicle, showRoutePath }) {
+export default function LivePositions({ selectedVehicle, showRoutePath }) {
   return (
     <div className="w-full h-full min-h-[350px] lg:min-h-0 bg-[#121214] border border-[#1f1f23]/60 rounded-xl flex flex-col select-none overflow-hidden relative">
       

@@ -17,7 +17,7 @@ const vehicles = [
   { id: 6, plate: "MH09XY1234", status: "Idle", statusColor: "text-[#f59e0b]", driver: "Rahul Singh", info: "Stopped 12 min ago", speed: "52 km/h", location: "Pune" },
 ];
 
-export default function VehicleList({ onSelectVehicle }) {
+export default function VehiclesList({ onSelectVehicle }) {
   const [activeFilter, setActiveFilter] = useState("All");
   const [selectedId, setSelectedId] = useState(null);
 

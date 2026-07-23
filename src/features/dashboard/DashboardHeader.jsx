@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Search, SlidersHorizontal, Download, Plus } from "lucide-react";
-import Button from "../Ui/Button";
+import Button from "../../components/Ui/Button";
 
 export default function DashboardHeader({
   userName = "Atul",
@@ -29,7 +29,6 @@ export default function DashboardHeader({
         </p>
       </div>
 
-    
       <div className="flex items-center gap-1.5 w-full sm:w-auto shrink-0 justify-between sm:justify-end">
         
         {/* Search Bar Input */}
@@ -48,7 +47,6 @@ export default function DashboardHeader({
         </div>
 
         <div className="flex items-center gap-1 shrink-0">
-          
           <Button
             variant="secondary"
             size="sm"
@@ -68,7 +66,7 @@ export default function DashboardHeader({
           />
         </div>
 
-    
+        {/* Fixed Add Vehicle Button */}
         <Button
           variant="primary"
           size="sm"
@@ -76,7 +74,7 @@ export default function DashboardHeader({
           onClick={onAddVehicleClick}
           className="font-bold whitespace-nowrap text-[10px]"
         >
-          <span className="hidden xs:inline">Add Vehicle</span>
+          <span>Add Vehicle</span>
         </Button>
 
       </div>

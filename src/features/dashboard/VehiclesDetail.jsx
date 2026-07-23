@@ -1,7 +1,7 @@
 import React from 'react';
 import { RefreshCw, X, Gauge, Fuel, Battery, ShieldCheck, Milestone, Waypoints, Clock, MapPin, Radio, Key, Calendar } from 'lucide-react';
 
-export default function VehicleDetails({ vehicle, onViewRoute, onClose }) {
+export default function VehiclesDetail({ vehicle, onViewRoute, onClose }) {
   return (
     <div className="w-full h-full bg-[#16161a] border border-[#1f1f23] rounded-xl p-3 flex flex-col justify-between select-none overflow-hidden">
       
