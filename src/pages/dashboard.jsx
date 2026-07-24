@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
 import MainLayout from "../layouts/MainLayout";
 import RouteDashboardHeader from "../features/route-details/RouteDashboardHeader";
+import TripStatsCard from "../features/route-details/TripStatsCard";
 import LivePosition from "../features/dashboard/LivePositions";
 import VehicleRouteDetails from "../features/route-details/VehicleRouteDetails";
 import StatsCard from "../features/dashboard/StatsCard";
-import VehiclesList from "../features/dashboard/VehiclesList";
-import LivePositions from "../features/dashboard/LivePositions";
-import VehiclesDetail from "../features/dashboard/VehiclesDetail";
+import FleetHealthOverview from "../features/dashboard/FleetHealthOverview";
 import DashboardHeader from "../features/dashboard/DashboardHeader";
+import {
+  FleetInsightsCenterColumn,
+  FleetInsightsRightColumn,
+} from "../features/dashboard/FleetInsightsPanel";
 
 export default function Dashboard() {
   const [selectedVehicle, setSelectedVehicle] = useState(() => {
@@ -57,7 +60,7 @@ export default function Dashboard() {
           </div>
 
           <div className="shrink-0">
-            <Tr />
+            <TripStatsCard />
           </div>
 
           <div className="flex flex-row gap-3.5 items-stretch w-full flex-1 min-h-0 overflow-hidden">
@@ -86,39 +89,38 @@ export default function Dashboard() {
             <StatsCard/>
           </div>
 
-          <div className="flex flex-row gap-3.5 items-stretch w-full flex-1 min-h-0 overflow-hidden">
-            <div
-              className={`h-full min-h-0 overflow-hidden transition-all duration-300 ${
-                selectedVehicle && showDetailsPanel
-                  ? "flex-1 min-w-0"
-                  : "w-90 xl:w-95 shrink-0"
-              }`}
-            >
-              <VehiclesList
-                onSelectVehicle={(v) => {
-                  setSelectedVehicle(v);
-                  setShowDetailsPanel(true);
+          <div className="grid grid-cols-[37%_1fr] gap-3.5 w-full flex-1 min-h-0 overflow-hidden">
+            <div className="h-full min-h-0 overflow-hidden">
+              <FleetHealthOverview />
+            </div>
+
+            <div className="grid grid-cols-[1.4fr_1fr] gap-3.5 h-full min-h-0 overflow-hidden min-w-0">
+              <div className="h-full min-h-0 overflow-hidden">
+                <FleetInsightsCenterColumn />
+              </div>
+
+              <div className="h-full min-h-0 overflow-hidden min-w-0">
+                <FleetInsightsRightColumn />
+              </div>
+            </div>
+          </div>
+
+          {/* <div className="flex-1 min-w-0 h-full min-h-0 overflow-hidden">
+            <LivePositions selectedVehicle={selectedVehicle} showRoutePath={false} />
+          </div> */}
+
+          {/* {selectedVehicle && showDetailsPanel && (
+            <div className="w-75 xl:w-[320px] shrink-0 h-full min-h-0 overflow-hidden animate-in slide-in-from-right-5 duration-300">
+              <VehiclesDetail
+                vehicle={selectedVehicle}
+                onClose={() => {
+                  setSelectedVehicle(null);
+                  setShowDetailsPanel(false);
                 }}
+                onViewRoute={() => setIsRouteView(true)}
               />
             </div>
-
-            <div className="flex-1 min-w-0 h-full min-h-0 overflow-hidden">
-              <LivePositions selectedVehicle={selectedVehicle} showRoutePath={false} />
-            </div>
-
-            {selectedVehicle && showDetailsPanel && (
-              <div className="w-75 xl:w-[320px] shrink-0 h-full min-h-0 overflow-hidden animate-in slide-in-from-right-5 duration-300">
-                <VehiclesDetail
-                  vehicle={selectedVehicle}
-                  onClose={() => {
-                    setSelectedVehicle(null);
-                    setShowDetailsPanel(false);
-                  }}
-                  onViewRoute={() => setIsRouteView(true)}
-                />
-              </div>
-            )}
-          </div>
+          )} */}
         </div>
       )}
     </MainLayout>
