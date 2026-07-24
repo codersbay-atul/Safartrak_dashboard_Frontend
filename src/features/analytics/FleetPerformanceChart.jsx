@@ -9,8 +9,8 @@ export default function FleetPerformanceChart() {
       <div className="flex flex-wrap items-center justify-between gap-4 pb-2">
         <div className="flex items-center gap-3">
           <div>
-            <h3 className="text-[13px] font-bold tracking-tight text-white">Fleet Distance</h3>
-            <p className="text-[9px] text-zinc-500 mt-0.5">Last Updated: 11:49 AM</p>
+            <h3 className="text-[15px] font-bold tracking-tight text-white">Fleet Distance</h3>
+            <p className="text-[12px] text-zinc-500 mt-0.5">Last Updated: 11:49 AM</p>
           </div>
           {/* Live Indicator Badge */}
           <span className="flex items-center gap-1 bg-[#052e16] border border-[#14532d] text-[#22c55e] text-[9px] font-bold px-2 py-0.5 rounded-full">

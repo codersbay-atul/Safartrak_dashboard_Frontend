@@ -132,11 +132,11 @@ export default function Sidebar({ activeTab, setActiveTab }) {
           <div className="px-4 overflow-y-auto flex-1 flex flex-col gap-3">
             {sections.map((section) => (
               <div key={section.title} className="flex flex-col gap-0.5">
-                <h4 className="text-[10.5px] font-bold tracking-wider uppercase text-[#71717A] mb-0.5">
+                <h4 className="text-[12px] font-bold tracking-wider uppercase text-[#71717A] mb-0.5">
                   {section.title}
                 </h4>
 
-                <div className="space-y-0.5">
+                <div className="space-y-4">
                   {section.items.map((item) => {
                     const targetPath = routeMap[item.label];
                     const isItemActive =
@@ -144,32 +144,41 @@ export default function Sidebar({ activeTab, setActiveTab }) {
                       (targetPath && location.pathname === targetPath);
 
                     return (
-                      <button
+                      <div
                         key={item.label}
-                        onClick={() => handleNavigation(item.label)}
-                        className={`relative w-full h-7 flex items-center gap-2.5 rounded-md pl-3 transition cursor-pointer
-                          ${
-                            isItemActive
-                              ? "bg-[#18181B] text-white font-semibold border border-zinc-800/60"
-                              : "text-[#D4D4D8] hover:bg-[#232328]/70"
-                          }`}
+                        className={`flex items-center w-full ${isItemActive ? "gap-3" : ""}`}
                       >
                         {isItemActive && (
-                          <span className="absolute left-0 top-1 h-5 w-0.75 rounded-r bg-[#F6B100]" />
+                          <span className="w-1 h-10 rounded-full bg-[#F6B100] shrink-0" />
                         )}
 
-                        <item.icon
-                          size={13}
-                          className={
-                            isItemActive ? "text-[#F6B100]" : "text-[#D4D4D8]"
-                          }
-                          strokeWidth={isItemActive ? 2.5 : 2}
-                        />
+                        <button
+                          onClick={() => handleNavigation(item.label)}
+                          className={`flex items-center transition cursor-pointer min-w-0 ${
+                            isItemActive
+                              ? "flex-1 h-10 gap-4 rounded-xl px-4 py-2 bg-[#3B2A00] text-white"
+                              : "relative w-full h-7 gap-2.5 rounded-md pl-3 text-[#D4D4D8] hover:bg-[#232328]/70"
+                          }`}
+                        >
+                          <item.icon
+                            size={15}
+                            className={
+                              isItemActive ? "text-white shrink-0" : "text-[#D4D4D8] shrink-0"
+                            }
+                            strokeWidth={isItemActive ? 2.5 : 2}
+                          />
 
-                        <span className="text-[11.5px] font-medium truncate">
-                          {item.label}
-                        </span>
-                      </button>
+                          <span
+                            className={`text-[15px] font-medium truncate ${
+                              isItemActive
+                                ? "leading-[20px] text-white"
+                                : "leading-[30px]"
+                            }`}
+                          >
+                            {item.label}
+                          </span>
+                        </button>
+                      </div>
                     );
                   })}
                 </div>

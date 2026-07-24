@@ -40,13 +40,13 @@ export default function Navbar({ activeTab, isRouteView }) {
   return (
     <header className="flex items-center justify-between px-3 sm:px-6 py-2.5 border-b border-[#1f1f23] bg-[#09090b] sticky top-0 z-30 select-none">
       
-      <div className="flex items-center gap-2 text-[11px] text-[#a1a1aa] font-medium tracking-wide min-w-0">
+      <div className="flex items-center gap-2 text-[15px] text-[#a1a1aa] font-medium tracking-wide min-w-0">
         
       
         <div className="w-10 h-1 shrink-0 lg:hidden" />
 
        
-        <ActiveIcon size={14} className="text-[#71717a] shrink-0 transition-all duration-200" />
+        <ActiveIcon size={15} className="text-[#71717a] shrink-0 transition-all duration-200" />
         
         
         <div className="flex items-center gap-1.5 min-w-0">
@@ -74,20 +74,20 @@ export default function Navbar({ activeTab, isRouteView }) {
       <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
         
         {/* Notification Button */}
-        <button className="p-1.5 rounded-full bg-[#18181b] border border-[#27272a] text-[#a1a1aa] hover:text-white transition-colors relative cursor-pointer shrink-0">
-          <Bell size={13} />
+        <button className="p-2 rounded-full bg-[#18181b] border border-[#27272a] text-[#a1a1aa] hover:text-white transition-colors relative cursor-pointer shrink-0 flex items-center justify-center">
+          <Bell size={18} />
           <span className="absolute top-1 right-1 w-1.5 h-1.5 bg-[#ef4444] rounded-full"></span>
         </button>
 
         {/* Calendar Button */}
-        <button className="p-1.5 rounded-full bg-[#18181b] border border-[#27272a] text-[#a1a1aa] hover:text-white transition-colors cursor-pointer shrink-0">
-          <Calendar size={13} />
+        <button className="p-2 rounded-full bg-[#18181b] border border-[#27272a] text-[#a1a1aa] hover:text-white transition-colors cursor-pointer shrink-0 flex items-center justify-center">
+          <Calendar size={18} />
         </button>
 
         {/* Current Date Details */}
         <div className="hidden sm:block text-right leading-none shrink-0">
-          <p className="text-[10px] font-semibold text-white">Friday,</p>
-          <p className="text-[8.5px] text-[#a1a1aa] mt-0.5">July 17, 2026</p>
+          <p className="text-[15px] font-semibold text-white">Friday,</p>
+          <p className="text-[10px] text-[#a1a1aa] mt-0.5">July 17, 2026</p>
         </div>
 
         {/* User Account Info */}
@@ -98,8 +98,8 @@ export default function Navbar({ activeTab, isRouteView }) {
           </div>
           {/* User Details */}
           <div className="leading-none hidden md:block">
-            <p className="text-[10px] font-semibold text-white">Atul</p>
-            <p className="text-[8.5px] text-[#a1a1aa] mt-0.5">Operations Admin</p>
+            <p className="text-[15px] font-semibold text-white">Atul</p>
+            <p className="text-[10px] text-[#a1a1aa] mt-0.5">Operations Admin</p>
           </div>
         </div>
 

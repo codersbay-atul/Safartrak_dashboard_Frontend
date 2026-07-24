@@ -8,11 +8,11 @@ export default function PerformanceSummary() {
       {/* Header Info Block */}
       <div className="flex items-start justify-between border-b border-zinc-800/50 pb-3">
         <div>
-          <h3 className="text-[13px] font-bold text-white tracking-tight">Performance Summary</h3>
-          <p className="text-[9px] text-zinc-500 mt-0.5">Jun 30 – Jul 6 • All Vehicles</p>
+          <h3 className="text-[15px] font-bold text-white tracking-tight">Performance Summary</h3>
+          <p className="text-[12px] text-zinc-500 mt-0.5">Jun 30 – Jul 6 • All Vehicles</p>
         </div>
         <div className="text-right">
-          <p className="text-[8px] text-zinc-500 font-bold uppercase tracking-wider">Total Distance</p>
+          <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">Total Distance</p>
           <div className="flex items-center gap-1 mt-0.5 justify-end">
             <span className="text-[15px] font-extrabold text-white">3,248 km</span>
             <span className="flex items-center text-[9.5px] font-bold text-[#22c55e]">

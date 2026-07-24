@@ -8,7 +8,7 @@ export default function LivePositions({ selectedVehicle, showRoutePath }) {
       
       {/* 1. Header Area */}
       <div className="flex items-center justify-between p-3 border-b border-[#1f1f23]/60 bg-[#121214]/90 z-10 shrink-0">
-        <h3 className="text-[13px] font-bold text-white tracking-tight">
+        <h3 className="text-[15px] font-bold text-white tracking-tight">
           Live Position
         </h3>
         <button className="flex items-center gap-0.5 text-[10.5px] font-bold text-[#FDBB24] hover:text-[#E9AE17] transition-colors cursor-pointer">

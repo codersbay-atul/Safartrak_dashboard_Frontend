@@ -2,15 +2,12 @@ import React, { useState, useEffect } from "react";
 import MainLayout from "../layouts/MainLayout";
 import RouteDashboardHeader from "../features/route-details/RouteDashboardHeader";
 import TripStatsCard from "../features/route-details/TripStatsCard";
-import LivePosition from "../features/dashboard/LivePositions";
 import VehicleRouteDetails from "../features/route-details/VehicleRouteDetails";
 import StatsCard from "../features/dashboard/StatsCard";
-import FleetHealthOverview from "../features/dashboard/FleetHealthOverview";
 import DashboardHeader from "../features/dashboard/DashboardHeader";
-import {
-  FleetInsightsCenterColumn,
-  FleetInsightsRightColumn,
-} from "../features/dashboard/FleetInsightsPanel";
+import LivePositions from "../features/dashboard/LivePositions";
+import VehiclesList from "../features/dashboard/VehiclesList";
+import DashboardVehicleDetails from "../features/dashboard/DashboardVehicleDetails";
 
 export default function Dashboard() {
   const [selectedVehicle, setSelectedVehicle] = useState(() => {
@@ -65,7 +62,7 @@ export default function Dashboard() {
 
           <div className="flex flex-row gap-3.5 items-stretch w-full flex-1 min-h-0 overflow-hidden">
             <div className="flex-1 min-w-0 h-full min-h-0 overflow-hidden rounded-lg">
-              <LivePosition selectedVehicle={selectedVehicle} showRoutePath={true} />
+              <LivePositions selectedVehicle={selectedVehicle} showRoutePath={true} />
             </div>
             <div className="w-[320px] xl:w-87.5 shrink-0 h-full min-h-0 overflow-hidden">
               <VehicleRouteDetails
@@ -86,41 +83,42 @@ export default function Dashboard() {
             <DashboardHeader />
           </div>
           <div className="shrink-0">
-            <StatsCard/>
+            <StatsCard />
           </div>
 
-          <div className="grid grid-cols-[37%_1fr] gap-3.5 w-full flex-1 min-h-0 overflow-hidden">
-            <div className="h-full min-h-0 overflow-hidden">
-              <FleetHealthOverview />
-            </div>
-
-            <div className="grid grid-cols-[1.4fr_1fr] gap-3.5 h-full min-h-0 overflow-hidden min-w-0">
-              <div className="h-full min-h-0 overflow-hidden">
-                <FleetInsightsCenterColumn />
-              </div>
-
-              <div className="h-full min-h-0 overflow-hidden min-w-0">
-                <FleetInsightsRightColumn />
-              </div>
-            </div>
-          </div>
-
-          {/* <div className="flex-1 min-w-0 h-full min-h-0 overflow-hidden">
-            <LivePositions selectedVehicle={selectedVehicle} showRoutePath={false} />
-          </div> */}
-
-          {/* {selectedVehicle && showDetailsPanel && (
-            <div className="w-75 xl:w-[320px] shrink-0 h-full min-h-0 overflow-hidden animate-in slide-in-from-right-5 duration-300">
-              <VehiclesDetail
-                vehicle={selectedVehicle}
-                onClose={() => {
-                  setSelectedVehicle(null);
-                  setShowDetailsPanel(false);
+          <div className="flex flex-row gap-3.5 items-stretch w-full flex-1 min-h-0 overflow-hidden">
+            <div
+              className={`h-full min-h-0 overflow-hidden transition-all duration-300 ${
+                selectedVehicle && showDetailsPanel
+                  ? "flex-[1.2] min-w-0"
+                  : "w-[400px] xl:w-[420px] shrink-0"
+              }`}
+            >
+              <VehiclesList
+                selectedVehicle={selectedVehicle}
+                onSelectVehicle={(v) => {
+                  setSelectedVehicle(v);
+                  setShowDetailsPanel(true);
                 }}
-                onViewRoute={() => setIsRouteView(true)}
               />
             </div>
-          )} */}
+
+            <div className="flex-1 min-w-0 h-full min-h-0 overflow-hidden">
+              <LivePositions
+                selectedVehicle={selectedVehicle}
+                showRoutePath={false}
+              />
+            </div>
+
+            {selectedVehicle && showDetailsPanel && (
+              <div className="w-75 xl:w-[320px] shrink-0 h-full min-h-0 overflow-hidden animate-in slide-in-from-right-5 duration-300">
+                <DashboardVehicleDetails
+                  vehicle={selectedVehicle}
+                  onViewRoute={() => setIsRouteView(true)}
+                />
+              </div>
+            )}
+          </div>
         </div>
       )}
     </MainLayout>
