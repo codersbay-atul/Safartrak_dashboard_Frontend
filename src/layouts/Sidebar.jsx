@@ -18,6 +18,7 @@ import {
   Menu,
   X,
 } from "lucide-react";
+import Logo from "../assets/images/Logo.svg";
 
 export default function Sidebar({ activeTab, setActiveTab }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -112,12 +113,16 @@ export default function Sidebar({ activeTab, setActiveTab }) {
       >
         <div className="flex flex-col flex-1 min-h-0">
           <div className="h-8 flex items-center justify-between px-4 mb-2 shrink-0">
-            <h1
-              className="text-[20px] font-semibold tracking-tight text-white cursor-pointer"
+            <div
               onClick={() => navigate("/")}
+              className="cursor-pointer flex items-center"
             >
-              Safar<span className="text-[#F6B100]">Trak</span>
-            </h1>
+              <img
+                src={Logo}
+                alt="SafarTrak"
+                className="h-5 w-auto object-contain"
+              />
+            </div>
 
             {isOpen && (
               <button

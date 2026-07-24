@@ -1,8 +1,36 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
+import MobileUnsupported from "../components/common/MobileUnsupported";
 
 export default function MainLayout({ children, activeTab, setActiveTab, isRouteView }) {
+  const [isUnsupported, setIsUnsupported] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return window.innerWidth < 1024;
+  });
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 1023px)");
+
+    const update = (event) => {
+      setIsUnsupported(event.matches);
+    };
+
+    setIsUnsupported(mediaQuery.matches);
+
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener("change", update);
+      return () => mediaQuery.removeEventListener("change", update);
+    }
+
+    mediaQuery.addListener(update);
+    return () => mediaQuery.removeListener(update);
+  }, []);
+
+  if (isUnsupported) {
+    return <MobileUnsupported />;
+  }
+
   return (
     <div className="flex h-screen w-screen bg-[#09090b] text-white overflow-hidden select-none">
       
