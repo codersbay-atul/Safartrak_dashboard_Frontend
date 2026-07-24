@@ -2,7 +2,8 @@ import React from 'react';
 import { 
   LayoutDashboard, 
   BarChart3, 
-  Clock3, 
+  Clock3,
+  Power,
   TriangleAlert, 
   ScanSearch, 
   Route, 
@@ -10,7 +11,7 @@ import {
   Send, 
   Truck, 
   IdCard, 
-  Car, 
+  FileSearch, 
   Users, 
   Bell, 
   Calendar 
@@ -21,7 +22,7 @@ const iconMap = {
   "Dashboard": LayoutDashboard,
   "Analytics": BarChart3,
   "Reports": Clock3,
-  "Mobilize / Immobilize": Clock3,
+  "Mobilize / Immobilize": Power,
   "Alerts": TriangleAlert,
   "Area of Interest (AOI)": ScanSearch,
   "Routes": Route,
@@ -29,7 +30,7 @@ const iconMap = {
   "Activity": Send,
   "Vehicles": Truck,
   "Drivers": IdCard,
-  "Vehicle Details": Car,
+  "Vehicle Details": FileSearch,
   "Users": Users
 };
 
