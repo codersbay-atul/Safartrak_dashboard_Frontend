@@ -11,10 +11,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
@@ -28,17 +28,20 @@ jobs:
       - name: Clean npm cache
         run: npm cache clean --force
 
-      - name: Remove existing modules
+      - name: Clean install
         run: |
-          rm -rf node_modules
+          rm -rf node_modules package-lock.json
+          npm install
 
-      - name: Install dependencies
-        run: npm install
+      - name: Verify Rolldown binding
+        run: |
+          echo "Checking Rolldown bindings..."
+          ls -la node_modules/@rolldown || true
 
       - name: Build React App
         run: npm run build
 
-      - name: Deploy to AWS EC2 via rsync
+      - name: Deploy to AWS EC2
         env:
           HOST: ${{ secrets.HOST_MAIN }}
           USER: ${{ secrets.NEW_USER }}
@@ -50,12 +53,19 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y rsync
 
-          ssh -o StrictHostKeyChecking=no -i deploy-key.pem $USER@$HOST \
-          "sudo mkdir -p /var/www/html && sudo chown -R $USER:$USER /var/www/html"
+          ssh -o StrictHostKeyChecking=no -i deploy-key.pem $USER@$HOST "
+            sudo mkdir -p /var/www/html &&
+            sudo chown -R $USER:$USER /var/www/html
+          "
 
           rsync -avz --delete \
-          -e "ssh -o StrictHostKeyChecking=no -i deploy-key.pem" \
-          dist/ $USER@$HOST:/var/www/html/
+            -e "ssh -o StrictHostKeyChecking=no -i deploy-key.pem" \
+            dist/ $USER@$HOST:/var/www/html/
 
-          ssh -o StrictHostKeyChecking=no -i deploy-key.pem $USER@$HOST \
-          "sudo systemctl restart nginx"
+          ssh -o StrictHostKeyChecking=no -i deploy-key.pem $USER@$HOST "
+            sudo systemctl restart nginx
+          "
+
+      - name: Cleanup
+        if: always()
+        run: rm -f deploy-key.pem
