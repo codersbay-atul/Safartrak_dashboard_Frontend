@@ -25,11 +25,13 @@ export default function DashboardHeader({
       <Button
         variant="primary"
         size="sm"
-        icon={Plus}
         onClick={onAddVehicleClick}
-        className="font-bold whitespace-nowrap text-[10px]"
+        className="font-bold whitespace-nowrap flex-nowrap !text-[15px] !h-7 !px-4 !py-0 min-w-fit"
       >
-        <span>Add Vehicle</span>
+        <span className="inline-flex items-center gap-1.5 whitespace-nowrap flex-nowrap">
+          <Plus size={15} className="shrink-0" />
+          <span className="whitespace-nowrap">Add Vehicle</span>
+        </span>
       </Button>
     </PageHeader>
   );

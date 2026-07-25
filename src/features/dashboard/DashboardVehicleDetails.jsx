@@ -14,7 +14,88 @@ import {
   Calendar,
 } from "lucide-react";
 
+function getVehicleMetrics(vehicle) {
+  return [
+    {
+      key: "speed",
+      label: "Speed",
+      value: vehicle?.speed || "52 km/h",
+      icon: Gauge,
+    },
+    {
+      key: "fuel",
+      label: "Fuel Level",
+      value: "82%",
+      icon: Fuel,
+      progress: 82,
+      progressColor: "bg-[#22c55e]",
+    },
+    {
+      key: "battery",
+      label: "Battery",
+      value: "12.8V",
+      icon: Battery,
+    },
+    {
+      key: "engineHealth",
+      label: "Engine Health",
+      value: "Excellent",
+      icon: ShieldCheck,
+      valueColor: "text-zinc-200",
+    },
+    {
+      key: "odometer",
+      label: "Odometer",
+      value: "186,240 km",
+      icon: Milestone,
+    },
+    {
+      key: "tripProgress",
+      label: "Trip Progress",
+      value: "72%",
+      icon: Waypoints,
+      progress: 72,
+      progressColor: "bg-[#FDBB24]",
+    },
+    {
+      key: "eta",
+      label: "ETA",
+      value: "1 hr 24 min",
+      icon: Clock,
+    },
+    {
+      key: "currentAddress",
+      label: "Current Address",
+      value: "Andheri East, Mumbai",
+      icon: MapPin,
+      valueClassName: "text-right truncate pl-4 max-w-[150px]",
+    },
+    {
+      key: "gpsSignal",
+      label: "GPS Signal",
+      value: "Strong",
+      icon: Radio,
+    },
+    {
+      key: "ignition",
+      label: "Ignition",
+      value: "ON",
+      icon: Key,
+      valueColor: "text-[#10b981]",
+    },
+    {
+      key: "lastUpdated",
+      label: "Last Updated",
+      value: "12 Second ago",
+      icon: Calendar,
+      valueColor: "text-zinc-200",
+    },
+  ];
+}
+
 export default function DashboardVehicleDetails({ vehicle, onViewRoute }) {
+  const metrics = getVehicleMetrics(vehicle);
+
   return (
     <div className="w-full h-full bg-[#16161a] border border-[#1f1f23] rounded-xl p-3.5 flex flex-col justify-between select-none overflow-hidden font-sans text-zinc-100">
       {/* 1. Header */}
@@ -79,107 +160,47 @@ export default function DashboardVehicleDetails({ vehicle, onViewRoute }) {
 
       {/* 4. Vehicle Information List */}
       <div className="flex flex-col flex-1 py-0.5 text-[15px] gap-y-3 overflow-y-auto pr-0.5 mb-3 scrollbar-thin scrollbar-thumb-zinc-800 scrollbar-track-transparent">
-        <div className="flex items-center justify-between shrink-0 gap-2">
-          <div className="flex items-center gap-2 text-zinc-500 font-medium min-w-0">
-            <Gauge size={15} className="text-zinc-500 shrink-0" />
-            <span className="truncate">Speed</span>
-          </div>
-          <span className="font-bold text-white shrink-0">
-            {vehicle?.speed || "52 km/h"}
-          </span>
-        </div>
-
-        <div className="flex items-center justify-between shrink-0 gap-2">
-          <div className="flex items-center gap-2 text-zinc-500 font-medium min-w-0">
-            <Fuel size={15} className="text-zinc-500 shrink-0" />
-            <span className="truncate">Fuel Level</span>
-          </div>
-          <div className="flex items-center gap-2 shrink-0">
-            <span className="font-bold text-white">82%</span>
-            <div className="w-12 h-[3px] bg-zinc-800 rounded-full overflow-hidden">
-              <div className="h-full bg-[#22c55e] rounded-full" style={{ width: "82%" }} />
+        {metrics.map(
+          ({
+            key,
+            label,
+            value,
+            icon: Icon,
+            progress,
+            progressColor,
+            valueColor = "text-white",
+            valueClassName,
+          }) => (
+            <div
+              key={key}
+              className="flex items-center justify-between shrink-0 gap-2"
+            >
+              <div className="flex items-center gap-2 text-zinc-500 font-medium min-w-0">
+                <Icon size={15} className="text-zinc-100 shrink-0" />
+                <span className="truncate">{label}</span>
+              </div>
+              {progress != null ? (
+                <div className="flex items-center gap-2 shrink-0">
+                  <span className="font-bold text-white">{value}</span>
+                  <div className="w-12 h-[3px] bg-zinc-800 rounded-full overflow-hidden">
+                    <div
+                      className={`h-full ${progressColor} rounded-full`}
+                      style={{ width: `${progress}%` }}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <span
+                  className={`font-bold ${valueColor} ${
+                    valueClassName || "shrink-0"
+                  }`}
+                >
+                  {value}
+                </span>
+              )}
             </div>
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between shrink-0 gap-2">
-          <div className="flex items-center gap-2 text-zinc-500 font-medium min-w-0">
-            <Battery size={15} className="text-zinc-500 shrink-0" />
-            <span className="truncate">Battery</span>
-          </div>
-          <span className="font-bold text-white shrink-0">12.8V</span>
-        </div>
-
-        <div className="flex items-center justify-between shrink-0 gap-2">
-          <div className="flex items-center gap-2 text-zinc-500 font-medium min-w-0">
-            <ShieldCheck size={15} className="text-zinc-500 shrink-0" />
-            <span className="truncate">Engine Health</span>
-          </div>
-          <span className="font-bold text-zinc-200 shrink-0">Excellent</span>
-        </div>
-
-        <div className="flex items-center justify-between shrink-0 gap-2">
-          <div className="flex items-center gap-2 text-zinc-500 font-medium min-w-0">
-            <Milestone size={15} className="text-zinc-500 shrink-0" />
-            <span className="truncate">Odometer</span>
-          </div>
-          <span className="font-bold text-white shrink-0">186,240 km</span>
-        </div>
-
-        <div className="flex items-center justify-between shrink-0 gap-2">
-          <div className="flex items-center gap-2 text-zinc-500 font-medium min-w-0">
-            <Waypoints size={15} className="text-zinc-500 shrink-0" />
-            <span className="truncate">Trip Progress</span>
-          </div>
-          <div className="flex items-center gap-2 shrink-0">
-            <span className="font-bold text-white">72%</span>
-            <div className="w-12 h-[3px] bg-zinc-800 rounded-full overflow-hidden">
-              <div className="h-full bg-[#FDBB24] rounded-full" style={{ width: "72%" }} />
-            </div>
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between shrink-0 gap-2">
-          <div className="flex items-center gap-2 text-zinc-500 font-medium min-w-0">
-            <Clock size={15} className="text-zinc-500 shrink-0" />
-            <span className="truncate">ETA</span>
-          </div>
-          <span className="font-bold text-white shrink-0">1 hr 24 min</span>
-        </div>
-
-        <div className="flex items-center justify-between shrink-0 gap-2">
-          <div className="flex items-center gap-2 text-zinc-500 font-medium min-w-0">
-            <MapPin size={15} className="text-zinc-500 shrink-0" />
-            <span className="truncate">Current Address</span>
-          </div>
-          <span className="font-bold text-white text-right truncate pl-4 max-w-[150px]">
-            Andheri East, Mumbai
-          </span>
-        </div>
-
-        <div className="flex items-center justify-between shrink-0 gap-2">
-          <div className="flex items-center gap-2 text-zinc-500 font-medium min-w-0">
-            <Radio size={15} className="text-zinc-500 shrink-0" />
-            <span className="truncate">GPS Signal</span>
-          </div>
-          <span className="font-bold text-white shrink-0">Strong</span>
-        </div>
-
-        <div className="flex items-center justify-between shrink-0 gap-2">
-          <div className="flex items-center gap-2 text-zinc-500 font-medium min-w-0">
-            <Key size={15} className="text-zinc-500 shrink-0" />
-            <span className="truncate">Ignition</span>
-          </div>
-          <span className="font-bold text-[#10b981] shrink-0">ON</span>
-        </div>
-
-        <div className="flex items-center justify-between shrink-0 gap-2">
-          <div className="flex items-center gap-2 text-zinc-500 font-medium min-w-0">
-            <Calendar size={15} className="text-zinc-500 shrink-0" />
-            <span className="truncate">Last Updated</span>
-          </div>
-          <span className="font-bold text-zinc-200 shrink-0">12 Second ago</span>
-        </div>
+          )
+        )}
       </div>
 
       <div className="border-b border-dashed border-[#232329] w-full shrink-0 mb-3" />

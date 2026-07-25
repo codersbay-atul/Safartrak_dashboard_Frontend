@@ -36,7 +36,7 @@ export default function PageHeader({
           {title}
         </h1>
         {subtitle && (
-          <p className="text-[9px] sm:text-[10px] text-[#a1a1aa] leading-normal truncate max-w-xs sm:max-w-xl">
+          <p className="text-[12px] sm:text-[10px] text-[#a1a1aa] leading-normal truncate max-w-xs sm:max-w-xl">
             {subtitle}
           </p>
         )}
@@ -47,9 +47,9 @@ export default function PageHeader({
         
         {/* Search Bar */}
         {showSearch && (
-          <div className="relative flex-1 sm:flex-initial min-w-0 sm:min-w-[150px]">
+          <div className="relative flex-1 sm:flex-initial min-w-0 sm:min-w-[180px]">
             <Search
-              size={11}
+              size={15}
               className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#71717a] pointer-events-none"
             />
             <input
@@ -57,7 +57,7 @@ export default function PageHeader({
               value={searchQuery}
               onChange={handleSearchChange}
               placeholder={searchPlaceholder}
-              className="w-full pl-7 pr-2.5 py-1 text-[10px] rounded-lg bg-[#18181b] border border-[#27272a] placeholder-[#71717a] focus:outline-none focus:border-[#FDBB24] text-white transition-all"
+              className="w-full h-7 pl-8 pr-2.5 text-[14px] rounded-lg bg-[#18181b] border border-[#27272a] placeholder-[#71717a] placeholder:text-[14px] focus:outline-none focus:border-[#FDBB24] text-white transition-all"
             />
           </div>
         )}
@@ -68,22 +68,24 @@ export default function PageHeader({
             <Button
               variant="secondary"
               size="sm"
-              icon={SlidersHorizontal}
               onClick={onFilterClick}
               aria-label="Filter"
-              className="px-2 py-1.5"
-            />
+              className="!h-7 !w-7 !px-0 !py-0"
+            >
+              <SlidersHorizontal size={14} className="shrink-0" />
+            </Button>
           )}
 
           {showExport && (
             <Button
               variant="secondary"
               size="sm"
-              icon={Download}
               onClick={onExportClick}
               aria-label="Download Data"
-              className="px-2 py-1.5"
-            />
+              className="!h-7 !w-7 !px-0 !py-0"
+            >
+              <Download size={14} className="shrink-0" />
+            </Button>
           )}
         </div>
 

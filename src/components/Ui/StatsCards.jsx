@@ -45,7 +45,7 @@ export const StatCard = ({
               <h2 className="text-[13px] sm:text-[14px] font-bold text-white tracking-tight truncate">
                 {value}
               </h2>
-              <p className="text-[9px] text-[#71717a] truncate mt-0.5">
+              <p className="text-[10px] text-[#71717a] truncate mt-0.5">
                 {subtitle}
               </p>
             </div>
@@ -62,7 +62,7 @@ export const StatCard = ({
                   <span
                     className={`w-1.5 h-1.5 rounded-sm shrink-0 ${metric.color}`}
                   />
-                  <span className="text-[8px] text-[#71717a] whitespace-nowrap">
+                  <span className="text-[10px] text-[#71717a] whitespace-nowrap">
                     {metric.label}
                   </span>
                 </div>
@@ -75,13 +75,13 @@ export const StatCard = ({
       {/* Bottom Section: Label / Title & Arrow Icon */}
       {footerText && (
         <div className="flex items-center justify-between w-full pt-1.5 mt-1 border-t border-[#1d1d20]/40 shrink-0">
-          <span className="text-[9.5px] font-medium text-[#ffd60a] tracking-wide truncate">
+          <span className="text-[12px] font-medium text-[#ffd60a] tracking-wide truncate">
             {footerText}
           </span>
 
           {showArrow && (
             <ArrowRight
-              size={10}
+              size={12}
               className="text-[#ffd60a] group-hover:translate-x-0.5 transition-transform shrink-0"
             />
           )}

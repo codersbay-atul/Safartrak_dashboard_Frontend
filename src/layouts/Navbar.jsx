@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { 
   LayoutDashboard, 
   BarChart3, 
@@ -24,6 +26,7 @@ import { useOutsideClick } from '../hooks/UseOutsideClick';
 import Popover from '../components/Ui/Popover';
 import NotificationItem from '../components/Ui/NotificationItem';
 import UserAvatar from '../components/Ui/UserAvatar';
+import { clearAuth } from '../store/slices/authSlice';
 
 function NavPopoverWrapper({ children, isOpen, onClose }) {
   const wrapperRef = useOutsideClick(() => {
@@ -55,6 +58,8 @@ const iconMap = {
 
 export default function Navbar({ activeTab, isRouteView }) {
   const ActiveIcon = iconMap[activeTab] || LayoutDashboard;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [unreadCount, setUnreadCount] = useState(2);
   const [activePopover, setActivePopover] = useState(null); // 'notif' | 'calendar' | 'profile' | null
@@ -80,13 +85,19 @@ export default function Navbar({ activeTab, isRouteView }) {
 
   const closePopover = () => setActivePopover(null);
 
+  const handleLogout = () => {
+    dispatch(clearAuth());
+    closePopover();
+    navigate('/login', { replace: true });
+  };
+
   return (
     <header className="flex items-center justify-between px-3 sm:px-6 py-2.5 border-b border-[#1f1f23] bg-[#09090b] sticky top-0 z-30 select-none">
       
       {/* Left Side: Breadcrumb Title */}
-      <div className="flex items-center gap-2 text-[11px] text-[#a1a1aa] font-medium tracking-wide min-w-0">
+      <div className="flex items-center gap-2 text-[15px] text-[#a1a1aa] font-medium tracking-wide min-w-0">
         <div className="w-10 h-1 shrink-0 lg:hidden" />
-        <ActiveIcon size={14} className="text-[#71717a] shrink-0" />
+        <ActiveIcon size={20} className="text-[#71717a] shrink-0" />
         <span className="text-white font-semibold truncate">
           {activeTab === "Dashboard" && isRouteView ? "Route Details" : (activeTab || "Dashboard")}
         </span>
@@ -102,7 +113,7 @@ export default function Navbar({ activeTab, isRouteView }) {
             className="p-1.5 rounded-full bg-[#18181b] border border-[#27272a] text-[#a1a1aa] hover:text-white transition-colors relative cursor-pointer"
             aria-label="Notifications"
           >
-            <Bell size={13} />
+            <Bell size={15} />
             {unreadCount > 0 && <span className="absolute top-1 right-1 w-1.5 h-1.5 bg-[#ef4444] rounded-full" />}
           </button>
 
@@ -142,11 +153,11 @@ export default function Navbar({ activeTab, isRouteView }) {
             className="p-1.5 rounded-full bg-[#18181b] border border-[#27272a] text-[#a1a1aa] hover:text-white transition-colors cursor-pointer"
             aria-label="Calendar Scope"
           >
-            <Calendar size={13} />
+            <Calendar size={15} />
           </button>
 
           <Popover isOpen={activePopover === 'calendar'} className="w-44 right-0 p-2 text-xs">
-            <p className="text-[9.5px] text-[#a1a1aa] font-bold uppercase tracking-wider px-2 py-1">Date Scope</p>
+            <p className="text-[10px] text-[#a1a1aa] font-bold uppercase tracking-wider px-2 py-1">Date Scope</p>
             <button onClick={closePopover} className="w-full text-left px-2 py-1.5 hover:bg-[#18181b] rounded text-[#a1a1aa] hover:text-white cursor-pointer">Today</button>
             <button onClick={closePopover} className="w-full text-left px-2 py-1.5 hover:bg-[#18181b] rounded text-[#a1a1aa] hover:text-white cursor-pointer">Last 7 Days</button>
             <button onClick={closePopover} className="w-full text-left px-2 py-1.5 hover:bg-[#18181b] rounded text-[#a1a1aa] hover:text-white cursor-pointer">This Month</button>
@@ -155,8 +166,8 @@ export default function Navbar({ activeTab, isRouteView }) {
 
         {/* 3. Live System Date */}
         <div className="hidden sm:block text-right leading-none shrink-0">
-          <p className="text-[10px] font-semibold text-white">{weekday},</p>
-          <p className="text-[8.5px] text-[#a1a1aa] mt-0.5">{monthDayYear}</p>
+          <p className="text-[15px] font-semibold text-white">{weekday},</p>
+          <p className="text-[10px] text-[#a1a1aa] mt-0.5">{monthDayYear}</p>
         </div>
 
         {/* 4. User Profile Dropdown */}
@@ -172,14 +183,14 @@ export default function Navbar({ activeTab, isRouteView }) {
 
           <Popover isOpen={activePopover === 'profile'} className="w-40 right-0 p-1.5 text-xs">
             <button onClick={closePopover} className="w-full flex items-center gap-2 px-2.5 py-1.5 hover:bg-[#18181b] rounded-lg text-[#a1a1aa] hover:text-white cursor-pointer">
-              <User size={13} /> Profile
+              <User size={15} /> Profile
             </button>
             <button onClick={closePopover} className="w-full flex items-center gap-2 px-2.5 py-1.5 hover:bg-[#18181b] rounded-lg text-[#a1a1aa] hover:text-white cursor-pointer">
               <Settings size={13} /> Settings
             </button>
             <div className="h-[1px] bg-[#27272a] my-1" />
-            <button onClick={closePopover} className="w-full flex items-center gap-2 px-2.5 py-1.5 hover:bg-[#18181b] rounded-lg text-[#ef4444] cursor-pointer">
-              <LogOut size={13} /> Logout
+            <button onClick={handleLogout} className="w-full flex items-center gap-2 px-2.5 py-1.5 hover:bg-[#18181b] rounded-lg text-[#ef4444] cursor-pointer">
+              <LogOut size={15} /> Logout
             </button>
           </Popover>
         </NavPopoverWrapper>

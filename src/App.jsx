@@ -1,5 +1,4 @@
-import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 import Dashboard from "./pages/dashboard";
 import Analytics from "./pages/Analytics";
@@ -8,19 +7,82 @@ import Mobilize from "./pages/Mobilize";
 import Alerts from "./pages/Alerts";
 import Aoi from "./pages/Aoi";
 import Vehicles from "./pages/Vehicles";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import ProtectedRoute from "./routes/ProtectedRoute";
 
 function App() {
   return (
     <BrowserRouter>
-      <div className="min-h-screen w-full bg-[#0B0F19] overflow-hidden">
+      <div className="min-h-screen w-full bg-[#0B0F19] overflow-x-hidden">
         <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/analytics" element={<Analytics />} />
-          <Route path="/reports" element={<Reports />} />
-          <Route path="/mobilize" element={<Mobilize />} />
-          <Route path="/alerts" element={<Alerts />} />
-          <Route path="/aoi" element={<Aoi />} />
-           <Route path="/vehicles" element={<Vehicles />} />
+          {/* Auth screens */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+
+          {/* Protected dashboard */}
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Existing app routes (protected) */}
+          <Route
+            path="/analytics"
+            element={
+              <ProtectedRoute>
+                <Analytics />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/reports"
+            element={
+              <ProtectedRoute>
+                <Reports />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/mobilize"
+            element={
+              <ProtectedRoute>
+                <Mobilize />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/alerts"
+            element={
+              <ProtectedRoute>
+                <Alerts />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/aoi"
+            element={
+              <ProtectedRoute>
+                <Aoi />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/vehicles"
+            element={
+              <ProtectedRoute>
+                <Vehicles />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Default entry → dashboard (ProtectedRoute handles auth redirect) */}
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </div>
     </BrowserRouter>

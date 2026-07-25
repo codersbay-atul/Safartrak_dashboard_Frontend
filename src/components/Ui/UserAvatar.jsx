@@ -10,8 +10,8 @@ export default function UserAvatar({ initials = "AT", name = "Atul", role = "Ope
         {initials}
       </div>
       <div className="leading-none hidden md:block text-left">
-        <p className="text-[10px] font-semibold text-white truncate">{name}</p>
-        <p className="text-[8.5px] text-[#a1a1aa] mt-0.5 truncate">{role}</p>
+        <p className="text-[15px] font-semibold text-white truncate">{name}</p>
+        <p className="text-[10px] text-[#a1a1aa] mt-0.5 truncate">{role}</p>
       </div>
     </button>
   );
