@@ -5,9 +5,9 @@ import {
 } from 'lucide-react';
 
 import { useOutsideClick } from '../hooks/UseOutsideClick';
-import Popover from '../components/ui/Popover';
-import NotificationItem from '../components/ui/NotificationItem';
-import UserAvatar from '../components/ui/UserAvatar';
+import Popover from '../components/Ui/Popover';
+import NotificationItem from '../components/Ui/NotificationItem';
+import UserAvatar from '../components/Ui/UserAvatar';
 
 function NavPopoverWrapper({ children, isOpen, onClose }) {
   const wrapperRef = useOutsideClick(() => {
@@ -109,7 +109,7 @@ export default function Navbar({ activeTab, isRouteView }) {
                 time="2m ago" 
                 isUnread={true} 
               />
-              <NotificationItem 
+              <NotificationItem
                 title="Geofence Exit" 
                 description="MH12-9901 left Depot Terminal." 
                 time="1h ago" 
