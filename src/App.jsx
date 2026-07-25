@@ -7,6 +7,7 @@ import Reports from "./pages/Reports";
 import Mobilize from "./pages/Mobilize";
 import Alerts from "./pages/Alerts";
 import Aoi from "./pages/Aoi";
+import Vehicles from "./pages/Vehicles";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/mobilize" element={<Mobilize />} />
           <Route path="/alerts" element={<Alerts />} />
           <Route path="/aoi" element={<Aoi />} />
+           <Route path="/vehicles" element={<Vehicles />} />
         </Routes>
       </div>
     </BrowserRouter>
