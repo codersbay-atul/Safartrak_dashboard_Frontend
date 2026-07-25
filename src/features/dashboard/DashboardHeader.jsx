@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Search, SlidersHorizontal, Download, Plus } from "lucide-react";
-import Button from "../../components/Ui/Button";
+import Button from "../../components/ui/Button";
 
 export default function DashboardHeader({
   userName = "Atul",
