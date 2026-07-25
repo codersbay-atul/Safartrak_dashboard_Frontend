@@ -20,23 +20,20 @@ jobs:
           node-version: "20"
           cache: "npm"
 
-      - name: Check Node & NPM Versions
-        run: |
-          node -v
-          npm -v
-
       - name: Clean npm cache
-        run: npm cache clean --force
+        run: |
+          npm cache clean --force
 
-      - name: Clean install
+      - name: Install dependencies
         run: |
           rm -rf node_modules package-lock.json
-          npm install
+          npm install --include=optional
+          npm install @rolldown/binding-linux-x64-gnu --save-dev
 
       - name: Verify Rolldown binding
         run: |
-          echo "Checking Rolldown bindings..."
-          ls -la node_modules/@rolldown || true
+          npm ls rolldown
+          npm ls @rolldown/binding-linux-x64-gnu
 
       - name: Build React App
         run: npm run build
