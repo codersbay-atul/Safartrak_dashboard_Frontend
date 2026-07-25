@@ -1,6 +1,6 @@
 import React from "react";
 import { Truck, TriangleAlert, Wrench, Target } from "lucide-react";
-import { StatCard } from "../../components/ui/StatsCards";
+import { StatCard } from "../../components/Ui/StatsCards";
 
 const STATS_DATA = [
   {

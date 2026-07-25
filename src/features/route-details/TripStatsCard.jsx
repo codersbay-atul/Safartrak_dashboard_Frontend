@@ -1,6 +1,6 @@
 import React from "react";
 import { Truck, Gauge, Clock, Route, Timer } from "lucide-react";
-import { StatCard } from "../../components/ui/StatsCards"; 
+import { StatCard } from "../../components/Ui/StatsCards"; 
 
 const TRIP_STATS_DATA = [
   {
