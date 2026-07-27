@@ -3,9 +3,9 @@ import { Download, Upload, Plus } from "lucide-react";
 import Button from "../../components/Ui/Button";
 import PageHeader from "../../components/Ui/PageHeader";
 
-export default function VehiclesHeader({
-  title = "Vehicles",
-  subtitle = "Manage fleet vehicles, GPS devices, assignments, and tracking status.",
+export default function VehicleDetailsHeader({
+  title = "Vehicles Details",
+  subtitle = "View complete vehicle information, tracking device details, documents, trip history, and operational status.",
   onImportClick,
   onExportClick,
   onAddVehicleClick,
@@ -18,18 +18,9 @@ export default function VehiclesHeader({
       showFilter={false}
       showExport={false}
     >
-      {/* 1. Import Data Button (Secondary) */}
-      <Button
-        variant="secondary"
-        size="sm"
-        icon={Download}
-        iconPosition="left"
-        onClick={onImportClick}
-        className="px-3 py-1.5 text-[10.5px]"
-      >
-        Import Data
-      </Button>
-      
+    
+
+      {/* 2. Export Data Button (Secondary) */}
       <Button
         variant="secondary"
         size="sm"
@@ -41,6 +32,7 @@ export default function VehiclesHeader({
         Export Data
       </Button>
 
+      {/* 3. Add Vehicle Button (Primary Peela) */}
       <Button
         variant="primary"
         size="sm"

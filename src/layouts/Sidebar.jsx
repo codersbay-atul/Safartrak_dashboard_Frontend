@@ -26,18 +26,18 @@ export default function Sidebar({ activeTab, setActiveTab }) {
   const location = useLocation();
 
   const routeMap = {
-    Dashboard: "/",
+    Dashboard: "/dashboard",
     Analytics: "/analytics",
     Reports: "/reports",
     "Mobilize / Immobilize": "/mobilize",
     Alerts: "/alerts",
     "Area of Interest (AOI)": "/aoi",
-    Routes: "/routes",
-    Trips: "/trips",
+    // Routes: "/routes",
+    // Trips: "/trips",
     Activity: "/activity",
     Vehicles: "/vehicles",
     Drivers: "/drivers",
-    "Vehicle Details": "/vehicle-details",
+    "Vehicle Details": "/vehicle-overview",
     Users: "/users",
   };
 
@@ -61,8 +61,8 @@ export default function Sidebar({ activeTab, setActiveTab }) {
       title: "GEO SERVICES",
       items: [
         { icon: ScanSearch, label: "Area of Interest (AOI)" },
-        { icon: Route, label: "Routes" },
-        { icon: GitBranch, label: "Trips" },
+        // { icon: Route, label: "Routes" },
+        // { icon: GitBranch, label: "Trips" },
         { icon: Send, label: "Activity" },
       ],
     },
@@ -144,9 +144,7 @@ export default function Sidebar({ activeTab, setActiveTab }) {
                 <div className="space-y-4">
                   {section.items.map((item) => {
                     const targetPath = routeMap[item.label];
-                    const isItemActive =
-                      activeTab === item.label ||
-                      (targetPath && location.pathname === targetPath);
+                    const isItemActive = targetPath && location.pathname === targetPath;
 
                     return (
                       <div

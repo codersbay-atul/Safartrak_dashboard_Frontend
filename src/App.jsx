@@ -10,6 +10,8 @@ import Vehicles from "./pages/Vehicles";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import VehiclesDetails from "./pages/VehiclesDetails";
+import Users from "./pages/Users";
 
 function App() {
   return (
@@ -79,8 +81,24 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/vehicle-overview"
+            element={
+              <ProtectedRoute>
+                <VehiclesDetails />
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/users"
+            element={
+              <ProtectedRoute>
+                <Users />
+              </ProtectedRoute>
+            }
+          />
 
-          {/* Default entry → dashboard (ProtectedRoute handles auth redirect) */}
+          {/* Default entry -> Redirect to /dashboard */}
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>

@@ -12,8 +12,8 @@ import {
   Radio, 
   Key, 
   Calendar,
-  MapPin as TrackIcon, // Using MapPin variant for Track Live
-  RotateCcw, // Replay icon alternative
+  MapPin as TrackIcon, 
+  RotateCcw, 
   Share2 
 } from 'lucide-react';
 

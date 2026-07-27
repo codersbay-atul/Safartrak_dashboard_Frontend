@@ -20,15 +20,13 @@ body {
   display: none !important;
 }
 
-/* =========================
-    Premium Scrollbar (For Vehicle List, etc.)
-========================= */
+
 
 .custom-scrollbar {
   overflow-y: auto;
   overflow-x: hidden;
 
-  /* Firefox */
+
   scrollbar-width: thin;
   scrollbar-color: rgba(156, 163, 175, 0.25) transparent;
 }
@@ -84,9 +82,10 @@ body {
   background: transparent;
 }
 
-/* =========================
-    Clean No-Scrollbar (For Sidebar navigation)
-========================= */
+.custom-leaflet-marker {
+  background: transparent !important;
+  border: none !important;
+}
 
 .no-scrollbar {
   -ms-overflow-style: none;  /* IE and Edge */
@@ -94,7 +93,7 @@ body {
 }
 
 .no-scrollbar::-webkit-scrollbar {
-  display: none !important;  /* Chrome, Safari, Opera */
+  display: none !important;  
   width: 0 !important;
   height: 0 !important;
 }

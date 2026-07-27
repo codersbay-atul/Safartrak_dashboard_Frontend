@@ -10,15 +10,54 @@ export default function AddDriverModal({ isOpen, onClose, onNext, onBack }) {
     emergencyContact: "",
   });
 
+  /* -------------------------------------------------------------
+     1. VALIDATION ERRORS STATE (Uncomment jab use karna ho)
+  ---------------------------------------------------------------- */
+  // const [errors, setErrors] = useState({});
+
   if (!isOpen) return null;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+
+    /* -------------------------------------------------------------
+       2. CLEAR ERROR ON INPUT CHANGE (Uncomment jab use karna ho)
+    ---------------------------------------------------------------- */
+    // if (errors[name]) {
+    //   setErrors((prev) => ({ ...prev, [name]: "" }));
+    // }
   };
+
+  /* -------------------------------------------------------------
+     3. VALIDATION FUNCTION (Uncomment jab validation active karna ho)
+  ---------------------------------------------------------------- */
+  /*
+  const validateForm = () => {
+    let newErrors = {};
+
+    if (!formData.assignDriver) newErrors.assignDriver = "Please assign a driver";
+    if (!formData.driverPhone.trim()) newErrors.driverPhone = "Driver phone is required";
+    if (!formData.driverLicenseNumber.trim()) newErrors.driverLicenseNumber = "License number is required";
+    if (!formData.licenseExpiry.trim()) newErrors.licenseExpiry = "License expiry date is required";
+    if (!formData.emergencyContact.trim()) newErrors.emergencyContact = "Emergency contact is required";
+
+    setErrors(newErrors);
+
+    // Agar koi bhi field empty hai toh false return karega
+    return Object.keys(newErrors).length === 0;
+  };
+  */
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    /* -------------------------------------------------------------
+       4. CHECK VALIDATION BEFORE NEXT (Uncomment jab active karna ho)
+    ---------------------------------------------------------------- */
+    // const isValid = validateForm();
+    // if (!isValid) return;
+
     if (onNext) onNext(formData);
   };
 
@@ -52,7 +91,9 @@ export default function AddDriverModal({ isOpen, onClose, onNext, onBack }) {
                 name="assignDriver"
                 value={formData.assignDriver}
                 onChange={handleChange}
-                className="w-full appearance-none bg-[#18181b]/60 border border-[#27272a] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#ffd60a] cursor-pointer"
+                className={`w-full appearance-none bg-[#18181b]/60 border rounded-xl px-3 py-2 text-white focus:outline-none cursor-pointer transition-all ${
+                  /* errors.assignDriver ? "border-red-500 focus:border-red-500" : */ "border-[#27272a] focus:border-[#ffd60a]"
+                }`}
               >
                 <option value="" disabled className="text-[#52525b]">
                   Enter Assign Driver
@@ -63,6 +104,7 @@ export default function AddDriverModal({ isOpen, onClose, onNext, onBack }) {
               </select>
               <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#71717a] pointer-events-none" />
             </div>
+            {/* {errors.assignDriver && <p className="text-red-500 text-[9px] mt-0.5">{errors.assignDriver}</p>} */}
           </div>
 
           {/* Row: Driver Phone & Driver License Number */}
@@ -75,9 +117,13 @@ export default function AddDriverModal({ isOpen, onClose, onNext, onBack }) {
                 placeholder="Enter Driver Phone"
                 value={formData.driverPhone}
                 onChange={handleChange}
-                className="w-full bg-[#18181b]/60 border border-[#27272a] rounded-xl px-3 py-2 text-white placeholder-[#52525b] focus:outline-none focus:border-[#ffd60a] transition-all"
+                className={`w-full bg-[#18181b]/60 border rounded-xl px-3 py-2 text-white placeholder-[#52525b] focus:outline-none transition-all ${
+                  /* errors.driverPhone ? "border-red-500 focus:border-red-500" : */ "border-[#27272a] focus:border-[#ffd60a]"
+                }`}
               />
+              {/* {errors.driverPhone && <p className="text-red-500 text-[9px] mt-0.5">{errors.driverPhone}</p>} */}
             </div>
+
             <div>
               <label className="block text-[#a1a1aa] mb-1 font-medium">Driver License Number</label>
               <input
@@ -86,8 +132,11 @@ export default function AddDriverModal({ isOpen, onClose, onNext, onBack }) {
                 placeholder="Enter Driver License Number"
                 value={formData.driverLicenseNumber}
                 onChange={handleChange}
-                className="w-full bg-[#18181b]/60 border border-[#27272a] rounded-xl px-3 py-2 text-white placeholder-[#52525b] focus:outline-none focus:border-[#ffd60a] transition-all"
+                className={`w-full bg-[#18181b]/60 border rounded-xl px-3 py-2 text-white placeholder-[#52525b] focus:outline-none transition-all ${
+                  /* errors.driverLicenseNumber ? "border-red-500 focus:border-red-500" : */ "border-[#27272a] focus:border-[#ffd60a]"
+                }`}
               />
+              {/* {errors.driverLicenseNumber && <p className="text-red-500 text-[9px] mt-0.5">{errors.driverLicenseNumber}</p>} */}
             </div>
           </div>
 
@@ -100,8 +149,11 @@ export default function AddDriverModal({ isOpen, onClose, onNext, onBack }) {
               placeholder="Enter License Expiry"
               value={formData.licenseExpiry}
               onChange={handleChange}
-              className="w-full bg-[#18181b]/60 border border-[#27272a] rounded-xl px-3 py-2 text-white placeholder-[#52525b] focus:outline-none focus:border-[#ffd60a] transition-all"
+              className={`w-full bg-[#18181b]/60 border rounded-xl px-3 py-2 text-white placeholder-[#52525b] focus:outline-none transition-all ${
+                /* errors.licenseExpiry ? "border-red-500 focus:border-red-500" : */ "border-[#27272a] focus:border-[#ffd60a]"
+              }`}
             />
+            {/* {errors.licenseExpiry && <p className="text-red-500 text-[9px] mt-0.5">{errors.licenseExpiry}</p>} */}
           </div>
 
           {/* Emergency Contact */}
@@ -113,8 +165,11 @@ export default function AddDriverModal({ isOpen, onClose, onNext, onBack }) {
               placeholder="Enter Emergency Contact"
               value={formData.emergencyContact}
               onChange={handleChange}
-              className="w-full bg-[#18181b]/60 border border-[#27272a] rounded-xl px-3 py-2 text-white placeholder-[#52525b] focus:outline-none focus:border-[#ffd60a] transition-all"
+              className={`w-full bg-[#18181b]/60 border rounded-xl px-3 py-2 text-white placeholder-[#52525b] focus:outline-none transition-all ${
+                /* errors.emergencyContact ? "border-red-500 focus:border-red-500" : */ "border-[#27272a] focus:border-[#ffd60a]"
+              }`}
             />
+            {/* {errors.emergencyContact && <p className="text-red-500 text-[9px] mt-0.5">{errors.emergencyContact}</p>} */}
           </div>
 
           {/* Action Buttons */}
