@@ -61,8 +61,8 @@ export default function Sidebar({ activeTab, setActiveTab }) {
       title: "GEO SERVICES",
       items: [
         { icon: ScanSearch, label: "Area of Interest (AOI)" },
-        { icon: Route, label: "Routes" },
-        { icon: GitBranch, label: "Trips" },
+        // { icon: Route, label: "Routes" },
+        // { icon: GitBranch, label: "Trips" },
         { icon: Send, label: "Activity" },
       ],
     },
