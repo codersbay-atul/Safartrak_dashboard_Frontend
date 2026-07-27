@@ -3,16 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { LoaderCircle } from "lucide-react";
 import Button from "../components/Ui/Button";
-import AuthShell, { AuthField, AuthLink } from "../features/auth/AuthShell";
+import AuthShell, { AuthField } from "../features/auth/AuthShell";
 import { toast } from "../components/Ui/toast";
+import { loginRequest } from "../api/authApi";
 import {
-  MOCK_ACCESS_TOKEN,
   selectIsAuthenticated,
   setMockSession,
 } from "../store/slices/authSlice";
-
-const MOCK_USERNAME = "admin";
-const MOCK_PASSWORD = "admin123";
 
 function validateLoginForm({ username, password }) {
   const errors = {};
@@ -28,10 +25,6 @@ function validateLoginForm({ username, password }) {
   return errors;
 }
 
-/**
- * Temporary mock login screen (development only).
- * // TODO: Replace mock login with POST /v1/auth/login
- */
 export default function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -56,50 +49,44 @@ export default function Login() {
 
     setIsLoading(true);
 
-    // Simulate brief loading for UX (no network call).
-    await new Promise((resolve) => setTimeout(resolve, 400));
+    try {
+      const result = await loginRequest({
+        username: username.trim(),
+        password,
+      });
 
-    const isValid =
-      username.trim() === MOCK_USERNAME && password === MOCK_PASSWORD;
+      dispatch(
+        setMockSession({
+          user: result.user ?? { username: username.trim() },
+          accessToken: result.accessToken ?? result.token,
+        })
+      );
 
-    if (!isValid) {
+      const redirectTo = location.state?.from?.pathname || "/dashboard";
+      navigate(redirectTo, { replace: true });
+    } catch (error) {
+      // API returns 403 for invalid credentials ("Vehk rejected..."), not only 401.
+      if (error?.status === 401 || error?.status === 403) {
+        toast.error("Invalid username or password");
+      } else {
+        toast.error("Unable to sign in. Please try again.");
+      }
+    } finally {
       setIsLoading(false);
-      toast.error("Invalid username or password");
-      return;
     }
-
-    // TODO: Replace mock login with POST /v1/auth/login
-    dispatch(
-      setMockSession({
-        user: {
-          username: MOCK_USERNAME,
-          displayName: "Admin",
-        },
-        accessToken: MOCK_ACCESS_TOKEN,
-      })
-    );
-
-    setIsLoading(false);
-
-    const redirectTo = location.state?.from?.pathname || "/dashboard";
-    navigate(redirectTo, { replace: true });
   };
 
   return (
     <AuthShell
-      title="Welcome back"
-      subtitle="Sign in to your SafarTrak fleet dashboard"
-      footer={
-        <>
-          Don&apos;t have an account?{" "}
-          <AuthLink to="/signup">Create account</AuthLink>
-        </>
-      }
+      variant="split"
+      title="Welcome Back"
+      subtitle="Sign In to continue managing your fleet operations."
+      sectionLabel="Login"
     >
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4" noValidate>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-5" noValidate>
         <AuthField
           id="username"
-          label="Username"
+          label="Email"
           type="text"
           value={username}
           onChange={(e) => {
@@ -108,7 +95,7 @@ export default function Login() {
               setFieldErrors((prev) => ({ ...prev, username: undefined }));
             }
           }}
-          placeholder="Enter your username"
+          placeholder="Enter your email"
           autoComplete="username"
           disabled={isLoading}
           error={fieldErrors.username}
@@ -131,11 +118,13 @@ export default function Login() {
           error={fieldErrors.password}
         />
 
-        <div className="rounded-lg border border-[#27272a] bg-[#0B0F19] px-3 py-2 text-[10px] text-[#71717a]">
-          Dev login:{" "}
-          <span className="text-[#a1a1aa] font-medium">admin</span>
-          {" / "}
-          <span className="text-[#a1a1aa] font-medium">admin123</span>
+        <div className="flex items-center justify-end">
+          <button
+            type="button"
+            className="text-[12px] font-medium text-[#F5B700] hover:text-[#d9a200] transition-colors cursor-pointer"
+          >
+            Forgot Password?
+          </button>
         </div>
 
         <Button
@@ -143,15 +132,14 @@ export default function Login() {
           variant="primary"
           size="lg"
           disabled={isLoading}
-          className="w-full h-10 mt-1"
+          className="w-full h-[50px] mt-1 rounded-[10px] bg-[#F5B700] hover:bg-[#d9a200] text-black text-[14px] font-semibold"
         >
           {isLoading ? (
             <>
-              <LoaderCircle size={14} className="animate-spin shrink-0" />
               <span>Signing in...</span>
             </>
           ) : (
-            "Sign in"
+            "Login"
           )}
         </Button>
       </form>

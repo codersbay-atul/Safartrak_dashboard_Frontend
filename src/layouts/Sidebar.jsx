@@ -95,7 +95,7 @@ export default function Sidebar({ activeTab, setActiveTab }) {
             onClick={() => setIsOpen(true)}
             className="flex items-center justify-center w-8 h-8 bg-[#17171C] text-white border border-[#2A2A2F] rounded-lg shadow-lg hover:bg-[#232328] cursor-pointer"
           >
-            <Menu size={16} />
+            <Menu size={14} />
           </button>
         </div>
       )}
@@ -112,7 +112,7 @@ export default function Sidebar({ activeTab, setActiveTab }) {
           ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}
       >
         <div className="flex flex-col flex-1 min-h-0">
-          <div className="h-8 flex items-center justify-between px-4 mb-2 shrink-0">
+          <div className="h-8 flex items-center justify-between px-4 mb-8 shrink-0">
             <div
               onClick={() => navigate("/")}
               className="cursor-pointer flex items-center"
@@ -129,59 +129,44 @@ export default function Sidebar({ activeTab, setActiveTab }) {
                 onClick={() => setIsOpen(false)}
                 className="lg:hidden flex items-center justify-center w-7 h-7 text-[#A1A1AA] hover:text-white hover:bg-[#232328] rounded-md cursor-pointer transition"
               >
-                <X size={16} />
+                <X size={15} />
               </button>
             )}
           </div>
 
-          <div className="px-4 overflow-y-auto flex-1 flex flex-col gap-3">
+          <div className="px-3 overflow-y-auto flex-1 flex flex-col gap-4">
             {sections.map((section) => (
               <div key={section.title} className="flex flex-col gap-0.5">
-                <h4 className="text-[12px] font-bold tracking-wider uppercase text-[#71717A] mb-0.5">
+                <h4 className="text-[10px] font-semibold leading-[10px] tracking-wider uppercase text-[#71717A] mb-1 px-1">
                   {section.title}
                 </h4>
 
-                <div className="space-y-4">
+                <div className="flex flex-col gap-1.5">
                   {section.items.map((item) => {
                     const targetPath = routeMap[item.label];
-                    const isItemActive = targetPath && location.pathname === targetPath;
+                    const isItemActive =
+                      targetPath && location.pathname === targetPath;
 
                     return (
-                      <div
+                      <button
                         key={item.label}
-                        className={`flex items-center w-full ${isItemActive ? "gap-3" : ""}`}
+                        onClick={() => handleNavigation(item.label)}
+                        className={`flex items-center w-full h-8 gap-3 rounded-lg px-2.5 transition cursor-pointer min-w-0 ${
+                          isItemActive
+                            ? "bg-[#232328] text-white"
+                            : "text-[#D4D4D8] hover:bg-[#232328]/70"
+                        }`}
                       >
-                        {isItemActive && (
-                          <span className="w-1 h-10 rounded-full bg-[#F6B100] shrink-0" />
-                        )}
+                        <item.icon
+                          size={15}
+                          className="text-[#F5B700] shrink-0"
+                          strokeWidth={isItemActive ? 2.5 : 2}
+                        />
 
-                        <button
-                          onClick={() => handleNavigation(item.label)}
-                          className={`flex items-center transition cursor-pointer min-w-0 ${
-                            isItemActive
-                              ? "flex-1 h-10 gap-4 rounded-xl px-4 py-2 bg-[#3B2A00] text-white"
-                              : "relative w-full h-7 gap-2.5 rounded-md pl-3 text-[#D4D4D8] hover:bg-[#232328]/70"
-                          }`}
-                        >
-                          <item.icon
-                            size={15}
-                            className={
-                              isItemActive ? "text-white shrink-0" : "text-[#D4D4D8] shrink-0"
-                            }
-                            strokeWidth={isItemActive ? 2.5 : 2}
-                          />
-
-                          <span
-                            className={`text-[15px] font-medium truncate ${
-                              isItemActive
-                                ? "leading-[20px] text-white"
-                                : "leading-[30px]"
-                            }`}
-                          >
-                            {item.label}
-                          </span>
-                        </button>
-                      </div>
+                        <span className="text-[15px] font-medium leading-[20px] truncate">
+                          {item.label}
+                        </span>
+                      </button>
                     );
                   })}
                 </div>

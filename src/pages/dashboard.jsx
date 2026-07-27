@@ -15,6 +15,8 @@ export default function Dashboard() {
     return savedVehicle ? JSON.parse(savedVehicle) : null;
   });
 
+  const [vehicleSearch, setVehicleSearch] = useState("");
+
   const [isRouteView, setIsRouteView] = useState(() => {
     return localStorage.getItem("isRouteView") === "true";
   });
@@ -80,7 +82,7 @@ export default function Dashboard() {
         /* Standard Dashboard View */
         <div className="flex-1 flex flex-col gap-3 overflow-hidden min-h-0">
           <div className="shrink-0">
-            <DashboardHeader />
+            <DashboardHeader onSearch={setVehicleSearch} />
           </div>
           <div className="shrink-0">
             <StatsCard />
@@ -95,6 +97,7 @@ export default function Dashboard() {
               }`}
             >
               <VehiclesList
+                search={vehicleSearch}
                 selectedVehicle={selectedVehicle}
                 onSelectVehicle={(v) => {
                   setSelectedVehicle(v);

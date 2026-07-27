@@ -97,3 +97,21 @@ body {
   width: 0 !important;
   height: 0 !important;
 }
+
+/* Auth inputs: keep dark background under Chrome autofill */
+.auth-field-input:-webkit-autofill,
+.auth-field-input:-webkit-autofill:hover,
+.auth-field-input:-webkit-autofill:focus,
+.auth-field-input:-webkit-autofill:active {
+  -webkit-text-fill-color: #ffffff !important;
+  caret-color: #ffffff;
+  box-shadow: 0 0 0 1000px #0a0a0f inset !important;
+  -webkit-box-shadow: 0 0 0 1000px #0a0a0f inset !important;
+  transition: background-color 99999s ease-in-out 0s;
+  background-color: #0a0a0f !important;
+  border-color: #2a2a32;
+}
+
+.auth-field-input:-webkit-autofill:focus {
+  border-color: #f5b700 !important;
+}

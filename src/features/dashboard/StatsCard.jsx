@@ -23,7 +23,10 @@ function buildStatsData(summary, { isLoading = false } = {}) {
       id: "total",
       icon: Truck,
       value: valueOrSkeleton(values.totalVehicles),
-      subtitle: "56 Active Vehicles",
+      subtitle:
+        values.activeVehicles === "-"
+          ? "Active Vehicles"
+          : `${values.activeVehicles} Active Vehicles`,
       title: "Total Vehicles",
       bgIcon: "bg-[#ffd60a]/10 border border-[#ffd60a]/20",
       colorIcon: "text-[#ffd60a]",

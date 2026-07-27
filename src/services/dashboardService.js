@@ -1,4 +1,4 @@
-import { fetchDashboardSummary } from "../api/dashboardApi";
+import { getDashboardSummary as getDashboardSummaryRequest } from "../api/dashboardApi";
 
 /**
  * Dashboard service layer.
@@ -12,5 +12,5 @@ import { fetchDashboardSummary } from "../api/dashboardApi";
  * @returns {Promise<object>} Unwrapped API payload
  */
 export function getDashboardSummary() {
-  return fetchDashboardSummary();
+  return getDashboardSummaryRequest();
 }

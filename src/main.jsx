@@ -19,9 +19,9 @@ const queryClient = new QueryClient({
   },
 });
 
-// Auth intentionally deferred — token getter returns null for now.
+// Attach Bearer token from Redux auth state (set on login).
 setupApiClient({
-  getToken: () => null,
+  getToken: () => store.getState().auth.accessToken ?? null,
 });
 
 createRoot(document.getElementById("root")).render(

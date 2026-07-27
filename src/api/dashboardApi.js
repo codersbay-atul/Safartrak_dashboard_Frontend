@@ -1,22 +1,14 @@
 import apiClient from "./client";
 
-/**
- * Dashboard API transport.
- *
- * GET /v1/dashboard/summary
- *
- * Inspected live response (unauthenticated, 2026-07-25):
- *   HTTP 401
- *   { "detail": "Authentication credentials were not provided." }
- *
- * Success (HTTP 200) body was not available without credentials.
- * Do not invent field names in mappers — confirm from a 200 payload.
- */
+/* =========================
+   DASHBOARD APIs
+========================= */
 
 /**
+ * GET /v1/dashboard/summary
  * @returns {Promise<object>} Raw/unwrapped API payload
  */
-export async function fetchDashboardSummary() {
+export async function getDashboardSummary() {
   const response = await apiClient.get("/v1/dashboard/summary");
   const payload = response?.data;
 
@@ -34,3 +26,6 @@ export async function fetchDashboardSummary() {
 
   return payload ?? {};
 }
+
+/** @deprecated Prefer getDashboardSummary — kept for existing imports. */
+export const fetchDashboardSummary = getDashboardSummary;

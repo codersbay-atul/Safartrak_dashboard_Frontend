@@ -1,27 +1,12 @@
 /**
  * Dashboard summary → StatsCard value mapping.
  *
- * ---------------------------------------------------------------------------
- * LIVE INSPECTION (2026-07-25)
- * GET https://web.backend.safartrak.zevon.systems/v1/dashboard/summary
- *
- * Unauthenticated response (actual):
- *   HTTP 401
- *   { "detail": "Authentication credentials were not provided." }
- *
- * Authenticated HTTP 200 body: NOT INSPECTED (credentials required).
- * Therefore SUMMARY_FIELD_KEYS stays empty until a 200 sample is confirmed.
- * Missing / unknown keys always render as "-". Never invent KPI numbers.
- * ---------------------------------------------------------------------------
- *
- * When you have a real 200 JSON body, set exact keys only, e.g.:
- *   totalVehicles: "total_vehicles",
- *   criticalAlerts: "critical_alerts",
- *   ...
+ * GET /v1/dashboard/summary (authenticated)
  */
 
 export const DASHBOARD_SUMMARY_PLACEHOLDER = {
   totalVehicles: "-",
+  activeVehicles: "-",
   criticalAlerts: "-",
   maintenanceDue: "-",
   predictionAccuracy: "-",
@@ -30,14 +15,15 @@ export const DASHBOARD_SUMMARY_PLACEHOLDER = {
 
 /**
  * Exact response field names for each StatsCard slot.
- * Leave null until confirmed from an authenticated 200 response.
  */
 export const SUMMARY_FIELD_KEYS = {
-  totalVehicles: null,
-  criticalAlerts: null,
-  maintenanceDue: null,
-  predictionAccuracy: null,
-  noGps: null,
+  totalVehicles: "total_vehicles",
+  activeVehicles: "active_vehicles",
+  criticalAlerts: "critical_alerts",
+  maintenanceDue: "maintenance_due",
+  predictionAccuracy: "prediction_accuracy_pct",
+  // Closest existing widget to offline vehicles (no dedicated Offline card).
+  noGps: "offline_vehicles",
 };
 
 function isMissingValue(value) {
@@ -88,18 +74,12 @@ export function mapDashboardSummary(apiSummary) {
     return { ...DASHBOARD_SUMMARY_PLACEHOLDER };
   }
 
-  // Dev aid: log actual keys once a 200 payload arrives so SUMMARY_FIELD_KEYS
-  // can be filled without guessing.
-  if (import.meta.env.DEV) {
-    console.info(
-      "[dashboard/summary] payload keys:",
-      Object.keys(apiSummary)
-    );
-  }
-
   return {
     totalVehicles: toDisplayValue(
       readField(apiSummary, SUMMARY_FIELD_KEYS.totalVehicles)
+    ),
+    activeVehicles: toDisplayValue(
+      readField(apiSummary, SUMMARY_FIELD_KEYS.activeVehicles)
     ),
     criticalAlerts: toDisplayValue(
       readField(apiSummary, SUMMARY_FIELD_KEYS.criticalAlerts)

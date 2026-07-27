@@ -14,79 +14,167 @@ import {
   Calendar,
 } from "lucide-react";
 
+const STATUS_BADGE = {
+  Running: {
+    text: "text-[#10b981]",
+    bg: "bg-[#10b981]/10",
+    dot: "bg-[#10b981]",
+  },
+  Idle: {
+    text: "text-[#f59e0b]",
+    bg: "bg-[#f59e0b]/10",
+    dot: "bg-[#f59e0b]",
+  },
+  Critical: {
+    text: "text-[#f97316]",
+    bg: "bg-[#f97316]/10",
+    dot: "bg-[#f97316]",
+  },
+  Maintenance: {
+    text: "text-[#f97316]",
+    bg: "bg-[#f97316]/10",
+    dot: "bg-[#f97316]",
+  },
+  Offline: {
+    text: "text-[#ef4444]",
+    bg: "bg-[#ef4444]/10",
+    dot: "bg-[#ef4444]",
+  },
+};
+
+function displayValue(value) {
+  if (value == null) return "-";
+  if (typeof value === "string" && value.trim() === "") return "-";
+  return String(value);
+}
+
+/**
+ * Status badge label from selected vehicle API data only.
+ * Prefer raw GET /v1/vehicles fields over any stale mapped/localStorage values.
+ */
+function resolveStatusLabel(vehicle) {
+  const raw = vehicle?.raw ?? {};
+  const inMaintenance = raw.in_maintenance ?? raw.inMaintenance;
+  if (inMaintenance === true) return "Maintenance";
+
+  const status = String(raw.status ?? "").toLowerCase().trim();
+
+  if (status === "moving") return "Running";
+  if (status === "idle") return "Idle";
+  if (status === "offline") return "Offline";
+
+  // Mapped list label (already normalized) when raw.status is absent.
+  const mapped = vehicle?.status;
+  if (mapped != null && String(mapped).trim() !== "") {
+    return String(mapped);
+  }
+
+  return "-";
+}
+
+/**
+ * Build detail rows from the selected Vehicles API object only.
+ * Fields not present in the API always render "-".
+ */
 function getVehicleMetrics(vehicle) {
   return [
     {
       key: "speed",
       label: "Speed",
-      value: vehicle?.speed || "52 km/h",
+      value: displayValue(vehicle?.speed),
       icon: Gauge,
     },
     {
       key: "fuel",
       label: "Fuel Level",
-      value: "82%",
+      value: "-",
       icon: Fuel,
-      progress: 82,
-      progressColor: "bg-[#22c55e]",
     },
     {
       key: "battery",
       label: "Battery",
-      value: "12.8V",
+      value: "-",
       icon: Battery,
     },
     {
       key: "engineHealth",
       label: "Engine Health",
-      value: "Excellent",
+      value: "-",
       icon: ShieldCheck,
       valueColor: "text-zinc-200",
     },
     {
       key: "odometer",
       label: "Odometer",
-      value: "186,240 km",
+      value: "-",
       icon: Milestone,
     },
     {
       key: "tripProgress",
       label: "Trip Progress",
-      value: "72%",
+      value: "-",
       icon: Waypoints,
-      progress: 72,
-      progressColor: "bg-[#FDBB24]",
     },
     {
       key: "eta",
       label: "ETA",
-      value: "1 hr 24 min",
+      value: "-",
       icon: Clock,
     },
     {
-      key: "currentAddress",
-      label: "Current Address",
-      value: "Andheri East, Mumbai",
+      key: "vehicleType",
+      label: "Vehicle Type",
+      value: displayValue(vehicle?.type),
+      icon: Milestone,
+    },
+    {
+      key: "model",
+      label: "Model",
+      value: displayValue(vehicle?.model),
+      icon: ShieldCheck,
+    },
+    {
+      key: "fleetGroup",
+      label: "Fleet Group",
+      value: displayValue(vehicle?.fleetGroup ?? vehicle?.location),
       icon: MapPin,
       valueClassName: "text-right truncate pl-4 max-w-[150px]",
     },
     {
-      key: "gpsSignal",
-      label: "GPS Signal",
-      value: "Strong",
+      key: "deviceStatus",
+      label: "Connection Status",
+      value: displayValue(vehicle?.deviceStatus),
       icon: Radio,
     },
     {
-      key: "ignition",
-      label: "Ignition",
-      value: "ON",
+      key: "inMaintenance",
+      label: "Maintenance Status",
+      value: displayValue(vehicle?.inMaintenance),
       icon: Key,
-      valueColor: "text-[#10b981]",
+    },
+    {
+      key: "uniqueId",
+      label: "Unique ID",
+      value: displayValue(vehicle?.uniqueId),
+      icon: Key,
+      valueClassName: "text-right truncate pl-4 max-w-[150px]",
+    },
+    {
+      key: "lat",
+      label: "Latitude",
+      value: displayValue(vehicle?.latDisplay ?? vehicle?.lat),
+      icon: MapPin,
+    },
+    {
+      key: "lng",
+      label: "Longitude",
+      value: displayValue(vehicle?.lngDisplay ?? vehicle?.lng),
+      icon: MapPin,
     },
     {
       key: "lastUpdated",
       label: "Last Updated",
-      value: "12 Second ago",
+      value: displayValue(vehicle?.lastUpdated ?? vehicle?.info),
       icon: Calendar,
       valueColor: "text-zinc-200",
     },
@@ -95,6 +183,12 @@ function getVehicleMetrics(vehicle) {
 
 export default function DashboardVehicleDetails({ vehicle, onViewRoute }) {
   const metrics = getVehicleMetrics(vehicle);
+  const statusLabel = resolveStatusLabel(vehicle);
+  const badge = STATUS_BADGE[statusLabel] || {
+    text: "text-zinc-300",
+    bg: "bg-zinc-500/10",
+    dot: "bg-zinc-400",
+  };
 
   return (
     <div className="w-full h-full bg-[#16161a] border border-[#1f1f23] rounded-xl p-3.5 flex flex-col justify-between select-none overflow-hidden font-sans text-zinc-100">
@@ -104,8 +198,11 @@ export default function DashboardVehicleDetails({ vehicle, onViewRoute }) {
           <h3 className="text-[15px] font-bold text-white tracking-tight">
             Vehicle Details
           </h3>
-          <span className="text-[15px] font-bold text-[#10b981] bg-[#10b981]/10 px-2 py-0.5 rounded-sm flex items-center gap-1.5 shrink-0">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#10b981]" /> Running
+          <span
+            className={`text-[15px] font-bold ${badge.text} ${badge.bg} px-2 py-0.5 rounded-sm flex items-center gap-1.5 shrink-0`}
+          >
+            <span className={`w-1.5 h-1.5 rounded-full ${badge.dot}`} />{" "}
+            {statusLabel}
           </span>
         </div>
 
@@ -124,35 +221,30 @@ export default function DashboardVehicleDetails({ vehicle, onViewRoute }) {
           <div className="w-9 h-9 bg-[#d9d9d9] rounded-md shrink-0" />
           <div className="leading-tight min-w-0">
             <h4 className="text-[15px] font-bold text-white tracking-tight truncate">
-              {vehicle?.plate || "MH14ZZ8765"}
+              {displayValue(vehicle?.plate)}
             </h4>
             <p className="text-[15px] text-zinc-500 font-medium truncate mt-0.5">
-              {vehicle?.driver || "Ashok Sharma"}
+              {displayValue(vehicle?.driver)}
             </p>
           </div>
         </div>
         <div className="text-right leading-tight shrink-0">
-          <p className="text-[15px] font-bold text-white">118 km</p>
+          <p className="text-[15px] font-bold text-white">-</p>
           <p className="text-[15px] text-zinc-500 font-medium mt-0.5">
             Remaining Distance
           </p>
         </div>
       </div>
 
-      {/* 3. Trip Progress */}
+      {/* 3. Trip Progress — no API field; never show fake % */}
       <div className="mb-3 mt-1.5 px-1 shrink-0">
         <div className="relative w-full h-4 flex items-center">
           <div className="absolute left-0 right-0 h-[2.5px] bg-[#2e2e36] rounded-full" />
-          <div className="absolute left-0 w-[72%] h-[2.5px] bg-[#FDBB24] rounded-full" />
-          <div className="absolute left-0 w-2.5 h-2.5 rounded-full bg-[#16161a] border-2 border-[#FDBB24] transform -translate-x-1/2 z-10" />
-          <div className="absolute left-[38%] w-2.5 h-2.5 rounded-full bg-[#16161a] border-2 border-[#FDBB24] transform -translate-x-1/2 z-10" />
-          <div className="absolute left-[72%] text-[15px] transform -translate-x-1/2 z-20 select-none pb-0.5 pointer-events-none">
-            🚚
-          </div>
+          <div className="absolute left-0 w-2.5 h-2.5 rounded-full bg-[#16161a] border-2 border-[#2e2e36] transform -translate-x-1/2 z-10" />
           <div className="absolute right-0 w-2.5 h-2.5 rounded-full bg-[#16161a] border-2 border-[#2e2e36] transform translate-x-1/2 z-10" />
         </div>
         <p className="text-[15px] font-bold text-[#FDBB24] tracking-wide mt-1.5">
-          72% Completed
+          -
         </p>
       </div>
 
@@ -166,8 +258,6 @@ export default function DashboardVehicleDetails({ vehicle, onViewRoute }) {
             label,
             value,
             icon: Icon,
-            progress,
-            progressColor,
             valueColor = "text-white",
             valueClassName,
           }) => (
@@ -179,25 +269,13 @@ export default function DashboardVehicleDetails({ vehicle, onViewRoute }) {
                 <Icon size={15} className="text-zinc-100 shrink-0" />
                 <span className="truncate">{label}</span>
               </div>
-              {progress != null ? (
-                <div className="flex items-center gap-2 shrink-0">
-                  <span className="font-bold text-white">{value}</span>
-                  <div className="w-12 h-[3px] bg-zinc-800 rounded-full overflow-hidden">
-                    <div
-                      className={`h-full ${progressColor} rounded-full`}
-                      style={{ width: `${progress}%` }}
-                    />
-                  </div>
-                </div>
-              ) : (
-                <span
-                  className={`font-bold ${valueColor} ${
-                    valueClassName || "shrink-0"
-                  }`}
-                >
-                  {value}
-                </span>
-              )}
+              <span
+                className={`font-bold ${valueColor} ${
+                  valueClassName || "shrink-0"
+                }`}
+              >
+                {value}
+              </span>
             </div>
           )
         )}
@@ -210,7 +288,7 @@ export default function DashboardVehicleDetails({ vehicle, onViewRoute }) {
         <button
           type="button"
           onClick={onViewRoute}
-          className="w-full h-10 rounded-lg text-[15px] font-bold text-[#FDBB24] border border-[#FDBB24]/30 bg-transparent hover:bg-[#FDBB24]/5 transition-all text-center flex items-center justify-center tracking-wide cursor-pointer"
+          className="w-full h-10 rounded-lg text-[15px] font-bold text-[#ffff] border border-[#FDBB24]/30 bg-transparent hover:bg-[#FDBB24]/5 transition-all text-center flex items-center justify-center tracking-wide cursor-pointer"
         >
           View Route
         </button>
