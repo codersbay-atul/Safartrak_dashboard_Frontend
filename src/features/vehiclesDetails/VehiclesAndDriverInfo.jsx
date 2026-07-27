@@ -13,10 +13,8 @@ export default function VehiclesAndDriverInfo() {
         </span>
       </div>
 
-      {/* 2-Column Exact Grid */}
       <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-[10px] my-auto py-0.5">
         
-        {/* Left Side Specifications */}
         <div className="space-y-0.5">
           <div className="flex justify-between py-0.5 border-b border-gray-800/40"><span className="text-gray-400">Model</span><span className="font-semibold text-white">Prima 5530</span></div>
           <div className="flex justify-between py-0.5 border-b border-gray-800/40"><span className="text-gray-400">Year</span><span className="font-semibold text-white">2024</span></div>

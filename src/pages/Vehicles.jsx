@@ -55,7 +55,7 @@ export default function Vehicles() {
 
       </div>
 
-      {/* Step 1: Add Vehicle Modal */}
+     
       {currentStep === 1 && (
         <AddVehicleModal
           isOpen={isAddModalOpen}
@@ -64,7 +64,7 @@ export default function Vehicles() {
         />
       )}
 
-      {/* Step 2: Add Driver Modal */}
+     
       {currentStep === 2 && (
         <AddDriverModal
           isOpen={isAddModalOpen}
@@ -73,7 +73,7 @@ export default function Vehicles() {
         />
       )}
 
-      {/* Step 3: Add Fleet Assignment Modal */}
+    
       {currentStep === 3 && (
         <AddFleetAssignmentModal
           isOpen={isAddModalOpen}
@@ -82,7 +82,7 @@ export default function Vehicles() {
         />
       )}
 
-      {/* Step 4: Add GPS Device Modal */}
+      
       {currentStep === 4 && (
         <AddGPSDeviceModal
           isOpen={isAddModalOpen}
@@ -91,7 +91,7 @@ export default function Vehicles() {
         />
       )}
 
-      {/* Step 5: Upload Documents Modal */}
+
       {currentStep === 5 && (
         <UploadDocumentsModal
           isOpen={isAddModalOpen}
@@ -100,7 +100,7 @@ export default function Vehicles() {
         />
       )}
 
-      {/* Step 6: Success Screen Modal */}
+      
       {currentStep === 6 && (
         <VehicleAddedSuccessModal
           isOpen={isAddModalOpen}

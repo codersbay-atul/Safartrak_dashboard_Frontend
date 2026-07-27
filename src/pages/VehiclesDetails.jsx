@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import MainLayout from "../layouts/MainLayout";
 
-// Modal Steps
 import VehiclesBasicInfo from "../features/vehiclesDetails/VehiclesBasicInfo";
 import VehiclesRegistrationDetails from "../features/vehiclesDetails/VehiclesRegistrationDetails";
 import DriverAssignmentDetails from "../features/vehiclesDetails/DriverAssignmentDetails";
@@ -11,7 +10,6 @@ import MaintenanceInfo from "../features/vehiclesDetails/MaintenanceInfo";
 import VehiclesInfo from "../features/vehiclesDetails/VehiclesInfo";
 import VehiclesSetting from "../features/vehiclesDetails/VehiclesSetting";
 import ScheduleMaintenance from "../features/vehiclesDetails/ScheduleMaintenance";
-
 
 import VehicleDetailsHeader from "../features/vehiclesDetails/VehiclesDetailsHeader";
 import VehiclesDetailsStatsCard from "../features/vehiclesDetails/VehiclesDetailsStatsCard";
@@ -40,10 +38,10 @@ export default function VehiclesDetails() {
 
   return (
     <MainLayout activeTab="Vehicles">
-      {/* Container to fit 100% height without body scroll */}
+
       <div className="h-screen max-h-screen flex flex-col gap-2 p-2.5 bg-[#090b0e] text-gray-200 overflow-hidden">
         
-        {/* 1. Top Header */}
+       
         <div className="shrink-0">
           <VehicleDetailsHeader
             onImportClick={handleImport}
@@ -52,43 +50,41 @@ export default function VehiclesDetails() {
           />
         </div>
 
-        {/* 2. Top Stats Cards (59 Total, 53 Active, etc.) */}
+       
         <div className="shrink-0">
           <VehiclesDetailsStatsCard />
         </div>
 
-        {/* 3. Main Content Area */}
+        
         <div className="flex-1 min-h-0 grid grid-cols-12 gap-2.5 overflow-hidden">
           
-          {/* Left Panel: Vehicle List */}
+         
           <div className="col-span-3 h-full min-h-0 rounded-xl border border-gray-800/80 bg-[#0d0f12] overflow-hidden flex flex-col">
             <VehiclesDetailsInfo />
           </div>
 
-          {/* Right Panel: Stats + Info + Map + Actions */}
           <div className="col-span-9 h-full min-h-0 flex flex-col gap-2 overflow-hidden">
             
-            {/* Quick Stats Row */}
+            
             <div className="shrink-0">
               <VehiclesQuickStats />
             </div>
 
-            {/* Middle Row: Vehicle & Driver Info (Left) + Map (Right) */}
             <div className="flex-1 min-h-0 grid grid-cols-12 gap-2.5 overflow-hidden">
               
-              {/* Vehicle & Driver Details (8 Columns) */}
+             
               <div className="col-span-8 h-full min-h-0">
                 <VehiclesAndDriverInfo />
               </div>
 
-              {/* Last Known Location Map (4 Columns) */}
+          
               <div className="col-span-4 h-full min-h-0">
                 <VehiclesLastKnownLocation />
               </div>
 
             </div>
 
-            {/* Fixed Bottom Action Buttons */}
+           
             <div className="shrink-0">
               <VehiclesActionButtons />
             </div>
@@ -99,9 +95,8 @@ export default function VehiclesDetails() {
 
       </div>
 
-      {/* MODAL OVERLAY */}
       {isAddModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 overflow-y-auto">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-md p-4 overflow-y-auto">
           {currentStep === 1 && (
             <VehiclesBasicInfo
               isOpen={isAddModalOpen}

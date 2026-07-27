@@ -22,7 +22,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
 
-          {/* Protected dashboard */}
+          
           <Route
             path="/dashboard"
             element={
@@ -32,7 +32,7 @@ function App() {
             }
           />
 
-          {/* Existing app routes (protected) */}
+          
           <Route
             path="/analytics"
             element={
@@ -98,7 +98,6 @@ function App() {
             }
           />
 
-          {/* Default entry -> Redirect to /dashboard */}
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
