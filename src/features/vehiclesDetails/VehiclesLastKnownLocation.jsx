@@ -3,15 +3,13 @@ import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
 import L from "leaflet";
 import { MapPin, Truck } from "lucide-react";
 import "leaflet/dist/leaflet.css";
-
-// Fix Leaflet CSS Z-Index conflict with Tailwind UI
 import ReactDOMServer from "react-dom/server";
 
-// 1. Custom Truck Marker Icon (Matching Image Design)
+
 const createTruckIcon = () => {
   const iconHtml = ReactDOMServer.renderToString(
-    <div className="w-10 h-10 bg-[#1a1712] border border-amber-500/60 rounded-xl flex items-center justify-center shadow-lg shadow-black/80">
-      <Truck className="w-5 h-5 text-amber-500" />
+    <div className="w-10 h-10 bg-[#111115] border-2 border-[#FDBB24] rounded-xl flex items-center justify-center shadow-[0_4px_16px_rgba(253,187,36,0.4)]">
+      <Truck className="w-5 h-5 text-[#FDBB24]" />
     </div>
   );
 
@@ -23,7 +21,6 @@ const createTruckIcon = () => {
   });
 };
 
-// Map Recenter Helper Component
 function RecenterMap({ center }) {
   const map = useMap();
   useEffect(() => {
@@ -33,9 +30,11 @@ function RecenterMap({ center }) {
 }
 
 export default function VehiclesLastKnownLocation({ selectedVehicle }) {
-  // Default Coordinates (Pune / New Delhi area as shown in image)
+
   const position = selectedVehicle?.coordinates || [18.5204, 73.8567];
-  const address = selectedVehicle?.address || "NH48, Near Pune Toll Plaza, Pune Maharashtra412308";
+  const address =
+    selectedVehicle?.address ||
+    "NH48, Near Pune Toll Plaza, Pune Maharashtra 412308";
 
   return (
     <div className="w-full h-full bg-[#12151a] border border-gray-800/80 rounded-xl flex flex-col min-h-0 overflow-hidden relative">
@@ -47,19 +46,19 @@ export default function VehiclesLastKnownLocation({ selectedVehicle }) {
         </h3>
       </div>
 
-      {/* 2. Map View Container */}
+      
       <div className="flex-1 min-h-0 w-full relative overflow-hidden">
         <MapContainer
           center={position}
           zoom={12}
           zoomControl={false}
           attributionControl={false}
-          className="w-full h-full z-0 bg-[#0e1013]"
+          className="w-full h-full z-0 bg-[#0B0F19]"
         >
-          {/* Dark Mode Map Tiles */}
           <TileLayer
-            url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
-            maxZoom={20}
+            url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+            maxZoom={19}
+            subdomains="abcd"
           />
 
           <RecenterMap center={position} />
@@ -68,24 +67,19 @@ export default function VehiclesLastKnownLocation({ selectedVehicle }) {
           <Marker position={position} icon={createTruckIcon()} />
         </MapContainer>
 
-        {/* Custom Dark Overlay to maintain deep pitch-black UI look */}
-        <div className="absolute inset-0 bg-black/20 pointer-events-none z-[1]"></div>
+        {/* Custom Dark Layer Overlay */}
+        <div className="absolute inset-0 bg-black/10 pointer-events-none z-[1]"></div>
 
-        {/* 3. Bottom Address & Action Overlay Card */}
-        <div className="absolute bottom-2 left-2 right-2 bg-[#0e1116]/95 backdrop-blur-md p-2 rounded-lg border border-gray-800/80 flex items-center justify-between z-[10] shadow-xl">
-          {/* Address Text */}
-          <div className="flex items-start gap-1.5 min-w-0 pr-2">
-            <MapPin className="w-3.5 h-3.5 text-gray-400 shrink-0 mt-0.5" />
+        {/* 3. Bottom Address HUD Card */}
+        <div className="absolute bottom-2.5 left-2.5 right-2.5 bg-[#17171C] border border-[#2A2A2F] p-2.5 rounded-lg flex items-center justify-between z-[1000] shadow-2xl">
+          <div className="flex items-start gap-2 min-w-0 pr-2">
+            <MapPin className="w-3.5 h-3.5 text-[#FDBB24] shrink-0 mt-0.5" />
             <p className="text-[9.5px] text-gray-300 font-medium leading-tight line-clamp-2">
               {address}
             </p>
           </div>
 
-          {/* View on Map Button */}
-          <button
-            onClick={() => window.open(`https://maps.google.com/?q=${position[0]},${position[1]}`, "_blank")}
-            className="bg-[#161a20] hover:bg-[#1f2630] text-amber-400 border border-amber-500/50 px-2.5 py-1 rounded-md text-[10px] font-semibold transition shrink-0 shadow-sm"
-          >
+          <button className="px-2.5 py-1 bg-[#FDBB24]/10 border border-[#FDBB24]/40 hover:bg-[#FDBB24]/20 text-[#FDBB24] rounded-md text-[9.5px] font-bold transition shrink-0 cursor-pointer">
             View on Map
           </button>
         </div>
