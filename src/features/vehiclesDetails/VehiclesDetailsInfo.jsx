@@ -17,7 +17,7 @@ export default function VehiclesDetailsInfo() {
     <aside className="w-full h-full bg-[#12151a] flex flex-col p-2.5 rounded-xl border border-gray-800/80 min-h-0 overflow-hidden">
       <h2 className="text-xs font-bold mb-1.5 text-white shrink-0 tracking-wide">Vehicles</h2>
 
-      {/* Search Input */}
+      
       <div className="relative mb-1.5 shrink-0">
         <input
           type="text"
@@ -27,7 +27,7 @@ export default function VehiclesDetailsInfo() {
         <Search className="w-3 h-3 absolute right-2 top-1.5 text-gray-400" />
       </div>
 
-      {/* Filter Badges */}
+      
       <div className="flex items-center gap-1 mb-1.5 overflow-x-auto no-scrollbar shrink-0 pb-0.5">
         {filters.map((filter) => {
           const isActive = activeFilter === filter;
@@ -54,7 +54,7 @@ export default function VehiclesDetailsInfo() {
         })}
       </div>
 
-      {/* Vehicles List Container */}
+     
       <div className="flex-1 overflow-y-auto space-y-1.5 pr-0.5 custom-scrollbar min-h-0">
         {vehicles.map((v, i) => (
           <div
