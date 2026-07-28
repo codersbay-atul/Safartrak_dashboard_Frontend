@@ -1,4 +1,4 @@
-import { getVehicles } from "../api/vehicleApi";
+import { getVehicles, getVehiclesSummary as getVehiclesSummaryRequest, getVehiclesExport as getVehiclesExportRequest } from "../api/vehicleApi";
 
 /**
  * Vehicle service layer.
@@ -11,4 +11,12 @@ import { getVehicles } from "../api/vehicleApi";
  */
 export function getVehiclesList(params) {
   return getVehicles(params);
+}
+
+export function getVehiclesSummary() {
+  return getVehiclesSummaryRequest();
+}
+
+export function getVehiclesExport(params) {
+  return getVehiclesExportRequest(params);
 }

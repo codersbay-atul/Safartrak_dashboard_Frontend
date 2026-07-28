@@ -9,6 +9,8 @@ import AddFleetAssignmentModal from "../features/vehicles/AddFleetAssignmentModa
 import AddGPSDeviceModal from "../features/vehicles/AddGPSDeviceModal";
 import UploadDocumentsModal from "../features/vehicles/UploadDocumentModal";
 import VehicleAddedSuccessModal from "../features/vehicles/VehiclesAddedSuccessModal";
+import { getVehiclesExport } from "../services/vehicleService";
+import { toast } from "../components/Ui/toast";
 
 
 
@@ -18,7 +20,36 @@ export default function Vehicles() {
   const [currentStep, setCurrentStep] = useState(1);
 
   const handleImport = () => console.log("Import Data Clicked");
-  const handleExport = () => console.log("Export Data Clicked");
+  const handleExport = async () => {
+    try {
+      // Request export for all tabs (server should return a file blob)
+      const response = await getVehiclesExport({ tab: "all" });
+
+      // Extract filename from content-disposition header if present
+      const disposition = response.headers?.["content-disposition"] || response.headers?.["Content-Disposition"];
+      let filename = "vehicles_export";
+      if (disposition) {
+        const match = /filename\*?=([^;]+)/i.exec(disposition);
+        if (match) {
+          filename = match[1].replace(/UTF-8''/, "").replace(/\"/g, "");
+        }
+      }
+
+      const blob = new Blob([response.data], { type: response.data.type || "application/octet-stream" });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+      toast.success("Export started");
+    } catch (err) {
+      console.error("Export failed", err);
+      toast.error(err?.message || "Export failed");
+    }
+  };
 
   const handleAddVehicle = () => {
     setCurrentStep(1);

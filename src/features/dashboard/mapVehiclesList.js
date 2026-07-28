@@ -105,17 +105,31 @@ export function mapVehicleItem(item) {
  * @param {object|null|undefined} payload - getVehicles() result
  */
 export function mapVehiclesList(payload) {
-  const results = Array.isArray(payload?.results) ? payload.results : [];
+  const results =
+    Array.isArray(payload?.results)
+      ? payload.results
+      : Array.isArray(payload?.items)
+        ? payload.items
+        : Array.isArray(payload?.data)
+          ? payload.data
+          : Array.isArray(payload?.vehicles)
+            ? payload.vehicles
+            : [];
+
   const vehicles = results.map(mapVehicleItem).filter(Boolean);
   const counts =
-    payload?.counts && typeof payload.counts === "object" ? payload.counts : {};
+    payload?.counts && typeof payload.counts === "object"
+      ? payload.counts
+      : payload?.count && typeof payload.count === "object"
+        ? payload.count
+        : {};
 
   return {
     vehicles,
     counts,
-    total: payload?.total ?? vehicles.length,
+    total: payload?.total ?? payload?.count ?? vehicles.length,
     page: payload?.page ?? 1,
-    pageSize: payload?.page_size ?? 25,
+    pageSize: payload?.page_size ?? payload?.pageSize ?? 25,
   };
 }
 

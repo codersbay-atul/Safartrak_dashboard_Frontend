@@ -13,7 +13,7 @@ import apiClient from "./client";
 export async function getVehicles(params = {}) {
   const search = String(params.search ?? "").trim();
   const page = params.page ?? 1;
-  const page_size = params.page_size ?? 25;
+  const page_size = params.page_size ?? params.pageSize ?? 25;
 
   const response = await apiClient.get("/v1/vehicles", {
     params: {
@@ -35,4 +35,27 @@ export async function getVehicles(params = {}) {
     page: payload.page ?? page,
     page_size: payload.page_size ?? page_size,
   };
+}
+
+export async function getVehiclesSummary() {
+  const response = await apiClient.get("/v1/vehicles/summary");
+  const payload = response?.data?.data ?? response?.data ?? {};
+
+  return payload;
+}
+
+/**
+ * GET /v1/vehicles/export
+ * Returns a file (CSV/Excel) as a binary blob.
+ * @param {{ tab?: string }} [params]
+ */
+export async function getVehiclesExport(params = {}) {
+  const response = await apiClient.get("/v1/vehicles/export", {
+    params: {
+      ...(params.tab ? { tab: params.tab } : {}),
+    },
+    responseType: "blob",
+  });
+
+  return response;
 }
