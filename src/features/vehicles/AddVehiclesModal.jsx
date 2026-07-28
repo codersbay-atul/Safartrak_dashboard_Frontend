@@ -1,6 +1,31 @@
 import React, { useState } from "react";
-import { ChevronDown, X } from "lucide-react";
 import Button from "../../components/Ui/Button";
+import Dropdown from "../../components/Ui/DropDown";
+
+// Dropdown Options
+const VEHICLE_TYPE_OPTIONS = [
+  { label: "Truck", value: "Truck" },
+  { label: "Van", value: "Van" },
+  { label: "Car", value: "Car" },
+];
+
+const MANUFACTURER_OPTIONS = [
+  { label: "Tata", value: "Tata" },
+  { label: "Ashok Leyland", value: "Ashok Leyland" },
+  { label: "Mahindra", value: "Mahindra" },
+];
+
+const MANUFACTURING_YEAR_OPTIONS = [
+  { label: "2026", value: "2026" },
+  { label: "2025", value: "2025" },
+  { label: "2024", value: "2024" },
+];
+
+const FUEL_TYPE_OPTIONS = [
+  { label: "Diesel", value: "Diesel" },
+  { label: "Petrol", value: "Petrol" },
+  { label: "Electric", value: "Electric" },
+];
 
 export default function AddVehicleModal({ isOpen, onClose, onNext }) {
   const [formData, setFormData] = useState({
@@ -18,7 +43,7 @@ export default function AddVehicleModal({ isOpen, onClose, onNext }) {
   });
 
   /* -------------------------------------------------------------
-     1. VALIDATION ERRORS STATE
+     1. VALIDATION ERRORS STATE (Commented out for now)
   ---------------------------------------------------------------- */
   // const [errors, setErrors] = useState({});
 
@@ -29,15 +54,23 @@ export default function AddVehicleModal({ isOpen, onClose, onNext }) {
     setFormData((prev) => ({ ...prev, [name]: value }));
 
     /* -------------------------------------------------------------
-       2. CLEAR ERROR ON INPUT CHANGE 
+       2. CLEAR ERROR ON INPUT CHANGE (Commented out for now)
     ---------------------------------------------------------------- */
     // if (errors[name]) {
     //   setErrors((prev) => ({ ...prev, [name]: "" }));
     // }
   };
 
+  // Helper for custom Dropdowns
+  const handleDropdownSelect = (field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    // if (errors[field]) {
+    //   setErrors((prev) => ({ ...prev, [field]: "" }));
+    // }
+  };
+
   /* -------------------------------------------------------------
-     3. VALIDATION FUNCTION 
+     3. VALIDATION FUNCTION (Commented out for now)
   ---------------------------------------------------------------- */
   /*
   const validateForm = () => {
@@ -56,8 +89,6 @@ export default function AddVehicleModal({ isOpen, onClose, onNext }) {
     if (!formData.vehicleColor.trim()) newErrors.vehicleColor = "Vehicle Color is required";
 
     setErrors(newErrors);
-
-    
     return Object.keys(newErrors).length === 0;
   };
   */
@@ -66,7 +97,7 @@ export default function AddVehicleModal({ isOpen, onClose, onNext }) {
     e.preventDefault();
 
     /* -------------------------------------------------------------
-       4. CHECK VALIDATION BEFORE NEXT PAGE 
+       4. CHECK VALIDATION BEFORE NEXT PAGE (Commented out for now)
     ---------------------------------------------------------------- */
     // const isValid = validateForm();
     // if (!isValid) return; 
@@ -76,21 +107,14 @@ export default function AddVehicleModal({ isOpen, onClose, onNext }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/70 backdrop-blur-xs select-none animate-fadeIn">
-      {/* Modal Card */}
-      <div className="relative w-full max-w-[480px] bg-[#121214] border border-[#27272a] rounded-2xl p-4 shadow-2xl flex flex-col overflow-hidden">
+      {/* Modal Card - set overflow-visible to prevent menu clipping */}
+      <div className="relative w-full max-w-[480px] bg-[#121214] border border-[#27272a] rounded-2xl p-4 shadow-2xl flex flex-col overflow-visible">
         
-        {/* Header */}
-        <div className="flex items-center justify-between pb-2 mb-2 border-b border-[#1d1d20]/60">
+        {/* Header (Without Cross Button) */}
+        <div className="pb-2 mb-2 border-b border-[#1d1d20]/60">
           <h2 className="text-[14px] font-bold text-white tracking-tight">
             Add Vehicle
           </h2>
-          <button
-            type="button"
-            onClick={onClose}
-            className="text-[#71717a] hover:text-white transition-colors cursor-pointer"
-          >
-            <X size={15} />
-          </button>
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-2 text-[10.5px]">
@@ -105,7 +129,7 @@ export default function AddVehicleModal({ isOpen, onClose, onNext }) {
                 placeholder="Enter Vehicle Number"
                 value={formData.vehicleNumber}
                 onChange={handleChange}
-                className="w-full bg-[#18181b]/60 border border-[#27272a] rounded-lg px-2.5 py-1 text-white placeholder-[#52525b] focus:outline-none focus:border-[#ffd60a] transition-all"
+                className="w-full bg-[#18181b]/60 border border-[#27272a] rounded-lg px-2.5 py-1.5 text-white placeholder-[#52525b] focus:outline-none focus:border-[#ffd60a] transition-all"
               />
               {/* {errors.vehicleNumber && <p className="text-red-500 text-[9px] mt-0.5">{errors.vehicleNumber}</p>} */}
             </div>
@@ -117,7 +141,7 @@ export default function AddVehicleModal({ isOpen, onClose, onNext }) {
                 placeholder="Enter Registration Number"
                 value={formData.registrationNumber}
                 onChange={handleChange}
-                className="w-full bg-[#18181b]/60 border border-[#27272a] rounded-lg px-2.5 py-1 text-white placeholder-[#52525b] focus:outline-none focus:border-[#ffd60a] transition-all"
+                className="w-full bg-[#18181b]/60 border border-[#27272a] rounded-lg px-2.5 py-1.5 text-white placeholder-[#52525b] focus:outline-none focus:border-[#ffd60a] transition-all"
               />
               {/* {errors.registrationNumber && <p className="text-red-500 text-[9px] mt-0.5">{errors.registrationNumber}</p>} */}
             </div>
@@ -127,39 +151,25 @@ export default function AddVehicleModal({ isOpen, onClose, onNext }) {
           <div className="grid grid-cols-2 gap-2">
             <div>
               <label className="block text-[#a1a1aa] mb-0.5 font-medium">Vehicle Type</label>
-              <div className="relative">
-                <select
-                  name="vehicleType"
-                  value={formData.vehicleType}
-                  onChange={handleChange}
-                  className="w-full appearance-none bg-[#18181b]/60 border border-[#27272a] rounded-lg px-2.5 py-1 text-white focus:outline-none focus:border-[#ffd60a] cursor-pointer"
-                >
-                  <option value="" disabled className="text-[#52525b]">Enter Vehicle Type</option>
-                  <option value="Truck" className="bg-[#121214]">Truck</option>
-                  <option value="Van" className="bg-[#121214]">Van</option>
-                  <option value="Car" className="bg-[#121214]">Car</option>
-                </select>
-                <ChevronDown size={11} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#71717a] pointer-events-none" />
-              </div>
+              <Dropdown
+                label="Enter Vehicle Type"
+                options={VEHICLE_TYPE_OPTIONS}
+                selectedValue={formData.vehicleType}
+                onSelect={(val) => handleDropdownSelect("vehicleType", val)}
+                className="w-full justify-between rounded-lg bg-[#18181b]/60 border-[#27272a] py-1.5 px-2.5 text-white"
+              />
               {/* {errors.vehicleType && <p className="text-red-500 text-[9px] mt-0.5">{errors.vehicleType}</p>} */}
             </div>
 
             <div>
               <label className="block text-[#a1a1aa] mb-0.5 font-medium">Manufacturer</label>
-              <div className="relative">
-                <select
-                  name="manufacturer"
-                  value={formData.manufacturer}
-                  onChange={handleChange}
-                  className="w-full appearance-none bg-[#18181b]/60 border border-[#27272a] rounded-lg px-2.5 py-1 text-white focus:outline-none focus:border-[#ffd60a] cursor-pointer"
-                >
-                  <option value="" disabled className="text-[#52525b]">Enter Manufacturer Name</option>
-                  <option value="Tata" className="bg-[#121214]">Tata</option>
-                  <option value="Ashok Leyland" className="bg-[#121214]">Ashok Leyland</option>
-                  <option value="Mahindra" className="bg-[#121214]">Mahindra</option>
-                </select>
-                <ChevronDown size={11} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#71717a] pointer-events-none" />
-              </div>
+              <Dropdown
+                label="Enter Manufacturer Name"
+                options={MANUFACTURER_OPTIONS}
+                selectedValue={formData.manufacturer}
+                onSelect={(val) => handleDropdownSelect("manufacturer", val)}
+                className="w-full justify-between rounded-lg bg-[#18181b]/60 border-[#27272a] py-1.5 px-2.5 text-white"
+              />
               {/* {errors.manufacturer && <p className="text-red-500 text-[9px] mt-0.5">{errors.manufacturer}</p>} */}
             </div>
           </div>
@@ -173,7 +183,7 @@ export default function AddVehicleModal({ isOpen, onClose, onNext }) {
               placeholder="Enter Model Number"
               value={formData.model}
               onChange={handleChange}
-              className="w-full bg-[#18181b]/60 border border-[#27272a] rounded-lg px-2.5 py-1 text-white placeholder-[#52525b] focus:outline-none focus:border-[#ffd60a] transition-all"
+              className="w-full bg-[#18181b]/60 border border-[#27272a] rounded-lg px-2.5 py-1.5 text-white placeholder-[#52525b] focus:outline-none focus:border-[#ffd60a] transition-all"
             />
             {/* {errors.model && <p className="text-red-500 text-[9px] mt-0.5">{errors.model}</p>} */}
           </div>
@@ -182,39 +192,25 @@ export default function AddVehicleModal({ isOpen, onClose, onNext }) {
           <div className="grid grid-cols-2 gap-2">
             <div>
               <label className="block text-[#a1a1aa] mb-0.5 font-medium">Manufacturing Year</label>
-              <div className="relative">
-                <select
-                  name="manufacturingYear"
-                  value={formData.manufacturingYear}
-                  onChange={handleChange}
-                  className="w-full appearance-none bg-[#18181b]/60 border border-[#27272a] rounded-lg px-2.5 py-1 text-white focus:outline-none focus:border-[#ffd60a] cursor-pointer"
-                >
-                  <option value="" disabled className="text-[#52525b]">Enter Manufacturing Year</option>
-                  <option value="2026" className="bg-[#121214]">2026</option>
-                  <option value="2025" className="bg-[#121214]">2025</option>
-                  <option value="2024" className="bg-[#121214]">2024</option>
-                </select>
-                <ChevronDown size={11} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#71717a] pointer-events-none" />
-              </div>
+              <Dropdown
+                label="Enter Manufacturing Year"
+                options={MANUFACTURING_YEAR_OPTIONS}
+                selectedValue={formData.manufacturingYear}
+                onSelect={(val) => handleDropdownSelect("manufacturingYear", val)}
+                className="w-full justify-between rounded-lg bg-[#18181b]/60 border-[#27272a] py-1.5 px-2.5 text-white"
+              />
               {/* {errors.manufacturingYear && <p className="text-red-500 text-[9px] mt-0.5">{errors.manufacturingYear}</p>} */}
             </div>
 
             <div>
               <label className="block text-[#a1a1aa] mb-0.5 font-medium">Fuel Type</label>
-              <div className="relative">
-                <select
-                  name="fuelType"
-                  value={formData.fuelType}
-                  onChange={handleChange}
-                  className="w-full appearance-none bg-[#18181b]/60 border border-[#27272a] rounded-lg px-2.5 py-1 text-white focus:outline-none focus:border-[#ffd60a] cursor-pointer"
-                >
-                  <option value="" disabled className="text-[#52525b]">Enter Fuel Type</option>
-                  <option value="Diesel" className="bg-[#121214]">Diesel</option>
-                  <option value="Petrol" className="bg-[#121214]">Petrol</option>
-                  <option value="Electric" className="bg-[#121214]">Electric</option>
-                </select>
-                <ChevronDown size={11} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#71717a] pointer-events-none" />
-              </div>
+              <Dropdown
+                label="Enter Fuel Type"
+                options={FUEL_TYPE_OPTIONS}
+                selectedValue={formData.fuelType}
+                onSelect={(val) => handleDropdownSelect("fuelType", val)}
+                className="w-full justify-between rounded-lg bg-[#18181b]/60 border-[#27272a] py-1.5 px-2.5 text-white"
+              />
               {/* {errors.fuelType && <p className="text-red-500 text-[9px] mt-0.5">{errors.fuelType}</p>} */}
             </div>
           </div>
@@ -228,7 +224,7 @@ export default function AddVehicleModal({ isOpen, onClose, onNext }) {
               placeholder="Enter Vehicle Capacity"
               value={formData.vehicleCapacity}
               onChange={handleChange}
-              className="w-full bg-[#18181b]/60 border border-[#27272a] rounded-lg px-2.5 py-1 text-white placeholder-[#52525b] focus:outline-none focus:border-[#ffd60a] transition-all"
+              className="w-full bg-[#18181b]/60 border border-[#27272a] rounded-lg px-2.5 py-1.5 text-white placeholder-[#52525b] focus:outline-none focus:border-[#ffd60a] transition-all"
             />
             {/* {errors.vehicleCapacity && <p className="text-red-500 text-[9px] mt-0.5">{errors.vehicleCapacity}</p>} */}
           </div>
@@ -242,7 +238,7 @@ export default function AddVehicleModal({ isOpen, onClose, onNext }) {
               placeholder="Enter Chassis Number"
               value={formData.chassisNumber}
               onChange={handleChange}
-              className="w-full bg-[#18181b]/60 border border-[#27272a] rounded-lg px-2.5 py-1 text-white placeholder-[#52525b] focus:outline-none focus:border-[#ffd60a] transition-all"
+              className="w-full bg-[#18181b]/60 border border-[#27272a] rounded-lg px-2.5 py-1.5 text-white placeholder-[#52525b] focus:outline-none focus:border-[#ffd60a] transition-all"
             />
             {/* {errors.chassisNumber && <p className="text-red-500 text-[9px] mt-0.5">{errors.chassisNumber}</p>} */}
           </div>
@@ -257,7 +253,7 @@ export default function AddVehicleModal({ isOpen, onClose, onNext }) {
                 placeholder="Enter Engine Number"
                 value={formData.engineNumber}
                 onChange={handleChange}
-                className="w-full bg-[#18181b]/60 border border-[#27272a] rounded-lg px-2.5 py-1 text-white placeholder-[#52525b] focus:outline-none focus:border-[#ffd60a] transition-all"
+                className="w-full bg-[#18181b]/60 border border-[#27272a] rounded-lg px-2.5 py-1.5 text-white placeholder-[#52525b] focus:outline-none focus:border-[#ffd60a] transition-all"
               />
               {/* {errors.engineNumber && <p className="text-red-500 text-[9px] mt-0.5">{errors.engineNumber}</p>} */}
             </div>
@@ -269,7 +265,7 @@ export default function AddVehicleModal({ isOpen, onClose, onNext }) {
                 placeholder="Enter Vehicle color"
                 value={formData.vehicleColor}
                 onChange={handleChange}
-                className="w-full bg-[#18181b]/60 border border-[#27272a] rounded-lg px-2.5 py-1 text-white placeholder-[#52525b] focus:outline-none focus:border-[#ffd60a] transition-all"
+                className="w-full bg-[#18181b]/60 border border-[#27272a] rounded-lg px-2.5 py-1.5 text-white placeholder-[#52525b] focus:outline-none focus:border-[#ffd60a] transition-all"
               />
               {/* {errors.vehicleColor && <p className="text-red-500 text-[9px] mt-0.5">{errors.vehicleColor}</p>} */}
             </div>

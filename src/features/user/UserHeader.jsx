@@ -1,99 +1,90 @@
-import React, { useState } from "react";
-import { UserPlus, Search, ChevronDown } from "lucide-react";
+import React from "react";
+import { UserPlus, Search } from "lucide-react";
+import PageHeader from "../../components/Ui/PageHeader";
 import Button from "../../components/Ui/Button";
+import Dropdown from "../../components/Ui/DropDown";
 
-export default function UsersHeader({
+const ROLE_OPTIONS = [
+  { label: "Role", value: "" },
+  { label: "Operations Admin", value: "Operations Admin" },
+  { label: "Fleet Manager", value: "Fleet Manager" },
+];
+
+const STATUS_OPTIONS = [
+  { label: "Status", value: "" },
+  { label: "Active", value: "Active" },
+  { label: "Pending", value: "Pending" },
+];
+
+export default function UserHeader({
   title = "Users",
   subtitle = "Manage team members, roles, and access permissions.",
+  searchQuery = "",
+  roleFilter = "",
+  statusFilter = "",
   onAddUserClick,
   onSearchChange,
   onRoleChange,
   onStatusChange,
 }) {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [roleFilter, setRoleFilter] = useState("");
-  const [statusFilter, setStatusFilter] = useState("");
-
-  const handleSearch = (e) => {
-    const val = e.target.value;
-    setSearchQuery(val);
-    if (onSearchChange) onSearchChange(val);
-  };
-
-  const handleRole = (e) => {
-    const val = e.target.value;
-    setRoleFilter(val);
-    if (onRoleChange) onRoleChange(val);
-  };
-
-  const handleStatus = (e) => {
-    const val = e.target.value;
-    setStatusFilter(val);
-    if (onStatusChange) onStatusChange(val);
-  };
-
   return (
-    <div className="w-full flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-1 shrink-0">
-      {/* Title & Subtitle */}
-      <div>
-        <h1 className="text-base font-bold text-white leading-tight">{title}</h1>
-        <p className="text-[11px] text-gray-400 mt-0.5">{subtitle}</p>
-      </div>
-
-      {/* Right Controls Bar (Search, Role, Status, Add User Button) */}
-      <div className="flex items-center gap-2 flex-wrap">
-        {/* Search Bar */}
+    <PageHeader
+      title={title}
+      subtitle={subtitle}
+      showSearch={false}
+      showFilter={false}
+      showExport={false}
+    >
+      {/* Right controls layout matching exact image */}
+      <div className="flex items-center gap-2">
+        
+        {/* Search Field */}
         <div className="relative w-48">
           <input
             type="text"
             placeholder="Search Vehicle..."
             value={searchQuery}
-            onChange={handleSearch}
-            className="w-full bg-[#12151a] text-gray-300 text-[11px] rounded-lg pl-3 pr-8 py-1.5 border border-gray-800 focus:outline-none focus:border-amber-500 placeholder-gray-500"
+            onChange={(e) => onSearchChange && onSearchChange(e.target.value)}
+            className="w-full bg-[#18181b]/80 text-[#d4d4d8] text-[11px] rounded-full pl-4 pr-8 py-1.5 border border-[#27272a] focus:outline-none focus:border-[#ffd60a] placeholder-[#71717a] transition-all"
           />
-          <Search className="w-3.5 h-3.5 text-gray-400 absolute right-2.5 top-2" />
+          <Search className="w-3.5 h-3.5 text-[#a1a1aa] absolute right-3 top-2.5 pointer-events-none" />
         </div>
 
-        {/* Role Filter Dropdown */}
-        <div className="relative">
-          <select
-            value={roleFilter}
-            onChange={handleRole}
-            className="bg-[#12151a] text-gray-300 text-[11px] rounded-lg pl-3 pr-7 py-1.5 appearance-none border border-gray-800 focus:outline-none focus:border-amber-500 cursor-pointer"
-          >
-            <option value="">Role</option>
-            <option value="Operations Admin">Operations Admin</option>
-            <option value="Fleet Manager">Fleet Manager</option>
-          </select>
-          <ChevronDown className="w-3 h-3 text-gray-400 absolute right-2 top-2.5 pointer-events-none" />
+        {/* Role Dropdown */}
+        <div>
+          <Dropdown
+            label="Role"
+            options={ROLE_OPTIONS}
+            selectedValue={roleFilter}
+            onSelect={(val) => onRoleChange && onRoleChange(val)}
+            className="rounded-full bg-[#18181b]/80 border-[#27272a] py-1.5 px-3.5 text-[11px] text-[#a1a1aa] hover:border-[#3f3f46] hover:text-white transition-colors gap-1.5"
+          />
         </div>
 
-        {/* Status Filter Dropdown */}
-        <div className="relative">
-          <select
-            value={statusFilter}
-            onChange={handleStatus}
-            className="bg-[#12151a] text-gray-300 text-[11px] rounded-lg pl-3 pr-7 py-1.5 appearance-none border border-gray-800 focus:outline-none focus:border-amber-500 cursor-pointer"
-          >
-            <option value="">Status</option>
-            <option value="Active">Active</option>
-            <option value="Pending">Pending</option>
-          </select>
-          <ChevronDown className="w-3 h-3 text-gray-400 absolute right-2 top-2.5 pointer-events-none" />
+        {/* Status Dropdown */}
+        <div>
+          <Dropdown
+            label="Status"
+            options={STATUS_OPTIONS}
+            selectedValue={statusFilter}
+            onSelect={(val) => onStatusChange && onStatusChange(val)}
+            className="rounded-full bg-[#18181b]/80 border-[#27272a] py-1.5 px-3.5 text-[11px] text-[#a1a1aa] hover:border-[#3f3f46] hover:text-white transition-colors gap-1.5"
+          />
         </div>
 
-        {/* Add User Button (Primary Peela) */}
+        {/* Add User Button */}
         <Button
           variant="primary"
           size="sm"
           icon={UserPlus}
           iconPosition="left"
           onClick={onAddUserClick}
-          className="font-bold whitespace-nowrap px-3 py-1.5 text-[10.5px] bg-[#ffd60a] text-black hover:bg-amber-400 border-none rounded-lg flex items-center gap-1.5"
+          className="font-bold whitespace-nowrap px-4 py-1.5 text-[11px] bg-[#ffd60a] text-black hover:bg-[#e6c208] border-none rounded-full flex items-center gap-1.5 cursor-pointer shadow-md transition-colors ml-1"
         >
           Add User
         </Button>
+
       </div>
-    </div>
+    </PageHeader>
   );
 }

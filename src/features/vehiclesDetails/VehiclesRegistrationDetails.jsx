@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { ChevronDown } from "lucide-react";
+import Dropdown from "../../components/Ui/DropDown";
+
+// Dropdown Options
+const PERMIT_TYPE_OPTIONS = [
+  { label: "National Permit", value: "National Permit" },
+  { label: "State Permit", value: "State Permit" },
+];
 
 export default function VehiclesRegistrationDetails({ onNext, onCancel }) {
   const [formData, setFormData] = useState({
@@ -14,178 +20,209 @@ export default function VehiclesRegistrationDetails({ onNext, onCancel }) {
     pollutionExpiry: "",
   });
 
-  const [errors, setErrors] = useState({});
+  /* -------------------------------------------------------------
+     1. VALIDATION ERRORS STATE (Commented out for now)
+  ---------------------------------------------------------------- */
+  // const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    // if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
+
+    /* -------------------------------------------------------------
+       2. CLEAR ERROR ON INPUT CHANGE (Commented out for now)
+    ---------------------------------------------------------------- */
+    // if (errors[name]) {
+    //   setErrors((prev) => ({ ...prev, [name]: "" }));
+    // }
   };
 
-  const handleNext = (e) => {
-    e.preventDefault();
+  // Helper function for Custom Dropdowns
+  const handleDropdownSelect = (field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    // if (errors[field]) {
+    //   setErrors((prev) => ({ ...prev, [field]: "" }));
+    // }
+  };
 
-    /* 
-    // ==========================================
-    // VALIDATION LOGIC (Currently Commented Out)
-    // ==========================================
+  /* -------------------------------------------------------------
+     3. VALIDATION LOGIC FUNCTION (Commented out for now)
+  ---------------------------------------------------------------- */
+  /*
+  const validateForm = () => {
     let newErrors = {};
 
     if (!formData.registrationNumber.trim()) newErrors.registrationNumber = "Registration Number required";
     if (!formData.vinNumber.trim()) newErrors.vinNumber = "VIN Number required";
     if (!formData.rcExpiry) newErrors.rcExpiry = "Select RC expiry date";
 
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
-    */
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+  */
+
+  const handleNext = (e) => {
+    e.preventDefault();
+
+    /* -------------------------------------------------------------
+       4. FORM VALIDATION CHECK BEFORE NEXT (Commented out for now)
+    ---------------------------------------------------------------- */
+    // const isValid = validateForm();
+    // if (!isValid) return;
 
     if (onNext) onNext(formData);
   };
 
   return (
-    <div className="w-full max-w-lg bg-[#111419] border border-gray-800 rounded-xl p-5 text-gray-200">
-      <h2 className="text-base font-semibold text-white pb-3 mb-4 border-b border-gray-800/80">
-        Registration Details
-      </h2>
+    <div className="w-full max-w-[480px] bg-[#121214] border border-[#27272a] rounded-2xl p-4 shadow-2xl flex flex-col overflow-visible select-none">
+      
+      {/* Header (Without Cross Button) */}
+      <div className="pb-3 mb-2 border-b border-[#1d1d20]/60">
+        <h2 className="text-[14px] font-bold text-white tracking-tight">
+          Registration Details
+        </h2>
+      </div>
 
-      <form onSubmit={handleNext} className="space-y-3.5">
-        <div className="grid grid-cols-2 gap-3">
+      {/* Form Body */}
+      <form onSubmit={handleNext} className="flex flex-col gap-2.5 text-[10.5px]">
+        
+        {/* Row 1: Registration Number & VIN Number */}
+        <div className="grid grid-cols-2 gap-2.5">
           <div>
-            <label className="block text-xs text-gray-400 mb-1">Registration Number</label>
+            <label className="block text-[#a1a1aa] mb-1 font-medium">Registration Number</label>
             <input
               type="text"
               name="registrationNumber"
               placeholder="Enter Registration Number"
               value={formData.registrationNumber}
               onChange={handleChange}
-              className="w-full bg-[#181c24] border border-gray-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none"
+              className="w-full bg-[#18181b]/60 border border-[#27272a] focus:border-[#ffd60a] rounded-xl px-3 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all"
             />
-            {/* {errors.registrationNumber && <p className="text-[10px] text-red-400 mt-0.5">{errors.registrationNumber}</p>} */}
+            {/* {errors.registrationNumber && <p className="text-red-500 text-[9px] mt-0.5">{errors.registrationNumber}</p>} */}
           </div>
 
           <div>
-            <label className="block text-xs text-gray-400 mb-1">VIN Number</label>
+            <label className="block text-[#a1a1aa] mb-1 font-medium">VIN Number</label>
             <input
               type="text"
               name="vinNumber"
               placeholder="Enter VIN Number"
               value={formData.vinNumber}
               onChange={handleChange}
-              className="w-full bg-[#181c24] border border-gray-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none"
+              className="w-full bg-[#18181b]/60 border border-[#27272a] focus:border-[#ffd60a] rounded-xl px-3 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all"
             />
-            {/* {errors.vinNumber && <p className="text-[10px] text-red-400 mt-0.5">{errors.vinNumber}</p>} */}
+            {/* {errors.vinNumber && <p className="text-red-500 text-[9px] mt-0.5">{errors.vinNumber}</p>} */}
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
+        {/* Row 2: Engine Number & Chassis Number */}
+        <div className="grid grid-cols-2 gap-2.5">
           <div>
-            <label className="block text-xs text-gray-400 mb-1">Engine Number</label>
+            <label className="block text-[#a1a1aa] mb-1 font-medium">Engine Number</label>
             <input
               type="text"
               name="engineNumber"
               placeholder="Enter Engine Number"
               value={formData.engineNumber}
               onChange={handleChange}
-              className="w-full bg-[#181c24] border border-gray-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none"
+              className="w-full bg-[#18181b]/60 border border-[#27272a] focus:border-[#ffd60a] rounded-xl px-3 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all"
             />
           </div>
 
           <div>
-            <label className="block text-xs text-gray-400 mb-1">Chassis Number</label>
+            <label className="block text-[#a1a1aa] mb-1 font-medium">Chassis Number</label>
             <input
               type="text"
               name="chassisNumber"
               placeholder="Enter Chassis Number"
               value={formData.chassisNumber}
               onChange={handleChange}
-              className="w-full bg-[#181c24] border border-gray-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none"
+              className="w-full bg-[#18181b]/60 border border-[#27272a] focus:border-[#ffd60a] rounded-xl px-3 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all"
             />
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
+        {/* Row 3: RC Expiry & Permit Type */}
+        <div className="grid grid-cols-2 gap-2.5">
           <div>
-            <label className="block text-xs text-gray-400 mb-1">RC Expiry</label>
+            <label className="block text-[#a1a1aa] mb-1 font-medium">RC Expiry</label>
             <input
               type="date"
               name="rcExpiry"
               value={formData.rcExpiry}
               onChange={handleChange}
-              className="w-full bg-[#181c24] border border-gray-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none"
+              className="w-full bg-[#18181b]/60 border border-[#27272a] focus:border-[#ffd60a] rounded-xl px-3 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all [color-scheme:dark]"
             />
-            {/* {errors.rcExpiry && <p className="text-[10px] text-red-400 mt-0.5">{errors.rcExpiry}</p>} */}
+            {/* {errors.rcExpiry && <p className="text-red-500 text-[9px] mt-0.5">{errors.rcExpiry}</p>} */}
           </div>
 
           <div>
-            <label className="block text-xs text-gray-400 mb-1">Permit Type</label>
-            <div className="relative">
-              <select
-                name="permitType"
-                value={formData.permitType}
-                onChange={handleChange}
-                className="w-full appearance-none bg-[#181c24] border border-gray-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none pr-8"
-              >
-                <option value="">National Permit</option>
-                <option value="State">State Permit</option>
-              </select>
-              <ChevronDown className="w-4 h-4 text-gray-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-            </div>
+            <label className="block text-[#a1a1aa] mb-1 font-medium">Permit Type</label>
+            <Dropdown
+              label="Select Permit Type"
+              options={PERMIT_TYPE_OPTIONS}
+              selectedValue={formData.permitType}
+              onSelect={(val) => handleDropdownSelect("permitType", val)}
+              className="w-full justify-between rounded-xl bg-[#18181b]/60 border-[#27272a] py-1.5 px-3 text-white"
+            />
           </div>
         </div>
 
+        {/* Permit Expiry */}
         <div>
-          <label className="block text-xs text-gray-400 mb-1">Permit Expiry</label>
+          <label className="block text-[#a1a1aa] mb-1 font-medium">Permit Expiry</label>
           <input
             type="date"
             name="permitExpiry"
             value={formData.permitExpiry}
             onChange={handleChange}
-            className="w-full bg-[#181c24] border border-gray-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none"
+            className="w-full bg-[#18181b]/60 border border-[#27272a] focus:border-[#ffd60a] rounded-xl px-3 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all [color-scheme:dark]"
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
+        {/* Row 4: Fitness Certificate & Pollution Expiry */}
+        <div className="grid grid-cols-2 gap-2.5">
           <div>
-            <label className="block text-xs text-gray-400 mb-1">Fitness Certificate</label>
+            <label className="block text-[#a1a1aa] mb-1 font-medium">Fitness Certificate</label>
             <input
               type="text"
               name="fitnessCertificate"
               placeholder="Enter Fitness Certificate"
               value={formData.fitnessCertificate}
               onChange={handleChange}
-              className="w-full bg-[#181c24] border border-gray-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none"
+              className="w-full bg-[#18181b]/60 border border-[#27272a] focus:border-[#ffd60a] rounded-xl px-3 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all"
             />
           </div>
 
           <div>
-            <label className="block text-xs text-gray-400 mb-1">Pollution Expiry</label>
+            <label className="block text-[#a1a1aa] mb-1 font-medium">Pollution Expiry</label>
             <input
               type="date"
               name="pollutionExpiry"
               value={formData.pollutionExpiry}
               onChange={handleChange}
-              className="w-full bg-[#181c24] border border-gray-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none"
+              className="w-full bg-[#18181b]/60 border border-[#27272a] focus:border-[#ffd60a] rounded-xl px-3 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all [color-scheme:dark]"
             />
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 pt-3 mt-4 border-t border-gray-800/80">
+        {/* Action Buttons */}
+        <div className="grid grid-cols-2 gap-2.5 pt-2 mt-2 border-t border-[#1d1d20]">
           <button
             type="button"
             onClick={onCancel}
-            className="w-full py-2.5 bg-[#20242d] hover:bg-[#282d38] text-white text-xs font-medium rounded-lg transition cursor-pointer"
+            className="w-full py-2 px-4 rounded-xl text-[11px] font-semibold bg-[#27272a]/60 hover:bg-[#27272a] text-[#d4d4d8] transition-colors cursor-pointer"
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="w-full py-2.5 bg-[#fabb00] hover:bg-[#e0a800] text-black text-xs font-semibold rounded-lg transition cursor-pointer"
+            className="w-full py-2 rounded-xl text-[11px] font-bold text-black bg-[#ffd60a] hover:bg-[#e6c200] transition-colors cursor-pointer"
           >
             Next
           </button>
         </div>
+
       </form>
     </div>
   );

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Check, Upload, X } from "lucide-react";
+import { Check, Upload } from "lucide-react";
 
 export default function UploadDocumentsModal({ isOpen, onClose, onNext }) {
   const [files, setFiles] = useState({
@@ -10,7 +10,7 @@ export default function UploadDocumentsModal({ isOpen, onClose, onNext }) {
   });
 
   /* -------------------------------------------------------------
-     1. VALIDATION ERRORS STATE (Uncomment when needed)
+     1. VALIDATION ERRORS STATE (Commented out for now)
   ---------------------------------------------------------------- */
   // const [errors, setErrors] = useState({});
 
@@ -22,7 +22,7 @@ export default function UploadDocumentsModal({ isOpen, onClose, onNext }) {
       setFiles((prev) => ({ ...prev, [field]: fileName }));
 
       /* -------------------------------------------------------------
-         2. CLEAR ERROR ON FILE UPLOAD (Uncomment when needed)
+         2. CLEAR ERROR ON FILE UPLOAD (Commented out for now)
       ---------------------------------------------------------------- */
       // if (errors[field]) {
       //   setErrors((prev) => ({ ...prev, [field]: "" }));
@@ -31,7 +31,7 @@ export default function UploadDocumentsModal({ isOpen, onClose, onNext }) {
   };
 
   /* -------------------------------------------------------------
-     3. VALIDATION LOGIC FUNCTION (Uncomment when needed)
+     3. VALIDATION LOGIC FUNCTION (Commented out for now)
   ---------------------------------------------------------------- */
   /*
   const validateForm = () => {
@@ -59,7 +59,7 @@ export default function UploadDocumentsModal({ isOpen, onClose, onNext }) {
     e.preventDefault();
 
     /* -------------------------------------------------------------
-       4. FORM VALIDATION CHECK BEFORE SUBMIT (Uncomment when needed)
+       4. FORM VALIDATION CHECK BEFORE SUBMIT (Commented out for now)
     ---------------------------------------------------------------- */
     // const isValid = validateForm();
     // if (!isValid) return;
@@ -78,24 +78,15 @@ export default function UploadDocumentsModal({ isOpen, onClose, onNext }) {
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/70 backdrop-blur-xs select-none animate-fadeIn">
       <div className="relative w-full max-w-[480px] bg-[#121214] border border-[#27272a] rounded-2xl p-4 shadow-2xl flex flex-col overflow-hidden">
         
-        {/* Header */}
+        {/* Header (Without Cross Button) */}
         <div className="flex items-center justify-between pb-3 mb-2 border-b border-[#1d1d20]/60">
           <h2 className="text-[14px] font-bold text-white tracking-tight">
             Upload Documents
           </h2>
-          <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#052e16] border border-[#14532d] text-[#4ade80] text-[10px] font-medium">
-              <Check size={11} />
-              Device Connected
-            </span>
-            <button
-              type="button"
-              onClick={onClose}
-              className="text-[#71717a] hover:text-white transition-colors cursor-pointer ml-1"
-            >
-              <X size={15} />
-            </button>
-          </div>
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#052e16] border border-[#14532d] text-[#4ade80] text-[10px] font-medium">
+            <Check size={11} />
+            Device Connected
+          </span>
         </div>
 
         {/* Form Body */}
@@ -104,9 +95,7 @@ export default function UploadDocumentsModal({ isOpen, onClose, onNext }) {
             <div key={field.key}>
               <label className="block text-[#a1a1aa] mb-1 font-medium">{field.label}</label>
               <div
-                className={`flex items-center bg-[#18181b]/60 border rounded-xl overflow-hidden focus-within:border-[#ffd60a] transition-all ${
-                  /* errors[field.key] ? "border-red-500" : */ "border-[#27272a]"
-                }`}
+                className="flex items-center bg-[#18181b]/60 border border-[#27272a] rounded-xl overflow-hidden focus-within:border-[#ffd60a] transition-all"
               >
                 <label className="flex items-center gap-1.5 px-3 py-2 bg-[#27272a]/60 text-white font-medium cursor-pointer hover:bg-[#27272a] transition-colors border-r border-[#27272a] shrink-0">
                   <Upload size={13} />

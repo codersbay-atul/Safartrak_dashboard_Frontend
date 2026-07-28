@@ -3,80 +3,152 @@ import { Search, ChevronRight } from "lucide-react";
 
 export default function VehiclesDetailsInfo() {
   const [activeFilter, setActiveFilter] = useState("Active");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedVehicle, setSelectedVehicle] = useState("MH14ZZ8765");
 
   const vehicles = [
     { id: "MH14ZZ8765", type: "Heavy Truck", driver: "Ashoke Sharma", fleet: "West Fleet", status: "Active" },
     { id: "MH14ZZ8766", type: "Heavy Truck", driver: "Ashoke Sharma", fleet: "West Fleet", status: "Active" },
-    { id: "MH14ZZ8767", type: "Heavy Truck", driver: "Ashoke Sharma", fleet: "West Fleet", status: "Active" },
-    { id: "MH14ZZ8768", type: "Heavy Truck", driver: "Ashoke Sharma", fleet: "West Fleet", status: "Active" },
+    { id: "MH14ZZ8767", type: "Heavy Truck", driver: "Ashoke Sharma", fleet: "West Fleet", status: "Maint." },
+    { id: "MH14ZZ8768", type: "Heavy Truck", driver: "Ashoke Sharma", fleet: "West Fleet", status: "Idle" },
+    { id: "MH14ZZ8769", type: "Heavy Truck", driver: "Ashoke Sharma", fleet: "West Fleet", status: "Offline" },
   ];
 
-  const filters = ["All Routes", "Active", "Maint.", "Idle", "Offline"];
+  const filters = [
+    { label: "All Vehicles", value: "All" },
+    { label: "Active", value: "Active", color: "bg-emerald-500" },
+    { label: "Maint.", value: "Maint.", color: "bg-[#ffd60a]" },
+    { label: "Idle", value: "Idle", color: "bg-amber-500" },
+    { label: "Offline", value: "Offline", color: "bg-zinc-500" },
+  ];
+
+  // Helper for Status Badge Styling
+  const getStatusBadge = (status) => {
+    switch (status) {
+      case "Active":
+        return "bg-emerald-500/10 text-emerald-400 border-emerald-500/20 dot-emerald";
+      case "Maint.":
+        return "bg-[#ffd60a]/10 text-[#ffd60a] border-[#ffd60a]/20 dot-yellow";
+      case "Idle":
+        return "bg-amber-500/10 text-amber-400 border-amber-500/20 dot-amber";
+      default:
+        return "bg-zinc-500/10 text-zinc-400 border-zinc-500/20 dot-zinc";
+    }
+  };
+
+  // Filter Logic
+  const filteredVehicles = vehicles.filter((v) => {
+    const matchesFilter = activeFilter === "All" || v.status === activeFilter;
+    const matchesSearch =
+      v.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      v.driver.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      v.fleet.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesFilter && matchesSearch;
+  });
 
   return (
-    <aside className="w-full h-full bg-[#12151a] flex flex-col p-2.5 rounded-xl border border-gray-800/80 min-h-0 overflow-hidden">
-      <h2 className="text-xs font-bold mb-1.5 text-white shrink-0 tracking-wide">Vehicles</h2>
-
+    <aside className="w-full h-full bg-[#121214] border border-[#27272a] flex flex-col p-2.5 rounded-xl min-h-0 overflow-hidden select-none">
       
-      <div className="relative mb-1.5 shrink-0">
-        <input
-          type="text"
-          placeholder="Search routes..."
-          className="w-full bg-[#161a20] text-[10px] text-gray-300 rounded-md pl-2 pr-7 py-1 focus:outline-none focus:ring-1 focus:ring-amber-500 border border-gray-800"
-        />
-        <Search className="w-3 h-3 absolute right-2 top-1.5 text-gray-400" />
+      {/* Title */}
+      <div className="flex items-center justify-between mb-2 shrink-0">
+        <h2 className="text-[12px] font-bold text-white tracking-tight">
+          Vehicles
+        </h2>
+        <span className="text-[10px] font-semibold text-[#a1a1aa] bg-[#18181b] border border-[#27272a] px-1.5 py-0.5 rounded-md">
+          {filteredVehicles.length}
+        </span>
       </div>
 
-      
-      <div className="flex items-center gap-1 mb-1.5 overflow-x-auto no-scrollbar shrink-0 pb-0.5">
+      {/* Search Input */}
+      <div className="relative mb-2 shrink-0">
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Search vehicle, driver..."
+          className="w-full bg-[#18181b]/80 border border-[#27272a] focus:border-[#ffd60a] text-[10.5px] text-white rounded-lg pl-2.5 pr-8 py-1.5 focus:outline-none transition-all placeholder-[#52525b]"
+        />
+        <Search className="w-3.5 h-3.5 absolute right-2.5 top-1/2 -translate-y-1/2 text-[#a1a1aa] pointer-events-none" />
+      </div>
+
+      {/* Status Filter Tabs */}
+      <div className="flex items-center gap-1 mb-2 overflow-x-auto no-scrollbar shrink-0 pb-0.5">
         {filters.map((filter) => {
-          const isActive = activeFilter === filter;
+          const isActive = activeFilter === filter.value;
           return (
             <button
-              key={filter}
-              onClick={() => setActiveFilter(filter)}
-              className={`px-1.5 py-0.5 rounded text-[9px] whitespace-nowrap transition flex items-center gap-1 shrink-0 ${
+              key={filter.value}
+              onClick={() => setActiveFilter(filter.value)}
+              className={`px-2 py-1 rounded-lg text-[9.5px] font-medium whitespace-nowrap transition-all flex items-center gap-1.5 shrink-0 cursor-pointer border ${
                 isActive
-                  ? "bg-gray-800 text-white border border-gray-700 font-medium"
-                  : "bg-[#161a20] text-gray-400 hover:text-gray-200"
+                  ? "bg-[#27272a] text-white border-[#ffd60a]"
+                  : "bg-[#18181b]/60 text-[#a1a1aa] border-[#27272a] hover:border-[#3f3f46] hover:text-white"
               }`}
             >
-              {filter !== "All Routes" && (
-                <span
-                  className={`w-1 h-1 rounded-full ${
-                    filter === "Active" ? "bg-green-500" : "bg-red-500"
-                  }`}
-                ></span>
+              {filter.color && (
+                <span className={`w-1.5 h-1.5 rounded-full ${filter.color}`} />
               )}
-              {filter}
+              {filter.label}
             </button>
           );
         })}
       </div>
 
-     
+      {/* Vehicle List */}
       <div className="flex-1 overflow-y-auto space-y-1.5 pr-0.5 custom-scrollbar min-h-0">
-        {vehicles.map((v, i) => (
-          <div
-            key={i}
-            className="bg-[#161a20] p-2 rounded-lg border border-gray-800/80 hover:border-amber-500/50 transition flex items-center justify-between cursor-pointer group"
-          >
-            <div className="space-y-0.5">
-              <div className="flex items-center gap-1.5">
-                <span className="font-bold text-[10.5px] text-white">{v.id}</span>
-                <span className="text-[8px] bg-green-950/80 text-green-400 px-1 py-0.2 rounded font-medium border border-green-800/40 flex items-center gap-0.5">
-                  <span className="w-1 h-1 rounded-full bg-green-400"></span>
-                  {v.status}
-                </span>
+        {filteredVehicles.length > 0 ? (
+          filteredVehicles.map((v) => {
+            const isSelected = selectedVehicle === v.id;
+            return (
+              <div
+                key={v.id}
+                onClick={() => setSelectedVehicle(v.id)}
+                className={`p-2 rounded-xl border transition-all flex items-center justify-between cursor-pointer group ${
+                  isSelected
+                    ? "bg-[#18181b] border-[#ffd60a] shadow-md shadow-[#ffd60a]/5"
+                    : "bg-[#18181b]/50 border-[#27272a] hover:border-[#3f3f46] hover:bg-[#18181b]/80"
+                }`}
+              >
+                <div className="space-y-0.5 min-w-0">
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-bold text-[11px] text-white tracking-tight truncate">
+                      {v.id}
+                    </span>
+                    <span
+                      className={`text-[8.5px] px-1.5 py-0.2 rounded-full font-semibold border flex items-center gap-1 ${getStatusBadge(
+                        v.status
+                      )}`}
+                    >
+                      <span className="w-1 h-1 rounded-full bg-current" />
+                      {v.status}
+                    </span>
+                  </div>
+                  <p className="text-[9.5px] text-[#a1a1aa] font-medium leading-tight truncate">
+                    {v.type}
+                  </p>
+                  <p className="text-[8.5px] text-[#71717a] leading-tight truncate">
+                    {v.driver} • <span className="text-[#a1a1aa]">{v.fleet}</span>
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  className={`w-5 h-5 rounded-lg flex items-center justify-center transition-all shrink-0 ml-2 ${
+                    isSelected
+                      ? "bg-[#ffd60a] text-black"
+                      : "bg-[#27272a]/60 text-[#a1a1aa] group-hover:bg-[#ffd60a] group-hover:text-black"
+                  }`}
+                >
+                  <ChevronRight className="w-3 h-3" />
+                </button>
               </div>
-              <p className="text-[9px] text-gray-400 leading-tight">{v.type}</p>
-              <p className="text-[8.5px] text-gray-500 leading-tight">{v.driver} • {v.fleet}</p>
-            </div>
-            <button className="w-5 h-5 rounded bg-[#202630] flex items-center justify-center text-amber-500 group-hover:bg-amber-500 group-hover:text-black transition shrink-0">
-              <ChevronRight className="w-3 h-3" />
-            </button>
+            );
+          })
+        ) : (
+          <div className="h-full flex items-center justify-center text-[10.5px] text-[#71717a] p-4 text-center">
+            No vehicles found
           </div>
-        ))}
+        )}
       </div>
     </aside>
   );

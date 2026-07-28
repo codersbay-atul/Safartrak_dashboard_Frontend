@@ -1,7 +1,20 @@
 import React, { useState } from "react";
-import { ChevronDown, CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Calendar, Clock, AlertCircle } from "lucide-react";
+import Dropdown from "../../components/Ui/DropDown";
 
-export default function ScheduleMaintenance({ onNext, onClose, onCancel }) {
+const MAINTENANCE_TYPE_OPTIONS = [
+  { label: "Preventive Maintenance", value: "Preventive" },
+  { label: "Breakdown Repair", value: "Breakdown" },
+  { label: "Routine Inspection", value: "Inspection" },
+];
+
+const DURATION_OPTIONS = [
+  { label: "2 Hours", value: "2 Hours" },
+  { label: "4 Hours", value: "4 Hours" },
+  { label: "1 Day", value: "1 Day" },
+];
+
+export default function ScheduleMaintenance({ onClose, onCancel, onNext }) {
   const [isSuccess, setIsSuccess] = useState(false);
   const [maintData, setMaintData] = useState({
     maintenanceType: "",
@@ -23,68 +36,94 @@ export default function ScheduleMaintenance({ onNext, onClose, onCancel }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
-    // Parent state me pass karein agar zaroorat ho
-    if (onNext) onNext(maintData);
 
-    // Success screen trigger karein
     setIsSuccess(true);
 
-    // 1.5 seconds baad modal automatically close kar dein
     setTimeout(() => {
+      if (onNext) onNext(maintData);
       handleClose();
-    }, 1500);
+    }, 2500);
   };
 
-  // Agar Form submit ho chuka hai, toh yeh UI render hoga
   if (isSuccess) {
     return (
-      <div className="w-full max-w-lg bg-[#111419] border border-gray-800 rounded-xl p-8 text-gray-200 flex flex-col items-center justify-center text-center space-y-3">
-        <CheckCircle2 className="w-14 h-14 text-emerald-500 animate-bounce" />
-        <h2 className="text-lg font-semibold text-white">
-          Maintenance Scheduled Successfully!
-        </h2>
-        <p className="text-xs text-gray-400">
-          The vehicle service details have been updated in the system.
-        </p>
+      <div className="w-full max-w-[380px] bg-[#121214] border border-[#27272a] rounded-2xl p-6 shadow-2xl flex flex-col items-center justify-center text-center space-y-3 animate-in fade-in zoom-in duration-200 select-none">
+        {/* Success Icon */}
+        <div className="w-14 h-14 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+          <CheckCircle2 className="w-8 h-8 text-emerald-400 animate-bounce" />
+        </div>
+
+        <div className="space-y-1">
+          <h2 className="text-[15px] font-bold text-white tracking-tight">
+            Maintenance Scheduled Successfully!
+          </h2>
+          <p className="text-[11px] text-[#a1a1aa]">
+            Your request has been recorded into the timeline.
+          </p>
+        </div>
+
+        <div className="w-full bg-[#18181b]/70 border border-[#27272a] rounded-xl p-3 text-left text-[10.5px] space-y-1.5 mt-2">
+          <div className="flex items-center justify-between text-[#a1a1aa]">
+            <span>Type:</span>
+            <span className="text-white font-medium">
+              {maintData.maintenanceType || "Preventive Maintenance"}
+            </span>
+          </div>
+          <div className="flex items-center justify-between text-[#a1a1aa]">
+            <span>Priority:</span>
+            <span className="text-[#ffd60a] font-medium">
+              {maintData.priority}
+            </span>
+          </div>
+          <div className="flex items-center justify-between text-[#a1a1aa]">
+            <span>Date & Time:</span>
+            <span className="text-white font-medium">
+              {maintData.serviceDate || "Today"} •{" "}
+              {maintData.serviceTime || "Now"}
+            </span>
+          </div>
+        </div>
+
+        <div className="pt-2 flex items-center gap-2 text-[10px] text-[#71717a]">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#ffd60a] animate-ping" />
+          Closing automatically...
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="w-full max-w-lg bg-[#111419] border border-gray-800 rounded-xl p-5 text-gray-200 flex flex-col max-h-[85vh]">
+    <div className="w-full max-w-[480px] bg-[#121214] border border-[#27272a] rounded-2xl p-4 shadow-2xl flex flex-col max-h-[85vh] overflow-visible select-none">
       {/* Header */}
-      <h2 className="text-base font-semibold text-white pb-3 mb-3 border-b border-gray-800/80 shrink-0">
-        Schedule Maintenance
-      </h2>
+      <div className="pb-3 mb-2 border-b border-[#1d1d20]/60 shrink-0">
+        <h2 className="text-[14px] font-bold text-white tracking-tight">
+          Schedule Maintenance
+        </h2>
+      </div>
 
-      {/* Form Content */}
-      <form onSubmit={handleSubmit} className="flex-1 flex flex-col min-h-0">
-        <div className="flex-1 overflow-y-auto pr-1.5 space-y-3.5 custom-scrollbar">
+      <form
+        onSubmit={handleSubmit}
+        className="flex-1 flex flex-col min-h-0 text-[10.5px]"
+      >
+        <div className="flex-1 overflow-y-auto pr-1 flex flex-col gap-2.5 custom-scrollbar">
           <div>
-            <label className="block text-xs text-gray-400 mb-1">
+            <label className="block text-[#a1a1aa] mb-1 font-medium">
               Maintenance Type
             </label>
-            <div className="relative">
-              <select
-                value={maintData.maintenanceType}
-                onChange={(e) =>
-                  setMaintData({ ...maintData, maintenanceType: e.target.value })
-                }
-                className="w-full appearance-none bg-[#181c24] border border-gray-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none pr-8"
-              >
-                <option value="">Select Maintenance Type</option>
-                <option value="Preventive">Preventive Maintenance</option>
-                <option value="Breakdown">Breakdown Repair</option>
-                <option value="Inspection">Routine Inspection</option>
-              </select>
-              <ChevronDown className="w-4 h-4 text-gray-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-            </div>
+            <Dropdown
+              label="Select Maintenance Type"
+              options={MAINTENANCE_TYPE_OPTIONS}
+              selectedValue={maintData.maintenanceType}
+              onSelect={(val) =>
+                setMaintData((p) => ({ ...p, maintenanceType: val }))
+              }
+              className="w-full justify-between rounded-xl bg-[#18181b]/60 border-[#27272a] py-1.5 px-3 text-white"
+            />
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-2.5">
             <div>
-              <label className="block text-xs text-gray-400 mb-1">
+              <label className="block text-[#a1a1aa] mb-1 font-medium">
                 Service Date
               </label>
               <input
@@ -93,11 +132,12 @@ export default function ScheduleMaintenance({ onNext, onClose, onCancel }) {
                 onChange={(e) =>
                   setMaintData({ ...maintData, serviceDate: e.target.value })
                 }
-                className="w-full bg-[#181c24] border border-gray-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none"
+                className="w-full bg-[#18181b]/60 border border-[#27272a] focus:border-[#ffd60a] rounded-xl px-3 py-1.5 text-white focus:outline-none [color-scheme:dark]"
               />
             </div>
+
             <div>
-              <label className="block text-xs text-gray-400 mb-1">
+              <label className="block text-[#a1a1aa] mb-1 font-medium">
                 Service Time
               </label>
               <input
@@ -106,119 +146,119 @@ export default function ScheduleMaintenance({ onNext, onClose, onCancel }) {
                 onChange={(e) =>
                   setMaintData({ ...maintData, serviceTime: e.target.value })
                 }
-                className="w-full bg-[#181c24] border border-gray-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none"
+                className="w-full bg-[#18181b]/60 border border-[#27272a] focus:border-[#ffd60a] rounded-xl px-3 py-1.5 text-white focus:outline-none [color-scheme:dark]"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs text-gray-400 mb-1">
-              Estimate Duration
+            <label className="block text-[#a1a1aa] mb-1 font-medium">
+              Estimated Duration
             </label>
-            <div className="relative">
-              <select
-                value={maintData.duration}
-                onChange={(e) =>
-                  setMaintData({ ...maintData, duration: e.target.value })
-                }
-                className="w-full appearance-none bg-[#181c24] border border-gray-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none pr-8"
-              >
-                <option value="">Select Durations</option>
-                <option value="2 Hours">2 Hours</option>
-                <option value="4 Hours">4 Hours</option>
-                <option value="1 Day">1 Day</option>
-              </select>
-              <ChevronDown className="w-4 h-4 text-gray-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-xs text-gray-400 mb-1">
-              Additional Note
-            </label>
-            <textarea
-              rows="2.5"
-              value={maintData.additionalNote}
-              onChange={(e) =>
-                setMaintData({ ...maintData, additionalNote: e.target.value })
-              }
-              className="w-full bg-[#181c24] border border-gray-800 rounded-lg p-2.5 text-xs text-gray-300 focus:outline-none resize-none"
+            <Dropdown
+              label="Select Duration"
+              options={DURATION_OPTIONS}
+              selectedValue={maintData.duration}
+              onSelect={(val) => setMaintData((p) => ({ ...p, duration: val }))}
+              className="w-full justify-between rounded-xl bg-[#18181b]/60 border-[#27272a] py-1.5 px-3 text-white"
             />
           </div>
 
           <div>
-            <label className="block text-xs text-gray-400 mb-1.5">
-              Reminder & Notification
+            <label className="block text-[#a1a1aa] mb-1 font-medium">
+              Priority Level
             </label>
-            <div className="space-y-2">
-              {[
-                { label: "Notify Driver", key: "notifyDriver" },
-                { label: "Notify Fleet Manager", key: "notifyFleetManager" },
-                { label: "Send Email Reminder", key: "sendEmailReminder" },
-              ].map((item) => (
-                <label
-                  key={item.key}
-                  className="flex items-center gap-2 cursor-pointer"
-                >
-                  <input
-                    type="checkbox"
-                    checked={maintData[item.key]}
-                    onChange={(e) =>
-                      setMaintData({
-                        ...maintData,
-                        [item.key]: e.target.checked,
-                      })
-                    }
-                    className="w-3.5 h-3.5 rounded bg-[#181c24] border-gray-700 text-amber-500 focus:ring-0"
-                  />
-                  <span className="text-xs text-gray-300">{item.label}</span>
-                </label>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-xs text-gray-400 mb-1.5">
-              Priority
-            </label>
-            <div className="flex items-center gap-3">
-              {[
-                { name: "Low", color: "bg-green-500" },
-                { name: "Medium", color: "bg-amber-500" },
-                { name: "High", color: "bg-red-500" },
-              ].map((p) => (
+            <div className="grid grid-cols-3 gap-2">
+              {["Low", "Medium", "High"].map((p) => (
                 <button
+                  key={p}
                   type="button"
-                  key={p.name}
                   onClick={() =>
-                    setMaintData({ ...maintData, priority: p.name })
+                    setMaintData((prev) => ({ ...prev, priority: p }))
                   }
-                  className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs transition border ${
-                    maintData.priority === p.name
-                      ? "bg-[#20242d] border-amber-500 text-white"
-                      : "bg-[#181c24] border-gray-800 text-gray-400"
+                  className={`py-1.5 rounded-xl border text-[10px] font-semibold transition-all cursor-pointer ${
+                    maintData.priority === p
+                      ? "bg-[#ffd60a]/10 border-[#ffd60a] text-[#ffd60a]"
+                      : "bg-[#18181b]/60 border-[#27272a] text-[#a1a1aa] hover:text-white"
                   }`}
                 >
-                  <span className={`w-2 h-2 rounded-full ${p.color}`} />
-                  {p.name}
+                  {p}
                 </button>
               ))}
             </div>
           </div>
+
+          <div className="space-y-1.5 pt-1">
+            <label className="block text-[#a1a1aa] font-medium">
+              Notifications
+            </label>
+            <div className="flex items-center justify-between text-[#d4d4d8]">
+              <span>Notify Driver</span>
+              <input
+                type="checkbox"
+                checked={maintData.notifyDriver}
+                onChange={(e) =>
+                  setMaintData({ ...maintData, notifyDriver: e.target.checked })
+                }
+                className="accent-[#ffd60a] rounded cursor-pointer"
+              />
+            </div>
+            <div className="flex items-center justify-between text-[#d4d4d8]">
+              <span>Notify Fleet Manager</span>
+              <input
+                type="checkbox"
+                checked={maintData.notifyFleetManager}
+                onChange={(e) =>
+                  setMaintData({
+                    ...maintData,
+                    notifyFleetManager: e.target.checked,
+                  })
+                }
+                className="accent-[#ffd60a] rounded cursor-pointer"
+              />
+            </div>
+            <div className="flex items-center justify-between text-[#d4d4d8]">
+              <span>Send Email Reminder</span>
+              <input
+                type="checkbox"
+                checked={maintData.sendEmailReminder}
+                onChange={(e) =>
+                  setMaintData({
+                    ...maintData,
+                    sendEmailReminder: e.target.checked,
+                  })
+                }
+                className="accent-[#ffd60a] rounded cursor-pointer"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-[#a1a1aa] mb-1 font-medium">
+              Additional Note
+            </label>
+            <textarea
+              rows="2"
+              value={maintData.additionalNote}
+              onChange={(e) =>
+                setMaintData({ ...maintData, additionalNote: e.target.value })
+              }
+              className="w-full bg-[#18181b]/60 border border-[#27272a] focus:border-[#ffd60a] rounded-xl p-2.5 text-[#d4d4d8] focus:outline-none resize-none"
+            />
+          </div>
         </div>
 
-        {/* Action Buttons */}
-        <div className="grid grid-cols-2 gap-3 pt-3 mt-3 border-t border-gray-800/80 shrink-0">
+        <div className="grid grid-cols-2 gap-2.5 pt-2 mt-2 border-t border-[#1d1d20] shrink-0">
           <button
             type="button"
             onClick={handleClose}
-            className="w-full py-2 bg-[#20242d] hover:bg-[#282d38] text-white text-xs font-medium rounded-lg transition cursor-pointer"
+            className="w-full py-2 px-4 rounded-xl text-[11px] font-semibold bg-[#27272a]/60 hover:bg-[#27272a] text-[#d4d4d8] transition-colors cursor-pointer"
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="w-full py-2 bg-[#fabb00] hover:bg-[#e0a800] text-black text-xs font-semibold rounded-lg transition cursor-pointer"
+            className="w-full py-2 rounded-xl text-[11px] font-bold text-black bg-[#ffd60a] hover:bg-[#e6c200] transition-colors cursor-pointer"
           >
             Schedule
           </button>

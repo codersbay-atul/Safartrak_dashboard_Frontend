@@ -11,21 +11,30 @@ export default function VehiclesQuickStats() {
   ];
 
   return (
-    <div className="grid grid-cols-5 gap-2 w-full">
+    <div className="grid grid-cols-5 gap-2 w-full select-none">
       {topStats.map((stat, idx) => {
         const Icon = stat.icon;
         return (
           <div
             key={idx}
-            className="bg-[#12151a] p-2 rounded-lg border border-gray-800/80 flex items-center gap-2"
+            className="bg-[#121214] border border-[#27272a] p-2.5 rounded-xl flex items-center gap-2.5 hover:border-[#3f3f46] transition-all group"
           >
-            <div className="w-6 h-6 rounded bg-[#1c2128] flex items-center justify-center text-amber-500 shrink-0">
-              <Icon className="w-3 h-3" />
+            {/* Icon Wrapper */}
+            <div className="w-7 h-7 rounded-lg bg-[#ffd60a]/10 border border-[#ffd60a]/20 flex items-center justify-center text-[#ffd60a] shrink-0 group-hover:scale-105 transition-transform">
+              <Icon className="w-3.5 h-3.5" />
             </div>
+
+            {/* Stat Content */}
             <div className="min-w-0 flex-1">
-              <p className="text-[9.5px] text-gray-400 font-medium truncate leading-tight">{stat.label}</p>
-              <h3 className="text-xs font-bold text-white tracking-tight leading-tight my-0.5">{stat.value}</h3>
-              <span className="text-[8.5px] text-gray-500 leading-none block">{stat.sub}</span>
+              <p className="text-[9.5px] text-[#a1a1aa] font-medium truncate leading-tight">
+                {stat.label}
+              </p>
+              <h3 className="text-[12px] font-bold text-white tracking-tight leading-snug my-0.5 truncate">
+                {stat.value}
+              </h3>
+              <span className="text-[8.5px] font-semibold text-[#71717a] bg-[#18181b] border border-[#27272a] px-1.5 py-0.2 rounded-md inline-block leading-none">
+                {stat.sub}
+              </span>
             </div>
           </div>
         );

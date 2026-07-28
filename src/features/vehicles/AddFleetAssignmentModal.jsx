@@ -1,5 +1,23 @@
 import React, { useState } from "react";
-import { ChevronDown, X } from "lucide-react";
+import Dropdown from "../../components/Ui/DropDown";
+
+// Dropdown Options
+const FLEET_GROUP_OPTIONS = [
+  { label: "North Region Fleet", value: "group1" },
+  { label: "South Logistics", value: "group2" },
+  { label: "Express Delivery", value: "group3" },
+];
+
+const OPERATING_REGION_OPTIONS = [
+  { label: "North Zone", value: "north" },
+  { label: "West Zone", value: "west" },
+  { label: "East Zone", value: "east" },
+];
+
+const DEPOT_WAREHOUSE_OPTIONS = [
+  { label: "Central Warehouse 01", value: "depot1" },
+  { label: "South Depot A", value: "depot2" },
+];
 
 export default function AddFleetAssignmentModal({ isOpen, onClose, onNext }) {
   const [formData, setFormData] = useState({
@@ -10,7 +28,7 @@ export default function AddFleetAssignmentModal({ isOpen, onClose, onNext }) {
   });
 
   /* -------------------------------------------------------------
-     1. VALIDATION ERRORS STATE (Uncomment when needed)
+     1. VALIDATION ERRORS STATE (Commented out for now)
   ---------------------------------------------------------------- */
   // const [errors, setErrors] = useState({});
 
@@ -21,32 +39,32 @@ export default function AddFleetAssignmentModal({ isOpen, onClose, onNext }) {
     setFormData((prev) => ({ ...prev, [name]: value }));
 
     /* -------------------------------------------------------------
-       2. CLEAR ERROR ON INPUT CHANGE (Uncomment when needed)
+       2. CLEAR ERROR ON INPUT CHANGE (Commented out for now)
     ---------------------------------------------------------------- */
     // if (errors[name]) {
     //   setErrors((prev) => ({ ...prev, [name]: "" }));
     // }
   };
 
+  // Helper function for Custom Dropdowns
+  const handleDropdownSelect = (field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    // if (errors[field]) {
+    //   setErrors((prev) => ({ ...prev, [field]: "" }));
+    // }
+  };
+
   /* -------------------------------------------------------------
-     3. VALIDATION LOGIC FUNCTION (Uncomment when needed)
+     3. VALIDATION LOGIC FUNCTION (Commented out for now)
   ---------------------------------------------------------------- */
   /*
   const validateForm = () => {
     let newErrors = {};
 
-    if (!formData.fleetGroup) {
-      newErrors.fleetGroup = "Please select a Fleet Group";
-    }
-    if (!formData.operatingRegion) {
-      newErrors.operatingRegion = "Please select an Operating Region";
-    }
-    if (!formData.depotWarehouse) {
-      newErrors.depotWarehouse = "Please select a Depot/Warehouse";
-    }
-    if (!formData.businessUnit.trim()) {
-      newErrors.businessUnit = "Business Unit is required";
-    }
+    if (!formData.fleetGroup) newErrors.fleetGroup = "Please select a Fleet Group";
+    if (!formData.operatingRegion) newErrors.operatingRegion = "Please select an Operating Region";
+    if (!formData.depotWarehouse) newErrors.depotWarehouse = "Please select a Depot/Warehouse";
+    if (!formData.businessUnit.trim()) newErrors.businessUnit = "Business Unit is required";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -57,7 +75,7 @@ export default function AddFleetAssignmentModal({ isOpen, onClose, onNext }) {
     e.preventDefault();
 
     /* -------------------------------------------------------------
-       4. FORM VALIDATION CHECK BEFORE NEXT (Uncomment when needed)
+       4. FORM VALIDATION CHECK BEFORE NEXT (Commented out for now)
     ---------------------------------------------------------------- */
     // const isValid = validateForm();
     // if (!isValid) return;
@@ -67,47 +85,29 @@ export default function AddFleetAssignmentModal({ isOpen, onClose, onNext }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/70 backdrop-blur-xs select-none animate-fadeIn">
-      {/* Modal Card */}
-      <div className="relative w-full max-w-[480px] bg-[#121214] border border-[#27272a] rounded-2xl p-4 shadow-2xl flex flex-col overflow-hidden">
+      {/* Modal Card - overflow-visible ensures dropdowns don't get clipped */}
+      <div className="relative w-full max-w-[480px] bg-[#121214] border border-[#27272a] rounded-2xl p-4 shadow-2xl flex flex-col overflow-visible">
         
-        {/* Header */}
-        <div className="flex items-center justify-between pb-3 mb-2 border-b border-[#1d1d20]/60">
+        {/* Header (Without Cross Button) */}
+        <div className="pb-3 mb-2 border-b border-[#1d1d20]/60">
           <h2 className="text-[14px] font-bold text-white tracking-tight">
             Add Fleet Assignment
           </h2>
-          <button
-            type="button"
-            onClick={onClose}
-            className="text-[#71717a] hover:text-white transition-colors cursor-pointer"
-          >
-            <X size={15} />
-          </button>
         </div>
 
         {/* Compact Form Body */}
         <form onSubmit={handleSubmit} className="flex flex-col gap-3 text-[10.5px]">
           
-          {/* Fleet Group (Dropdown) */}
+          {/* Fleet Group */}
           <div>
             <label className="block text-[#a1a1aa] mb-1 font-medium">Fleet Group</label>
-            <div className="relative">
-              <select
-                name="fleetGroup"
-                value={formData.fleetGroup}
-                onChange={handleChange}
-                className={`w-full appearance-none bg-[#18181b]/60 border rounded-xl px-3 py-2 text-white focus:outline-none cursor-pointer transition-all ${
-                  /* errors.fleetGroup ? "border-red-500 focus:border-red-500" : */ "border-[#27272a] focus:border-[#ffd60a]"
-                }`}
-              >
-                <option value="" disabled className="text-[#52525b]">
-                  Select Fleet Group
-                </option>
-                <option value="group1" className="bg-[#121214]">North Region Fleet</option>
-                <option value="group2" className="bg-[#121214]">South Logistics</option>
-                <option value="group3" className="bg-[#121214]">Express Delivery</option>
-              </select>
-              <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#71717a] pointer-events-none" />
-            </div>
+            <Dropdown
+              label="Select Fleet Group"
+              options={FLEET_GROUP_OPTIONS}
+              selectedValue={formData.fleetGroup}
+              onSelect={(val) => handleDropdownSelect("fleetGroup", val)}
+              className="w-full justify-between rounded-xl bg-[#18181b]/60 border-[#27272a] py-2 text-white"
+            />
             {/* {errors.fleetGroup && <p className="text-red-500 text-[9px] mt-0.5">{errors.fleetGroup}</p>} */}
           </div>
 
@@ -115,46 +115,25 @@ export default function AddFleetAssignmentModal({ isOpen, onClose, onNext }) {
           <div className="grid grid-cols-2 gap-2.5">
             <div>
               <label className="block text-[#a1a1aa] mb-1 font-medium">Operating Region</label>
-              <div className="relative">
-                <select
-                  name="operatingRegion"
-                  value={formData.operatingRegion}
-                  onChange={handleChange}
-                  className={`w-full appearance-none bg-[#18181b]/60 border rounded-xl px-3 py-2 text-white focus:outline-none cursor-pointer transition-all ${
-                    /* errors.operatingRegion ? "border-red-500 focus:border-red-500" : */ "border-[#27272a] focus:border-[#ffd60a]"
-                  }`}
-                >
-                  <option value="" disabled className="text-[#52525b]">
-                    Select Operating Region
-                  </option>
-                  <option value="north" className="bg-[#121214]">North Zone</option>
-                  <option value="west" className="bg-[#121214]">West Zone</option>
-                  <option value="east" className="bg-[#121214]">East Zone</option>
-                </select>
-                <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#71717a] pointer-events-none" />
-              </div>
+              <Dropdown
+                label="Select Operating Region"
+                options={OPERATING_REGION_OPTIONS}
+                selectedValue={formData.operatingRegion}
+                onSelect={(val) => handleDropdownSelect("operatingRegion", val)}
+                className="w-full justify-between rounded-xl bg-[#18181b]/60 border-[#27272a] py-2 text-white"
+              />
               {/* {errors.operatingRegion && <p className="text-red-500 text-[9px] mt-0.5">{errors.operatingRegion}</p>} */}
             </div>
 
             <div>
               <label className="block text-[#a1a1aa] mb-1 font-medium">Depot / Warehouse</label>
-              <div className="relative">
-                <select
-                  name="depotWarehouse"
-                  value={formData.depotWarehouse}
-                  onChange={handleChange}
-                  className={`w-full appearance-none bg-[#18181b]/60 border rounded-xl px-3 py-2 text-white focus:outline-none cursor-pointer transition-all ${
-                    /* errors.depotWarehouse ? "border-red-500 focus:border-red-500" : */ "border-[#27272a] focus:border-[#ffd60a]"
-                  }`}
-                >
-                  <option value="" disabled className="text-[#52525b]">
-                    Select Depot / Warehouse
-                  </option>
-                  <option value="depot1" className="bg-[#121214]">Central Warehouse 01</option>
-                  <option value="depot2" className="bg-[#121214]">South Depot A</option>
-                </select>
-                <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#71717a] pointer-events-none" />
-              </div>
+              <Dropdown
+                label="Select Depot / Warehouse"
+                options={DEPOT_WAREHOUSE_OPTIONS}
+                selectedValue={formData.depotWarehouse}
+                onSelect={(val) => handleDropdownSelect("depotWarehouse", val)}
+                className="w-full justify-between rounded-xl bg-[#18181b]/60 border-[#27272a] py-2 text-white"
+              />
               {/* {errors.depotWarehouse && <p className="text-red-500 text-[9px] mt-0.5">{errors.depotWarehouse}</p>} */}
             </div>
           </div>
@@ -168,9 +147,7 @@ export default function AddFleetAssignmentModal({ isOpen, onClose, onNext }) {
               placeholder="Enter Business Unit"
               value={formData.businessUnit}
               onChange={handleChange}
-              className={`w-full bg-[#18181b]/60 border rounded-xl px-3 py-2 text-white placeholder-[#52525b] focus:outline-none transition-all ${
-                /* errors.businessUnit ? "border-red-500 focus:border-red-500" : */ "border-[#27272a] focus:border-[#ffd60a]"
-              }`}
+              className="w-full bg-[#18181b]/60 border border-[#27272a] focus:border-[#ffd60a] rounded-xl px-3 py-2 text-white placeholder-[#52525b] focus:outline-none transition-all"
             />
             {/* {errors.businessUnit && <p className="text-red-500 text-[9px] mt-0.5">{errors.businessUnit}</p>} */}
           </div>
