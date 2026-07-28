@@ -100,12 +100,13 @@ export default function AuthShell({
                     <X size={18} />
                   </button>
                 ) : (
-                  <span
-                    aria-hidden
-                    className="flex h-8 w-8 items-center justify-center text-[#71717a]"
-                  >
-                    <X size={18} />
-                  </span>
+                  // <span
+                  //   aria-hidden
+                  //   className="flex h-8 w-8 items-center justify-center text-[#71717a]"
+                  // >
+                  //   <X size={18} />
+                  // </span>
+                  ""
                 )}
               </div>
 
