@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { MoreVertical, ArrowUpDown } from "lucide-react";
+import { MoreVertical } from "lucide-react";
 import SearchInput from "../../components/Ui/SearchInput";
 import Dropdown from "../../components/Ui/DropDown";
 import Button from "../../components/Ui/Button";
@@ -35,7 +35,6 @@ const MOCK_VEHICLES = [
   },
 ];
 
-// Options matched to Dropdown component expectations
 const FLEET_OPTIONS = [
   { label: "Fleet Group", value: "" },
   { label: "West Fleet", value: "west" },
@@ -56,7 +55,7 @@ const TRACKING_OPTIONS = [
 
 export default function VehicleListTable() {
   const [searchQuery, setSearchQuery] = useState("");
-  // States store standard string values
+  
   const [selectedFleet, setSelectedFleet] = useState("");
   const [selectedVehicleType, setSelectedVehicleType] = useState("");
   const [selectedTrackingStatus, setSelectedTrackingStatus] = useState("");
@@ -64,7 +63,7 @@ export default function VehicleListTable() {
   return (
     <div className="w-full bg-[#0d0e12] border border-[#1d1d20] rounded-xl overflow-hidden select-none">
       
-      {/* --- HEADER BAR --- */}
+     
       <div className="px-4 py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#1d1d20]">
         
         {/* Title */}
@@ -72,10 +71,10 @@ export default function VehicleListTable() {
           Vehicle List
         </h2>
 
-        {/* Right Controls */}
+      
         <div className="flex flex-wrap items-center justify-end gap-2.5">
           
-          {/* 1. Fleet Group Dropdown */}
+        
           <Dropdown
             label="Fleet Group"
             options={FLEET_OPTIONS}
@@ -84,7 +83,7 @@ export default function VehicleListTable() {
             className="rounded-full bg-[#121215] border-[#27272a] text-[#a1a1aa] py-1.5"
           />
 
-          {/* 2. Vehicle Type Dropdown */}
+         
           <Dropdown
             label="Vehicle Type"
             options={VEHICLE_OPTIONS}
@@ -93,7 +92,6 @@ export default function VehicleListTable() {
             className="rounded-full bg-[#121215] border-[#27272a] text-[#a1a1aa] py-1.5"
           />
 
-          {/* 3. Tracking Status Dropdown */}
           <Dropdown
             label="Tracking status"
             options={TRACKING_OPTIONS}
@@ -102,7 +100,7 @@ export default function VehicleListTable() {
             className="rounded-full bg-[#121215] border-[#27272a] text-[#a1a1aa] py-1.5"
           />
 
-          {/* Search Input */}
+         
           <div className="w-[150px] sm:w-[170px]">
             <SearchInput
               value={searchQuery}
@@ -115,18 +113,13 @@ export default function VehicleListTable() {
         </div>
       </div>
 
-      {/* --- TABLE SECTION --- */}
+      
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="bg-[#09090b] border-b border-[#1d1d20] text-[#71717a] text-[10px] font-medium">
               <th className="py-2.5 px-3 pl-4">Vehicle Number</th>
-              <th className="py-2.5 px-3">
-                <div className="flex items-center gap-1 cursor-pointer hover:text-white">
-                  Vehicle Type
-                  <ArrowUpDown size={10} />
-                </div>
-              </th>
+              <th className="py-2.5 px-3">Vehicle Type</th>
               <th className="py-2.5 px-3">Fleet Group</th>
               <th className="py-2.5 px-3">Driver</th>
               <th className="py-2.5 px-3">Device Status</th>
