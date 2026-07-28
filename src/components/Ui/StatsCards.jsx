@@ -75,7 +75,7 @@ export const StatCard = ({
       {/* Bottom Section: Label / Title & Arrow Icon */}
       {footerText && (
         <div className="flex items-center justify-between w-full pt-1.5 mt-1 border-t border-[#1d1d20]/40 shrink-0">
-          <span className="text-[12px] font-medium text-[#ffd60a] tracking-wide truncate">
+          <span className="text-[12px] font-medium text-[#9D6F00] tracking-wide truncate">
             {footerText}
           </span>
 

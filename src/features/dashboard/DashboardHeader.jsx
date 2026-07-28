@@ -3,8 +3,6 @@ import { Plus } from "lucide-react";
 import PageHeader from "../../components/Ui/PageHeader";
 import Button from "../../components/Ui/Button";
 
-
-
 export default function DashboardHeader({
   userName = "Atul",
   onSearch,
@@ -21,17 +19,14 @@ export default function DashboardHeader({
       onFilterClick={onFilterClick}
       onExportClick={onExportClick}
     >
-      {/* Primary Action Button passed as children */}
       <Button
         variant="primary"
-        size="sm"
+        icon={Plus}
+        iconPosition="right"
         onClick={onAddVehicleClick}
-        className="font-bold whitespace-nowrap flex-nowrap !text-[15px] !h-7 !px-4 !py-0 min-w-fit"
+        className="!w-[170px] min-w-[170px] !h-[40px] !rounded-[8px] !bg-[#FFC107] hover:!bg-[#e6ac00] active:scale-[0.98] !text-black !font-normal !text-[16px] !px-[18px] !py-0 gap-2 whitespace-nowrap flex-nowrap flex-shrink-0 [&_svg]:size-[15px] [&_span]:!overflow-visible [&_span]:!max-w-none"
       >
-        <span className="inline-flex items-center gap-1.5 whitespace-nowrap flex-nowrap">
-          <Plus size={15} className="shrink-0" />
-          <span className="whitespace-nowrap">Add Vehicle</span>
-        </span>
+        Add Vehicle
       </Button>
     </PageHeader>
   );

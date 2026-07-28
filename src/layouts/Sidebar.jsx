@@ -141,7 +141,7 @@ export default function Sidebar({ activeTab, setActiveTab }) {
                   {section.title}
                 </h4>
 
-                <div className="flex flex-col gap-1.5">
+                <div className="flex flex-col gap-2">
                   {section.items.map((item) => {
                     const targetPath = routeMap[item.label];
                     const isItemActive =
@@ -158,12 +158,12 @@ export default function Sidebar({ activeTab, setActiveTab }) {
                         }`}
                       >
                         <item.icon
-                          size={15}
+                          size={18}
                           className="text-[#F5B700] shrink-0"
                           strokeWidth={isItemActive ? 2.5 : 2}
                         />
 
-                        <span className="text-[15px] font-medium leading-[20px] truncate">
+                        <span className="text-[14px] font-normal leading-[20px] truncate">
                           {item.label}
                         </span>
                       </button>

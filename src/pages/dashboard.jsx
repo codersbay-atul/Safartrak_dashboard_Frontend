@@ -89,13 +89,7 @@ export default function Dashboard() {
           </div>
 
           <div className="flex flex-row gap-3.5 items-stretch w-full flex-1 min-h-0 overflow-hidden">
-            <div
-              className={`h-full min-h-0 overflow-hidden transition-all duration-300 ${
-                selectedVehicle && showDetailsPanel
-                  ? "flex-[1.2] min-w-0"
-                  : "w-[400px] xl:w-[420px] shrink-0"
-              }`}
-            >
+            <div className="h-full min-h-0 overflow-hidden transition-all duration-300 w-[342px] xl:w-[360px] shrink-0">
               <VehiclesList
                 search={vehicleSearch}
                 selectedVehicle={selectedVehicle}

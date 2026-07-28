@@ -106,7 +106,7 @@ export default function VehiclesList({
               }`}
           >
             <span
-              className={`w-1.5 h-1.5 rounded-full shrink-0 ${filter.color}`}
+              className={`w-[10px] h-[8px] rounded-none shrink-0 ${filter.color}`}
             />
             {filter.label} {filter.count !== null && `(${filter.count})`}
           </button>
