@@ -11,6 +11,10 @@ import apiClient from "./client";
  * @returns {Promise<{ accessToken: string, refreshToken: string|null, user: object|null, token: string|null }>}
  */
 export async function loginRequest(credentials) {
+  if (import.meta.env.DEV) {
+    console.log("BASE URL", import.meta.env.VITE_API_BASE_URL);
+  }
+
   const response = await apiClient.post("/v1/auth/login", {
     username: String(credentials?.username ?? "").trim(),
     password: credentials?.password ?? "",

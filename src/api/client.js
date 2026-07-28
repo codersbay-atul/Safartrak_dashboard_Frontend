@@ -74,11 +74,13 @@ export function normalizeApiError(error) {
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || "",
   timeout: 15000,
+  
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json",
   },
 });
+console.log("BASE URL =>", import.meta.env.VITE_API_BASE_URL);
 
 apiClient.interceptors.request.use(
   (config) => {
@@ -89,6 +91,20 @@ apiClient.interceptors.request.use(
     } else {
       delete config.headers.Authorization;
     }
+
+    if (
+      import.meta.env.DEV &&
+      String(config.url || "").includes("/auth/login")
+    ) {
+      console.log("REQUEST CONFIG", {
+        method: config.method,
+        baseURL: config.baseURL,
+        url: config.url,
+        headers: config.headers,
+        data: config.data,
+      });
+    }
+
     return config;
   },
   (error) => Promise.reject(normalizeApiError(error))
