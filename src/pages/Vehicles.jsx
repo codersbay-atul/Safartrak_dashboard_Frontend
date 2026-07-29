@@ -12,21 +12,18 @@ import VehicleAddedSuccessModal from "../features/vehicles/VehiclesAddedSuccessM
 import { getVehiclesExport } from "../services/vehicleService";
 import { toast } from "../components/Ui/toast";
 
-
-
 export default function Vehicles() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-
   const [currentStep, setCurrentStep] = useState(1);
 
   const handleImport = () => console.log("Import Data Clicked");
+
   const handleExport = async () => {
     try {
-      // Request export for all tabs (server should return a file blob)
       const response = await getVehiclesExport({ tab: "all" });
-
-      // Extract filename from content-disposition header if present
-      const disposition = response.headers?.["content-disposition"] || response.headers?.["Content-Disposition"];
+      const disposition =
+        response.headers?.["content-disposition"] ||
+        response.headers?.["Content-Disposition"];
       let filename = "vehicles_export";
       if (disposition) {
         const match = /filename\*?=([^;]+)/i.exec(disposition);
@@ -35,7 +32,9 @@ export default function Vehicles() {
         }
       }
 
-      const blob = new Blob([response.data], { type: response.data.type || "application/octet-stream" });
+      const blob = new Blob([response.data], {
+        type: response.data.type || "application/octet-stream",
+      });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
@@ -63,9 +62,14 @@ export default function Vehicles() {
 
   return (
     <MainLayout activeTab="Vehicles">
-      <div className="flex-1 flex flex-col gap-3.5 min-h-0 overflow-y-auto lg:overflow-hidden pr-0.5">
+      {/* 
+        Viewport-bound layout container:
+        h-[calc(100vh-80px)] locks height within screen.
+        overflow-hidden prevents outer scrolling.
+      */}
+      <div className="w-full h-[calc(100vh-80px)] flex flex-col gap-3.5 overflow-hidden p-1">
         
-        {/* Header */}
+        {/* Top Header */}
         <div className="shrink-0">
           <VehiclesHeader
             onImportClick={handleImport}
@@ -74,19 +78,19 @@ export default function Vehicles() {
           />
         </div>
 
-        
+        {/* Vehicle Stats Cards */}
         <div className="shrink-0">
           <VehicleStats />
         </div>
 
-       
+        {/* Table Container (Occupies remaining flex space accurately) */}
         <div className="flex-1 min-h-0 w-full overflow-hidden">
-          <VehicleListTable/>
+          <VehicleListTable />
         </div>
 
       </div>
 
-     
+      {/* Step Modals */}
       {currentStep === 1 && (
         <AddVehicleModal
           isOpen={isAddModalOpen}
@@ -95,7 +99,6 @@ export default function Vehicles() {
         />
       )}
 
-     
       {currentStep === 2 && (
         <AddDriverModal
           isOpen={isAddModalOpen}
@@ -104,7 +107,6 @@ export default function Vehicles() {
         />
       )}
 
-    
       {currentStep === 3 && (
         <AddFleetAssignmentModal
           isOpen={isAddModalOpen}
@@ -113,7 +115,6 @@ export default function Vehicles() {
         />
       )}
 
-      
       {currentStep === 4 && (
         <AddGPSDeviceModal
           isOpen={isAddModalOpen}
@@ -121,7 +122,6 @@ export default function Vehicles() {
           onNext={() => setCurrentStep(5)}
         />
       )}
-
 
       {currentStep === 5 && (
         <UploadDocumentsModal
@@ -131,7 +131,6 @@ export default function Vehicles() {
         />
       )}
 
-      
       {currentStep === 6 && (
         <VehicleAddedSuccessModal
           isOpen={isAddModalOpen}

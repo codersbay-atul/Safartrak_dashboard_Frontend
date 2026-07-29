@@ -53,45 +53,42 @@ export function mapVehicleSummary(apiSummary) {
     readValue(apiSummary, ["total_vehicles", "totalVehicles", "total", "count", "vehicles_count"])
   );
 
-  
+  const active = formatMetric(
+    readValue(apiSummary, ["active", "tracking", "tracking_vehicles", "active_vehicles"])
+  );
+
+  const idle = formatMetric(
+    readValue(apiSummary, ["idle", "idle_vehicles", "inactive", "inactive_vehicles"])
+  );
+
   const tracking = formatMetric(
-    readValue(apiSummary, [
-      "tracking",
-      "tracking_vehicles",
-      "active_vehicles",
-      "active",
-      "gps_connected",
-      "connected_vehicles",
-      "moving",
-    ])
+    readValue(apiSummary, ["tracking", "tracking_vehicles", "active_vehicles", "active", "gps_connected", "connected_vehicles", "moving"])
   );
 
   const offline = formatMetric(
-    readValue(apiSummary, [
-      "offline",
-      "offline_vehicles",
-      "disconnected_vehicles",
-      "inactive_vehicles",
-      "inactive",
-      "idle",
-    ])
+    readValue(apiSummary, ["offline", "offline_vehicles", "disconnected_vehicles", "inactive_vehicles", "inactive", "idle"])
+  );
+
+  const inMaintenance = formatMetric(
+    readValue(apiSummary, ["in_maintenance", "inMaintenance", "maintenance", "maintenance_vehicles"])
+  );
+
+  const criticalAlerts = formatMetric(
+    readValue(apiSummary, ["critical_alerts", "criticalAlerts", "alerts_critical", "critical"])
   );
 
   const groups = formatMetric(
-    readValue(apiSummary, [
-      "groups",
-      "fleet_groups",
-      "fleet_group_count",
-      "group_count",
-      "groups_count",
-      "fleet_groups_count",
-    ])
+    readValue(apiSummary, ["groups", "fleet_groups", "fleet_group_count", "group_count", "groups_count", "fleet_groups_count"])
   );
 
   return {
     totalVehicles,
+    active,
+    idle,
     tracking,
     offline,
+    inMaintenance,
+    criticalAlerts,
     groups,
   };
 }

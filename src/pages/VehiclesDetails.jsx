@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MainLayout from "../layouts/MainLayout";
+import useVehiclesList from "../hooks/useVehiclesList";
 
 import VehiclesBasicInfo from "../features/vehiclesDetails/VehiclesBasicInfo";
 import VehiclesRegistrationDetails from "../features/vehiclesDetails/VehiclesRegistrationDetails";
@@ -22,9 +23,26 @@ import VehiclesLastKnownLocation from "../features/vehiclesDetails/VehiclesLastK
 export default function VehiclesDetails() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
+  const [selectedVehicle, setSelectedVehicle] = useState(null);
+
+  const {
+    vehicles: apiVehicles = [],
+    isLoading: vehiclesLoading,
+    isError: vehiclesError,
+  } = useVehiclesList({ pageSize: 10 });
+
+  useEffect(() => {
+    if (!selectedVehicle && apiVehicles.length > 0) {
+      // Store the actual unique_id directly
+      setSelectedVehicle(apiVehicles[0]?.raw?.unique_id ?? null);
+    }
+  }, [apiVehicles, selectedVehicle]);
+
+  const selectedVehicleItem = apiVehicles.find(
+    (item) => item?.raw?.unique_id === selectedVehicle
+  );
 
   const handleImport = () => console.log("Import Data Clicked");
-  const handleExport = () => console.log("Export Data Clicked");
 
   const handleAddVehicle = () => {
     setCurrentStep(1);
@@ -42,23 +60,28 @@ export default function VehiclesDetails() {
         <div className="shrink-0">
           <VehicleDetailsHeader
             onImportClick={handleImport}
-            onExportClick={handleExport}
             onAddVehicleClick={handleAddVehicle}
           />
         </div>
 
         <div className="shrink-0">
-          <VehiclesDetailsStatsCard />
+          <VehiclesDetailsStatsCard uniqueId={selectedVehicle} />
         </div>
 
         <div className="flex-1 min-h-0 grid grid-cols-12 gap-2.5 overflow-hidden">
           <div className="col-span-3 h-full min-h-0 rounded-xl border border-gray-800/80 bg-[#0d0f12] overflow-hidden flex flex-col">
-            <VehiclesDetailsInfo />
+            <VehiclesDetailsInfo
+              selectedVehicle={selectedVehicle}
+              onSelectVehicle={setSelectedVehicle}
+              vehicles={apiVehicles}
+              isLoading={vehiclesLoading}
+              isError={vehiclesError}
+            />
           </div>
 
           <div className="col-span-9 h-full min-h-0 flex flex-col gap-2 overflow-hidden">
             <div className="shrink-0">
-              <VehiclesQuickStats />
+              <VehiclesQuickStats uniqueId={selectedVehicle} />
             </div>
 
             <div className="flex-1 min-h-0 grid grid-cols-12 gap-2.5 overflow-hidden">
@@ -85,6 +108,11 @@ export default function VehiclesDetails() {
               isOpen={isAddModalOpen}
               onClose={handleCloseModal}
               onCancel={handleCloseModal}
+              uniqueId={selectedVehicle}
+              selectedVehicle={selectedVehicleItem}
+              onSaved={() => {
+                setCurrentStep(2);
+              }}
               onNext={() => setCurrentStep(2)}
             />
           )}
@@ -94,7 +122,12 @@ export default function VehiclesDetails() {
               isOpen={isAddModalOpen}
               onClose={handleCloseModal}
               onCancel={handleCloseModal}
+              uniqueId={selectedVehicle}
+              selectedVehicle={selectedVehicleItem}
               onNext={() => setCurrentStep(3)}
+              onSaved={() => {
+                setCurrentStep(3);
+              }}
             />
           )}
 

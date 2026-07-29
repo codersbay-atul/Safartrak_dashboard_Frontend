@@ -72,7 +72,6 @@ export default function MaintenanceInfo({ onNext, onCancel }) {
 
   return (
     <div className="w-full max-w-[480px] bg-[#121214] border border-[#27272a] rounded-2xl p-4 shadow-2xl flex flex-col overflow-visible select-none">
-      
       {/* Header (Without Cross Button) */}
       <div className="pb-3 mb-2 border-b border-[#1d1d20]/60">
         <h2 className="text-[14px] font-bold text-white tracking-tight">
@@ -80,13 +79,15 @@ export default function MaintenanceInfo({ onNext, onCancel }) {
         </h2>
       </div>
 
-      
-      <form onSubmit={handleNext} className="flex flex-col gap-2.5 text-[10.5px]">
-        
- 
+      <form
+        onSubmit={handleNext}
+        className="flex flex-col gap-2.5 text-[10.5px]"
+      >
         <div className="grid grid-cols-2 gap-2.5">
           <div>
-            <label className="block text-[#a1a1aa] mb-1 font-medium">Last Service Date</label>
+            <label className="block text-[#a1a1aa] mb-1 font-medium">
+              Last Service Date
+            </label>
             <input
               type="date"
               name="lastServiceDate"
@@ -97,7 +98,9 @@ export default function MaintenanceInfo({ onNext, onCancel }) {
           </div>
 
           <div>
-            <label className="block text-[#a1a1aa] mb-1 font-medium">Next Service Due</label>
+            <label className="block text-[#a1a1aa] mb-1 font-medium">
+              Next Service Due
+            </label>
             <input
               type="date"
               name="nextServiceDue"
@@ -111,7 +114,9 @@ export default function MaintenanceInfo({ onNext, onCancel }) {
         {/* Row 2: Current Odometer & Engine Hour */}
         <div className="grid grid-cols-2 gap-2.5">
           <div>
-            <label className="block text-[#a1a1aa] mb-1 font-medium">Current Odometer</label>
+            <label className="block text-[#a1a1aa] mb-1 font-medium">
+              Current Odometer
+            </label>
             <input
               type="text"
               name="currentOdometer"
@@ -124,7 +129,9 @@ export default function MaintenanceInfo({ onNext, onCancel }) {
           </div>
 
           <div>
-            <label className="block text-[#a1a1aa] mb-1 font-medium">Engine Hour</label>
+            <label className="block text-[#a1a1aa] mb-1 font-medium">
+              Engine Hour
+            </label>
             <input
               type="text"
               name="engineHour"
@@ -139,18 +146,24 @@ export default function MaintenanceInfo({ onNext, onCancel }) {
         {/* Row 3: Maintenance Interval & Preferred Workshop */}
         <div className="grid grid-cols-2 gap-2.5">
           <div>
-            <label className="block text-[#a1a1aa] mb-1 font-medium">Maintenance Interval</label>
+            <label className="block text-[#a1a1aa] mb-1 font-medium">
+              Maintenance Interval
+            </label>
             <Dropdown
               label="Select Interval"
               options={MAINTENANCE_INTERVAL_OPTIONS}
               selectedValue={formData.maintenanceInterval}
-              onSelect={(val) => handleDropdownSelect("maintenanceInterval", val)}
+              onSelect={(val) =>
+                handleDropdownSelect("maintenanceInterval", val)
+              }
               className="w-full justify-between rounded-xl bg-[#18181b]/60 border-[#27272a] py-1.5 px-3 text-white"
             />
           </div>
 
           <div>
-            <label className="block text-[#a1a1aa] mb-1 font-medium">Preferred Workshop</label>
+            <label className="block text-[#a1a1aa] mb-1 font-medium">
+              Preferred Workshop
+            </label>
             <input
               type="text"
               name="preferredWorkshop"
@@ -178,7 +191,6 @@ export default function MaintenanceInfo({ onNext, onCancel }) {
             Next
           </button>
         </div>
-
       </form>
     </div>
   );

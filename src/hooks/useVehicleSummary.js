@@ -11,7 +11,6 @@ export function useVehicleSummary() {
     gcTime: 5 * 60_000,
     retry: 2,
     retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 8_000),
-    // Poll for live KPIs every 15s. Adjust as needed for load/real-timeness.
     refetchInterval: 15_000,
     refetchIntervalInBackground: true,
     refetchOnWindowFocus: true,

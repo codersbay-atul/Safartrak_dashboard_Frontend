@@ -1,18 +1,36 @@
 import React, { useState } from "react";
-import { Search, ChevronRight } from "lucide-react";
+import { Search, ChevronRight, Loader2 } from "lucide-react";
 
-export default function VehiclesDetailsInfo() {
+export default function VehiclesDetailsInfo({ selectedVehicle, onSelectVehicle, vehicles: apiVehicles = [], isLoading, isError }) {
   const [activeFilter, setActiveFilter] = useState("Active");
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedVehicle, setSelectedVehicle] = useState("MH14ZZ8765");
 
-  const vehicles = [
-    { id: "MH14ZZ8765", type: "Heavy Truck", driver: "Ashoke Sharma", fleet: "West Fleet", status: "Active" },
-    { id: "MH14ZZ8766", type: "Heavy Truck", driver: "Ashoke Sharma", fleet: "West Fleet", status: "Active" },
-    { id: "MH14ZZ8767", type: "Heavy Truck", driver: "Ashoke Sharma", fleet: "West Fleet", status: "Maint." },
-    { id: "MH14ZZ8768", type: "Heavy Truck", driver: "Ashoke Sharma", fleet: "West Fleet", status: "Idle" },
-    { id: "MH14ZZ8769", type: "Heavy Truck", driver: "Ashoke Sharma", fleet: "West Fleet", status: "Offline" },
-  ];
+  const vehicles = apiVehicles.length > 0
+    ? apiVehicles.map((item) => ({
+        id: item.id,
+        uniqueId: item.raw?.unique_id,
+        type: item.type || item.model || item.raw?.vehicle_type || "Unknown",
+        driver: item.driver || item.raw?.driver_name || "Unassigned",
+        fleet:
+          item.fleetGroup ||
+          item.location ||
+          item.raw?.fleet_group ||
+          item.raw?.fleetGroup ||
+          "Unknown",
+        status:
+          item.status ||
+          item.raw?.status ||
+          item.raw?.tracking_status ||
+          item.raw?.device_status ||
+          "Unknown",
+      }))
+    : [
+        { id: "MH14ZZ8765", type: "Heavy Truck", driver: "Ashoke Sharma", fleet: "West Fleet", status: "Active" },
+        { id: "MH14ZZ8766", type: "Heavy Truck", driver: "Ashoke Sharma", fleet: "West Fleet", status: "Active" },
+        { id: "MH14ZZ8767", type: "Heavy Truck", driver: "Ashoke Sharma", fleet: "West Fleet", status: "Maint." },
+        { id: "MH14ZZ8768", type: "Heavy Truck", driver: "Ashoke Sharma", fleet: "West Fleet", status: "Idle" },
+        { id: "MH14ZZ8769", type: "Heavy Truck", driver: "Ashoke Sharma", fleet: "West Fleet", status: "Offline" },
+      ];
 
   const filters = [
     { label: "All Vehicles", value: "All" },
@@ -96,13 +114,22 @@ export default function VehiclesDetailsInfo() {
 
       {/* Vehicle List */}
       <div className="flex-1 overflow-y-auto space-y-1.5 pr-0.5 custom-scrollbar min-h-0">
-        {filteredVehicles.length > 0 ? (
+        {isLoading ? (
+          <div className="py-16 flex flex-col items-center justify-center text-[#71717a] gap-2.5">
+            <Loader2 size={24} className="animate-spin text-[#ffd60a]" />
+            <p className="text-[11px] tracking-wide">Loading vehicles...</p>
+          </div>
+        ) : isError ? (
+          <div className="py-16 text-center text-[#71717a] text-[11px]">
+            Failed to load vehicles list.
+          </div>
+        ) : filteredVehicles.length > 0 ? (
           filteredVehicles.map((v) => {
-            const isSelected = selectedVehicle === v.id;
+            const isSelected = selectedVehicle === v.uniqueId;
             return (
               <div
                 key={v.id}
-                onClick={() => setSelectedVehicle(v.id)}
+                onClick={() => onSelectVehicle?.(v.uniqueId)}
                 className={`p-2 rounded-xl border transition-all flex items-center justify-between cursor-pointer group ${
                   isSelected
                     ? "bg-[#18181b] border-[#ffd60a] shadow-md shadow-[#ffd60a]/5"

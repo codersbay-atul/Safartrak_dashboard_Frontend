@@ -73,6 +73,7 @@ export function mapVehicleItem(item) {
 
   return {
     id: uniqueId ?? vehicleNumber ?? item.id,
+    statsId: uniqueId ?? item.id,
     uniqueId: displayOrDash(uniqueId),
     plate: displayOrDash(vehicleNumber),
     status,

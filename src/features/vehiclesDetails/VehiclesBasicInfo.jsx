@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Dropdown from "../../components/Ui/DropDown";
+import { patchVehicle } from "../../services/vehicleService";
+import { toast } from "../../components/Ui/toast";
 
 // Dropdown Options
 const VEHICLE_TYPE_OPTIONS = [
@@ -22,7 +24,7 @@ const FUEL_TYPE_OPTIONS = [
   { label: "Electric", value: "Electric" },
 ];
 
-export default function VehiclesBasicInfo({ onNext, onCancel }) {
+export default function VehiclesBasicInfo({ onNext, onCancel, uniqueId, onSaved, selectedVehicle }) {
   const [formData, setFormData] = useState({
     vehicleNumber: "",
     vehicleType: "",
@@ -33,59 +35,101 @@ export default function VehiclesBasicInfo({ onNext, onCancel }) {
     fuelType: "",
     fleet: "",
   });
+  const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  /* -------------------------------------------------------------
-     1. VALIDATION ERRORS STATE (Commented out for now)
-  ---------------------------------------------------------------- */
-  // const [errors, setErrors] = useState({});
+  useEffect(() => {
+    if (selectedVehicle) {
+      const vehicleNumber =
+        selectedVehicle?.plate ||
+        selectedVehicle?.vehicleNumber ||
+        selectedVehicle?.raw?.vehicle_number ||
+        selectedVehicle?.raw?.vehicleNumber ||
+        "";
+
+      setFormData((prev) => ({
+        ...prev,
+        vehicleNumber,
+        vehicleType: "Heavy Truck",
+        manufacturer: "Tata Motors",
+        model: "Model X",
+        color: "White",
+        capacity: "12 Tons",
+        fuelType: "Diesel",
+        fleet: "Main Fleet",
+      }));
+    }
+  }, [selectedVehicle]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
 
-    /* -------------------------------------------------------------
-       2. CLEAR ERROR ON INPUT CHANGE (Commented out for now)
-    ---------------------------------------------------------------- */
-    // if (errors[name]) {
-    //   setErrors((prev) => ({ ...prev, [name]: "" }));
-    // }
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
   };
 
   // Helper function for Custom Dropdowns
   const handleDropdownSelect = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
-    // if (errors[field]) {
-    //   setErrors((prev) => ({ ...prev, [field]: "" }));
-    // }
+    if (errors[field]) {
+      setErrors((prev) => ({ ...prev, [field]: "" }));
+    }
   };
 
-  /* -------------------------------------------------------------
-     3. VALIDATION LOGIC FUNCTION (Commented out for now)
-  ---------------------------------------------------------------- */
-  /*
   const validateForm = () => {
-    let newErrors = {};
-
-    if (!formData.vehicleNumber.trim()) newErrors.vehicleNumber = "Vehicle Number is required";
-    if (!formData.vehicleType) newErrors.vehicleType = "Select Vehicle Type";
-    if (!formData.manufacturer) newErrors.manufacturer = "Select Manufacturer";
-    if (!formData.model.trim()) newErrors.model = "Model is required";
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    // const newErrors = {};
+    // if (!formData.vehicleNumber.trim()) {
+    //   newErrors.vehicleNumber = "Vehicle Number is required";
+    // }
+    // if (!formData.vehicleType) {
+    //   newErrors.vehicleType = "Select Vehicle Type";
+    // }
+    // if (!formData.manufacturer) {
+    //   newErrors.manufacturer = "Select Manufacturer";
+    // }
+    // if (!formData.model.trim()) {
+    //   newErrors.model = "Model is required";
+    // }
+    // setErrors(newErrors);
+    // return Object.keys(newErrors).length === 0;
+    return true; // Skip validation
   };
-  */
 
-  const handleNext = (e) => {
+  const handleNext = async (e) => {
     e.preventDefault();
 
-    /* -------------------------------------------------------------
-       4. FORM VALIDATION CHECK BEFORE NEXT (Commented out for now)
-    ---------------------------------------------------------------- */
-    // const isValid = validateForm();
-    // if (!isValid) return;
+    if (!validateForm()) return;
 
-    if (onNext) onNext(formData);
+    if (!uniqueId) {
+      toast.error("No vehicle selected");
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+      const payload = {
+        vehicle_number: formData.vehicleNumber.trim(),
+        vehicle_type: formData.vehicleType,
+        manufacturer: formData.manufacturer,
+        model: formData.model.trim(),
+        color: formData.color.trim(),
+        capacity: formData.capacity,
+        fuel_type: formData.fuelType,
+        fleet_group: formData.fleet.trim(),
+      };
+
+      await patchVehicle(uniqueId, payload);
+      toast.success("Vehicle updated successfully");
+      if (onSaved) onSaved();
+      if (onNext) onNext(formData);
+    } catch (error) {
+      console.error("Failed to update vehicle", error);
+      toast.error(error?.message || "Failed to update vehicle");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -111,9 +155,9 @@ export default function VehiclesBasicInfo({ onNext, onCancel }) {
               placeholder="Enter Vehicle Number"
               value={formData.vehicleNumber}
               onChange={handleChange}
-              className="w-full bg-[#18181b]/60 border border-[#27272a] focus:border-[#ffd60a] rounded-xl px-3 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all"
+              className={`w-full bg-[#18181b]/60 border ${errors.vehicleNumber ? "border-rose-500" : "border-[#27272a]"} focus:border-[#ffd60a] rounded-xl px-3 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all`}
             />
-            {/* {errors.vehicleNumber && <p className="text-red-500 text-[9px] mt-0.5">{errors.vehicleNumber}</p>} */}
+            {errors.vehicleNumber && <p className="text-red-500 text-[9px] mt-0.5">{errors.vehicleNumber}</p>}
           </div>
 
           <div>
@@ -123,9 +167,9 @@ export default function VehiclesBasicInfo({ onNext, onCancel }) {
               options={VEHICLE_TYPE_OPTIONS}
               selectedValue={formData.vehicleType}
               onSelect={(val) => handleDropdownSelect("vehicleType", val)}
-              className="w-full justify-between rounded-xl bg-[#18181b]/60 border-[#27272a] py-1.5 px-3 text-white"
+              className={`w-full justify-between rounded-xl bg-[#18181b]/60 ${errors.vehicleType ? "border-rose-500" : "border-[#27272a]"} py-1.5 px-3 text-white`}
             />
-            {/* {errors.vehicleType && <p className="text-red-500 text-[9px] mt-0.5">{errors.vehicleType}</p>} */}
+            {errors.vehicleType && <p className="text-red-500 text-[9px] mt-0.5">{errors.vehicleType}</p>}
           </div>
         </div>
 
@@ -138,9 +182,9 @@ export default function VehiclesBasicInfo({ onNext, onCancel }) {
               options={MANUFACTURER_OPTIONS}
               selectedValue={formData.manufacturer}
               onSelect={(val) => handleDropdownSelect("manufacturer", val)}
-              className="w-full justify-between rounded-xl bg-[#18181b]/60 border-[#27272a] py-1.5 px-3 text-white"
+              className={`w-full justify-between rounded-xl bg-[#18181b]/60 ${errors.manufacturer ? "border-rose-500" : "border-[#27272a]"} py-1.5 px-3 text-white`}
             />
-            {/* {errors.manufacturer && <p className="text-red-500 text-[9px] mt-0.5">{errors.manufacturer}</p>} */}
+            {errors.manufacturer && <p className="text-red-500 text-[9px] mt-0.5">{errors.manufacturer}</p>}
           </div>
 
           <div>
@@ -151,9 +195,9 @@ export default function VehiclesBasicInfo({ onNext, onCancel }) {
               placeholder="Enter Model"
               value={formData.model}
               onChange={handleChange}
-              className="w-full bg-[#18181b]/60 border border-[#27272a] focus:border-[#ffd60a] rounded-xl px-3 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all"
+              className={`w-full bg-[#18181b]/60 border ${errors.model ? "border-rose-500" : "border-[#27272a]"} focus:border-[#ffd60a] rounded-xl px-3 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all`}
             />
-            {/* {errors.model && <p className="text-red-500 text-[9px] mt-0.5">{errors.model}</p>} */}
+            {errors.model && <p className="text-red-500 text-[9px] mt-0.5">{errors.model}</p>}
           </div>
         </div>
 
@@ -219,9 +263,10 @@ export default function VehiclesBasicInfo({ onNext, onCancel }) {
           </button>
           <button
             type="submit"
-            className="w-full py-2 rounded-xl text-[11px] font-bold text-black bg-[#ffd60a] hover:bg-[#e6c200] transition-colors cursor-pointer"
+            disabled={isSubmitting}
+            className="w-full py-2 rounded-xl text-[11px] font-bold text-black bg-[#ffd60a] hover:bg-[#e6c200] transition-colors cursor-pointer disabled:opacity-70"
           >
-            Next
+            {isSubmitting ? "Saving..." : "Next"}
           </button>
         </div>
 

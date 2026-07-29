@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import Dropdown from "../../components/Ui/DropDown";
+import { patchVehicleRegistration } from "../../services/vehicleService";
+import { toast } from "../../components/Ui/toast";
 
 // Dropdown Options
 const PERMIT_TYPE_OPTIONS = [
@@ -7,7 +9,7 @@ const PERMIT_TYPE_OPTIONS = [
   { label: "State Permit", value: "State Permit" },
 ];
 
-export default function VehiclesRegistrationDetails({ onNext, onCancel }) {
+export default function VehiclesRegistrationDetails({ onNext, onCancel, uniqueId, selectedVehicle, onSaved }) {
   const [formData, setFormData] = useState({
     registrationNumber: "",
     vinNumber: "",
@@ -19,6 +21,7 @@ export default function VehiclesRegistrationDetails({ onNext, onCancel }) {
     fitnessCertificate: "",
     pollutionExpiry: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   /* -------------------------------------------------------------
      1. VALIDATION ERRORS STATE (Commented out for now)
@@ -61,7 +64,7 @@ export default function VehiclesRegistrationDetails({ onNext, onCancel }) {
   };
   */
 
-  const handleNext = (e) => {
+  const handleNext = async (e) => {
     e.preventDefault();
 
     /* -------------------------------------------------------------
@@ -70,7 +73,35 @@ export default function VehiclesRegistrationDetails({ onNext, onCancel }) {
     // const isValid = validateForm();
     // if (!isValid) return;
 
-    if (onNext) onNext(formData);
+    if (!uniqueId) {
+      toast.error("No vehicle selected");
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+      const payload = {
+        registration_number: formData.registrationNumber.trim(),
+        vin_number: formData.vinNumber.trim(),
+        engine_number: formData.engineNumber.trim(),
+        chassis_number: formData.chassisNumber.trim(),
+        rc_expiry: formData.rcExpiry,
+        permit_type: formData.permitType,
+        permit_expiry: formData.permitExpiry,
+        fitness_certificate: formData.fitnessCertificate.trim(),
+        pollution_expiry: formData.pollutionExpiry,
+      };
+
+      await patchVehicleRegistration(uniqueId, payload);
+      toast.success("Registration details updated successfully");
+      if (onSaved) onSaved();
+      if (onNext) onNext(formData);
+    } catch (error) {
+      console.error("Failed to update registration details", error);
+      toast.error(error?.message || "Failed to update registration details");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -211,15 +242,17 @@ export default function VehiclesRegistrationDetails({ onNext, onCancel }) {
           <button
             type="button"
             onClick={onCancel}
-            className="w-full py-2 px-4 rounded-xl text-[11px] font-semibold bg-[#27272a]/60 hover:bg-[#27272a] text-[#d4d4d8] transition-colors cursor-pointer"
+            disabled={isSubmitting}
+            className="w-full py-2 px-4 rounded-xl text-[11px] font-semibold bg-[#27272a]/60 hover:bg-[#27272a] text-[#d4d4d8] transition-colors cursor-pointer disabled:opacity-50"
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="w-full py-2 rounded-xl text-[11px] font-bold text-black bg-[#ffd60a] hover:bg-[#e6c200] transition-colors cursor-pointer"
+            disabled={isSubmitting}
+            className="w-full py-2 rounded-xl text-[11px] font-bold text-black bg-[#ffd60a] hover:bg-[#e6c200] transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Next
+            {isSubmitting ? "Loading..." : "Next"}
           </button>
         </div>
 

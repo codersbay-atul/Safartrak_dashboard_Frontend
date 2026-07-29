@@ -15,6 +15,7 @@ export function useVehiclesList({
   search = "",
   page = 1,
   pageSize = 25,
+  tab = "all",
 } = {}) {
   const [debouncedSearch, setDebouncedSearch] = useState(search);
 
@@ -30,12 +31,14 @@ export function useVehiclesList({
       search: debouncedSearch,
       page,
       pageSize,
+      tab,
     }),
     queryFn: () =>
       getVehiclesList({
         search: debouncedSearch,
         page,
         page_size: pageSize,
+        tab,
       }),
     staleTime: 30_000,
     gcTime: 5 * 60_000,
