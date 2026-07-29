@@ -36,7 +36,7 @@ export default function UserHeader({
       showFilter={false}
       showExport={false}
     >
-      {/* Right controls layout matching exact image */}
+      
       <div className="flex items-center gap-2">
         
         {/* Search Field */}
