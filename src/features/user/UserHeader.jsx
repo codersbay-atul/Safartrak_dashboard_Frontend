@@ -43,7 +43,7 @@ export default function UserHeader({
         <div className="relative w-48">
           <input
             type="text"
-            placeholder="Search Vehicle..."
+            placeholder="Search Name.."
             value={searchQuery}
             onChange={(e) => onSearchChange && onSearchChange(e.target.value)}
             className="w-full bg-[#18181b]/80 text-[#d4d4d8] text-[11px] rounded-full pl-4 pr-8 py-1.5 border border-[#27272a] focus:outline-none focus:border-[#ffd60a] placeholder-[#71717a] transition-all"
