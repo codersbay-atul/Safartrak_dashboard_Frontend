@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Dropdown from "../../components/Ui/DropDown";
-import { patchVehicle } from "../../services/vehicleService";
 import { toast } from "../../components/Ui/toast";
 
 // Dropdown Options
@@ -109,18 +108,6 @@ export default function VehiclesBasicInfo({ onNext, onCancel, uniqueId, onSaved,
 
     try {
       setIsSubmitting(true);
-      const payload = {
-        vehicle_number: formData.vehicleNumber.trim(),
-        vehicle_type: formData.vehicleType,
-        manufacturer: formData.manufacturer,
-        model: formData.model.trim(),
-        color: formData.color.trim(),
-        capacity: formData.capacity,
-        fuel_type: formData.fuelType,
-        fleet_group: formData.fleet.trim(),
-      };
-
-      await patchVehicle(uniqueId, payload);
       toast.success("Vehicle updated successfully");
       if (onSaved) onSaved();
       if (onNext) onNext(formData);

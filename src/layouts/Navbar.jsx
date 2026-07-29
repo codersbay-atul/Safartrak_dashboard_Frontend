@@ -56,7 +56,7 @@ const iconMap = {
   "Users": Users
 };
 
-export default function Navbar({ activeTab, isRouteView }) {
+export default function Navbar({ activeTab, isRouteView, user }) {
   const ActiveIcon = iconMap[activeTab] || LayoutDashboard;
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -90,6 +90,18 @@ export default function Navbar({ activeTab, isRouteView }) {
     closePopover();
     navigate('/login', { replace: true });
   };
+
+  const initials = user?.name
+    ? user.name
+        .split(" ")
+        .map((part) => part.charAt(0))
+        .join("")
+        .slice(0, 2)
+        .toUpperCase()
+    : "AT";
+
+  const displayName = user?.name || "Atul";
+  const displayRole = user?.role || "Operations Admin";
 
   return (
     <header className="flex items-center justify-between px-3 sm:px-6 py-2.5 border-b border-[#1f1f23] bg-[#09090b] sticky top-0 z-30 select-none">
@@ -174,9 +186,9 @@ export default function Navbar({ activeTab, isRouteView }) {
         <NavPopoverWrapper isOpen={activePopover === 'profile'} onClose={closePopover}>
           <div className="pl-1.5 sm:pl-3 border-l border-[#27272a]">
             <UserAvatar 
-              initials="AT" 
-              name="Atul" 
-              role="Operations Admin" 
+              initials={initials} 
+              name={displayName} 
+              role={displayRole} 
               onClick={() => togglePopover('profile')} 
             />
           </div>

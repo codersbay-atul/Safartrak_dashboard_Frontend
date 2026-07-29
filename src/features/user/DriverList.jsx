@@ -1,77 +1,107 @@
 import React, { useState, useEffect } from "react";
-import { Search, MoreVertical } from "lucide-react";
-import Dropdown from "../../components/Ui/DropDown"; 
+import { Search, MoreVertical, Pencil } from "lucide-react";
+import Dropdown from "../../components/Ui/DropDown";
+import { getPendingUsers, getUsers } from "../../api/userApi";
 
 const ROLE_OPTIONS = [
   { label: "Role", value: "All" },
-  { label: "Operations Admin", value: "Operations Admin" },
-  { label: "Fleet Manager", value: "Fleet Manager" },
+  { label: "Fleet Owner", value: "fleet_owner" },
 ];
 
 const STATUS_OPTIONS = [
   { label: "Status", value: "All" },
-  { label: "Active", value: "Active" },
-  { label: "Pending", value: "Pending" },
+  { label: "Active", value: "active" },
+  { label: "Pending", value: "pending" },
+  { label: "Inactive", value: "inactive" },
 ];
 
-export default function DriverList({ selectedUser, onSelectUser }) {
+export default function DriverList({ selectedUser, onSelectUser, refreshTrigger = 0 }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [roleFilter, setRoleFilter] = useState("All");
   const [statusFilter, setStatusFilter] = useState("All");
+  const [users, setUsers] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [activeMenuId, setActiveMenuId] = useState(null);
 
-  const users = [
-    {
-      id: "1",
-      name: "Ashoke Sharma",
-      empId: "EMP-1001",
-      email: "debra.holt@example.com",
-      phone: "(702) 555-0122",
-      fleet: "West Fleet",
-      role: "Operations Admin",
-      status: "Active",
-      lastActive: "Today 9:45 PM",
-      joined: "15 Jan 2024",
-      department: "Operation",
-    },
-    {
-      id: "2",
-      name: "Vikram Malhotra",
-      empId: "EMP-1002",
-      email: "jessica.hanson@example.com",
-      phone: "(229) 555-0109",
-      fleet: "West Fleet",
-      role: "Fleet Manager",
-      status: "Pending",
-      lastActive: "Today 9:45 PM",
-      joined: "10 Feb 2024",
-      department: "Logistics",
-    },
-  ];
+  const mappedUsers = users.map((user) => ({
+    id: user.id,
+    name: user.name || "",
+    empId: user.employee_id || "",
+    email: user.email || "",
+    phone: user.phone || "",
+    fleet: user.fleet || "",
+    role: user.role || "",
+    status: user.status ? user.status.charAt(0).toUpperCase() + user.status.slice(1) : "",
+    lastActive: user.last_active_at || "",
+  }));
 
   useEffect(() => {
-    if (!selectedUser && users.length > 0) {
-      onSelectUser(users[0]);
+    let isMounted = true;
+
+    async function loadUsers() {
+      try {
+        setIsLoading(true);
+        const response = statusFilter === "pending"
+          ? await getPendingUsers({
+              search: searchQuery,
+              role: roleFilter === "All" ? "" : roleFilter,
+              page: 1,
+              page_size: 25,
+            })
+          : await getUsers({
+              search: searchQuery,
+              role: roleFilter === "All" ? "" : roleFilter,
+              status: statusFilter === "All" ? "" : statusFilter,
+              page: 1,
+              page_size: 25,
+            });
+
+        if (isMounted) {
+          setUsers(response.results || []);
+        }
+      } catch (error) {
+        console.error("Failed to load users", error);
+        if (isMounted) {
+          setUsers([]);
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
+        }
+      }
     }
-  }, [selectedUser, onSelectUser]);
 
-  const filteredUsers = users.filter((user) => {
-    const matchesSearch =
-      user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.empId.toLowerCase().includes(searchQuery.toLowerCase());
+    loadUsers();
 
-    const matchesRole = roleFilter === "All" || user.role === roleFilter;
-    const matchesStatus =
-      statusFilter === "All" || user.status === statusFilter;
+    return () => {
+      isMounted = false;
+    };
+  }, [searchQuery, roleFilter, statusFilter, refreshTrigger]);
 
-    return matchesSearch && matchesRole && matchesStatus;
-  });
+  useEffect(() => {
+    if (!selectedUser && mappedUsers.length > 0) {
+      onSelectUser?.({
+        id: mappedUsers[0].id,
+        name: mappedUsers[0].name,
+        empId: mappedUsers[0].empId,
+        email: mappedUsers[0].email,
+        phone: mappedUsers[0].phone,
+        fleet: mappedUsers[0].fleet,
+        role: mappedUsers[0].role,
+        status: mappedUsers[0].status,
+        lastActive: mappedUsers[0].lastActive,
+      });
+    }
+  }, [selectedUser, mappedUsers, onSelectUser]);
+
+  const handleMenuToggle = (userId) => {
+    setActiveMenuId((prev) => (prev === userId ? null : userId));
+  };
 
   return (
-    <div className="w-full h-full bg-[#121214] border border-[#27272a] rounded-2xl flex flex-col overflow-hidden select-none shadow-2xl">
+    <div className="w-full h-full min-h-0 bg-[#121214] border border-[#27272a] rounded-2xl flex flex-col overflow-hidden select-none shadow-2xl">
       
-      {/* Header & Controls - Tight Fit Spacing */}
-      <div className="px-3.5 py-2.5 border-b border-[#27272a] flex items-center justify-between gap-2 shrink-0 bg-[#121214]">
+      <div className="sticky top-0 z-10 px-3.5 py-2.5 border-b border-[#27272a] flex items-center justify-between gap-2 shrink-0 bg-[#121214]">
         
         {/* Title */}
         <h2 className="text-[13px] font-semibold text-white tracking-wide">
@@ -133,8 +163,14 @@ export default function DriverList({ selectedUser, onSelectUser }) {
             </tr>
           </thead>
           <tbody className="divide-y divide-[#27272a]/50 text-[11px]">
-            {filteredUsers.length > 0 ? (
-              filteredUsers.map((user) => {
+            {isLoading ? (
+              <tr>
+                <td colSpan="7" className="py-8 text-center text-[#71717a]">
+                  Loading users...
+                </td>
+              </tr>
+            ) : mappedUsers.length > 0 ? (
+              mappedUsers.map((user) => {
                 const isSelected = selectedUser?.id === user.id;
                 return (
                   <tr
@@ -189,9 +225,13 @@ export default function DriverList({ selectedUser, onSelectUser }) {
                         <span className="px-2.5 py-0.5 rounded-full text-[9px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                           Active
                         </span>
+                      ) : user.status === "Inactive" ? (
+                        <span className="px-2.5 py-0.5 rounded-full text-[9px] font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/20">
+                          Inactive
+                        </span>
                       ) : (
                         <span className="px-2.5 py-0.5 rounded-full text-[9px] font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
-                          Pending
+                          {user.status}
                         </span>
                       )}
                     </td>
@@ -202,16 +242,30 @@ export default function DriverList({ selectedUser, onSelectUser }) {
                     </td>
 
                     {/* Actions */}
-                    <td className="py-2.5 px-4 text-center">
+                    <td className="py-2.5 px-4 text-center relative">
                       <button
                         type="button"
                         onClick={(e) => {
                           e.stopPropagation();
+                          handleMenuToggle(user.id);
                         }}
                         className="p-1 hover:bg-[#27272a] rounded-lg text-[#a1a1aa] hover:text-white transition-colors cursor-pointer"
                       >
                         <MoreVertical className="w-3.5 h-3.5" />
                       </button>
+
+                      {activeMenuId === user.id && (
+                        <div className="absolute right-3 top-8 z-10 min-w-[140px] rounded-xl border border-[#27272a] bg-[#18181b] p-1.5 shadow-xl">
+                          <div className="flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-[11px] text-[#d4d4d8]">
+                            <Pencil className="h-3.5 w-3.5" />
+                            Edit Role
+                          </div>
+                          <div className="flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-[11px] text-[#d4d4d8]">
+                            <Pencil className="h-3.5 w-3.5" />
+                            Edit Status
+                          </div>
+                        </div>
+                      )}
                     </td>
                   </tr>
                 );

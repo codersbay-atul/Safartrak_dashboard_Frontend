@@ -1,9 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { RefreshCw } from "lucide-react";
 
-export default function AccountDetails({ isOpen, onClose, onConfirm }) {
+export default function AccountDetails({ isOpen, onClose, onConfirm, initialData }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    if (!initialData) {
+      setUsername("");
+      setPassword("");
+      return;
+    }
+
+    const user = initialData.user ?? initialData;
+    setUsername(user.name || "");
+    setPassword(initialData.temporary_password || "");
+  }, [initialData]);
 
   if (!isOpen) return null;
 

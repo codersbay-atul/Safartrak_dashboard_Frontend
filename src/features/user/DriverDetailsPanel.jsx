@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { Phone, Mail, UserX, KeyRound } from "lucide-react";
 import DeactivateUserModal from "./DeactivateUser";
+import { deactivateUser } from "../../api/userApi";
+import { toast } from "../../components/Ui/toast";
 
-export default function DriverDetailsPanel({ user }) {
+export default function DriverDetailsPanel({ user, onUserUpdated }) {
   const [isDeactivateModalOpen, setIsDeactivateModalOpen] = useState(false);
+  const [isDeactivating, setIsDeactivating] = useState(false);
 
   if (!user) {
     return (
@@ -15,9 +18,31 @@ export default function DriverDetailsPanel({ user }) {
 
   const isActive = user.status === "Active";
 
-  const handleConfirmDeactivate = () => {
-    console.log("User Deactivated:", user.empId);
-    setIsDeactivateModalOpen(false);
+  const handleConfirmDeactivate = async () => {
+    const userId = user?.id ?? user?.empId;
+
+    if (!userId) {
+      toast.error("Unable to deactivate this user because no valid user ID was provided.");
+      return;
+    }
+
+    try {
+      setIsDeactivating(true);
+      await deactivateUser(userId);
+
+      const updatedUser = {
+        ...user,
+        status: "Inactive",
+      };
+
+      onUserUpdated?.(updatedUser);
+      toast.success("User deactivated successfully.");
+      setIsDeactivateModalOpen(false);
+    } catch (error) {
+      toast.error(error?.message || "Failed to deactivate user.");
+    } finally {
+      setIsDeactivating(false);
+    }
   };
 
   return (
@@ -143,6 +168,7 @@ export default function DriverDetailsPanel({ user }) {
         isOpen={isDeactivateModalOpen}
         onClose={() => setIsDeactivateModalOpen(false)}
         onConfirm={handleConfirmDeactivate}
+        isLoading={isDeactivating}
       />
     </>
   );

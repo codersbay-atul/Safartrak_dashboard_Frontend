@@ -1,17 +1,58 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Dropdown from "../../components/Ui/DropDown";
 
-export default function UserInfo({ isOpen, onClose, onNext }) {
-  const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    phoneNumber: "",
-    employeeId: "",
-    department: "",
-    role: "",
-    assignedFleet: "",
-    reportingManager: "",
-  });
+const DEFAULT_FORM = {
+  fullName: "",
+  email: "",
+  phoneNumber: "",
+  employeeId: "",
+  department: "",
+  role: "",
+  assignedFleet: "",
+  reportingManager: "",
+};
+
+function normalizeRole(role) {
+  if (!role) return "";
+  const value = String(role).toLowerCase();
+  if (value.includes("admin")) return "admin";
+  if (value.includes("manager") || value.includes("fleet_owner")) return "manager";
+  if (value.includes("user") || value.includes("operator")) return "operator";
+  return value;
+}
+
+function normalizeDepartment(department) {
+  if (!department) return "";
+  const value = String(department).toLowerCase();
+  if (value.includes("operations")) return "operations";
+  if (value.includes("logistics")) return "logistics";
+  if (value.includes("fleet")) return "fleet";
+  return value;
+}
+
+export default function UserInfo({ isOpen, onClose, onNext, initialData }) {
+  const [formData, setFormData] = useState(DEFAULT_FORM);
+
+  useEffect(() => {
+    if (!initialData) {
+      setFormData(DEFAULT_FORM);
+      return;
+    }
+
+    const user = initialData.user ?? initialData;
+    const personal = user.personal ?? {};
+
+    setFormData({
+      fullName: personal.full_name || user.name || "",
+      email: personal.email || user.email || "",
+      phoneNumber: personal.phone || user.phone || "",
+      employeeId: personal.employee_id || "",
+      department: normalizeDepartment(personal.department || user.department || ""),
+      role: normalizeRole(user.role || ""),
+      assignedFleet: user.fleet || "",
+      reportingManager: personal.reporting_manager || "",
+    });
+  }, [initialData]);
 
   if (!isOpen) return null;
 
@@ -40,6 +81,7 @@ export default function UserInfo({ isOpen, onClose, onNext }) {
     { label: "Admin", value: "admin" },
     { label: "Fleet Manager", value: "manager" },
     { label: "Operator", value: "operator" },
+    { label: "User", value: "user" },
   ];
 
   const fleetOptions = [

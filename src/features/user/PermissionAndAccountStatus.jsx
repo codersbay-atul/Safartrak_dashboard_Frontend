@@ -1,29 +1,68 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Check, CheckCircle2 } from "lucide-react";
+
+const DEFAULT_PERMISSIONS = {
+  dashboard: false,
+  liveTracking: false,
+  analytics: false,
+  reports: false,
+  trips: false,
+  vehicles: false,
+  drivers: false,
+  vehicleDetails: false,
+  users: false,
+  alerts: false,
+  aoi: false,
+  mobilizeImmobilize: false,
+};
 
 export default function PermissionAndAccountStatus({
   isOpen,
   onClose,
   onSave,
+  initialData,
 }) {
   const [formData, setFormData] = useState({
-    permissions: {
-      dashboard: false,
-      liveTracking: false,
-      analytics: false,
-      reports: false,
-      trips: false,
-      vehicles: false,
-      drivers: false,
-      vehicleDetails: false,
-      users: false,
-      alerts: false,
-      aoi: false,
-      mobilizeImmobilize: false,
-    },
-    accountStatus: "Inactive",
+    permissions: DEFAULT_PERMISSIONS,
     additionalNotes: "",
   });
+
+  useEffect(() => {
+    if (!initialData) {
+      setFormData({
+        permissions: DEFAULT_PERMISSIONS,
+        additionalNotes: "",
+      });
+      return;
+    }
+
+    const user = initialData.user ?? initialData;
+    const permissions = Array.isArray(user.permissions) ? user.permissions : [];
+    const permissionMap = {
+      dashboard: "dashboard",
+      live_tracking: "liveTracking",
+      analytics: "analytics",
+      reports: "reports",
+      trips: "trips",
+      vehicles: "vehicles",
+      alerts: "alerts",
+      users: "users",
+      aoi: "aoi",
+    };
+
+    const nextPermissions = { ...DEFAULT_PERMISSIONS };
+    permissions.forEach((permission) => {
+      const key = permissionMap[String(permission).toLowerCase()];
+      if (key) {
+        nextPermissions[key] = true;
+      }
+    });
+
+    setFormData({
+      permissions: nextPermissions,
+      additionalNotes: user.notes || "",
+    });
+  }, [initialData]);
 
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -37,10 +76,6 @@ export default function PermissionAndAccountStatus({
         [key]: !prev.permissions[key],
       },
     }));
-  };
-
-  const handleStatusChange = (status) => {
-    setFormData((prev) => ({ ...prev, accountStatus: status }));
   };
 
   const handleNotesChange = (e) => {
@@ -90,7 +125,7 @@ export default function PermissionAndAccountStatus({
               Saved Successfully!
             </h3>
             <p className="text-[11px] text-[#71717a]">
-              User permissions and account status have been updated.
+              User permissions have been updated.
             </p>
           </div>
         ) : (
@@ -99,7 +134,7 @@ export default function PermissionAndAccountStatus({
             
             <div className="pb-3 mb-3 border-b border-[#27272a]/60">
               <h2 className="text-[13px] font-bold tracking-wide">
-                Permissions & Account Status
+                Permissions
               </h2>
             </div>
 
@@ -157,34 +192,6 @@ export default function PermissionAndAccountStatus({
               </div>
 
             
-              <div className="pt-2">
-                <label className="block text-[#71717a] mb-2 font-medium">
-                  Account Status
-                </label>
-                <div className="flex items-center gap-4">
-                  {["Active", "Pending Invitation", "Inactive"].map((status) => (
-                    <label
-                      key={status}
-                      onClick={() => handleStatusChange(status)}
-                      className="flex items-center gap-2 cursor-pointer text-[#d4d4d8] hover:text-white transition-colors"
-                    >
-                      <div
-                        className={`w-3.5 h-3.5 rounded-full border flex items-center justify-center transition-all shrink-0 ${
-                          formData.accountStatus === status
-                            ? "border-[#ffd60a] bg-transparent"
-                            : "border-[#3f3f46] bg-transparent"
-                        }`}
-                      >
-                        {formData.accountStatus === status && (
-                          <div className="w-1.5 h-1.5 rounded-full bg-[#ffd60a]" />
-                        )}
-                      </div>
-                      <span className="text-[11px]">{status}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
               {/* Additional Notes */}
               <div>
                 <label className="block text-[#71717a] mb-1 font-medium">

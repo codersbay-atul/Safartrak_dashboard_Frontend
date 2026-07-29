@@ -66,32 +66,6 @@ export async function getVehiclesExport(params = {}) {
 }
 
 /**
- * PATCH /v1/vehicles/{uniqueId}
- * @param {string} uniqueId
- * @param {object} payload
- * @returns {Promise<object>}
- */
-export async function patchVehicle(uniqueId, payload = {}) {
-  if (!uniqueId) throw new Error("uniqueId is required for patchVehicle");
-
-  const response = await apiClient.patch(`/v1/vehicles/${uniqueId}`, payload);
-  return response?.data?.data ?? response?.data ?? response;
-}
-
-/**
- * PATCH /v1/vehicles/{uniqueId}/registration
- * @param {string} uniqueId
- * @param {object} payload
- * @returns {Promise<object>}
- */
-export async function patchVehicleRegistration(uniqueId, payload = {}) {
-  if (!uniqueId) throw new Error("uniqueId is required for patchVehicleRegistration");
-
-  const response = await apiClient.patch(`/v1/vehicles/${uniqueId}/registration`, payload);
-  return response?.data?.data ?? response?.data ?? response;
-}
-
-/**
  * Build possible stats endpoints for a vehicle identifier payload.
  */
  function resolveVehicleStatsIds(vehicleOrId) {

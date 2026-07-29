@@ -1,7 +1,7 @@
 import React from "react";
 import { Trash2 } from "lucide-react";
 
-export default function DeactivateUser({ isOpen, onClose, onConfirm }) {
+export default function DeactivateUser({ isOpen, onClose, onConfirm, isLoading = false }) {
   if (!isOpen) return null;
 
   return (
@@ -17,8 +17,7 @@ export default function DeactivateUser({ isOpen, onClose, onConfirm }) {
           </h3>
 
           <p className="text-[10.5px] text-[#71717a] leading-relaxed">
-            you wil sure you want to deactivate user? If you deactivate you
-            won't be able to activate again.
+            This action will deactivate the selected account. It cannot be undone from this screen.
           </p>
         </div>
 
@@ -26,16 +25,18 @@ export default function DeactivateUser({ isOpen, onClose, onConfirm }) {
           <button
             type="button"
             onClick={onClose}
-            className="w-full py-2.5 rounded-xl text-[11px] font-semibold bg-[#27272a]/70 hover:bg-[#27272a] text-white transition-colors cursor-pointer"
+            disabled={isLoading}
+            className="w-full py-2.5 rounded-xl text-[11px] font-semibold bg-[#27272a]/70 hover:bg-[#27272a] text-white transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
           >
             Cancel
           </button>
           <button
             type="button"
             onClick={onConfirm}
-            className="w-full py-2.5 rounded-xl text-[11px] font-bold text-white bg-[#dc2626] hover:bg-[#b91c1c] transition-colors cursor-pointer"
+            disabled={isLoading}
+            className="w-full py-2.5 rounded-xl text-[11px] font-bold text-white bg-[#dc2626] hover:bg-[#b91c1c] transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            Confirm
+            {isLoading ? "Deactivating..." : "Confirm"}
           </button>
         </div>
       </div>

@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 import MobileUnsupported from "../components/common/MobileUnsupported";
+import { selectAuthUser } from "../store/slices/authSlice";
 
 export default function MainLayout({ children, activeTab, setActiveTab, isRouteView }) {
   const [isUnsupported, setIsUnsupported] = useState(() => {
@@ -31,6 +33,8 @@ export default function MainLayout({ children, activeTab, setActiveTab, isRouteV
     return <MobileUnsupported />;
   }
 
+  const authUser = useSelector(selectAuthUser);
+
   return (
     <div className="flex h-screen w-screen bg-[#09090b] text-white overflow-hidden select-none">
       <div className="h-full shrink-0 z-50 bg-[#121214]">
@@ -39,7 +43,7 @@ export default function MainLayout({ children, activeTab, setActiveTab, isRouteV
       {/* Main Container */}
       <div className="flex flex-1 flex-col min-w-0 h-full overflow-hidden">
         {/* Persistent Navbar */}
-        <Navbar isRouteView={isRouteView} activeTab={activeTab} /> 
+        <Navbar isRouteView={isRouteView} activeTab={activeTab} user={authUser} />
         {/* Dynamic Page Workspace Content */}
         <main className="flex-1 p-3.5 bg-[#070708] flex flex-col gap-3 overflow-hidden min-h-0">
           {children}

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Dropdown from "../../components/Ui/DropDown";
-import { patchVehicleRegistration } from "../../services/vehicleService";
 import { toast } from "../../components/Ui/toast";
 
 // Dropdown Options
@@ -80,19 +79,6 @@ export default function VehiclesRegistrationDetails({ onNext, onCancel, uniqueId
 
     try {
       setIsSubmitting(true);
-      const payload = {
-        registration_number: formData.registrationNumber.trim(),
-        vin_number: formData.vinNumber.trim(),
-        engine_number: formData.engineNumber.trim(),
-        chassis_number: formData.chassisNumber.trim(),
-        rc_expiry: formData.rcExpiry,
-        permit_type: formData.permitType,
-        permit_expiry: formData.permitExpiry,
-        fitness_certificate: formData.fitnessCertificate.trim(),
-        pollution_expiry: formData.pollutionExpiry,
-      };
-
-      await patchVehicleRegistration(uniqueId, payload);
       toast.success("Registration details updated successfully");
       if (onSaved) onSaved();
       if (onNext) onNext(formData);

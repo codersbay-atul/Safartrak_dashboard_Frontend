@@ -8,6 +8,7 @@ export default function Button({
   iconPosition = "left",
   fullWidthOnMobile = false,
   className = "",
+  type = "button",
   ...props
 }) {
   // 1. Force strict horizontal alignment with flex-row
@@ -44,6 +45,7 @@ export default function Button({
 
   return (
     <button
+      type={type}
       className={`${baseStyles} ${widthStyle} ${variants[variant]} ${sizes[size]} ${className}`}
       {...props}
     >

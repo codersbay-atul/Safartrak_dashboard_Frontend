@@ -23,6 +23,7 @@ export default function UserHeader({
   roleFilter = "",
   statusFilter = "",
   onAddUserClick,
+  onInviteUserClick,
   onSearchChange,
   onRoleChange,
   onStatusChange,
@@ -72,8 +73,22 @@ export default function UserHeader({
           />
         </div>
 
+        {/* Invite User Button */}
+        <Button
+          type="button"
+          variant="secondary"
+          size="sm"
+          icon={UserPlus}
+          iconPosition="left"
+          onClick={onInviteUserClick}
+          className="font-semibold whitespace-nowrap px-4 py-1.5 text-[11px] text-white bg-[#18181b] border border-[#27272a] hover:bg-[#212125] rounded-full flex items-center gap-1.5 cursor-pointer transition-colors"
+        >
+          Invite User
+        </Button>
+
         {/* Add User Button */}
         <Button
+          type="button"
           variant="primary"
           size="sm"
           icon={UserPlus}

@@ -1,13 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Check } from "lucide-react";
 
-export default function ContactAndNotification({ isOpen, onClose, onNext }) {
-  const [options, setOptions] = useState({
-    welcomeEmail: false,
-    loginCredentials: false,
-    emailNotifications: false,
-    smsNotifications: false,
-  });
+const DEFAULT_OPTIONS = {
+  welcomeEmail: false,
+  loginCredentials: false,
+  emailNotifications: false,
+  smsNotifications: false,
+};
+
+export default function ContactAndNotification({ isOpen, onClose, onNext, initialData }) {
+  const [options, setOptions] = useState(DEFAULT_OPTIONS);
+
+  useEffect(() => {
+    if (!initialData) {
+      setOptions(DEFAULT_OPTIONS);
+      return;
+    }
+
+    const user = initialData.user ?? initialData;
+    const notifications = user.notifications ?? {};
+    const invite = initialData.invite ?? {};
+
+    setOptions({
+      welcomeEmail: Boolean(invite.welcome_email || notifications.welcome_email_sent_at),
+      loginCredentials: Boolean(invite.login_credentials || notifications.credentials_sent_at),
+      emailNotifications: Boolean(notifications.email_notifications),
+      smsNotifications: Boolean(notifications.sms_notifications),
+    });
+  }, [initialData]);
 
   if (!isOpen) return null;
 
