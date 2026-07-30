@@ -80,7 +80,7 @@ export default function UserHeader({
           icon={UserPlus}
           iconPosition="left"
           onClick={onAddUserClick}
-          className="font-bold whitespace-nowrap px-4 py-1.5 text-[11px] bg-[#ffd60a] text-black hover:bg-[#e6c208] border-none rounded-full flex items-center gap-1.5 cursor-pointer shadow-md transition-colors ml-1"
+          className="!w-[120px] min-w-[130px] !h-[35px] !rounded-[8px] !bg-[#FFC107] hover:!bg-[#e6ac00] active:scale-[0.98] !text-black !font-normal !text-[16px] !px-[18px] !py-0 gap-2 whitespace-nowrap flex-nowrap flex-shrink-0 [&_svg]:size-[15px] [&_span]:!overflow-visible [&_span]:!max-w-none"
         >
           Add User
         </Button>

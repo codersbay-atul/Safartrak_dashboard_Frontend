@@ -7,6 +7,17 @@ export const queryKeys = {
     summary: ["dashboard-summary"],
     health: ["dashboard-health"],
   },
+  analytics: {
+    all: ["analytics"],
+    summary: (range) => ["analytics", "summary", range ?? "24h"],
+    distanceSeries: (range) => ["analytics", "distance-series", range ?? "24h"],
+    performance: (range, sort = "distance") => [
+      "analytics",
+      "performance",
+      range ?? "24h",
+      sort,
+    ],
+  },
   vehicles: {
     all: ["vehicles"],
     list: (filters) => ["vehicles", "list", filters ?? {}],
