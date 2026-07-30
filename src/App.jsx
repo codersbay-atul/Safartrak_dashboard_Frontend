@@ -6,6 +6,7 @@ import Reports from "./pages/Reports";
 import Mobilize from "./pages/Mobilize";
 import Alerts from "./pages/Alerts";
 import Aoi from "./pages/Aoi";
+import Activity from "./pages/Activity";
 import Vehicles from "./pages/Vehicles";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -70,6 +71,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Aoi />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/activity"
+            element={
+              <ProtectedRoute>
+                <Activity />
               </ProtectedRoute>
             }
           />
