@@ -4,16 +4,9 @@ import apiClient from "./client";
    DASHBOARD APIs
 ========================= */
 
-/**
- * GET /v1/dashboard/summary
- * @returns {Promise<object>} Raw/unwrapped API payload
- */
-export async function getDashboardSummary() {
-  const response = await apiClient.get("/v1/dashboard/summary");
+function unwrapPayload(response) {
   const payload = response?.data;
 
-  // Support both `{ ...fields }` and `{ data: { ...fields } }` envelopes
-  // only when those keys are actually present on the response.
   if (
     payload &&
     typeof payload === "object" &&
@@ -25,6 +18,37 @@ export async function getDashboardSummary() {
   }
 
   return payload ?? {};
+}
+
+/**
+ * GET /v1/dashboard/summary
+ * @returns {Promise<object>} Raw/unwrapped API payload
+ */
+export async function getDashboardSummary() {
+  const response = await apiClient.get("/v1/dashboard/summary");
+  return unwrapPayload(response);
+}
+
+/**
+ * GET /v1/dashboard/health?range={range}
+ * @param {{ range?: "24h"|"7d"|"30d" }} [params]
+ * @returns {Promise<object>}
+ */
+export async function getDashboardHealth(params = {}) {
+  const range = params.range ?? "24h";
+  const response = await apiClient.get("/v1/dashboard/health", {
+    params: { range },
+  });
+  const payload = unwrapPayload(response);
+
+  return {
+    ...payload,
+    series: Array.isArray(payload.series) ? payload.series : [],
+    current:
+      payload.current && typeof payload.current === "object"
+        ? payload.current
+        : {},
+  };
 }
 
 /** @deprecated Prefer getDashboardSummary — kept for existing imports. */

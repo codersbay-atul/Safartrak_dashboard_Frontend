@@ -195,11 +195,11 @@ export default function DashboardVehicleDetails({ vehicle, onViewRoute }) {
       {/* 1. Header */}
       <div className="flex items-center justify-between pb-2 shrink-0">
         <div className="flex items-center gap-2 min-w-0">
-          <h3 className="text-[15px] font-bold text-white tracking-tight">
+          <h3 className="text-[13px] font-bold text-white tracking-tight">
             Vehicle Details
           </h3>
           <span
-            className={`text-[15px] font-bold ${badge.text} ${badge.bg} px-2 py-0.5 rounded-sm flex items-center gap-1.5 shrink-0`}
+            className={`text-[13px] font-bold ${badge.text} ${badge.bg} px-2 py-0.5 rounded-sm flex items-center gap-1.5 shrink-0`}
           >
             <span className={`w-1.5 h-1.5 rounded-full ${badge.dot}`} />{" "}
             {statusLabel}
@@ -223,14 +223,14 @@ export default function DashboardVehicleDetails({ vehicle, onViewRoute }) {
             <h4 className="text-[15px] font-bold text-white tracking-tight truncate">
               {displayValue(vehicle?.plate)}
             </h4>
-            <p className="text-[15px] text-zinc-500 font-medium truncate mt-0.5">
+            <p className="text-[13px] text-zinc-500 font-medium truncate mt-0.5">
               {displayValue(vehicle?.driver)}
             </p>
           </div>
         </div>
         <div className="text-right leading-tight shrink-0">
-          <p className="text-[15px] font-bold text-white">-</p>
-          <p className="text-[15px] text-zinc-500 font-medium mt-0.5">
+          <p className="text-[13px] font-bold text-white">-</p>
+          <p className="text-[13px] text-zinc-500 font-medium mt-0.5">
             Remaining Distance
           </p>
         </div>
@@ -243,7 +243,7 @@ export default function DashboardVehicleDetails({ vehicle, onViewRoute }) {
           <div className="absolute left-0 w-2.5 h-2.5 rounded-full bg-[#16161a] border-2 border-[#2e2e36] transform -translate-x-1/2 z-10" />
           <div className="absolute right-0 w-2.5 h-2.5 rounded-full bg-[#16161a] border-2 border-[#2e2e36] transform translate-x-1/2 z-10" />
         </div>
-        <p className="text-[15px] font-bold text-[#FDBB24] tracking-wide mt-1.5">
+        <p className="text-[13px] font-bold text-[#FDBB24] tracking-wide mt-1.5">
           -
         </p>
       </div>
@@ -251,7 +251,7 @@ export default function DashboardVehicleDetails({ vehicle, onViewRoute }) {
       <div className="border-b border-dashed border-[#232329] w-full shrink-0 mb-3" />
 
       {/* 4. Vehicle Information List */}
-      <div className="flex flex-col flex-1 py-0.5 text-[15px] gap-y-3 overflow-y-auto pr-0.5 mb-3 scrollbar-thin scrollbar-thumb-zinc-800 scrollbar-track-transparent">
+      <div className="flex flex-col flex-1 py-0.5 text-[13px] gap-y-3 overflow-y-auto pr-0.5 mb-3 scrollbar-thin scrollbar-thumb-zinc-800 scrollbar-track-transparent">
         {metrics.map(
           ({
             key,

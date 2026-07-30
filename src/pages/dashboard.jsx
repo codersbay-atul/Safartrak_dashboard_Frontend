@@ -59,7 +59,7 @@ export default function Dashboard() {
           </div>
 
           <div className="shrink-0">
-            <TripStatsCard />
+            <TripStatsCard vehicle={selectedVehicle} />
           </div>
 
           <div className="flex flex-row gap-3.5 items-stretch w-full flex-1 min-h-0 overflow-hidden">

@@ -5,7 +5,16 @@
 export const queryKeys = {
   dashboard: {
     summary: ["dashboard-summary"],
-    health: ["dashboard-health"],
+    health: (range) => ["dashboard-health", range ?? "24h"],
+  },
+  fleet: {
+    health: ["fleet-health"],
+  },
+  insights: {
+    all: ["insights"],
+  },
+  actions: {
+    all: ["actions"],
   },
   analytics: {
     all: ["analytics"],
@@ -25,6 +34,7 @@ export const queryKeys = {
   tracking: {
     all: ["tracking"],
     live: ["tracking", "live"],
+    summary: (period) => ["tracking", "summary", period ?? "today"],
   },
   alerts: {
     all: ["alerts"],
@@ -32,5 +42,9 @@ export const queryKeys = {
   },
   activity: {
     summary: ["activity-summary"],
+  },
+  reports: {
+    all: ["reports"],
+    types: ["reports", "types"],
   },
 };
