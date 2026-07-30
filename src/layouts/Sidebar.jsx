@@ -36,7 +36,7 @@ export default function Sidebar({ activeTab, setActiveTab }) {
     // Trips: "/trips",
     Activity: "/activity",
     Vehicles: "/vehicles",
-    Drivers: "/drivers",
+    // Drivers: "/drivers",
     "Vehicle Details": "/vehicle-overview",
     Users: "/users",
   };
@@ -70,7 +70,7 @@ export default function Sidebar({ activeTab, setActiveTab }) {
       title: "MANAGEMENT",
       items: [
         { icon: Truck, label: "Vehicles" },
-        { icon: IdCard, label: "Drivers" },
+        // { icon: IdCard, label: "Drivers" },
         { icon: FileSearch, label: "Vehicle Details" },
         { icon: Users, label: "Users" },
       ],

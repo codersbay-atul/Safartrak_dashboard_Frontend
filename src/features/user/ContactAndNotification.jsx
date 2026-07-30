@@ -8,7 +8,7 @@ const DEFAULT_OPTIONS = {
   smsNotifications: false,
 };
 
-export default function ContactAndNotification({ isOpen, onClose, onNext, initialData }) {
+export default function ContactAndNotification({ isOpen, onClose, onSave, initialData }) {
   const [options, setOptions] = useState(DEFAULT_OPTIONS);
 
   useEffect(() => {
@@ -37,7 +37,7 @@ export default function ContactAndNotification({ isOpen, onClose, onNext, initia
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (onNext) onNext(options);
+    if (onSave) onSave(options);
   };
 
   const notificationItems = [
@@ -94,7 +94,7 @@ export default function ContactAndNotification({ isOpen, onClose, onNext, initia
               type="submit"
               className="w-full py-2.5 rounded-xl text-[11px] font-bold text-black bg-[#ffd60a] hover:bg-[#e6c200] transition-colors cursor-pointer"
             >
-              Next
+              Save
             </button>
           </div>
         </form>

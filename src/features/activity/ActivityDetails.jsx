@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Gauge,
   Fuel,
@@ -20,7 +20,9 @@ import {
 } from "lucide-react";
 import Button from "../../components/Ui/Button";
 import StatusBadge from "../../components/Ui/StatusBadge";
+import { toast } from "../../components/Ui/toast";
 import { ACTIVITY_DETAILS } from "./activityData";
+import useActivityNote from "../../hooks/useActivityNote";
 
 const ATTACHMENT_ICONS = {
   "Dashcam Snap": Image,
@@ -57,11 +59,54 @@ function ProgressBar({ value, color = "bg-[#22c55e]" }) {
 }
 
 export default function ActivityDetails({
+  event,
   details = ACTIVITY_DETAILS,
   onShare,
   onAddNote,
 }) {
-  if (!details) {
+  const [showNoteEditor, setShowNoteEditor] = useState(false);
+  const [noteBody, setNoteBody] = useState("");
+  const { mutateAsync: saveNote, isLoading: isSavingNote } = useActivityNote();
+
+  const detailsData = event ? {
+    ...details,
+    status: event.severity === "alert" ? "Attention" : details.status,
+    alert: event.severity === "alert" ? { time: event.time, label: event.title } : details.alert,
+    speed: event.speed || details.speed,
+    address: event.location || details.address,
+  } : details;
+
+  const handleSaveNote = async () => {
+    if (!event || !noteBody.trim()) return;
+
+    const payload = {
+      unique_id:
+        event.unique_id || event.uniqueId || event.id || event.vehicle || event.driver || null,
+      event_at: event.event_at || event.time || event.date || null,
+      event_kind:
+        event.event_kind || event.eventKind || event.type || event.severity || event.title || null,
+      body: noteBody.trim(),
+    };
+
+    if (!payload.unique_id || !payload.body) {
+      toast.error("Note cannot be saved: missing event identifier or content.");
+      return;
+    }
+
+    try {
+      await saveNote(payload);
+      setNoteBody("");
+      setShowNoteEditor(false);
+      if (typeof onAddNote === "function") {
+        onAddNote(payload);
+      }
+    } catch (error) {
+      console.error("Failed to save activity note", error);
+      toast.error(error?.message || "Unable to save note. Please try again.");
+    }
+  };
+
+  if (!detailsData) {
     return (
       <div className="w-full h-full bg-[#121214] border border-[#1f1f23] rounded-xl p-4 flex items-center justify-center select-none">
         <p className="text-[11px] text-[#71717a]">Select an event to view details</p>
@@ -75,70 +120,70 @@ export default function ActivityDetails({
         <h3 className="text-[12.5px] font-bold text-white tracking-tight">
           Activity Details
         </h3>
-        <StatusBadge label={details.status} variant="active" pulse />
+        <StatusBadge label={detailsData.status} variant="active" pulse />
       </div>
 
       <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar px-3 py-3 flex flex-col gap-3">
-        {details.alert && (
+        {detailsData.alert && (
           <div className="flex items-stretch gap-0 rounded-lg overflow-hidden border border-[#FDBB24]/25 bg-[#FDBB24]/08">
             <div className="w-1 shrink-0 bg-[#ef4444]" />
             <div className="flex-1 flex items-center gap-2 px-2.5 py-2">
               <span className="text-[10px] text-[#a1a1aa] tabular-nums shrink-0">
-                {details.alert.time}
+                {detailsData.alert.time}
               </span>
               <TriangleAlert size={13} className="text-[#FDBB24] shrink-0" />
               <span className="text-[11px] font-bold text-[#FDBB24]">
-                {details.alert.label}
+                {detailsData.alert.label}
               </span>
             </div>
           </div>
         )}
 
         <div className="rounded-lg border border-[#1f1f23] bg-[#161619]/40 px-2.5 py-1">
-          <DetailRow icon={Gauge} label="Speed" value={details.speed} />
-          <DetailRow icon={Fuel} label="Fuel Level" value={`${details.fuelLevel}%`}>
-            <ProgressBar value={details.fuelLevel} color="bg-[#22c55e]" />
+          <DetailRow icon={Gauge} label="Speed" value={detailsData.speed} />
+          <DetailRow icon={Fuel} label="Fuel Level" value={`${detailsData.fuelLevel}%`}>
+            <ProgressBar value={detailsData.fuelLevel} color="bg-[#22c55e]" />
           </DetailRow>
-          <DetailRow icon={Battery} label="Battery" value={details.battery} />
+          <DetailRow icon={Battery} label="Battery" value={detailsData.battery} />
           <DetailRow
             icon={HeartPulse}
             label="Engine Health"
-            value={details.engineHealth}
+            value={detailsData.engineHealth}
             valueClass="text-[#22c55e]"
           />
-          <DetailRow icon={GaugeCircle} label="Odometer" value={details.odometer} />
+          <DetailRow icon={GaugeCircle} label="Odometer" value={detailsData.odometer} />
           <DetailRow
             icon={Route}
             label="Trip Process"
-            value={`${details.tripProgress}%`}
+            value={`${detailsData.tripProgress}%`}
           >
-            <ProgressBar value={details.tripProgress} color="bg-[#FDBB24]" />
+            <ProgressBar value={detailsData.tripProgress} color="bg-[#FDBB24]" />
           </DetailRow>
-          <DetailRow icon={Clock3} label="ETA" value={details.eta} />
-          <DetailRow icon={MapPin} label="Current Address" value={details.address} />
+          <DetailRow icon={Clock3} label="ETA" value={detailsData.eta} />
+          <DetailRow icon={MapPin} label="Current Address" value={detailsData.address} />
           <DetailRow
             icon={Satellite}
             label="GPS Signal"
-            value={details.gpsSignal}
+            value={detailsData.gpsSignal}
             valueClass="text-[#22c55e]"
           />
           <DetailRow
             icon={Power}
             label="Ignition"
-            value={details.ignition}
+            value={detailsData.ignition}
             valueClass="text-[#22c55e]"
           />
           <DetailRow
             icon={RefreshCw}
             label="Last Updated"
-            value={details.lastUpdated}
+            value={detailsData.lastUpdated}
           />
         </div>
 
         <div>
           <p className="text-[10px] font-bold text-white mb-2">Event Attachments</p>
           <div className="grid grid-cols-3 gap-2">
-            {details.attachments.map((item) => {
+            {detailsData.attachments.map((item) => {
               const Icon = ATTACHMENT_ICONS[item.label] || Image;
               return (
                 <button
@@ -157,25 +202,60 @@ export default function ActivityDetails({
         </div>
       </div>
 
-      <div className="shrink-0 px-3 py-2.5 border-t border-[#1f1f23] flex items-center gap-2">
-        <Button
-          variant="secondary"
-          size="sm"
-          icon={Share2}
-          onClick={onShare}
-          className="flex-1 justify-center font-semibold"
-        >
-          Share Event
-        </Button>
-        <Button
-          variant="primary"
-          size="sm"
-          icon={Pencil}
-          onClick={onAddNote}
-          className="flex-1 justify-center font-bold"
-        >
-          Add Note
-        </Button>
+      <div className="px-3 py-2.5 border-t border-[#1f1f23] space-y-3">
+        {showNoteEditor && (
+          <div className="space-y-2">
+            <textarea
+              rows={4}
+              value={noteBody}
+              onChange={(e) => setNoteBody(e.target.value)}
+              placeholder={event ? "Write your note here..." : "Select an event to add a note."}
+              disabled={!event || isSavingNote}
+              className="w-full resize-none rounded-xl border border-[#27272a] bg-[#18181b] px-3 py-2 text-[10.5px] text-white placeholder:text-[#71717a] focus:outline-none focus:border-[#FDBB24]"
+            />
+            <div className="flex items-center gap-2">
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={handleSaveNote}
+                disabled={!event || isSavingNote || !noteBody.trim()}
+                className="flex-1 justify-center font-bold"
+              >
+                {isSavingNote ? "Saving..." : "Save Note"}
+              </Button>
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => setNoteBody("")}
+                disabled={!event || isSavingNote}
+                className="flex-1 justify-center font-semibold"
+              >
+                Clear
+              </Button>
+            </div>
+          </div>
+        )}
+
+        <div className="flex items-center gap-2">
+          <Button
+            variant="secondary"
+            size="sm"
+            icon={Share2}
+            onClick={onShare}
+            className="flex-1 justify-center font-semibold"
+          >
+            Share Event
+          </Button>
+          <Button
+            variant="primary"
+            size="sm"
+            icon={Pencil}
+            onClick={() => setShowNoteEditor((prev) => !prev)}
+            className="flex-1 justify-center font-bold"
+          >
+            {showNoteEditor ? "Hide Note" : "Add Note"}
+          </Button>
+        </div>
       </div>
     </div>
   );

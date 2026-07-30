@@ -9,8 +9,6 @@ import { getUserDetails } from "../api/userApi";
 import UserInfo from "../features/user/UserInfo";
 import AccountDetails from "../features/user/AccountDetails";
 import ContactAndNotification from "../features/user/ContactAndNotification";
-import PermissionAndAccountStatus from "../features/user/PermissionAndAccountStatus";
-import InviteUser from "../features/user/InviteUser";
 
 export default function Users() {
   const [selectedUser, setSelectedUser] = useState(null);
@@ -18,7 +16,6 @@ export default function Users() {
   const [isUserDetailsLoading, setIsUserDetailsLoading] = useState(false);
   const [usersRefreshKey, setUsersRefreshKey] = useState(0);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
 
   useEffect(() => {
@@ -60,13 +57,8 @@ export default function Users() {
     setIsAddModalOpen(true);
   };
 
-  const handleInviteUser = () => {
-    setIsInviteModalOpen(true);
-  };
-
   const handleCloseModal = () => {
     setIsAddModalOpen(false);
-    setIsInviteModalOpen(false);
     setCurrentStep(1);
   };
 
@@ -78,7 +70,7 @@ export default function Users() {
   return (
     <MainLayout activeTab="Users">
       <div className="h-screen max-h-screen p-3 bg-[#090b0e] flex flex-col gap-2.5 overflow-hidden text-gray-200">
-        <UserHeader onAddUserClick={handleAddUser} onInviteUserClick={handleInviteUser} />
+        <UserHeader onAddUserClick={handleAddUser} />
 
         <UserStats />
 
@@ -123,33 +115,13 @@ export default function Users() {
         <ContactAndNotification
           isOpen={isAddModalOpen}
           onClose={handleCloseModal}
-          onNext={() => setCurrentStep(4)}
-          initialData={userApiData}
-        />
-      )}
-
-      {/* Step 4: Permission & Status */}
-      {currentStep === 4 && (
-        <PermissionAndAccountStatus
-          isOpen={isAddModalOpen}
-          onClose={handleCloseModal}
-          onSave={() => {
-            console.log("User Added Successfully");
+          onSave={(options) => {
+            console.log("Saving user with contact options", options);
             handleCloseModal();
           }}
           initialData={userApiData}
         />
       )}
-
-      {/* Invite User Modal */}
-      <InviteUser
-        isOpen={isInviteModalOpen}
-        onClose={handleCloseModal}
-        onSendInvite={(email) => {
-          console.log("Invite sent to", email);
-          handleCloseModal();
-        }}
-      />
     </MainLayout>
   );
 }

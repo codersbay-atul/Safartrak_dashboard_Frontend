@@ -24,31 +24,31 @@ export const DRIVER_OPTIONS = [
 export const ACTIVITY_STATS = [
   {
     id: "trips",
-    value: "6 Trips",
+    value: "",
     subtitle: "Completed Today",
     bottomLabel: "Total Trips",
   },
   {
     id: "distance",
-    value: "324 km",
+    value: "",
     subtitle: "Today's Distance",
     bottomLabel: "Distance Covered",
   },
   {
     id: "drive",
-    value: "7h 42m",
+    value: "",
     subtitle: "Engine Running",
     bottomLabel: "Drive Time",
   },
   {
     id: "idle",
-    value: "42 hrs",
+    value: "",
     subtitle: "Vehicle Stopped",
     bottomLabel: "Idle Time",
   },
   {
     id: "events",
-    value: "32 Events",
+    value: "",
     subtitle: "Today's Activity",
     bottomLabel: "Events Recorded",
   },

@@ -19,4 +19,7 @@ export const queryKeys = {
     all: ["alerts"],
     list: (filters) => ["alerts", "list", filters ?? {}],
   },
+  activity: {
+    summary: ["activity-summary"],
+  },
 };
