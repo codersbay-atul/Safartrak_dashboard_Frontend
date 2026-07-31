@@ -15,8 +15,6 @@ export default function SecurityCard({ details = DEFAULT_DETAILS }) {
     <div className="bg-[#121214] border border-[#1f1f23] rounded-2xl p-6 text-white w-full">
       {/* Header */}
       <h2 className="text-base font-semibold text-white mb-6">Security</h2>
-
-      {/* Grid List */}
       <div className="flex flex-col gap-5">
         {items.map((item, index) => {
           const IconComponent = item.icon || User;

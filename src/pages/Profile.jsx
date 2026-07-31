@@ -5,9 +5,10 @@ import ProfileHero from "../features/profile/ProfileHero";
 import ProfileStatsCard from "../features/profile/ProfileStatsCard";
 import RecentActivity from "../features/profile/RecentActivity";
 import NotificationPreference from "../features/profile/NotificationPreference";
-import SecurityCard from "../features/profile/securityCard";
+
 import SecuritySettings from "../features/profile/SecuritySettings";
 import SecuritySettingUpdate from "../features/profile/SecuritySettingUpdate";
+import SecurityCard from "../features/profile/securityCard";
 
 export default function ProfilePage({ user }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
