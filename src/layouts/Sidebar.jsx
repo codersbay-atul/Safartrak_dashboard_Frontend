@@ -39,6 +39,7 @@ export default function Sidebar({ activeTab, setActiveTab }) {
     // Drivers: "/drivers",
     "Vehicle Details": "/vehicle-overview",
     Users: "/users",
+    Contact: "/contact",
   };
 
   const sections = [
@@ -176,7 +177,11 @@ export default function Sidebar({ activeTab, setActiveTab }) {
         </div>
 
         <div className="px-4 mt-2 shrink-0">
-          <div className="rounded-lg border border-[#303036] bg-[#1D1D22] px-3 py-1.5 flex items-center justify-between">
+          <button
+            type="button"
+            onClick={() => navigate("/contact")}
+            className="w-full rounded-lg border border-[#303036] bg-[#1D1D22] px-3 py-1.5 flex items-center justify-between text-left hover:border-[#4d5563] hover:bg-[#22252c] transition-colors"
+          >
             <div>
               <p className="text-[10.5px] font-semibold text-white">
                 Need Help?
@@ -184,7 +189,7 @@ export default function Sidebar({ activeTab, setActiveTab }) {
               <p className="text-[8.5px] text-[#9CA3AF]">Contact support</p>
             </div>
             <Headphones size={14} className="text-[#A1A1AA]" />
-          </div>
+          </button>
         </div>
       </aside>
     </>

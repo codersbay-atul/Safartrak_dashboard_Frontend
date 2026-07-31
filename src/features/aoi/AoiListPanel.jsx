@@ -1,6 +1,11 @@
 import React from "react";
 import SearchInput from "../../components/Ui/SearchInput";
-import { AOI_FILTERS } from "./aoiData";
+
+const AOI_FILTERS = [
+  { label: "All", value: "all", color: "bg-[#71717a]" },
+  { label: "Active", value: "active", color: "bg-[#10b981]" },
+  { label: "Inactive", value: "inactive", color: "bg-[#FDBB24]" },
+];
 
 export default function AoiListPanel({
   aois = [],

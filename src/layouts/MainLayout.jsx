@@ -45,7 +45,7 @@ export default function MainLayout({ children, activeTab, setActiveTab, isRouteV
         {/* Persistent Navbar */}
         <Navbar isRouteView={isRouteView} activeTab={activeTab} user={authUser} />
         {/* Dynamic Page Workspace Content */}
-        <main className="flex-1 p-3.5 bg-[#070708] flex flex-col gap-3 overflow-hidden min-h-0">
+        <main className="flex-1 p-3 bg-[#070708] flex flex-col gap-2.5 overflow-hidden min-h-0">
           {children}
         </main>
       </div>

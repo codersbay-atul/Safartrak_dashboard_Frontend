@@ -43,6 +43,11 @@ export const queryKeys = {
   activity: {
     summary: ["activity-summary"],
   },
+  aoi: {
+    summary: ["aoi-summary"],
+    list: (filters = {}) => ["aoi-list", filters],
+    detail: (id) => ["aoi-detail", id],
+  },
   reports: {
     all: ["reports"],
     types: ["reports", "types"],

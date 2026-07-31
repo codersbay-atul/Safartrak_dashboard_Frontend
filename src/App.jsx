@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import "./App.css";
 import Dashboard from "./pages/dashboard";
 import Analytics from "./pages/Analytics";
@@ -13,6 +13,31 @@ import Signup from "./pages/Signup";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import VehiclesDetails from "./pages/VehiclesDetails";
 import Users from "./pages/Users";
+import Profile from "./pages/Profile";
+import Contact from "./pages/Contact";
+import SecuritySettingUpdate from "./features/profile/SecuritySettingUpdate";
+import { toast } from "./components/Ui/toast";
+
+function SecuritySettingUpdateRoute() {
+  const navigate = useNavigate();
+
+  return (
+    <>
+      <Profile />
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+        <div className="w-full max-w-[460px] max-h-[90vh] overflow-y-auto rounded-2xl border border-[#1f1f23] bg-[#121214] shadow-2xl">
+          <SecuritySettingUpdate
+            onSave={() => {
+              toast.success("Settings updated successfully");
+              navigate("/profile");
+            }}
+            onDiscard={() => navigate("/profile")}
+          />
+        </div>
+      </div>
+    </>
+  );
+}
 
 function App() {
   return (
@@ -103,6 +128,30 @@ function App() {
             element={
               <ProtectedRoute>
                 <Users />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/securitysettingupdate"
+            element={
+              <ProtectedRoute>
+                <SecuritySettingUpdateRoute />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/contact"
+            element={
+              <ProtectedRoute>
+                <Contact />
               </ProtectedRoute>
             }
           />
