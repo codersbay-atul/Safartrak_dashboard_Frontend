@@ -53,8 +53,7 @@ export default function Button({
       {Icon && iconPosition === "left" && (
         <Icon size={iconSizes[size] || 12} className="shrink-0" />
       )}
-
-      {/* Button Text */}
+      
       {children && (
         <span className="truncate max-w-full leading-none">{children}</span>
       )}

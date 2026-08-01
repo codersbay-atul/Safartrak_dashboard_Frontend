@@ -34,9 +34,6 @@ export default function MobilizeHeader({
         />
 
         <Dropdown
-
-
-
           label="All Fleets"
           options={FLEET_OPTIONS}
           selectedValue={fleetFilter}

@@ -1,34 +1,90 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import MainLayout from "../layouts/MainLayout";
 import AoiHeader from "../features/aoi/AoiHeader";
 import AoiStats from "../features/aoi/AoiStats";
 import AoiListPanel from "../features/aoi/AoiListPanel";
 import AoiMap from "../features/aoi/AoiMap";
 import AoiDetailsPanel from "../features/aoi/AoiDetailsPanel";
-import { AOI_LIST } from "../features/aoi/aoiData";
+import { useAoiList } from "../hooks/useAoiList";
+import { deleteAoi } from "../services/aoiService";
+import { queryKeys } from "../api/queryKeys";
+import { toast } from "../components/Ui/toast";
 
 export default function Aoi() {
+  const queryClient = useQueryClient();
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
-  const [selectedId, setSelectedId] = useState(AOI_LIST[0]?.id ?? null);
+  const [selectedId, setSelectedId] = useState(null);
 
-  const filteredAois = AOI_LIST.filter((aoi) => {
-    const query = searchQuery.trim().toLowerCase();
-    const matchesSearch =
-      !query ||
-      aoi.name.toLowerCase().includes(query) ||
-      aoi.type.toLowerCase().includes(query);
-
-    const matchesStatus =
-      statusFilter === "all" || aoi.status === statusFilter;
-
-    return matchesSearch && matchesStatus;
+  const { aois, isLoading, isError, error } = useAoiList({
+    search: searchQuery,
+    status: statusFilter,
+    geometry: false,
   });
 
+  const formattedAois = useMemo(
+    () =>
+      aois.map((aoi) => ({
+        id: aoi.id,
+        name: aoi.name,
+        type: aoi.geometry?.shape === "circle" ? "Circular" : "Polygon",
+        size: aoi.geometry?.shape === "circle"
+          ? `${aoi.geometry?.radius_km ?? 0} km radius`
+          : `${aoi.geometry?.points?.length ?? 0} points`,
+        vehicles: aoi.assigned_vehicle_count ?? 0,
+        status: aoi.active ? "active" : "inactive",
+        color: aoi.active ? "#10b981" : "#FDBB24",
+        center: aoi.geometry?.center
+          ? [aoi.geometry.center.lat, aoi.geometry.center.lng]
+          : [20.5937, 78.9629],
+        radiusMeters: (aoi.geometry?.radius_km ?? 0) * 1000,
+        createdBy: "API",
+        createdAt: aoi.created_at,
+        inside: 0,
+        enteredToday: 0,
+        exitedToday: 0,
+        assignedVehicles: [],
+        raw: aoi,
+      })),
+    [aois]
+  );
+
+  useEffect(() => {
+    if (!formattedAois.length) {
+      setSelectedId(null);
+      return;
+    }
+
+    if (!selectedId || !formattedAois.some((aoi) => aoi.id === selectedId)) {
+      setSelectedId(formattedAois[0].id);
+    }
+  }, [formattedAois, selectedId]);
+
   const selectedAoi =
-    filteredAois.find((aoi) => aoi.id === selectedId) ||
-    AOI_LIST.find((aoi) => aoi.id === selectedId) ||
-    null;
+    formattedAois.find((aoi) => aoi.id === selectedId) || null;
+
+  const deleteMutation = useMutation({
+    mutationFn: deleteAoi,
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: queryKeys.aoi.list({}) });
+      await queryClient.invalidateQueries({ queryKey: queryKeys.aoi.summary });
+      toast.success("AOI deleted successfully");
+      setSelectedId(null);
+    },
+    onError: (err) => {
+      toast.error(err?.message || "Failed to delete AOI");
+    },
+  });
+
+  const handleDelete = () => {
+    if (!selectedAoi?.raw?.id) return;
+
+    const confirmed = window.confirm(`Delete AOI "${selectedAoi.name}"?`);
+    if (!confirmed) return;
+
+    deleteMutation.mutate(selectedAoi.raw.id);
+  };
 
   return (
     <MainLayout activeTab="Area of Interest (AOI)">
@@ -39,7 +95,7 @@ export default function Aoi() {
         <div className="flex flex-col xl:flex-row gap-3.5 w-full flex-1 min-h-[520px] xl:min-h-0 overflow-hidden">
           <div className="w-full xl:w-[280px] shrink-0 h-[280px] xl:h-full min-h-0 overflow-hidden">
             <AoiListPanel
-              aois={filteredAois}
+              aois={formattedAois}
               selectedId={selectedId}
               onSelect={(aoi) => setSelectedId(aoi.id)}
               searchQuery={searchQuery}
@@ -50,14 +106,14 @@ export default function Aoi() {
           </div>
 
           <div className="flex-1 min-w-0 h-[320px] xl:h-full min-h-0 overflow-hidden">
-            <AoiMap aois={AOI_LIST} selectedAoi={selectedAoi} />
+            <AoiMap aois={formattedAois} selectedAoi={selectedAoi} />
           </div>
 
           <div className="w-full xl:w-[300px] shrink-0 h-[420px] xl:h-full min-h-0 overflow-hidden">
             <AoiDetailsPanel
               aoi={selectedAoi}
               onEdit={() => {}}
-              onDelete={() => {}}
+              onDelete={handleDelete}
             />
           </div>
         </div>

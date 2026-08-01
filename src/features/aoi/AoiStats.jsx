@@ -1,5 +1,6 @@
 import React from "react";
-import { AOI_STATS } from "./aoiData";
+import { ScanSearch, CircleDot, Truck, Bell } from "lucide-react";
+import { useAoiSummary } from "../../hooks/useAoiSummary";
 
 const ACCENT_STYLES = {
   yellow: {
@@ -24,10 +25,56 @@ const ACCENT_STYLES = {
   },
 };
 
+const DEFAULT_SUMMARY = {
+  total_aois: 0,
+  active_aois: 0,
+  inactive_aois: 0,
+  vehicles_covered: 0,
+  alerts_today: 0,
+};
+
 export default function AoiStats() {
+  const { summary, isLoading } = useAoiSummary();
+  const data = summary && typeof summary === "object" ? summary : DEFAULT_SUMMARY;
+
+  const cards = [
+    {
+      id: "total",
+      icon: ScanSearch,
+      value: data.total_aois,
+      subtitle: `${data.inactive_aois} Inactive`,
+      title: "Total AOIs",
+      accent: "red",
+    },
+    {
+      id: "active",
+      icon: CircleDot,
+      value: data.active_aois,
+      subtitle: "Monitoring enabled",
+      title: "Active AOIs",
+      accent: "orange",
+    },
+    {
+      id: "vehicles",
+      icon: Truck,
+      value: data.vehicles_covered,
+      subtitle: "Across all AOIs",
+      title: "Vehicles Covered",
+      accent: "yellow",
+    },
+    {
+      id: "alerts",
+      icon: Bell,
+      value: data.alerts_today,
+      subtitle: "Entry & exit events",
+      title: "Alerts Today",
+      accent: "green",
+    },
+  ];
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 w-full select-none shrink-0">
-      {AOI_STATS.map((card) => {
+      {cards.map((card) => {
         const Icon = card.icon;
         const accent = ACCENT_STYLES[card.accent] || ACCENT_STYLES.yellow;
 
@@ -45,7 +92,7 @@ export default function AoiStats() {
 
               <div className="leading-tight min-w-0">
                 <h2 className="text-[15px] font-bold text-zinc-100 tracking-tight">
-                  {card.value}
+                  {isLoading && !summary ? "Loading..." : card.value}
                 </h2>
                 <p className="text-[10px] text-zinc-500 font-medium truncate mt-0.5">
                   {card.subtitle}

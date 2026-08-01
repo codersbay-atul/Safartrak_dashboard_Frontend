@@ -212,7 +212,13 @@ export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }
           </div>
 
           <Popover isOpen={activePopover === 'profile'} className="w-40 right-0 p-1.5 text-xs">
-            <button onClick={closePopover} className="w-full flex items-center gap-2 px-2.5 py-1.5 hover:bg-[#18181b] rounded-lg text-[#a1a1aa] hover:text-white cursor-pointer">
+            <button
+              onClick={() => {
+                closePopover();
+                navigate('/profile');
+              }}
+              className="w-full flex items-center gap-2 px-2.5 py-1.5 hover:bg-[#18181b] rounded-lg text-[#a1a1aa] hover:text-white cursor-pointer"
+            >
               <User size={15} /> Profile
             </button>
             <button onClick={closePopover} className="w-full flex items-center gap-2 px-2.5 py-1.5 hover:bg-[#18181b] rounded-lg text-[#a1a1aa] hover:text-white cursor-pointer">
