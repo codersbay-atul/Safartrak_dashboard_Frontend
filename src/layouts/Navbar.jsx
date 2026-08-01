@@ -19,7 +19,8 @@ import {
   Calendar,
   User,
   Settings,
-  LogOut
+  LogOut,
+  ChevronRight
 } from 'lucide-react';
 
 import { useOutsideClick } from '../hooks/UseOutsideClick';
@@ -56,10 +57,11 @@ const iconMap = {
   "Users": Users
 };
 
-export default function Navbar({ activeTab, isRouteView, user }) {
+export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }) {
   const ActiveIcon = iconMap[activeTab] || LayoutDashboard;
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const showRouteBreadcrumb = activeTab === "Dashboard" && isRouteView;
 
   const [unreadCount, setUnreadCount] = useState(2);
   const [activePopover, setActivePopover] = useState(null); // 'notif' | 'calendar' | 'profile' | null
@@ -110,9 +112,25 @@ export default function Navbar({ activeTab, isRouteView, user }) {
       <div className="flex items-center gap-2 text-[15px] text-[#a1a1aa] font-medium tracking-wide min-w-0">
         <div className="w-10 h-1 shrink-0 lg:hidden" />
         <ActiveIcon size={20} className="text-[#71717a] shrink-0" />
-        <span className="text-white font-semibold truncate">
-          {activeTab === "Dashboard" && isRouteView ? "Route Details" : (activeTab || "Dashboard")}
-        </span>
+        {showRouteBreadcrumb ? (
+          <nav className="flex items-center gap-1.5 min-w-0" aria-label="Breadcrumb">
+            <button
+              type="button"
+              onClick={onExitRouteView}
+              className="text-[#a1a1aa] hover:text-white font-medium truncate transition-colors cursor-pointer"
+            >
+              Dashboard
+            </button>
+            <ChevronRight size={14} className="text-[#52525b] shrink-0" />
+            <span className="text-white font-semibold truncate" aria-current="page">
+              Route Details
+            </span>
+          </nav>
+        ) : (
+          <span className="text-white font-semibold truncate">
+            {activeTab || "Dashboard"}
+          </span>
+        )}
       </div>
 
       {/* Right Side: Actions */}

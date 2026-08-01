@@ -41,14 +41,20 @@ export default function Dashboard() {
     localStorage.setItem("showDetailsPanel", showDetailsPanel);
   }, [showDetailsPanel]);
 
+  const exitRouteView = () => setIsRouteView(false);
+
   return (
-    <MainLayout activeTab="Dashboard" isRouteView={isRouteView}>
+    <MainLayout
+      activeTab="Dashboard"
+      isRouteView={isRouteView}
+      onExitRouteView={exitRouteView}
+    >
       {isRouteView ? (
         /* Route Details View */
         <div className="flex-1 flex flex-col gap-3 overflow-hidden min-h-0">
           <div className="shrink-0 flex items-center gap-3">
             <button
-              onClick={() => setIsRouteView(false)}
+              onClick={exitRouteView}
               className="px-2.5 py-1 text-[11px] font-bold bg-[#18181b] border border-[#27272a] hover:bg-[#27272a] rounded-md transition-colors cursor-pointer text-[#a1a1aa] hover:text-white"
             >
               &larr; Back
@@ -89,7 +95,7 @@ export default function Dashboard() {
           </div>
 
           <div className="flex flex-row gap-3.5 items-stretch w-full flex-1 min-h-0 overflow-hidden">
-            <div className="h-full min-h-0 overflow-hidden transition-all duration-300 w-[342px] xl:w-[360px] shrink-0">
+            <div className="h-full min-h-0 overflow-hidden transition-all duration-300 w-[380px] xl:w-[400px] shrink-0">
               <VehiclesList
                 search={vehicleSearch}
                 selectedVehicle={selectedVehicle}
@@ -104,6 +110,7 @@ export default function Dashboard() {
               <LivePositions
                 selectedVehicle={selectedVehicle}
                 showRoutePath={false}
+                onViewMap={() => setIsRouteView(true)}
               />
             </div>
 

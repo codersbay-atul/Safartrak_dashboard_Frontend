@@ -89,7 +89,7 @@ export default function VehiclesList({
   return (
     <div className="w-full h-full bg-[#121214] border border-[#1f1f23] rounded-xl p-3.5 flex flex-col select-none overflow-hidden">
       {/* Title */}
-      <h3 className="text-[13px] font-bold text-white tracking-tight mb-2.5 shrink-0">
+      <h3 className="text-[12px] font-bold text-white tracking-tight mb-2.5 shrink-0">
         Vehicle List
       </h3>
 

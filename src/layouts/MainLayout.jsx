@@ -5,7 +5,7 @@ import Navbar from "./Navbar";
 import MobileUnsupported from "../components/common/MobileUnsupported";
 import { selectAuthUser } from "../store/slices/authSlice";
 
-export default function MainLayout({ children, activeTab, setActiveTab, isRouteView }) {
+export default function MainLayout({ children, activeTab, setActiveTab, isRouteView, onExitRouteView }) {
   const [isUnsupported, setIsUnsupported] = useState(() => {
     if (typeof window === "undefined") return false;
     return window.innerWidth < 640;
@@ -43,7 +43,12 @@ export default function MainLayout({ children, activeTab, setActiveTab, isRouteV
       {/* Main Container */}
       <div className="flex flex-1 flex-col min-w-0 h-full overflow-hidden">
         {/* Persistent Navbar */}
-        <Navbar isRouteView={isRouteView} activeTab={activeTab} user={authUser} />
+        <Navbar
+          isRouteView={isRouteView}
+          onExitRouteView={onExitRouteView}
+          activeTab={activeTab}
+          user={authUser}
+        />
         {/* Dynamic Page Workspace Content */}
         <main className="flex-1 p-3.5 bg-[#070708] flex flex-col gap-3 overflow-hidden min-h-0">
           {children}

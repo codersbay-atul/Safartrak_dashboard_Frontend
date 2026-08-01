@@ -1,13 +1,23 @@
-import React from "react";
-import { MapContainer, TileLayer, Marker } from "react-leaflet";
+import React, { useEffect, useRef, useState } from "react";
+import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { Layers, LocateFixed, Maximize2, Plus, Minus } from "lucide-react";
+import { Layers, LocateFixed, Maximize2, Minimize2, Plus, Minus } from "lucide-react";
 import {
   displayOrDash,
   getTripField,
   shouldShowNoActiveTrip,
 } from "../route-details/routeVehicleDisplay";
+
+function MapBinder({ mapRef }) {
+  const map = useMap();
+
+  useEffect(() => {
+    mapRef.current = map;
+  }, [map, mapRef]);
+
+  return null;
+}
 
 
 const activeTruckIcon = L.divIcon({
@@ -94,6 +104,9 @@ function resolvePosition(vehicle) {
 }
 
 export default function LiveMap({ selectedVehicle, showRoutePath }) {
+  const mapRef = useRef(null);
+  const containerRef = useRef(null);
+  const [isMaximized, setIsMaximized] = useState(false);
   const vehicle = selectedVehicle ?? null;
   const position = resolvePosition(vehicle);
   const mapCenter =
@@ -120,8 +133,51 @@ export default function LiveMap({ selectedVehicle, showRoutePath }) {
     ? null
     : getTripField(vehicle, ["trip_id", "tripId"]);
 
+  useEffect(() => {
+    const onFullscreenChange = () => {
+      setIsMaximized(document.fullscreenElement === containerRef.current);
+      // Leaflet needs a resize after any fullscreen enter/exit (self or parent).
+      setTimeout(() => mapRef.current?.invalidateSize(), 150);
+    };
+
+    document.addEventListener("fullscreenchange", onFullscreenChange);
+    return () => {
+      document.removeEventListener("fullscreenchange", onFullscreenChange);
+    };
+  }, []);
+
+  const handleZoomIn = () => mapRef.current?.zoomIn();
+  const handleZoomOut = () => mapRef.current?.zoomOut();
+
+  const handleToggleMaximize = async () => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    try {
+      if (document.fullscreenElement === el) {
+        await document.exitFullscreen?.();
+      } else if (el.requestFullscreen) {
+        await el.requestFullscreen();
+      } else {
+        mapRef.current?.invalidateSize();
+      }
+    } catch {
+      mapRef.current?.invalidateSize();
+    }
+  };
+
+  const handleLocate = () => {
+    if (position) {
+      mapRef.current?.setView(position, Math.max(mapRef.current.getZoom(), 14), {
+        animate: true,
+      });
+      return;
+    }
+    mapRef.current?.locate({ setView: true, maxZoom: 14 });
+  };
+
   return (
-    <div className="relative h-full w-full bg-[#0c0c0e]">
+    <div ref={containerRef} className="relative h-full w-full bg-[#0c0c0e]">
       
       {/* 1. LEAFLET MAP CONTAINER */}
       <MapContainer
@@ -135,6 +191,8 @@ export default function LiveMap({ selectedVehicle, showRoutePath }) {
           url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
           attribution='&copy; OpenStreetMap'
         />
+
+        <MapBinder mapRef={mapRef} />
         
         {position ? (
           <Marker position={position} icon={activeTruckIcon} />
@@ -292,16 +350,47 @@ export default function LiveMap({ selectedVehicle, showRoutePath }) {
 
       {/* 4. CONTROLLER BUTTONS UTILITY SYSTEM */}
       <div className="absolute right-2.5 top-2.5 z-[1000]">
-        <button className="w-7.5 h-7.5 rounded-lg bg-[#17171C] border border-[#2A2A2F] text-zinc-400 hover:text-white flex items-center justify-center transition-colors shadow-lg cursor-pointer">
+        <button
+          type="button"
+          className="w-7.5 h-7.5 rounded-lg bg-[#17171C] border border-[#2A2A2F] text-zinc-400 hover:text-white flex items-center justify-center transition-colors shadow-lg cursor-pointer"
+        >
           <Layers size={12} />
         </button>
       </div>
 
       <div className="absolute right-2.5 bottom-2.5 z-[1000] flex flex-col bg-[#17171C] border border-[#2A2A2F] rounded-lg shadow-xl overflow-hidden">
-        <button className="w-7.5 h-7.5 text-zinc-400 hover:text-white border-b border-[#2A2A2F]/60 flex items-center justify-center transition-colors cursor-pointer"><Maximize2 size={11} /></button>
-        <button className="w-7.5 h-7.5 text-zinc-400 hover:text-white border-b border-[#2A2A2F]/60 flex items-center justify-center transition-colors cursor-pointer"><LocateFixed size={11} /></button>
-        <button className="w-7.5 h-7.5 text-zinc-400 hover:text-white border-b border-[#2A2A2F]/60 flex items-center justify-center transition-colors cursor-pointer"><Plus size={11} /></button>
-        <button className="w-7.5 h-7.5 text-zinc-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer"><Minus size={11} /></button>
+        <button
+          type="button"
+          onClick={handleToggleMaximize}
+          aria-label={isMaximized ? "Minimize map" : "Maximize map"}
+          className="w-7.5 h-7.5 text-zinc-400 hover:text-white border-b border-[#2A2A2F]/60 flex items-center justify-center transition-colors cursor-pointer"
+        >
+          {isMaximized ? <Minimize2 size={11} /> : <Maximize2 size={11} />}
+        </button>
+        <button
+          type="button"
+          onClick={handleLocate}
+          aria-label="Locate vehicle"
+          className="w-7.5 h-7.5 text-zinc-400 hover:text-white border-b border-[#2A2A2F]/60 flex items-center justify-center transition-colors cursor-pointer"
+        >
+          <LocateFixed size={11} />
+        </button>
+        <button
+          type="button"
+          onClick={handleZoomIn}
+          aria-label="Zoom in"
+          className="w-7.5 h-7.5 text-zinc-400 hover:text-white border-b border-[#2A2A2F]/60 flex items-center justify-center transition-colors cursor-pointer"
+        >
+          <Plus size={11} />
+        </button>
+        <button
+          type="button"
+          onClick={handleZoomOut}
+          aria-label="Zoom out"
+          className="w-7.5 h-7.5 text-zinc-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+        >
+          <Minus size={11} />
+        </button>
       </div>
 
     </div>
