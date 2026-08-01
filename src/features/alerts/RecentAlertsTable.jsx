@@ -8,7 +8,18 @@ const STATUS_STYLES = {
   Low: "bg-[#71717a]/15 text-[#a1a1aa] border-[#71717a]/30",
 };
 
-export default function RecentAlertsTable({ alerts = [] }) {
+function formatSpeed(value) {
+  if (value == null || value === "" || value === "-") return "-";
+  const n = Number(value);
+  if (!Number.isFinite(n)) return "-";
+  return `${n} km/h`;
+}
+
+export default function RecentAlertsTable({
+  alerts = [],
+  isLoading = false,
+  isError = false,
+}) {
   return (
     <div className="w-full flex-1 min-h-0 bg-[#121214] border border-[#1f1f23] rounded-xl p-3 flex flex-col select-none overflow-hidden">
       <div className="flex items-center justify-between mb-2.5 shrink-0">
@@ -42,9 +53,34 @@ export default function RecentAlertsTable({ alerts = [] }) {
           </thead>
 
           <tbody>
-            {alerts.length > 0 ? (
+            {isLoading ? (
+              <tr>
+                <td
+                  colSpan={8}
+                  className="px-2.5 py-10 text-center text-[11px] text-[#71717a]"
+                >
+                  Loading...
+                </td>
+              </tr>
+            ) : isError ? (
+              <tr>
+                <td
+                  colSpan={8}
+                  className="px-2.5 py-10 text-center text-[11px] text-[#71717a]"
+                >
+                  Failed to load alerts
+                </td>
+              </tr>
+            ) : alerts.length > 0 ? (
               alerts.map((alert) => {
-                const overLimit = alert.recordedSpeed > alert.speedLimit;
+                const recorded = alert.recordedSpeed;
+                const limit = alert.speedLimit;
+                const overLimit =
+                  recorded != null &&
+                  limit != null &&
+                  Number.isFinite(Number(recorded)) &&
+                  Number.isFinite(Number(limit)) &&
+                  Number(recorded) > Number(limit);
 
                 return (
                   <tr
@@ -68,10 +104,10 @@ export default function RecentAlertsTable({ alerts = [] }) {
                         overLimit ? "text-[#ef4444]" : "text-[#d4d4d8]"
                       }`}
                     >
-                      {alert.recordedSpeed} km/h
+                      {formatSpeed(recorded)}
                     </td>
                     <td className="px-2.5 py-2.5 text-[10px] text-[#a1a1aa] whitespace-nowrap">
-                      {alert.speedLimit} km/h
+                      {formatSpeed(limit)}
                     </td>
                     <td className="px-2.5 py-2.5 whitespace-nowrap">
                       <span

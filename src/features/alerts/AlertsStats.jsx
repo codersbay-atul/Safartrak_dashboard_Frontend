@@ -1,5 +1,5 @@
 import React from "react";
-import { ALERT_STATS } from "./alertsData";
+import { TriangleAlert, ShieldAlert, Bell, FileCheck } from "lucide-react";
 
 const ACCENT_STYLES = {
   yellow: {
@@ -19,10 +19,47 @@ const ACCENT_STYLES = {
   },
 };
 
-export default function AlertsStats() {
+const EMPTY_STATS = [
+  {
+    id: "total",
+    icon: TriangleAlert,
+    value: "-",
+    subtitle: "-",
+    title: "Total Alerts",
+    accent: "red",
+  },
+  {
+    id: "critical",
+    icon: ShieldAlert,
+    value: "-",
+    subtitle: "Requires immediate attention",
+    title: "Critical Alerts",
+    accent: "red",
+  },
+  {
+    id: "new",
+    icon: Bell,
+    value: "-",
+    subtitle: "Not yet reviewed",
+    title: "New Alerts",
+    accent: "yellow",
+  },
+  {
+    id: "resolved",
+    icon: FileCheck,
+    value: "-",
+    subtitle: "Issues handled",
+    title: "Resolved",
+    accent: "green",
+  },
+];
+
+export default function AlertsStats({ cards }) {
+  const stats = Array.isArray(cards) && cards.length > 0 ? cards : EMPTY_STATS;
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 w-full select-none shrink-0">
-      {ALERT_STATS.map((card) => {
+      {stats.map((card) => {
         const Icon = card.icon;
         const accent = ACCENT_STYLES[card.accent] || ACCENT_STYLES.yellow;
 

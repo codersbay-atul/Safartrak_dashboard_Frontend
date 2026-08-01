@@ -38,6 +38,9 @@ export const queryKeys = {
   },
   alerts: {
     all: ["alerts"],
+    count: ["alerts", "count"],
+    summary: ["alerts", "summary"],
+    types: ["alerts", "types"],
     list: (filters) => ["alerts", "list", filters ?? {}],
   },
   activity: {
