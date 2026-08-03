@@ -1,5 +1,6 @@
-import React from "react";
-import { MOBILIZE_STATS } from "./mobilizeData";
+import React, { useEffect, useState } from "react";
+import { Truck, Lock, RefreshCw, FileCheck } from "lucide-react";
+import apiClient from "../../api/client";
 
 const ACCENT_STYLES = {
   yellow: {
@@ -24,17 +25,95 @@ const ACCENT_STYLES = {
   },
 };
 
+const MOBILIZE_STATS = [
+  {
+    id: "total",
+    icon: Truck,
+    title: "Total Vehicle",
+    accent: "yellow",
+  },
+  {
+    id: "immobilized",
+    icon: Lock,
+    title: "Immobilized",
+    accent: "red",
+  },
+  {
+    id: "pending",
+    icon: RefreshCw,
+    title: "Commands Pending",
+    accent: "orange",
+  },
+  {
+    id: "success",
+    icon: FileCheck,
+    title: "Command Success Rate",
+    accent: "green",
+  },
+];
+
 export default function MobilizeStats() {
+  const [summary, setSummary] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    let mounted = true;
+    setLoading(true);
+    apiClient
+      .get("/v1/commands/summary")
+      .then((res) => {
+        if (!mounted) return;
+        setSummary(res?.data ?? null);
+      })
+      .catch(() => {
+        if (!mounted) return;
+        setSummary(null);
+      })
+      .finally(() => {
+        if (!mounted) return;
+        setLoading(false);
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 w-full select-none shrink-0">
       {MOBILIZE_STATS.map((card) => {
         const Icon = card.icon;
         const accent = ACCENT_STYLES[card.accent] || ACCENT_STYLES.yellow;
 
+        let value = "—";
+        let subtitle = "Unavailable";
+
+        if (summary) {
+          if (card.id === "total") {
+            value = summary.total_vehicles ?? "—";
+            subtitle = `${summary.active_vehicles ?? "0"} Active`;
+          }
+
+          if (card.id === "immobilized") {
+            value = summary.immobilized ?? "—";
+            subtitle = "Currently restricted";
+          }
+
+          if (card.id === "pending") {
+            value = summary.commands_pending ?? "—";
+            subtitle = "Awaiting device response";
+          }
+
+          if (card.id === "success") {
+            const pct = summary.command_success_rate_pct;
+            value = pct == null ? "—" : typeof pct === "number" ? `${pct}%` : pct;
+            subtitle = "Last 30 days";
+          }
+        }
+
         return (
           <div
             key={card.id}
-            className="bg-[#16161a] border border-[#232329] rounded-xl p-3 flex flex-col justify-between hover:border-[#2e2e36] transition-all relative overflow-hidden group cursor-pointer w-full min-h-[76px]"
+            className="bg-[#16161a] border border-[#232329] rounded-xl p-3 flex flex-col justify-between hover:border-[#2e2e36] transition-all relative overflow-hidden group cursor-pointer w-full min-h-19"
           >
             <div className="flex items-center gap-3">
               <div
@@ -45,10 +124,10 @@ export default function MobilizeStats() {
 
               <div className="leading-tight min-w-0">
                 <h2 className="text-[15px] font-bold text-zinc-100 tracking-tight">
-                  {card.value}
+                  {loading ? "—" : value}
                 </h2>
                 <p className="text-[10px] text-zinc-500 font-medium truncate mt-0.5">
-                  {card.subtitle}
+                  {loading ? "Loading..." : subtitle}
                 </p>
               </div>
             </div>

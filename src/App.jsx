@@ -16,6 +16,7 @@ import Users from "./pages/Users";
 import Profile from "./pages/Profile";
 import Contact from "./pages/Contact";
 import SecuritySettingUpdate from "./features/profile/SecuritySettingUpdate";
+import CommandHistoryPage from "./features/mobilize/CommandHistory";
 import { toast } from "./components/Ui/toast";
 
 function SecuritySettingUpdateRoute() {
@@ -152,6 +153,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Contact />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/command-history"
+            element={
+              <ProtectedRoute>
+                <CommandHistoryPage />
               </ProtectedRoute>
             }
           />

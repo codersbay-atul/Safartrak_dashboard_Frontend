@@ -3,7 +3,13 @@ import { Plus } from "lucide-react";
 import SearchInput from "../../components/Ui/SearchInput";
 import Dropdown from "../../components/Ui/DropDown";
 import Button from "../../components/Ui/Button";
-import { FLEET_OPTIONS } from "./mobilizeData";
+
+const FLEET_OPTIONS = [
+  { label: "All Fleets", value: "all" },
+  { label: "Mumbai Fleet", value: "mumbai" },
+  { label: "Pune Fleet", value: "pune" },
+  { label: "Nashik Fleet", value: "nashik" },
+];
 
 export default function MobilizeHeader({
   searchQuery = "",
