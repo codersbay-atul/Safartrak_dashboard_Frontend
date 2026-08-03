@@ -4,6 +4,7 @@ import AnalyticsHeader from "../features/analytics/AnalyticsHeader";
 import AnalyticsStatsCard from "../features/analytics/AnalyticsStatsCard";
 import FleetPerformanceChart from "../features/analytics/FleetPerformanceChart";
 import PerformanceSummary from "../features/analytics/PerformanceSummary";
+import PerformanceSummaryList from "../features/analytics/PerformanceSummaryList";
 import { getAnalyticsExport } from "../services/analyticsService";
 import { toast } from "../components/Ui/toast";
 
@@ -45,7 +46,7 @@ export default function Analytics() {
 
   return (
     <MainLayout activeTab="Analytics">
-      <div className="flex-1 flex flex-col gap-3.5 min-h-0 overflow-y-auto lg:overflow-hidden pr-0.5">
+      <div className="flex-1 flex flex-col gap-3.5 min-h-0 overflow-y-auto p-3.5 md:p-4 text-white bg-[#09090b] custom-scrollbar">
         <div className="shrink-0">
           <AnalyticsHeader onExportClick={handleExport} />
         </div>
@@ -54,13 +55,18 @@ export default function Analytics() {
           <AnalyticsStatsCard range={range} />
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-3.5 w-full flex-1 min-h-0 items-stretch">
-          <div className="flex-1 min-w-0 bg-[#16161a] border border-[#1f1f23] rounded-xl p-3 h-full min-h-[300px] lg:min-h-0">
+        <div className="flex flex-col lg:flex-row gap-3.5 w-full shrink-0 items-stretch">
+          <div className="flex-1 min-w-0 bg-[#141416] border border-[#222226] rounded-2xl p-3.5 min-h-[340px]">
             <FleetPerformanceChart range={range} onRangeChange={setRange} />
           </div>
-          <div className="w-full lg:w-[360px] xl:w-[400px] shrink-0 h-full">
+
+          <div className="w-full lg:w-[360px] xl:w-[400px] shrink-0">
             <PerformanceSummary range={range} />
           </div>
+        </div>
+
+        <div className="w-full shrink-0 bg-[#141416] border border-[#222226] rounded-2xl p-4 shadow-xl">
+          <PerformanceSummaryList range={range} />
         </div>
       </div>
     </MainLayout>

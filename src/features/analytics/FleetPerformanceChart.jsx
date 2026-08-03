@@ -81,7 +81,7 @@ export default function FleetPerformanceChart({
   return (
     <div className="w-full h-full bg-[#121214] border border-[#1f1f23] rounded-2xl p-4 flex flex-col justify-between shadow-xl select-none">
       
-      {/* Top Controls Header Area */}
+     
       <div className="flex flex-wrap items-center justify-between gap-4 pb-2">
         <div className="flex items-center gap-3">
           <div>
@@ -90,14 +90,14 @@ export default function FleetPerformanceChart({
               Last Updated: {formatLastUpdated(lastUpdated)}
             </p>
           </div>
-          {/* Live Indicator Badge */}
+         
           <span className="flex items-center gap-1 bg-[#052e16] border border-[#14532d] text-[#22c55e] text-[9px] font-bold px-2 py-0.5 rounded-full">
             <span className="w-1.5 h-1.5 rounded-full bg-[#22c55e] animate-pulse" />
             Live
           </span>
         </div>
 
-        {/* Timeframe Selector Button Controls */}
+        
         <div className="flex items-center gap-3">
           <button
             type="button"
@@ -132,7 +132,7 @@ export default function FleetPerformanceChart({
         </div>
       </div>
 
-      {/* Chart Canvas Graphic Panel */}
+      
       <div className="relative flex-1 min-h-[200px] mt-2 flex">
         {!hasData ? (
           <div className="flex-1 flex items-center justify-center text-[12px] text-zinc-500 font-medium">
@@ -140,17 +140,17 @@ export default function FleetPerformanceChart({
           </div>
         ) : (
           <>
-            {/* Y-Axis Metrics Labels */}
+            
             <div className="flex flex-col justify-between text-[9px] text-zinc-600 font-bold pr-2.5 select-none pb-5 pt-1">
               {geometry.yTicks.map((tick, index) => (
                 <span key={`${tick}-${index}`}>{tick}</span>
               ))}
             </div>
 
-            {/* SVG Wrapper Area */}
+           
             <div className="flex-1 relative">
               
-              {/* Dashed Grid Lines Overlay */}
+            
               <div className="absolute inset-0 flex flex-col justify-between pb-5 pt-1 pointer-events-none opacity-20">
                 <div className="border-b border-dashed border-zinc-700 w-full" />
                 <div className="border-b border-dashed border-zinc-700 w-full" />
@@ -160,7 +160,7 @@ export default function FleetPerformanceChart({
                 <div className="border-b border-zinc-700 w-full" />
               </div>
 
-              {/* Core Paths Shape container */}
+             
               <svg className="w-full h-full pb-5 pt-1 overflow-visible" viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`} preserveAspectRatio="none">
                 <defs>
                   <linearGradient id="blueGradient" x1="0" y1="0" x2="0" y2="1">
@@ -174,7 +174,7 @@ export default function FleetPerformanceChart({
                   fill="url(#blueGradient)"
                 />
 
-                {/* Top Glowing Stroke */}
+                
                 <path
                   d={geometry.linePath}
                   fill="none"
@@ -183,7 +183,7 @@ export default function FleetPerformanceChart({
                   strokeLinecap="round"
                 />
 
-                {/* Endpoint Neon Anchor Point */}
+               
                 <circle
                   cx={geometry.last.x}
                   cy={geometry.last.y}
@@ -194,7 +194,7 @@ export default function FleetPerformanceChart({
                 />
               </svg>
 
-              {/* Tooltip Metrics Bubble */}
+              
               <div className="absolute right-0 top-0 -translate-y-[80%] pointer-events-none z-10">
                 <div className="bg-[#1c1c1f] border border-zinc-800 text-[9.5px] font-bold text-white px-2 py-0.5 rounded shadow-lg">
                   {Number(geometry.last.value).toLocaleString("en-US", {
@@ -204,7 +204,7 @@ export default function FleetPerformanceChart({
                 </div>
               </div>
 
-              {/* X-Axis Days Timeline Row */}
+              
               <div className="absolute bottom-0 left-0 right-0 flex justify-between text-[9.5px] text-zinc-500 font-bold px-1 select-none">
                 {geometry.xLabels.map((label, index) => (
                   <span key={`${label}-${index}`}>{label}</span>

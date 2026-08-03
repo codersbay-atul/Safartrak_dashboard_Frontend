@@ -44,14 +44,10 @@ function PerformanceRow({ item, variant }) {
             {item.vehicleType}
           </span>
         </div>
-        <p
-          className="text-[16px] font-extrabold"
-          style={{ color }}
-        >
+        <p className="text-[16px] font-extrabold" style={{ color }}>
           {item.distance}
         </p>
 
-        {/* Pill Badge */}
         <div
           className={`inline-flex items-center gap-1 ${badgeBg} text-[7.5px] font-extrabold px-1.5 py-0.5 rounded-md w-max`}
         >
@@ -60,7 +56,6 @@ function PerformanceRow({ item, variant }) {
         </div>
       </div>
 
-      {/* Sparkline Mini SVG — only real series points */}
       <div className="w-[90px] h-[40px] shrink-0">
         {sparkline ? (
           <svg className="w-full h-full" viewBox="0 0 100 50">
@@ -87,13 +82,8 @@ function PerformanceRow({ item, variant }) {
 }
 
 export default function PerformanceSummary({ range = "24h" }) {
-  const {
-    results,
-    totalDistance,
-    totalChange,
-    periodLabel,
-    isLoading,
-  } = useAnalyticsPerformance(range, "distance");
+  const { results, totalDistance, totalChange, periodLabel, isLoading } =
+    useAnalyticsPerformance(range, "distance");
 
   let top = null;
   let lowest = null;
@@ -113,27 +103,33 @@ export default function PerformanceSummary({ range = "24h" }) {
   const ChangeIcon =
     totalChange && !totalChange.isPositive ? ArrowDownRight : ArrowUpRight;
   const changeColor =
-    totalChange && !totalChange.isPositive ? "text-[#ef4444]" : "text-[#22c55e]";
+    totalChange && !totalChange.isPositive
+      ? "text-[#ef4444]"
+      : "text-[#22c55e]";
 
   return (
     <div className="w-full h-full bg-[#121214] border border-[#1f1f23] rounded-2xl p-4 flex flex-col justify-between shadow-xl select-none">
-      
-      {/* Header Info Block */}
       <div className="flex items-start justify-between border-b border-zinc-800/50 pb-3">
         <div>
-          <h3 className="text-[15px] font-bold text-white tracking-tight">Performance Summary</h3>
+          <h3 className="text-[15px] font-bold text-white tracking-tight">
+            Performance Summary
+          </h3>
           <p className="text-[12px] text-zinc-500 mt-0.5">
             {periodLabel ?? "-"}
           </p>
         </div>
         <div className="text-right">
-          <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">Total Distance</p>
+          <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">
+            Total Distance
+          </p>
           <div className="flex items-center gap-1 mt-0.5 justify-end">
             <span className="text-[15px] font-extrabold text-white">
               {isLoading && totalDistance === "-" ? "-" : totalDistance}
             </span>
             {totalChange ? (
-              <span className={`flex items-center text-[9.5px] font-bold ${changeColor}`}>
+              <span
+                className={`flex items-center text-[9.5px] font-bold ${changeColor}`}
+              >
                 <ChangeIcon size={10} className="stroke-[2.5]" />
                 {totalChange.label}
               </span>
@@ -160,7 +156,6 @@ export default function PerformanceSummary({ range = "24h" }) {
           </>
         )}
       </div>
-
     </div>
   );
 }

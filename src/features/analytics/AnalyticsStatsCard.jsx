@@ -95,7 +95,7 @@ export default function AnalyticsStatsCard({ range = "24h" }) {
                   <Icon size={14} className="text-[#FDBB24]" />
                 </div>
 
-                {/* Value & Subtitle */}
+                
                 <div className="leading-none min-w-0">
                   <h2 className="text-[15px] font-bold text-zinc-100 tracking-tight leading-none">
                     {card.value}
