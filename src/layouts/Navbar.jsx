@@ -106,10 +106,10 @@ export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }
   const displayRole = user?.role || "Operations Admin";
 
   return (
-    <header className="flex items-center justify-between px-3 sm:px-6 py-2.5 border-b border-[#1f1f23] bg-[#09090b] sticky top-0 z-30 select-none">
+    <header className="flex items-center justify-between px-3 py-3 border-b border-[#1f1f23] bg-[#09090b] sticky top-0 z-30 select-none">
       
       {/* Left Side: Breadcrumb Title */}
-      <div className="flex items-center gap-2 text-[15px] text-[#a1a1aa] font-medium tracking-wide min-w-0">
+      <div className="flex items-center gap-2.5 text-[15px] text-[#a1a1aa] font-medium tracking-wide min-w-0">
         <div className="w-10 h-1 shrink-0 lg:hidden" />
         <ActiveIcon size={20} className="text-[#71717a] shrink-0" />
         {showRouteBreadcrumb ? (
@@ -134,7 +134,7 @@ export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }
       </div>
 
       {/* Right Side: Actions */}
-      <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
+      <div className="flex items-center gap-2.5 shrink-0">
         
         {/* 1. Notifications Bell */}
         <NavPopoverWrapper isOpen={activePopover === 'notif'} onClose={closePopover}>
