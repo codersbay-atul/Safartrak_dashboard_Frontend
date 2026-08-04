@@ -152,12 +152,14 @@ export default function Reports() {
 
   return (
     <MainLayout activeTab="Reports">
-      <div className="flex-1 flex flex-col gap-3.5 min-h-0 overflow-y-auto pr-0.5 custom-scrollbar">
-        <ReportsHeader
-          searchQuery={searchQuery}
-          onSearchChange={(e) => setSearchQuery(e.target.value)}
-          onCreateClick={() => {}}
-        />
+      <div className="flex-1 flex flex-col gap-2.5 min-h-0 overflow-y-auto pr-0.5 custom-scrollbar">
+        <div className="shrink-0">
+          <ReportsHeader
+            searchQuery={searchQuery}
+            onSearchChange={(e) => setSearchQuery(e.target.value)}
+            onCreateClick={() => {}}
+          />
+        </div>
 
         {showResultsView ? (
           <ReportResults

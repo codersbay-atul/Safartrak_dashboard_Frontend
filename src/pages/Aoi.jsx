@@ -319,10 +319,14 @@ export default function Aoi() {
 
   return (
     <MainLayout activeTab="Area of Interest (AOI)">
-      <div className="flex-1 flex flex-col gap-3.5 min-h-0 overflow-y-auto lg:overflow-hidden p-1 text-white bg-[#09090b]">
-        
-        <AoiHeader onCreateClick={() => setIsCreateModalOpen(true)} />
-        <AoiStats />
+      <div className="flex-1 flex flex-col gap-2.5 min-h-0 overflow-y-auto lg:overflow-hidden text-white bg-[#09090b]">
+        <div className="shrink-0">
+          <AoiHeader onCreateClick={() => setIsCreateModalOpen(true)} />
+        </div>
+
+        <div className="shrink-0">
+          <AoiStats />
+        </div>
 
         <div className="flex flex-col lg:flex-row gap-3.5 w-full flex-1 min-h-[550px] lg:min-h-0 overflow-hidden">
          

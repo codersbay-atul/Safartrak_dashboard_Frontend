@@ -211,7 +211,7 @@ export default function Mobilize() {
 
   return (
     <MainLayout activeTab="Mobilize / Immobilize">
-      <div className="relative flex-1 flex flex-col gap-3 w-full h-full min-h-0 overflow-hidden bg-[#09090b] text-white p-3 md:p-4 lg:p-4">
+      <div className="relative flex-1 flex flex-col gap-2.5 w-full h-full min-h-0 overflow-hidden bg-[#09090b] text-white">
         {/* Header Section */}
         <div className="shrink-0">
           <MobilizeHeader

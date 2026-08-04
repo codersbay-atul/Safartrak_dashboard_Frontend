@@ -80,8 +80,9 @@ export default function Activity() {
 
   return (
     <MainLayout activeTab="Activity">
-      <div className="flex-1 flex flex-col gap-3.5 min-h-0 overflow-y-auto lg:overflow-hidden pr-0.5 custom-scrollbar">
-        <ActivityHeader
+      <div className="flex-1 flex flex-col gap-2.5 min-h-0 overflow-y-auto lg:overflow-hidden pr-0.5 custom-scrollbar">
+        <div className="shrink-0">
+          <ActivityHeader
           vehicleFilter={vehicleFilter}
           onVehicleChange={setVehicleFilter}
           eventFilter={eventFilter}
@@ -92,8 +93,11 @@ export default function Activity() {
           onSearchChange={(e) => setSearchQuery(e.target.value)}
           onExportClick={handleExport}
         />
+        </div>
 
-        <ActivityStats />
+        <div className="shrink-0">
+          <ActivityStats cards={statsCards} />
+        </div>
 
         <div className="flex flex-col xl:flex-row gap-3.5 w-full flex-1 min-h-[560px] xl:min-h-0 overflow-hidden">
           <div className="w-full xl:w-[300px] shrink-0 h-[320px] xl:h-full min-h-0 overflow-hidden">

@@ -69,10 +69,14 @@ export default function Users() {
 
   return (
     <MainLayout activeTab="Users">
-      <div className="h-screen max-h-screen p-3 bg-[#090b0e] flex flex-col gap-2.5 overflow-hidden text-gray-200">
-        <UserHeader onAddUserClick={handleAddUser} />
+      <div className="h-screen max-h-screen bg-[#090b0e] flex flex-col gap-2.5 overflow-hidden text-gray-200">
+        <div className="shrink-0">
+          <UserHeader onAddUserClick={handleAddUser} />
+        </div>
 
-        <UserStats />
+        <div className="shrink-0">
+          <UserStats />
+        </div>
 
         <div className="flex-1 min-h-0 grid grid-cols-12 gap-2.5 overflow-hidden mt-1">
           <div className="col-span-8 h-full min-h-0">

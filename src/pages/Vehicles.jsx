@@ -67,8 +67,7 @@ export default function Vehicles() {
         h-[calc(100vh-80px)] locks height within screen.
         overflow-hidden prevents outer scrolling.
       */}
-      <div className="w-full h-[calc(100vh-80px)] flex flex-col gap-3.5 overflow-hidden p-1">
-        
+      <div className="w-full h-[calc(100vh-80px)] flex flex-col gap-2.5 overflow-hidden">
         {/* Top Header */}
         <div className="shrink-0">
           <VehiclesHeader

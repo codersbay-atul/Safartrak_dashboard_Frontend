@@ -56,7 +56,7 @@ export default function VehiclesDetails() {
 
   return (
     <MainLayout activeTab="Vehicles">
-      <div className="h-screen max-h-screen flex flex-col gap-2 p-2.5 bg-[#090b0e] text-gray-200 overflow-hidden">
+      <div className="h-screen max-h-screen flex flex-col gap-2.5 bg-[#090b0e] text-gray-200 overflow-hidden">
         <div className="shrink-0">
           <VehicleDetailsHeader
             onImportClick={handleImport}

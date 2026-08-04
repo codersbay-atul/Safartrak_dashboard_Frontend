@@ -51,7 +51,7 @@ export default function Dashboard() {
     >
       {isRouteView ? (
         /* Route Details View */
-        <div className="flex-1 flex flex-col gap-3 overflow-hidden min-h-0">
+        <div className="flex-1 flex flex-col gap-2.5 overflow-hidden min-h-0">
           <div className="shrink-0 flex items-center gap-3">
             <button
               onClick={exitRouteView}

@@ -10,13 +10,13 @@ export default function Contact() {
 
   return (
     <MainLayout activeTab="Contact">
-      <div className="flex-1 flex flex-col gap-3.5 min-h-0 overflow-y-auto lg:overflow-hidden pr-0.5 custom-scrollbar">
-        
-        <TicketsHeader
-          onNewTicketClick={() => setShowCreateForm(true)}
-        />
+      <div className="flex-1 flex flex-col gap-2.5 min-h-0 overflow-y-auto lg:overflow-hidden pr-0.5 custom-scrollbar">
+        <div className="shrink-0">
+          <TicketsHeader
+            onNewTicketClick={() => setShowCreateForm(true)}
+          />
+        </div>
 
-        
         {showCreateForm ? (
           <div className="flex-1 flex items-start justify-center px-1 pb-2">
             <PersonalInformation

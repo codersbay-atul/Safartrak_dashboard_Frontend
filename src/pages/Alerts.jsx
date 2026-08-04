@@ -109,8 +109,9 @@ export default function Alerts() {
 
   return (
     <MainLayout activeTab="Alerts">
-      <div className="flex-1 flex flex-col gap-3.5 min-h-0 overflow-y-auto pr-0.5 custom-scrollbar">
-        <AlertsHeader
+      <div className="flex-1 flex flex-col gap-2.5 min-h-0 overflow-y-auto pr-0.5 custom-scrollbar">
+        <div className="shrink-0">
+          <AlertsHeader
           searchQuery={searchQuery}
           onSearchChange={(e) => setSearchQuery(e.target.value)}
           fleetFilter={fleetFilter}
@@ -119,8 +120,11 @@ export default function Alerts() {
           onSeverityChange={setSeverityFilter}
           onConfigClick={() => {}}
         />
+        </div>
 
-        <AlertsStats cards={statsCards} />
+        <div className="shrink-0">
+          <AlertsStats cards={statsCards} />
+        </div>
 
         <AlertTypeGrid
           types={types}
