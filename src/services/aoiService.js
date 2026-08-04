@@ -1,4 +1,5 @@
 import {
+  createAoi as createAoiRequest,
   deleteAoi as deleteAoiRequest,
   getAoiList as getAoiListRequest,
   getAoiSummary as getAoiSummaryRequest,
@@ -24,6 +25,10 @@ export function getAoiList({ search = "", status = "all", geometry = false } = {
  * Delete an AOI by id.
  * @returns {Promise<object>} Unwrapped API payload
  */
+export function createAoi(payload) {
+  return createAoiRequest(payload);
+}
+
 export function deleteAoi(aoiId) {
   return deleteAoiRequest(aoiId);
 }

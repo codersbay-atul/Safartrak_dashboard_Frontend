@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Search, SlidersHorizontal, Download } from "lucide-react";
+import { SlidersHorizontal, Download } from "lucide-react";
 import Button from "./Button";
+import SearchInput from "./SearchInput";
 
 export default function PageHeader({
   title,
@@ -44,21 +45,14 @@ export default function PageHeader({
       <div className="flex items-center gap-3 w-full lg:w-auto shrink-0 justify-between lg:justify-end">
         {/* Search Bar */}
         {showSearch && (
-          <div className="relative flex-1 lg:flex-initial min-w-0 w-full lg:w-55">
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={handleSearchChange}
-              placeholder={searchPlaceholder}
-              aria-label={searchPlaceholder}
-              className="w-full h-10 px-3.5 text-[15px] rounded-full bg-[#05070B] border border-[#22252B] placeholder:text-[#8B8D97] placeholder:text-[15px] focus:outline-none focus:border-[#FDBB24] text-white transition-all"
-            />
-            <Search
-              size={18}
-              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#8B8D97] pointer-events-none"
-              aria-hidden="true"
-            />
-          </div>
+          <SearchInput
+            value={searchQuery}
+            onChange={handleSearchChange}
+            placeholder={searchPlaceholder}
+            aria-label={searchPlaceholder}
+            containerClassName="w-full lg:w-[220px]"
+            className="w-full"
+          />
         )}
 
         {showFilter && (

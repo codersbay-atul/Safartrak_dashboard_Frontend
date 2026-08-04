@@ -1,7 +1,7 @@
 import React from "react";
-import { Download, Upload, Plus } from "lucide-react";
-import Button from "../../components/Ui/Button";
+import { Upload, Plus } from "lucide-react";
 import PageHeader from "../../components/Ui/PageHeader";
+import HeaderActionButton from "../../components/Ui/HeaderActionButton";
 import { getVehiclesExport } from "../../services/vehicleService";
 import { toast } from "../../components/Ui/toast";
 
@@ -58,27 +58,13 @@ export default function VehicleDetailsHeader({
     >
     
 
-      <Button
-        variant="secondary"
-        size="sm"
-        icon={Upload}
-        iconPosition="left"
-        onClick={onExportClick}
-         className="!w-[120px] min-w-[130px] !h-[35px] !rounded-[8px] !bg-[#FFC107] hover:!bg-[#e6ac00] active:scale-[0.98] !text-black !font-normal !text-[16px] !px-[18px] !py-0 gap-2 whitespace-nowrap flex-nowrap flex-shrink-0 [&_svg]:size-[15px] [&_span]:!overflow-visible [&_span]:!max-w-none"
-      >
+      <HeaderActionButton icon={Upload} onClick={onExportClick} className="min-w-[110px]">
         Export Data
-      </Button>
+      </HeaderActionButton>
 
-      <Button
-        variant="primary"
-        size="sm"
-        icon={Plus}
-        iconPosition="right"
-        onClick={onAddVehicleClick}
-    className="!w-[120px] min-w-[130px] !h-[35px] !rounded-[8px] !bg-[#FFC107] hover:!bg-[#e6ac00] active:scale-[0.98] !text-black !font-normal !text-[16px] !px-[18px] !py-0 gap-2 whitespace-nowrap flex-nowrap flex-shrink-0 [&_svg]:size-[15px] [&_span]:!overflow-visible [&_span]:!max-w-none"
-      >
+      <HeaderActionButton icon={Plus} iconPosition="right" onClick={onAddVehicleClick} className="min-w-[120px]">
         Add Vehicle
-      </Button>
+      </HeaderActionButton>
     </PageHeader>
   );
 }

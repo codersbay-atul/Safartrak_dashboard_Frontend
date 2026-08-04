@@ -5,7 +5,7 @@ export default function SearchInput({
   placeholder = "Search...",
   value,
   onChange,
-  iconPosition = "right", 
+  iconPosition = "right",
   className = "",
   containerClassName = "",
   ...props
@@ -17,14 +17,14 @@ export default function SearchInput({
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        className={`w-full sm:w-44 py-1 text-[10.5px] rounded-2xl bg-[#18181b]/40 border border-[#27272a] placeholder-[#71717a] focus:outline-none focus:border-[#FDBB24] text-white transition-all
-          ${iconPosition === "left" ? "pl-7 pr-3" : "pr-8 pl-3"} 
+        className={`w-full h-8 sm:h-9 px-3 text-[11px] sm:text-[12px] rounded-full bg-[#05070B] border border-[#22252B] placeholder-[#8B8D97] focus:outline-none focus:border-[#FDBB24] text-white transition-all
+          ${iconPosition === "left" ? "pl-8 pr-3" : "pr-8 pl-3"}
           ${className}`}
         {...props}
       />
       <Search
         size={12}
-        className={`absolute top-1/2 -translate-y-1/2 text-[#71717a] pointer-events-none
+        className={`absolute top-1/2 -translate-y-1/2 text-[#8B8D97] pointer-events-none
           ${iconPosition === "left" ? "left-2.5" : "right-2.5"}`}
       />
     </div>

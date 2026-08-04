@@ -1,6 +1,6 @@
 import React from "react";
-import Button from "../../components/Ui/Button";
 import PageHeader from "../../components/Ui/PageHeader";
+import HeaderActionButton from "../../components/Ui/HeaderActionButton";
 
 export default function TicketsHeader({
   title = "My Tickets",
@@ -15,14 +15,9 @@ export default function TicketsHeader({
       showFilter={false}
       showExport={false}
     >
-      <Button
-        variant="primary"
-        size="sm"
-        onClick={onNewTicketClick}
-        className="!w-[120px] min-w-[120px] !h-[35px] !rounded-[8px] !bg-[#FFC107] hover:!bg-[#e6ac00] active:scale-[0.98] !text-black !font-medium !text-[13px] !px-[18px] !py-0 whitespace-nowrap flex-shrink-0"
-      >
+      <HeaderActionButton onClick={onNewTicketClick} className="min-w-[120px]">
         New Ticket
-      </Button>
+      </HeaderActionButton>
     </PageHeader>
   );
 }

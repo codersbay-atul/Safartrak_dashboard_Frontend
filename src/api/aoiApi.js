@@ -1,6 +1,15 @@
 import apiClient from "./client";
 
 /**
+ * POST /v1/aoi
+ * @returns {Promise<object>} create response payload from the server
+ */
+export async function createAoi(payload = {}) {
+  const response = await apiClient.post("/v1/aoi", payload);
+  return response?.data?.data ?? response?.data ?? {};
+}
+
+/**
  * GET /v1/aoi/summary
  * @returns {Promise<object>} summary payload from the server
  */

@@ -1,7 +1,7 @@
 import React from "react";
 import { ChevronDown, Download } from "lucide-react";
-import Button from "../../components/Ui/Button";
 import PageHeader from "../../components/Ui/PageHeader";
+import HeaderActionButton from "../../components/Ui/HeaderActionButton";
 
 export default function AnalyticsHeader({
   title = "Analytics",
@@ -21,27 +21,20 @@ export default function AnalyticsHeader({
       showFilter={false}
       showExport={false}
     >
-      <div className="relative flex-1 sm:flex-initial">
+      <div className="relative flex-1 sm:flex-initial min-w-[180px]">
         <button
           type="button"
           onClick={onVehicleSelectClick}
-          className="w-full sm:w-auto flex items-center justify-between gap-4 px-3 py-1 text-[10.5px] rounded-2xl bg-[#18181b]/40 border border-[#27272a] text-[#d4d4d8] hover:border-zinc-600 transition-colors cursor-pointer"
+          className="w-full sm:w-auto h-8 sm:h-9 px-3 flex items-center justify-between gap-2 text-[11px] sm:text-[12px] rounded-full bg-[#05070B] border border-[#22252B] text-[#d4d4d8] hover:border-[#FDBB24]/40 hover:text-white transition-colors cursor-pointer"
         >
-          <span>{selectedVehicleText}</span>
-          <ChevronDown size={12} className="text-[#71717a]" />
+          <span className="truncate">{selectedVehicleText}</span>
+          <ChevronDown size={12} className="text-[#8B8D97] shrink-0" />
         </button>
       </div>
 
-      <Button
-        variant="primary"
-        size="sm"
-        icon={Download}
-        iconPosition="right"
-        onClick={onExportClick}
-        className="!w-[120px] min-w-[130px] !h-[35px] !rounded-[8px] !bg-[#FFC107] hover:!bg-[#e6ac00] active:scale-[0.98] !text-black !font-normal !text-[16px] !px-[18px] !py-0 gap-2 whitespace-nowrap flex-nowrap flex-shrink-0 [&_svg]:size-[15px] [&_span]:!overflow-visible [&_span]:!max-w-none"
-      >
+      <HeaderActionButton icon={Download} iconPosition="right" onClick={onExportClick} className="min-w-[120px]">
         Export Data
-      </Button>
+      </HeaderActionButton>
     </PageHeader>
   );
 }

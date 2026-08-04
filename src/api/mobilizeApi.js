@@ -91,7 +91,8 @@ export async function sendVehicleCommand(uniqueId, action, opts = {}) {
     const res = await apiClient.post("/v1/commands", body);
     return res.data;
   } catch (err) {
-    throw normalizeApiError(err);
+    console.log(err);
+    throw normalizeApiError({ "message":  err?.details?.error?.reasons?.[0] || err?.message || "Failed to send command" });
   }
 }
 

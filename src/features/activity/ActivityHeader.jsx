@@ -2,7 +2,7 @@ import React from "react";
 import { Plus } from "lucide-react";
 import SearchInput from "../../components/Ui/SearchInput";
 import Dropdown from "../../components/Ui/DropDown";
-import Button from "../../components/Ui/Button";
+import HeaderActionButton from "../../components/Ui/HeaderActionButton";
 import {
   VEHICLE_OPTIONS,
   EVENT_OPTIONS,
@@ -65,15 +65,9 @@ export default function ActivityHeader({
           className="sm:w-44 rounded-xl bg-[#18181b] py-1.5"
         />
 
-        <Button
-          variant="primary"
-          size="sm"
-          icon={Plus}
-          onClick={onExportClick}
-          className="font-bold whitespace-nowrap rounded-md px-3 py-1.5 text-[10.5px] shadow-sm shadow-[#FDBB24]/15"
-        >
+        <HeaderActionButton icon={Plus} onClick={onExportClick}>
           Export
-        </Button>
+        </HeaderActionButton>
       </div>
     </div>
   );

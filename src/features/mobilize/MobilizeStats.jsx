@@ -113,7 +113,7 @@ export default function MobilizeStats() {
         return (
           <div
             key={card.id}
-            className="bg-[#16161a] border border-[#232329] rounded-xl p-3 flex flex-col justify-between hover:border-[#2e2e36] transition-all relative overflow-hidden group cursor-pointer w-full min-h-19"
+            className="bg-[#16161a] border border-[#232329] rounded-xl p-3 flex flex-col justify-between hover:border-[#2e2e36] transition-all relative overflow-hidden group cursor-pointer w-full min-h-[76px]"
           >
             <div className="flex items-center gap-3">
               <div

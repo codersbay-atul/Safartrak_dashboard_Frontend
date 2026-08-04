@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import MainLayout from "../layouts/MainLayout";
 import TicketsHeader from "../features/contact/TicketsHeader";
-import PersonalInformation from "../features/profile/PersonalInformation";
 import ProfileTickets from "../features/contact/ProfileTickets";
+import PersonalInformation from "../features/contact/PersonalInformation";
 
 
 export default function Contact() {
@@ -18,13 +18,15 @@ export default function Contact() {
 
         
         {showCreateForm ? (
-          <PersonalInformation
-            onCancel={() => setShowCreateForm(false)}
-            onSubmit={(formData) => {
-              console.log("Submitted Ticket:", formData);
-              setShowCreateForm(false);
-            }}
-          />
+          <div className="flex-1 flex items-start justify-center px-1 pb-2">
+            <PersonalInformation
+              onCancel={() => setShowCreateForm(false)}
+              onSubmit={(formData) => {
+                console.log("Submitted Ticket:", formData);
+                setShowCreateForm(false);
+              }}
+            />
+          </div>
         ) : (
           <ProfileTickets/>
         )}

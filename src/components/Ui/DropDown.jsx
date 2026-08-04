@@ -29,14 +29,14 @@ export default function Dropdown({
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-full sm:w-auto flex items-center justify-between gap-4 px-3 py-1 text-[10.5px] rounded-2xl bg-[#18181b]/40 border border-[#27272a] text-[#d4d4d8] hover:border-zinc-600 transition-colors cursor-pointer focus:outline-none ${className}`}
+        className={`w-full sm:w-auto flex items-center justify-between gap-2 h-8 sm:h-9 px-3 text-[11px] sm:text-[12px] rounded-full bg-[#05070B] border border-[#22252B] text-[#d4d4d8] hover:border-[#FDBB24]/40 hover:text-white transition-colors cursor-pointer focus:outline-none ${className}`}
       >
         <span>{currentLabel}</span>
-        <ChevronDown size={12} className={`text-[#71717a] transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`} />
+        <ChevronDown size={12} className={`text-[#8B8D97] transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`} />
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-1.5 w-full sm:w-44 bg-[#16161a] border border-[#232329] rounded-xl shadow-2xl overflow-hidden z-50 animate-in fade-in duration-100">
+        <div className="absolute right-0 mt-1.5 w-full sm:w-44 bg-[#0f1115] border border-[#22252B] rounded-xl shadow-2xl overflow-hidden z-50 animate-in fade-in duration-100">
           <div className="py-1">
             {options.map((option) => (
               <button

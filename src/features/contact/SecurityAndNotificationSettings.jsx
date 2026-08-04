@@ -30,13 +30,13 @@ export default function SecurityAndNotificationSettings({ initialData = {}, onSa
 
   return (
     <div className="bg-[#121214] border border-[#1f1f23] rounded-2xl p-6 text-white w-full max-w-xl">
-      {/* Header */}
+  
       <h2 className="text-sm font-semibold text-white mb-5 pb-3 border-b border-[#1f1f23]">
         Security Settings
       </h2>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        {/* Email Field */}
+    
         <div className="flex flex-col gap-1.5">
           <label className="text-[11px] text-[#71717a] font-medium">Email</label>
           <input
@@ -48,7 +48,7 @@ export default function SecurityAndNotificationSettings({ initialData = {}, onSa
           />
         </div>
 
-        {/* Enter New Email & Enter Password */}
+      
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
           <div className="flex flex-col gap-1.5">
             <label className="text-[11px] text-[#71717a] font-medium">Enter New Email</label>
@@ -75,7 +75,7 @@ export default function SecurityAndNotificationSettings({ initialData = {}, onSa
           </div>
         </div>
 
-        {/* Enter Phone Number Field */}
+        
         <div className="flex flex-col gap-1.5 mt-1">
           <label className="text-[11px] text-[#71717a] font-medium">Enter Phone Number</label>
           <input
@@ -87,7 +87,7 @@ export default function SecurityAndNotificationSettings({ initialData = {}, onSa
           />
         </div>
 
-        {/* Enter New Number & Enter Password */}
+        
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
           <div className="flex flex-col gap-1.5">
             <label className="text-[11px] text-[#71717a] font-medium">Enter New Number</label>
