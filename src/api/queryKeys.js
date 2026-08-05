@@ -51,6 +51,11 @@ export const queryKeys = {
     list: (filters = {}) => ["aoi-list", filters],
     detail: (id) => ["aoi-detail", id],
   },
+    account: {
+        profile: ["account-profile"],
+        notifications: ["account-notifications"],
+        activity: (limit = 20) => ["account-activity", limit],
+    },
   reports: {
     all: ["reports"],
     types: ["reports", "types"],

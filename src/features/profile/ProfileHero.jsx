@@ -2,14 +2,14 @@ import React from "react";
 import { IdCard, Mail, Phone, Calendar, Truck } from "lucide-react";
 
 export default function ProfileHero({ user }) {
-  const name = user?.name || "Atul Singh";
-  const role = user?.role || "Operation Admin";
-  const status = user?.status || "Active";
-  const fleet = user?.fleet || "West Fleet";
-  const employeeId = user?.employeeId || "EMP-1001";
-  const email = user?.email || "alex.morgan@company.io";
-  const phone = user?.phone || "+1 (415) 928-0744";
-  const joinedOn = user?.joinedOn || "15 Jan 2024";
+  const name = user?.name ?? '';
+  const role = user?.role ?? '';
+  const status = user?.status ?? '';
+  const fleet = user?.fleet ?? '';
+  const employeeId = user?.employeeId ?? '';
+  const email = user?.email ?? '';
+  const phone = user?.phone ?? '';
+  const joinedOn = user?.joinedOn ?? '';
 
   return (
     <div className="bg-[#121214] border border-[#1f1f23] rounded-2xl p-4 text-white flex flex-col xl:flex-row items-start xl:items-center justify-between gap-4">

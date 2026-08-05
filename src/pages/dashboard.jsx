@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 import RouteDashboardHeader from "../features/route-details/RouteDashboardHeader";
 import TripStatsCard from "../features/route-details/TripStatsCard";
@@ -10,6 +11,7 @@ import VehiclesList from "../features/dashboard/VehiclesList";
 import DashboardVehicleDetails from "../features/dashboard/DashboardVehicleDetails";
 
 export default function Dashboard() {
+  const navigate = useNavigate();
   const [selectedVehicle, setSelectedVehicle] = useState(() => {
     const savedVehicle = localStorage.getItem("selectedVehicle");
     return savedVehicle ? JSON.parse(savedVehicle) : null;
@@ -88,7 +90,7 @@ export default function Dashboard() {
         /* Standard Dashboard View */
         <div className="flex-1 flex flex-col gap-3 overflow-hidden min-h-0">
           <div className="shrink-0">
-            <DashboardHeader onSearch={setVehicleSearch} />
+            <DashboardHeader onSearch={setVehicleSearch} onAddVehicleClick={() => navigate("/vehicles")} />
           </div>
           <div className="shrink-0">
             <StatsCard />

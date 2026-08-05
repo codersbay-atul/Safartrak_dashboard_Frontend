@@ -96,9 +96,9 @@ export default function Mobilize() {
         const vehiclesList = Array.isArray(res) ? res : [];
         // debug: log fetched raw response shape and extracted array
         try {
-          // eslint-disable-next-line no-console
+           
           console.log("[Mobilize] getCommandVehicles response:", res);
-          // eslint-disable-next-line no-console
+           
           console.log("[Mobilize] extracted vehicles count:", vehiclesList.length);
         } catch (e) {}
         const normalized = vehiclesList.map((v, idx) => ({

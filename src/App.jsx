@@ -10,6 +10,10 @@ import Activity from "./pages/Activity";
 import Vehicles from "./pages/Vehicles";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import ForgotPassword from "./pages/Forgotpassword";
+import OtpVerification from "./pages/OtpVerification";
+import ResetPassword from "./pages/ResetPassword";
+import PasswordUpdated from "./pages/PasswordUpdated";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import VehiclesDetails from "./pages/VehiclesDetails";
 import Users from "./pages/Users";
@@ -48,6 +52,10 @@ function App() {
           {/* Auth screens */}
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/otp-verification" element={<OtpVerification />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/password-updated" element={<PasswordUpdated />} />
 
           
           <Route
