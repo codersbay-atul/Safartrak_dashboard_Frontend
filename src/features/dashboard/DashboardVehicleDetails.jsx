@@ -133,51 +133,51 @@ function getVehicleMetrics(vehicle) {
       value: displayValue(vehicle?.model),
       icon: ShieldCheck,
     },
-    {
-      key: "fleetGroup",
-      label: "Fleet Group",
-      value: displayValue(vehicle?.fleetGroup ?? vehicle?.location),
-      icon: MapPin,
-      valueClassName: "text-right truncate pl-2 max-w-[110px] sm:max-w-[130px]",
-    },
+    // {
+    //   key: "fleetGroup",
+    //   label: "Fleet Group",
+    //   value: displayValue(vehicle?.fleetGroup ?? vehicle?.location),
+    //   icon: MapPin,
+    //   valueClassName: "text-right truncate pl-2 max-w-[110px] sm:max-w-[130px]",
+    // },
     {
       key: "deviceStatus",
       label: "Connection Status",
       value: displayValue(vehicle?.deviceStatus),
       icon: Radio,
     },
-    {
-      key: "inMaintenance",
-      label: "Maintenance Status",
-      value: displayValue(vehicle?.inMaintenance),
-      icon: Key,
-    },
-    {
-      key: "uniqueId",
-      label: "Unique ID",
-      value: displayValue(vehicle?.uniqueId),
-      icon: Key,
-      valueClassName: "text-right truncate pl-2 max-w-[110px] sm:max-w-[130px]",
-    },
-    {
-      key: "lat",
-      label: "Latitude",
-      value: displayValue(vehicle?.latDisplay ?? vehicle?.lat),
-      icon: MapPin,
-    },
-    {
-      key: "lng",
-      label: "Longitude",
-      value: displayValue(vehicle?.lngDisplay ?? vehicle?.lng),
-      icon: MapPin,
-    },
-    {
-      key: "lastUpdated",
-      label: "Last Updated",
-      value: displayValue(vehicle?.lastUpdated ?? vehicle?.info),
-      icon: Calendar,
-      valueColor: "text-zinc-300",
-    },
+    // {
+    //   key: "inMaintenance",
+    //   label: "Maintenance Status",
+    //   value: displayValue(vehicle?.inMaintenance),
+    //   icon: Key,
+    // },
+    // {
+    //   key: "uniqueId",
+    //   label: "Unique ID",
+    //   value: displayValue(vehicle?.uniqueId),
+    //   icon: Key,
+    //   valueClassName: "text-right truncate pl-2 max-w-[110px] sm:max-w-[130px]",
+    // },
+    // {
+    //   key: "lat",
+    //   label: "Latitude",
+    //   value: displayValue(vehicle?.latDisplay ?? vehicle?.lat),
+    //   icon: MapPin,
+    // },
+    // {
+    //   key: "lng",
+    //   label: "Longitude",
+    //   value: displayValue(vehicle?.lngDisplay ?? vehicle?.lng),
+    //   icon: MapPin,
+    // },
+    // {
+    //   key: "lastUpdated",
+    //   label: "Last Updated",
+    //   value: displayValue(vehicle?.lastUpdated ?? vehicle?.info),
+    //   icon: Calendar,
+    //   valueColor: "text-zinc-300",
+    // },
   ];
 }
 
@@ -220,7 +220,7 @@ export default function DashboardVehicleDetails({ vehicle, onViewRoute }) {
         <div className="flex items-center gap-2 min-w-0">
           <div className="w-7 h-7 bg-zinc-800 border border-zinc-700/50 rounded-md shadow-inner shrink-0" />
           <div className="leading-tight min-w-0">
-            <h4 className="text-[11px] sm:text-[12px] font-extrabold text-white tracking-tight truncate">
+            <h4 className="text-[11px] sm:text-[12px] font-bold text-white tracking-tight truncate">
               {displayValue(vehicle?.plate)}
             </h4>
             <p className="text-[9px] text-zinc-500 font-medium truncate">
@@ -251,7 +251,7 @@ export default function DashboardVehicleDetails({ vehicle, onViewRoute }) {
       <div className="border-b border-zinc-800/20 w-full shrink-0 mb-1.5" />
 
       {/* 4. Vehicle Information List */}
-      <div className="flex flex-col flex-1 py-1 text-[9.5px] sm:text-[10px] gap-y-2 overflow-y-auto pr-0.5 mb-1.5 scrollbar-thin scrollbar-thumb-zinc-800 scrollbar-track-transparent">
+      <div className="flex flex-col flex-1 py-1 text-[9.5px] sm:text-[12px] gap-y-2 overflow-y-auto pr-0.5 mb-1.5 scrollbar-thin scrollbar-thumb-zinc-800 scrollbar-track-transparent">
         {metrics.map(
           ({
             key,
