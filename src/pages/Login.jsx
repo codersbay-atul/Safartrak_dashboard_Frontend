@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate, Link } from "react-router-dom";
 import { LoaderCircle } from "lucide-react";
 import Button from "../components/Ui/Button";
 import AuthShell, { AuthField } from "../features/auth/AuthShell";
@@ -119,12 +119,12 @@ export default function Login() {
         />
 
         <div className="flex items-center justify-end">
-          <button
-            type="button"
-            className="text-[12px] font-medium text-[#F5B700] hover:text-[#d9a200] transition-colors cursor-pointer"
+          <Link
+            to="/forgot-password"
+            className="text-[12px] font-medium text-[#F5B700] hover:text-[#d9a200] transition-colors"
           >
             Forgot Password?
-          </button>
+          </Link>
         </div>
 
         <Button

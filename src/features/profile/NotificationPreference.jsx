@@ -1,23 +1,33 @@
 import React from "react";
 import { Mail, Bell, MessageSquare, AlertTriangle, FileText } from "lucide-react";
+import useAccountNotifications from "../../hooks/useAccountNotifications";
 
-const DEFAULT_PREFERENCES = [
-  { label: "Email Notification", status: "Active", icon: Mail },
-  { label: "Push Notification", status: "Active", icon: Bell },
-  { label: "SMS Notification", status: "Disable", icon: MessageSquare },
-  { label: "Critical Alerts", status: "Active", icon: AlertTriangle },
-  { label: "Daily Reports", status: "Active", icon: FileText },
+const PREFERENCE_MAP = [
+  { key: "email_notifications", label: "Email Notification", icon: Mail },
+  { key: "push_notifications", label: "Push Notification", icon: Bell },
+  { key: "sms_notifications", label: "SMS Notification", icon: MessageSquare },
+  { key: "critical_alerts", label: "Critical Alerts", icon: AlertTriangle },
+  { key: "daily_reports", label: "Daily Reports", icon: FileText },
 ];
 
-export default function NotificationPreference({ preferences = DEFAULT_PREFERENCES }) {
-  const items = preferences.length > 0 ? preferences : DEFAULT_PREFERENCES;
+export default function NotificationPreference({ preferences = null }) {
+  const { notifications, isLoading, isError } = useAccountNotifications();
+
+  const source = notifications ?? preferences ?? {};
+
+  const items = PREFERENCE_MAP.map((p) => {
+    const enabled = !!(source && source[p.key]);
+    return {
+      label: p.label,
+      status: enabled ? "Active" : "Disable",
+      icon: p.icon,
+    };
+  });
 
   return (
     <div className="bg-[#121214] border border-[#1f1f23] rounded-2xl p-6 text-white w-full">
-      {/* Header */}
       <h2 className="text-base font-semibold text-white mb-6">Notification Preference</h2>
 
-   
       <div className="flex flex-col gap-5">
         {items.map((item, index) => {
           const IconComponent = item.icon || Mail;
@@ -25,13 +35,11 @@ export default function NotificationPreference({ preferences = DEFAULT_PREFERENC
 
           return (
             <div key={item.label || index} className="flex items-center justify-between">
-              {/* Left Label & Icon */}
               <div className="flex items-center gap-3">
                 <IconComponent className="w-4 h-4 text-[#71717a] shrink-0" />
                 <span className="text-xs text-[#a1a1aa] font-medium">{item.label}</span>
               </div>
 
-            
               <span
                 className={`text-[11px] font-medium px-3 py-0.5 rounded-full ${
                   isActive

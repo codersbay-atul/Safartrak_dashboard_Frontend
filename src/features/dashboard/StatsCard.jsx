@@ -1,6 +1,7 @@
 import { Truck, TriangleAlert, Circle, CircleSmall, LocateOff } from "lucide-react";
 import { StatCard } from "../../components/Ui/StatsCards";
 import { useDashboardSummary } from "../../hooks/useDashboardSummary";
+import { useNavigate } from "react-router-dom";
 import {
   DASHBOARD_SUMMARY_PLACEHOLDER,
   mapDashboardSummary,
@@ -77,6 +78,7 @@ function buildStatsData(summary, { isLoading = false } = {}) {
 
 export default function StatsCard() {
   const { summary, isLoading, isError, data } = useDashboardSummary();
+  const navigate = useNavigate();
 
   const showLoadingSkeleton = isLoading && !data;
 
@@ -95,7 +97,10 @@ export default function StatsCard() {
     <div className="grid grid-cols-[repeat(5,minmax(0,1fr))] gap-2 mt-0 pt-0 select-none w-full shrink-0">
       {statsData.map((card) => (
         <div key={card.id} className="min-h-[112px] [&>*]:h-full">
-          <StatCard {...card} />
+          <StatCard
+            {...card}
+            onClick={card.id === "active_vehicles" ? () => navigate("/vehicles") : card.onClick}
+          />
         </div>
       ))}
     </div>

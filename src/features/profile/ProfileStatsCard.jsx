@@ -1,13 +1,33 @@
 import { AlarmClock, Check, Truck } from "lucide-react";
 import { StatCard } from "../../components/Ui/StatsCards";
 
+function formatDateParts(isoString) {
+  if (!isoString) return { time: "", date: "" };
+  try {
+    const d = new Date(isoString);
+    if (Number.isNaN(d.getTime())) return { time: "", date: "" };
+    const time = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const date = d.toLocaleDateString();
+    return { time, date };
+  } catch (e) {
+    return { time: "", date: "" };
+  }
+}
+
 export default function ProfileStatsCard({ stats, isLoading = false }) {
+  const lastLoginIso = stats?.last_login_at ?? stats?.lastLoginAt ?? null;
+  const { time: lastLoginTime, date: lastLoginDate } = formatDateParts(lastLoginIso);
+
+  const accountStatus = stats?.status ?? '';
+  const assignedFleet = stats?.fleet ?? '';
+  const role = stats?.role ?? '';
+
   const cardData = [
     {
       id: "last-login",
       icon: AlarmClock,
-      value: stats?.lastLoginTime ?? "09:45 AM",
-      subtitle: stats?.lastLoginDate ?? "Today",
+      value: lastLoginTime || "",
+      subtitle: lastLoginDate || "",
       bottomLabel: "Last Login",
       bgIcon: "bg-[#2d2203] border border-[#4d3a05]",
       colorIcon: "text-[#ffd60a]",
@@ -16,7 +36,7 @@ export default function ProfileStatsCard({ stats, isLoading = false }) {
     {
       id: "account-status",
       icon: Check,
-      value: stats?.accountStatus ?? "Active",
+      value: accountStatus,
       bottomLabel: "Account Status",
       bgIcon: "bg-[#2d2203] border border-[#4d3a05]",
       colorIcon: "text-[#ffd60a]",
@@ -25,7 +45,7 @@ export default function ProfileStatsCard({ stats, isLoading = false }) {
     {
       id: "assigned-fleet",
       icon: Truck,
-      value: stats?.assignedFleet ?? "West Fleet",
+      value: assignedFleet,
       bottomLabel: "Assigned Fleet",
       bgIcon: "bg-[#2d2203] border border-[#4d3a05]",
       colorIcon: "text-[#ffd60a]",
@@ -34,7 +54,7 @@ export default function ProfileStatsCard({ stats, isLoading = false }) {
     {
       id: "role",
       icon: Truck,
-      value: stats?.role ?? "Operations Admin",
+      value: role,
       bottomLabel: "Role",
       bgIcon: "bg-[#2d2203] border border-[#4d3a05]",
       colorIcon: "text-[#ffd60a]",

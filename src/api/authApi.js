@@ -44,3 +44,32 @@ export async function loginRequest(credentials) {
     token,
   };
 }
+
+/**
+ * Trigger forgot-password flow via POST /v1/auth/forgot-password.
+ *
+ * @param {{ email: string }} payload
+ * @returns {Promise<object>}
+ */
+export async function forgotPasswordRequest(payload) {
+  const response = await apiClient.post("/v1/auth/forgot-password", {
+    username: String(payload?.username ?? payload?.email ?? "").trim(),
+  });
+
+  return response?.data?.data ?? response?.data ?? {};
+}
+
+/**
+ * Verify OTP via POST /v1/auth/verify-otp.
+ *
+ * @param {{ username: string, otp: string }} payload
+ * @returns {Promise<object>}
+ */
+export async function verifyOtpRequest(payload) {
+  const response = await apiClient.post("/v1/auth/verify-otp", {
+    username: String(payload?.username ?? payload?.email ?? "").trim(),
+    otp: String(payload?.otp ?? "").trim(),
+  });
+
+  return response?.data?.data ?? response?.data ?? {};
+}

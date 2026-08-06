@@ -138,7 +138,6 @@ export default function AoiDetailsPanel({ aoi, onEdit, onDelete, onViewVehicle }
         })}
       </div>
 
-      {/* Scrollable Content Container */}
       <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar pr-1">
         {activeTab === "Overview" && (
           <div className="space-y-6">

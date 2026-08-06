@@ -28,6 +28,7 @@ import Popover from '../components/Ui/Popover';
 import NotificationItem from '../components/Ui/NotificationItem';
 import UserAvatar from '../components/Ui/UserAvatar';
 import { clearAuth } from '../store/slices/authSlice';
+import useAccountProfile from '../hooks/useAccountProfile';
 
 function NavPopoverWrapper({ children, isOpen, onClose }) {
   const wrapperRef = useOutsideClick(() => {
@@ -66,10 +67,10 @@ export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }
   const [unreadCount, setUnreadCount] = useState(2);
   const [activePopover, setActivePopover] = useState(null); // 'notif' | 'calendar' | 'profile' | null
   
-  // Live Date State
+  
   const [currentDate, setCurrentDate] = useState(new Date());
 
-  // Auto-update date every 1 minute
+  
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentDate(new Date());
@@ -80,6 +81,27 @@ export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }
 
   const weekday = currentDate.toLocaleDateString('en-US', { weekday: 'long' });
   const monthDayYear = currentDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
+  const { profile: accountProfile } = useAccountProfile();
+  const displayName = user?.name ?? accountProfile?.name ?? '';
+  const displayRole = user?.role ?? '';
+  const initials = displayName
+    ? displayName
+        .split(' ')
+        .map((part) => part.charAt(0))
+        .join('')
+        .slice(0, 2)
+        .toUpperCase()
+    : 'U';
+
+  const getGreeting = (date) => {
+    const hour = date.getHours();
+    if (hour >= 5 && hour < 12) return 'Good morning';
+    if (hour >= 12 && hour < 17) return 'Good afternoon';
+    return 'Good evening';
+  };
+
+  const greetingText = displayName ? `${getGreeting(currentDate)}, ${displayName}` : getGreeting(currentDate);
 
   const togglePopover = (key) => {
     setActivePopover(prev => (prev === key ? null : key));
@@ -93,17 +115,7 @@ export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }
     navigate('/login', { replace: true });
   };
 
-  const initials = user?.name
-    ? user.name
-        .split(" ")
-        .map((part) => part.charAt(0))
-        .join("")
-        .slice(0, 2)
-        .toUpperCase()
-    : "AT";
-
-  const displayName = user?.name || "Atul";
-  const displayRole = user?.role || "Operations Admin";
+  
 
   return (
     <header className="flex items-center justify-between px-3 py-3 border-b border-[#1f1f23] bg-[#09090b] sticky top-0 z-30 select-none">
@@ -132,11 +144,9 @@ export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }
           </span>
         )}
       </div>
-
-      {/* Right Side: Actions */}
       <div className="flex items-center gap-2.5 shrink-0">
         
-        {/* 1. Notifications Bell */}
+      
         <NavPopoverWrapper isOpen={activePopover === 'notif'} onClose={closePopover}>
           <button 
             onClick={() => togglePopover('notif')}
@@ -176,7 +186,6 @@ export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }
           </Popover>
         </NavPopoverWrapper>
 
-        {/* 2. Calendar Date Scope */}
         <NavPopoverWrapper isOpen={activePopover === 'calendar'} onClose={closePopover}>
           <button 
             onClick={() => togglePopover('calendar')}
@@ -200,7 +209,13 @@ export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }
           <p className="text-[10px] text-[#a1a1aa] mt-0.5">{monthDayYear}</p>
         </div>
 
-        {/* 4. User Profile Dropdown */}
+
+        <div className="hidden md:flex flex-col text-right leading-none shrink-0 pr-3">
+         
+          <p className="text-[10px] text-[#a1a1aa] mt-0.5">{displayRole}</p>
+        </div>
+
+
         <NavPopoverWrapper isOpen={activePopover === 'profile'} onClose={closePopover}>
           <div className="pl-1.5 sm:pl-3 border-l border-[#27272a]">
             <UserAvatar 

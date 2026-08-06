@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import useAccountProfile from "../hooks/useAccountProfile";
 import MainLayout from "../layouts/MainLayout";
 import ProfileHeader from "../features/profile/ProfileHeader";
 import ProfileHero from "../features/profile/ProfileHero";
@@ -9,7 +10,7 @@ import SecuritySettings from "../features/profile/SecuritySettings";
 import SecuritySettingUpdate from "../features/profile/SecuritySettingUpdate";
 import SecurityCard from "../features/profile/SecurityCard";
 
-export default function ProfilePage({ user }) {
+export default function ProfilePage({ user: initialUser }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [settingsData, setSettingsData] = useState(null);
@@ -24,6 +25,10 @@ export default function ProfilePage({ user }) {
     setCurrentStep(1);
   };
 
+  const { profile, isLoading, isError } = useAccountProfile();
+
+  const user = profile ?? initialUser ?? null;
+
   return (
     <MainLayout activeTab="Profile">
       <div className="flex-1 flex flex-col gap-2.5 h-full min-h-0 overflow-y-auto pr-0.5 custom-scrollbar">
@@ -37,7 +42,7 @@ export default function ProfilePage({ user }) {
 
         {/* Stats Row */}
         <div className="shrink-0">
-          <ProfileStatsCard stats={user?.stats ?? {}} />
+          <ProfileStatsCard stats={user ?? {}} />
         </div>
 
         <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-3 gap-2.5 items-stretch">

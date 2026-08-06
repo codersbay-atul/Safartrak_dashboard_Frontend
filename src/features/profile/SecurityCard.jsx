@@ -1,15 +1,10 @@
 import React from "react";
 import { User, Mail, Phone, Truck } from "lucide-react";
 
-const DEFAULT_DETAILS = [
-  { label: "Name", value: "Atul Kumar Singh", icon: User },
-  { label: "Email", value: "atul.official@gmail.com", icon: Mail },
-  { label: "Phone Number", value: "+1 (415) 928-0744", icon: Phone },
-  { label: "Fleet", value: "West Fleet", icon: Truck },
-];
+const DEFAULT_DETAILS = [];
 
-export default function SecurityCard({ details = DEFAULT_DETAILS }) {
-  const items = details.length > 0 ? details : DEFAULT_DETAILS;
+export default function SecurityCard({ details = [] }) {
+  const items = Array.isArray(details) && details.length > 0 ? details : [];
 
   return (
     <div className="bg-[#121214] border border-[#1f1f23] rounded-2xl p-6 text-white w-full">

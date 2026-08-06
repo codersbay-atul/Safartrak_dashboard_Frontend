@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { useVehiclesList } from "../../hooks/useVehiclesList";
 
 const FILTER_DEFS = [
-  { label: "All", color: "bg-[#71717a]" },
+  { label: "All", color: "bg-[#8e8e93]" },
   { label: "Moving", color: "bg-[#10b981]" },
   { label: "Idle", color: "bg-[#f59e0b]" },
   { label: "Critical", color: "bg-[#f97316]" },
@@ -83,57 +83,58 @@ export default function VehiclesList({
     if (selectedVehicle) return;
     if (vehicles.length === 0) return;
     handleSelectVehicle(vehicles[0]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- auto-select first row once data arrives
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [vehicles, selectedVehicle]);
 
   return (
-    <div className="w-full h-full bg-[#121214] border border-[#1f1f23] rounded-xl p-3.5 flex flex-col select-none overflow-hidden">
-      {/* Title */}
-      <h3 className="text-[12px] font-bold text-white tracking-tight mb-2.5 shrink-0">
+    <div className="w-full h-full bg-[#16171a] border border-[#232428] rounded-xl py-4 flex flex-col select-none overflow-hidden text-white">
+      {/* Title with Padding */}
+      <h3 className="text-[14px] font-bold text-white tracking-tight mb-3 px-4 shrink-0">
         Vehicle List
       </h3>
 
-      <div className="flex items-center gap-1.5 overflow-x-auto pb-2 mb-2.5 shrink-0 no-scrollbar flex-nowrap">
+      {/* Filter Pills with Padding */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-2 mb-2 px-4 shrink-0 no-scrollbar flex-nowrap">
         {filters.map((filter) => (
           <button
             key={filter.label}
             onClick={() => setActiveFilter(filter.label)}
-            className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-medium transition-all duration-200 shrink-0 cursor-pointer
-              ${
-                activeFilter === filter.label
-                  ? "bg-[#27272a] border border-[#3f3f46] text-white"
-                  : "bg-[#18181b] border border-transparent text-[#a1a1aa] hover:text-[#d4d4d8]"
-              }`}
+            className={`flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-medium transition-colors shrink-0 cursor-pointer ${
+              activeFilter === filter.label
+                ? "bg-[#292a30] text-white"
+                : "bg-[#0d0e10] text-[#8e8e93] hover:text-white"
+            }`}
           >
-            <span
-              className={`w-[10px] h-[8px] rounded-none shrink-0 ${filter.color}`}
-            />
-            {filter.label} {filter.count !== null && `(${filter.count})`}
+            <span className={`w-2 h-2 rounded-[2px] shrink-0 ${filter.color}`} />
+            <span>{filter.label}</span>
+            {filter.count !== null && (
+              <span className="text-[#8e8e93]">({filter.count})</span>
+            )}
           </button>
         ))}
       </div>
 
-      {/* Vehicle Rows - Smooth layout redistribution */}
-      <div className="flex flex-col gap-2.5 overflow-y-auto flex-1 scrollbar-thin scrollbar-thumb-zinc-800 scrollbar-track-transparent">
+      {/* Vehicle Rows - Full 100% Width Highlight */}
+      <div className="flex flex-col overflow-y-auto flex-1 scrollbar-thin scrollbar-thumb-zinc-800 scrollbar-track-transparent">
         {filteredVehicles.map((vehicle) => {
           const isSelected = selectedId === vehicle.id;
+          const plateDisplay = vehicle.plate || vehicle.registrationNumber || "N/A";
 
           return (
             <div
               key={vehicle.id}
               onClick={() => handleSelectVehicle(vehicle)}
-              className={`flex items-center justify-between py-2.5 px-3.5 rounded-lg border transition-all duration-200 w-full gap-3 shrink-0
-                ${
-                  isSelected
-                    ? "bg-[#18181b] border-[#FDBB24]/70"
-                    : "bg-[#161618] border-[#1f1f23] hover:border-[#27272a]"
-                }`}
+              className={`flex items-center justify-between py-3 px-4 w-full transition-colors duration-150 gap-3 cursor-pointer ${
+                isSelected
+                  ? "bg-[#07080a]"
+                  : "bg-transparent hover:bg-[#1f2025]"
+              }`}
             >
               {/* Left Side Info */}
-              <div className="min-w-0 flex-1 flex flex-col justify-center gap-1">
-                <div className="flex items-center gap-1.5 leading-none min-w-0">
-                  <span className="text-[12px] font-bold text-white tracking-tight shrink-0">
-                    {vehicle.plate}
+              <div className="min-w-0 flex-1 flex flex-col gap-1">
+                <div className="flex items-center gap-2 leading-none min-w-0">
+                  <span className="text-[13px] font-bold text-white tracking-tight shrink-0">
+                    {plateDisplay}
                   </span>
                   <span
                     className={`w-1.5 h-1.5 rounded-full shrink-0 ${
@@ -147,8 +148,8 @@ export default function VehiclesList({
                   </span>
                 </div>
 
-                <div className="flex items-center gap-1 text-[10px] text-[#71717a] truncate max-w-[160px]">
-                  <span className="truncate">{vehicle.driver}</span>
+                <div className="flex items-center gap-1.5 text-[11px] text-[#8e8e93] truncate">
+                  <span className="truncate">{vehicle.driver || "-"}</span>
                   <span className="shrink-0 text-[#52525b]">•</span>
                   <span className="truncate">{vehicle.info}</span>
                 </div>
@@ -157,11 +158,11 @@ export default function VehiclesList({
               {/* Right Side Info */}
               <div className="flex items-center gap-3 shrink-0">
                 <div className="text-right leading-tight">
-                  <p className="text-[12px] font-bold text-white">
+                  <p className="text-[13px] font-bold text-white">
                     {vehicle.speed}
                   </p>
-                  <p className="text-[10px] text-[#71717a] mt-0.5 max-w-[60px] truncate">
-                    {vehicle.location}
+                  <p className="text-[10px] text-[#8e8e93] mt-0.5 truncate text-right">
+                    {vehicle.location || "-"}
                   </p>
                 </div>
 
@@ -170,12 +171,7 @@ export default function VehiclesList({
                     event.stopPropagation();
                     handleSelectVehicle(vehicle);
                   }}
-                  className={`h-7 px-2.5 rounded-md text-[10px] font-semibold transition-all shrink-0 cursor-pointer flex items-center justify-center whitespace-nowrap
-                    ${
-                      isSelected
-                        ? "text-[#ffff] border border-[#FDBB24]"
-                        : "text-[#ffff] border border-[#FDBB24]/40 bg-transparent hover:bg-[#ffff]/10"
-                    }`}
+                  className="h-7 px-3 rounded-md text-[11px] font-semibold transition-colors shrink-0 cursor-pointer flex items-center justify-center whitespace-nowrap text-[#eab308] border border-[#eab308]/70 bg-transparent hover:bg-[#eab308]/10"
                 >
                   View Details
                 </button>
