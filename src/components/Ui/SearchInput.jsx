@@ -11,7 +11,7 @@ export default function SearchInput({
   ...props
 }) {
   return (
-    <div className={`relative flex-1 sm:flex-initial min-w-36 ${containerClassName}`}>
+    <div className={`relative flex-1 min-w-0 sm:flex-initial ${containerClassName}`}>
       <input
         type="text"
         value={value}

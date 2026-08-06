@@ -21,7 +21,7 @@ export const StatCard = ({
   return (
     <div
       onClick={onClick}
-      className="bg-[#121214] border border-[#1d1d20] rounded-xl p-2.5 flex flex-col justify-between hover:border-[#27272a] transition-all relative overflow-hidden group cursor-pointer w-full h-full min-h-[76px]"
+      className="bg-[#121214] border border-[#1d1d20] rounded-xl p-2 min-[1152px]:p-2.5 flex flex-col justify-between hover:border-[#27272a] transition-all relative overflow-hidden group cursor-pointer w-full h-full min-h-[76px] min-w-0"
     >
       {/* Top Section: Icon + Value + Subtitle + Side Metrics */}
       <div className="flex-1 flex items-center min-h-0">

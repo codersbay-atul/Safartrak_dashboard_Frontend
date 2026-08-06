@@ -109,7 +109,7 @@ export default function Sidebar({ activeTab, setActiveTab }) {
       )}
 
       <aside
-        className={`fixed lg:static top-0 left-0 z-45 w-56.25 h-screen bg-[##121212] border-r border-[#2A2A2F] flex flex-col justify-between overflow-hidden select-none py-3 transition-transform duration-300 ease-in-out
+        className={`fixed lg:static top-0 left-0 z-45 w-52 xl:w-56.25 h-screen bg-[##121212] border-r border-[#2A2A2F] flex flex-col justify-between overflow-hidden select-none py-3 transition-transform duration-300 ease-in-out
           ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}
       >
         <div className="flex flex-col flex-1 min-h-0">

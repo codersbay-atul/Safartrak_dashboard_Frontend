@@ -118,10 +118,10 @@ export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }
   
 
   return (
-    <header className="flex items-center justify-between px-3 py-3 border-b border-[#1f1f23] bg-[#09090b] sticky top-0 z-30 select-none">
+    <header className="flex items-center justify-between px-2.5 min-[1152px]:px-3 py-2.5 xl:py-3 border-b border-[#1f1f23] bg-[#09090b] sticky top-0 z-30 select-none gap-2 min-w-0">
       
       {/* Left Side: Breadcrumb Title */}
-      <div className="flex items-center gap-2.5 text-[15px] text-[#a1a1aa] font-medium tracking-wide min-w-0">
+      <div className="flex items-center gap-2 xl:gap-2.5 text-[14px] xl:text-[15px] text-[#a1a1aa] font-medium tracking-wide min-w-0 flex-1">
         <div className="w-10 h-1 shrink-0 lg:hidden" />
         <ActiveIcon size={20} className="text-[#71717a] shrink-0" />
         {showRouteBreadcrumb ? (
@@ -144,7 +144,7 @@ export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }
           </span>
         )}
       </div>
-      <div className="flex items-center gap-2.5 shrink-0">
+      <div className="flex items-center gap-2 xl:gap-2.5 shrink-0">
         
       
         <NavPopoverWrapper isOpen={activePopover === 'notif'} onClose={closePopover}>
@@ -204,13 +204,13 @@ export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }
         </NavPopoverWrapper>
 
         {/* 3. Live System Date */}
-        <div className="hidden sm:block text-right leading-none shrink-0">
-          <p className="text-[15px] font-semibold text-white">{weekday},</p>
+        <div className="hidden lg:block text-right leading-none shrink-0">
+          <p className="text-[14px] xl:text-[15px] font-semibold text-white">{weekday},</p>
           <p className="text-[10px] text-[#a1a1aa] mt-0.5">{monthDayYear}</p>
         </div>
 
 
-        <div className="hidden md:flex flex-col text-right leading-none shrink-0 pr-3">
+        <div className="hidden xl:flex flex-col text-right leading-none shrink-0 pr-3">
          
           <p className="text-[10px] text-[#a1a1aa] mt-0.5">{displayRole}</p>
         </div>

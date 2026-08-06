@@ -94,9 +94,9 @@ export default function StatsCard() {
   });
 
   return (
-    <div className="grid grid-cols-[repeat(5,minmax(0,1fr))] gap-2 mt-0 pt-0 select-none w-full shrink-0">
+    <div className="grid grid-cols-[repeat(5,minmax(0,1fr))] gap-1.5 min-[1152px]:gap-2 xl:gap-2.5 mt-0 pt-0 select-none w-full shrink-0 min-w-0">
       {statsData.map((card) => (
-        <div key={card.id} className="min-h-[112px] [&>*]:h-full">
+        <div key={card.id} className="min-h-[100px] xl:min-h-[112px] min-w-0 [&>*]:h-full">
           <StatCard
             {...card}
             onClick={card.id === "active_vehicles" ? () => navigate("/vehicles") : card.onClick}

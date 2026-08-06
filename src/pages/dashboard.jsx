@@ -62,7 +62,7 @@ export default function Dashboard() {
         }`}
       >
         <div
-          className={`absolute inset-0 flex flex-col gap-3 overflow-hidden min-h-0 ${
+          className={`absolute inset-0 flex flex-col gap-2.5 xl:gap-3 overflow-hidden min-h-0 ${
             isRouteView
               ? "invisible pointer-events-none"
               : "visible pointer-events-auto"
@@ -76,8 +76,8 @@ export default function Dashboard() {
             <StatsCard />
           </div>
 
-          <div className="flex flex-row gap-3.5 items-stretch w-full flex-1 min-h-0 overflow-hidden">
-            <div className="h-full min-h-0 overflow-hidden transition-all duration-300 w-[380px] xl:w-[400px] shrink-0">
+          <div className="flex flex-row gap-2.5 min-[1152px]:gap-3 xl:gap-3.5 items-stretch w-full flex-1 min-h-0 overflow-hidden">
+            <div className="h-full min-h-0 overflow-hidden transition-all duration-300 w-[clamp(260px,32%,360px)] xl:w-[380px] 2xl:w-[400px] shrink-0">
               <VehiclesList
                 search={vehicleSearch}
                 selectedVehicle={selectedVehicle}
@@ -88,7 +88,7 @@ export default function Dashboard() {
               />
             </div>
 
-            <div className="flex-1 min-w-0 h-full min-h-0 overflow-hidden">
+            <div className="flex-1 min-w-[200px] h-full min-h-0 overflow-hidden">
               <LivePositions
                 selectedVehicle={selectedVehicle}
                 showRoutePath={false}
@@ -97,7 +97,7 @@ export default function Dashboard() {
             </div>
 
             {selectedVehicle && showDetailsPanel && (
-              <div className="w-75 xl:w-[320px] shrink-0 h-full min-h-0 overflow-hidden animate-in slide-in-from-right-5 duration-300">
+              <div className="w-[clamp(220px,24%,280px)] xl:w-[300px] 2xl:w-[320px] shrink-0 h-full min-h-0 overflow-hidden animate-in slide-in-from-right-5 duration-300">
                 <DashboardVehicleDetails
                   vehicle={selectedVehicle}
                   onViewRoute={() => setIsRouteView(true)}
@@ -125,14 +125,14 @@ export default function Dashboard() {
               <TripStatsCard vehicle={selectedVehicle} />
             </div>
 
-            <div className="flex flex-row gap-3.5 items-stretch w-full flex-1 min-h-0 overflow-hidden">
-              <div className="flex-1 min-w-0 h-full min-h-0 overflow-hidden rounded-lg">
+            <div className="flex flex-row gap-2.5 min-[1152px]:gap-3 xl:gap-3.5 items-stretch w-full flex-1 min-h-0 overflow-hidden">
+              <div className="flex-1 min-w-[220px] h-full min-h-0 overflow-hidden rounded-lg">
                 <LivePositions
                   selectedVehicle={selectedVehicle}
                   showRoutePath={true}
                 />
               </div>
-              <div className="w-[320px] xl:w-87.5 shrink-0 h-full min-h-0 overflow-hidden">
+              <div className="w-[clamp(260px,28%,320px)] xl:w-[320px] 2xl:w-[350px] shrink-0 h-full min-h-0 overflow-hidden">
                 <VehicleRouteDetails
                   vehicle={selectedVehicle}
                   onClose={() => {

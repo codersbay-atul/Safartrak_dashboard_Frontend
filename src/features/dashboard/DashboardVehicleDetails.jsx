@@ -191,11 +191,11 @@ export default function DashboardVehicleDetails({ vehicle, onViewRoute }) {
   };
 
   return (
-    <div className="w-full h-full bg-[#16161a] border border-[#1f1f23] rounded-xl p-3 flex flex-col justify-between select-none overflow-hidden">
+    <div className="w-full h-full bg-[#16161a] border border-[#1f1f23] rounded-xl p-2.5 xl:p-3 flex flex-col justify-between select-none overflow-hidden min-w-0">
       {/* 1. Header */}
       <div className="flex items-center justify-between pb-1.5 shrink-0 border-b border-zinc-800/40">
         <div className="flex items-center gap-1.5 min-w-0">
-          <h3 className="text-[11.5px] sm:text-xs font-bold text-white tracking-tight truncate">
+          <h3 className="text-[14px] sm:text-xs font-bold text-white tracking-tight truncate">
             Vehicle Details
           </h3>
           <span
@@ -251,7 +251,7 @@ export default function DashboardVehicleDetails({ vehicle, onViewRoute }) {
       <div className="border-b border-zinc-800/20 w-full shrink-0 mb-1.5" />
 
       {/* 4. Vehicle Information List */}
-      <div className="flex flex-col flex-1 py-1 text-[9.5px] sm:text-[12px] gap-y-2 overflow-y-auto pr-0.5 mb-1.5 scrollbar-thin scrollbar-thumb-zinc-800 scrollbar-track-transparent">
+      <div className="flex flex-col flex-1 py-1 text-[9.5px] sm:text-[14px] gap-y-2 overflow-y-auto pr-0.5 mb-1.5 scrollbar-thin scrollbar-thumb-zinc-800 scrollbar-track-transparent">
         {metrics.map(
           ({
             key,

@@ -153,9 +153,11 @@ export default function TripStatsCards({ vehicle = null }) {
   const cards = useMemo(() => buildTripStats(vehicle), [vehicle]);
 
   return (
-    <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-3 lg:grid-cols-5 gap-2 mt-0 pt-0 select-none w-full shrink-0">
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-1.5 min-[1152px]:gap-2 xl:gap-2.5 mt-0 pt-0 select-none w-full shrink-0 min-w-0">
       {cards.map((card) => (
-        <StatCard key={card.id} {...card} />
+        <div key={card.id} className="min-w-0">
+          <StatCard {...card} />
+        </div>
       ))}
     </div>
   );

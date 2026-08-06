@@ -28,21 +28,21 @@ export default function PageHeader({
   };
 
   return (
-    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 w-full select-none mt-0 pt-0 shrink-0">
+    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-2.5 xl:gap-4 w-full select-none mt-0 pt-0 shrink-0 min-w-0">
       {/* 1. Left Title & Subtitle Area */}
-      <div className="min-w-0">
-        <h1 className="text-[15px] sm:text-[17px] font-bold text-white tracking-tight leading-tight">
+      <div className="min-w-0 flex-1">
+        <h1 className="text-[15px] sm:text-[17px] font-bold text-white tracking-tight leading-tight truncate">
           {title}
         </h1>
         {subtitle && (
-          <p className="text-[12px] sm:text-[10px] text-[#a1a1aa] leading-normal truncate max-w-xs sm:max-w-xl">
+          <p className="text-[12px] sm:text-[10px] text-[#a1a1aa] leading-normal truncate max-w-full xl:max-w-xl 2xl:max-w-2xl">
             {subtitle}
           </p>
         )}
       </div>
 
       {/* 2. Right Actions Container */}
-      <div className="flex items-center gap-3 w-full lg:w-auto shrink-0 justify-between lg:justify-end">
+      <div className="flex items-center gap-2 xl:gap-3 w-full lg:w-auto shrink-0 justify-between lg:justify-end min-w-0">
         {/* Search Bar */}
         {showSearch && (
           <SearchInput
@@ -50,7 +50,7 @@ export default function PageHeader({
             onChange={handleSearchChange}
             placeholder={searchPlaceholder}
             aria-label={searchPlaceholder}
-            containerClassName="w-full lg:w-[220px]"
+            containerClassName="w-full min-w-0 lg:w-[180px] xl:w-[220px] 2xl:w-[260px]"
             className="w-full"
           />
         )}

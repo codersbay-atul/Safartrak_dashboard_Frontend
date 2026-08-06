@@ -48,22 +48,22 @@ export default function RouteDashboardHeader({ onFilterChange, onSearch }) {
   };
 
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 w-full select-none mt-0 pt-0 shrink-0">
+    <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-2 xl:gap-2.5 w-full select-none mt-0 pt-0 shrink-0 min-w-0">
       {/* Left Info Area */}
-      <div className="min-w-0">
-        <h1 className="text-[15px] sm:text-[17px] font-bold text-white tracking-tight leading-tight">
+      <div className="min-w-0 shrink">
+        <h1 className="text-[15px] sm:text-[17px] font-bold text-white tracking-tight leading-tight truncate">
           Current Route
         </h1>
-        <p className="text-[9px] sm:text-[10px] text-[#a1a1aa] leading-normal truncate max-w-xs sm:max-w-xl">
+        <p className="text-[9px] sm:text-[10px] text-[#a1a1aa] leading-normal truncate max-w-full xl:max-w-xl">
           Track the selected vehicle's current trip and route progress.
         </p>
       </div>
 
       {/* Right Actions Area */}
-      <div className="flex items-center gap-1.5 w-full sm:w-auto shrink-0 justify-between sm:justify-end flex-wrap sm:flex-nowrap">
+      <div className="flex items-center gap-1.5 w-full xl:w-auto shrink-0 justify-start xl:justify-end flex-wrap min-w-0">
         
         {/* Custom Dropdown Filters */}
-        <div className="flex items-center gap-1 shrink-0 flex-wrap sm:flex-nowrap">
+        <div className="flex items-center gap-1 shrink-0 flex-wrap">
           <Dropdown
             label="Time"
             options={timeOptions}
@@ -94,7 +94,7 @@ export default function RouteDashboardHeader({ onFilterChange, onSearch }) {
         </div>
 
         {/* Search Bar Input */}
-        <div className="relative flex-1 sm:flex-initial min-w-0 sm:min-w-[150px]">
+        <div className="relative flex-1 min-w-[140px] max-w-[220px] xl:max-w-none xl:min-w-[150px] xl:flex-initial">
           <Search
             size={11}
             className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#71717a] pointer-events-none"

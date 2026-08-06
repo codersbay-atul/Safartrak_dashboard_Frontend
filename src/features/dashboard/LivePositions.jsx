@@ -30,7 +30,7 @@ export default function LivePositions({ selectedVehicle, showRoutePath, onViewMa
   return (
     <div
       ref={panelRef}
-      className="w-full h-full min-h-[350px] lg:min-h-0 bg-[#121214] border border-[#1f1f23]/60 rounded-xl flex flex-col select-none overflow-hidden relative"
+      className="w-full h-full min-h-0 bg-[#121214] border border-[#1f1f23]/60 rounded-xl flex flex-col select-none overflow-hidden relative"
     >
       
       {/* 1. Header Area */}

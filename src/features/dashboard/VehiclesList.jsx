@@ -87,14 +87,14 @@ export default function VehiclesList({
   }, [vehicles, selectedVehicle]);
 
   return (
-    <div className="w-full h-full bg-[#16171a] border border-[#232428] rounded-xl py-4 flex flex-col select-none overflow-hidden text-white">
+    <div className="w-full h-full bg-[#16171a] border border-[#232428] rounded-xl py-3 xl:py-4 flex flex-col select-none overflow-hidden text-white min-w-0">
       {/* Title with Padding */}
-      <h3 className="text-[14px] font-bold text-white tracking-tight mb-3 px-4 shrink-0">
+      <h3 className="text-[13px] xl:text-[14px] font-bold text-white tracking-tight mb-2.5 xl:mb-3 px-3 xl:px-4 shrink-0">
         Vehicle List
       </h3>
 
       {/* Filter Pills with Padding */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2 mb-2 px-4 shrink-0 no-scrollbar flex-nowrap">
+      <div className="flex items-center gap-1.5 xl:gap-2 overflow-x-auto pb-2 mb-2 px-3 xl:px-4 shrink-0 no-scrollbar flex-nowrap">
         {filters.map((filter) => (
           <button
             key={filter.label}
@@ -124,7 +124,7 @@ export default function VehiclesList({
             <div
               key={vehicle.id}
               onClick={() => handleSelectVehicle(vehicle)}
-              className={`flex items-center justify-between py-3 px-4 w-full transition-colors duration-150 gap-3 cursor-pointer ${
+              className={`flex items-center justify-between py-2.5 xl:py-3 px-3 xl:px-4 w-full transition-colors duration-150 gap-2 xl:gap-3 cursor-pointer min-w-0 ${
                 isSelected
                   ? "bg-[#07080a]"
                   : "bg-transparent hover:bg-[#1f2025]"
@@ -133,7 +133,7 @@ export default function VehiclesList({
               {/* Left Side Info */}
               <div className="min-w-0 flex-1 flex flex-col gap-1">
                 <div className="flex items-center gap-2 leading-none min-w-0">
-                  <span className="text-[13px] font-bold text-white tracking-tight shrink-0">
+                  <span className="text-[12px] xl:text-[13px] font-bold text-white tracking-tight shrink-0">
                     {plateDisplay}
                   </span>
                   <span
@@ -156,9 +156,9 @@ export default function VehiclesList({
               </div>
 
               {/* Right Side Info */}
-              <div className="flex items-center gap-3 shrink-0">
-                <div className="text-right leading-tight">
-                  <p className="text-[13px] font-bold text-white">
+              <div className="flex items-center gap-2 xl:gap-3 shrink-0">
+                <div className="text-right leading-tight min-w-0 max-w-[72px] xl:max-w-none">
+                  <p className="text-[12px] xl:text-[13px] font-bold text-white">
                     {vehicle.speed}
                   </p>
                   <p className="text-[10px] text-[#8e8e93] mt-0.5 truncate text-right">
@@ -171,7 +171,7 @@ export default function VehiclesList({
                     event.stopPropagation();
                     handleSelectVehicle(vehicle);
                   }}
-                  className="h-7 px-3 rounded-md text-[11px] font-semibold transition-colors shrink-0 cursor-pointer flex items-center justify-center whitespace-nowrap text-[#eab308] border border-[#eab308]/70 bg-transparent hover:bg-[#eab308]/10"
+                  className="h-7 px-2.5 xl:px-3 rounded-md text-[10px] xl:text-[11px] font-semibold transition-colors shrink-0 cursor-pointer flex items-center justify-center whitespace-nowrap text-[#eab308] border border-[#eab308]/70 bg-transparent hover:bg-[#eab308]/10"
                 >
                   View Details
                 </button>
