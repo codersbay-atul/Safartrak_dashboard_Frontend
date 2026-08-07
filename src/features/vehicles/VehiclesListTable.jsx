@@ -187,7 +187,7 @@ export default function VehicleListTable() {
       </div>
 
       {/* Internal Scrollable Table Content */}
-      <div className="flex-1 min-h-0 w-full overflow-y-auto overflow-x-auto custom-scrollbar relative">
+      <div className="flex-1 min-h-0 min-w-0 w-full overflow-x-auto overflow-y-auto custom-scrollbar !overflow-x-auto relative">
         {isLoading ? (
           <div className="h-full min-h-[250px] flex flex-col items-center justify-center text-[#71717a] gap-2.5">
             <Loader2 size={24} className="animate-spin text-[#ffd60a]" />

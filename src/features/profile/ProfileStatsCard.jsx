@@ -63,7 +63,7 @@ export default function ProfileStatsCard({ stats, isLoading = false }) {
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 mt-0 pt-0 select-none w-full shrink-0">
+    <div className="grid grid-cols-1 min-[1152px]:grid-cols-4 gap-2 mt-0 pt-0 select-none w-full shrink-0">
       {cardData.map((card) => (
         <div key={card.id} className="min-h-16 h-full min-w-0">
           <StatCard

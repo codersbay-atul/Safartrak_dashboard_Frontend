@@ -31,30 +31,30 @@ export default function ProfilePage({ user: initialUser }) {
 
   return (
     <MainLayout activeTab="Profile">
-      <div className="flex-1 flex flex-col gap-2.5 h-full min-h-0 overflow-y-auto pr-0.5 custom-scrollbar">
+      <div className="flex-1 flex flex-col gap-2.5 h-full min-h-0 min-w-0 overflow-y-auto pr-0.5 custom-scrollbar">
         <div className="shrink-0">
           <ProfileHeader onEditSettings={handleEditSettings} />
         </div>
 
-        <div className="shrink-0">
+        <div className="shrink-0 w-full min-w-0">
           <ProfileHero user={user} />
         </div>
 
         {/* Stats Row */}
-        <div className="shrink-0">
+        <div className="shrink-0 w-full min-w-0">
           <ProfileStatsCard stats={user ?? {}} />
         </div>
 
-        <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-3 gap-2.5 items-stretch">
-          <div className="h-full min-h-0 flex flex-col overflow-hidden">
+        <div className="min-h-0 min-w-0 grid grid-cols-1 min-[1152px]:grid-cols-3 gap-2.5 items-stretch min-[1152px]:flex-1">
+          <div className="w-full min-h-0 flex flex-col min-[1152px]:h-full min-[1152px]:overflow-hidden">
             <RecentActivity />
           </div>
 
-          <div className="h-full min-h-0 flex flex-col overflow-hidden">
+          <div className="w-full min-h-0 flex flex-col min-[1152px]:h-full min-[1152px]:overflow-hidden">
             <NotificationPreference />
           </div>
 
-          <div className="h-full min-h-0 flex flex-col overflow-hidden">
+          <div className="w-full min-h-0 flex flex-col min-[1152px]:h-full min-[1152px]:overflow-hidden">
             <SecurityCard user={user} />
           </div>
         </div>

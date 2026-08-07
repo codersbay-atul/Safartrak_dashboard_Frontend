@@ -69,7 +69,7 @@ export default function Users() {
 
   return (
     <MainLayout activeTab="Users">
-      <div className="h-screen max-h-screen bg-[#090b0e] flex flex-col gap-2.5 overflow-hidden text-gray-200">
+      <div className="h-screen max-h-screen bg-[#090b0e] flex flex-col gap-2.5 overflow-y-auto min-[1152px]:overflow-hidden text-gray-200">
         <div className="shrink-0">
           <UserHeader onAddUserClick={handleAddUser} />
         </div>
@@ -78,8 +78,8 @@ export default function Users() {
           <UserStats />
         </div>
 
-        <div className="flex-1 min-h-0 grid grid-cols-12 gap-2.5 overflow-hidden mt-1">
-          <div className="col-span-8 h-full min-h-0">
+        <div className="flex-1 min-h-0 grid grid-cols-1 min-[1152px]:grid-cols-12 gap-2.5 overflow-y-auto min-[1152px]:overflow-hidden mt-1">
+          <div className="min-[1152px]:col-span-8 w-full h-[420px] min-[1152px]:h-full min-h-0 shrink-0">
             <DriverList
               selectedUser={selectedUser}
               onSelectUser={setSelectedUser}
@@ -87,7 +87,7 @@ export default function Users() {
             />
           </div>
 
-          <div className="col-span-4 h-full min-h-0">
+          <div className="min-[1152px]:col-span-4 w-full h-[480px] min-[1152px]:h-full min-h-0 shrink-0">
             <DriverDetailsPanel user={selectedUser} onUserUpdated={handleUserUpdated} />
           </div>
         </div>

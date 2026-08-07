@@ -149,8 +149,8 @@ export default function DriverList({ selectedUser, onSelectUser, refreshTrigger 
       </div>
 
       {/* Users Table */}
-      <div className="flex-1 overflow-y-auto custom-scrollbar">
-        <table className="w-full text-left border-collapse">
+      <div className="flex-1 min-h-0 min-w-0 overflow-x-auto overflow-y-auto custom-scrollbar !overflow-x-auto">
+        <table className="w-full text-left border-collapse min-w-[850px]">
           <thead>
             <tr className="border-b border-[#27272a] bg-[#18181b]/40 text-[10px] text-[#a1a1aa] font-medium uppercase tracking-wider">
               <th className="py-2.5 px-4">User Details</th>
