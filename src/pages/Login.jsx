@@ -11,6 +11,16 @@ import {
   setMockSession,
 } from "../store/slices/authSlice";
 
+const REMEMBERED_USERNAME_KEY = "rememberedUsername";
+
+function getRememberedUsername() {
+  try {
+    return localStorage.getItem(REMEMBERED_USERNAME_KEY) || "";
+  } catch {
+    return "";
+  }
+}
+
 function validateLoginForm({ username, password }) {
   const errors = {};
 
@@ -31,8 +41,10 @@ export default function Login() {
   const location = useLocation();
   const isAuthenticated = useSelector(selectIsAuthenticated);
 
-  const [username, setUsername] = useState("");
+  const rememberedUsername = getRememberedUsername();
+  const [username, setUsername] = useState(rememberedUsername);
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(Boolean(rememberedUsername));
   const [fieldErrors, setFieldErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
@@ -61,6 +73,16 @@ export default function Login() {
           accessToken: result.accessToken ?? result.token,
         })
       );
+
+      try {
+        if (rememberMe) {
+          localStorage.setItem(REMEMBERED_USERNAME_KEY, username.trim());
+        } else {
+          localStorage.removeItem(REMEMBERED_USERNAME_KEY);
+        }
+      } catch {
+        // Ignore storage failures (private mode / quota).
+      }
 
       const redirectTo = location.state?.from?.pathname || "/dashboard";
       navigate(redirectTo, { replace: true });
@@ -118,7 +140,17 @@ export default function Login() {
           error={fieldErrors.password}
         />
 
-        <div className="flex items-center justify-end">
+        <div className="flex items-center justify-between">
+          <label className="flex items-center gap-2 cursor-pointer select-none">
+            <input
+              type="checkbox"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+              disabled={isLoading}
+              className="h-4 w-4 rounded border-[#2a2a32] bg-[#0a0a0f] accent-[#F5B700] cursor-pointer"
+            />
+            <span className="text-[12px] text-[#a1a1aa]">Remember me</span>
+          </label>
           <Link
             to="/forgot-password"
             className="text-[12px] font-medium text-[#F5B700] hover:text-[#d9a200] transition-colors"
