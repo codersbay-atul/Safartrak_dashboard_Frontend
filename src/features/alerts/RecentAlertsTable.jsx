@@ -21,14 +21,14 @@ export default function RecentAlertsTable({
   isError = false,
 }) {
   return (
-    <div className="w-full flex-1 min-h-0 bg-[#121214] border border-[#1f1f23] rounded-xl p-3 flex flex-col select-none overflow-hidden">
+    <div className="w-full flex-1 min-h-[280px] lg:min-h-0 bg-[#121214] border border-[#1f1f23] rounded-xl p-3 flex flex-col select-none overflow-hidden">
       <div className="flex items-center justify-between mb-2.5 shrink-0">
         <h3 className="text-[12px] font-bold text-white tracking-tight">
           Recent VIEW
         </h3>
       </div>
 
-      <div className="flex-1 min-h-0 overflow-auto custom-scrollbar">
+      <div className="flex-1 min-h-0 min-w-0 overflow-x-auto overflow-y-auto custom-scrollbar !overflow-x-auto">
         <table className="w-full min-w-[900px] border-collapse">
           <thead className="sticky top-0 z-10 bg-[#121214]">
             <tr className="border-b border-[#1f1f23]">

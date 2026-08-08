@@ -319,7 +319,7 @@ export default function Aoi() {
 
   return (
     <MainLayout activeTab="Area of Interest (AOI)">
-      <div className="flex-1 flex flex-col gap-2.5 min-h-0 overflow-y-auto lg:overflow-hidden text-white bg-[#09090b]">
+      <div className="flex-1 flex flex-col gap-2.5 min-h-0 overflow-y-auto min-[1152px]:overflow-hidden text-white bg-[#09090b]">
         <div className="shrink-0">
           <AoiHeader onCreateClick={() => setIsCreateModalOpen(true)} />
         </div>
@@ -328,9 +328,9 @@ export default function Aoi() {
           <AoiStats />
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-3.5 w-full flex-1 min-h-[550px] lg:min-h-0 overflow-hidden">
+        <div className="flex flex-col min-[1152px]:flex-row gap-3.5 items-stretch w-full flex-1 min-h-0 overflow-y-auto min-[1152px]:overflow-hidden">
          
-          <div className="w-full lg:w-[320px] xl:w-[340px] shrink-0 h-[380px] lg:h-full min-h-0 overflow-hidden">
+          <div className="w-full min-[1152px]:w-[320px] xl:w-[340px] shrink-0 h-[380px] min-[1152px]:h-full min-h-0 overflow-hidden">
             <AoiListPanel
               aois={formattedAois}
               selectedId={selectedId}
@@ -343,12 +343,12 @@ export default function Aoi() {
           </div>
 
           {/* Map View */}
-          <div className="flex-1 min-w-0 h-[350px] lg:h-full min-h-0 overflow-hidden">
+          <div className="w-full shrink-0 h-[350px] min-[1152px]:flex-1 min-[1152px]:h-full min-w-0 min-h-0 overflow-hidden">
             <AoiMap aois={formattedAois} selectedAoi={selectedAoi} />
           </div>
 
          
-          <div className="w-full lg:w-[300px] xl:w-[320px] shrink-0 h-[420px] lg:h-full min-h-0 overflow-hidden">
+          <div className="w-full min-[1152px]:w-[300px] xl:w-[320px] shrink-0 h-[420px] min-[1152px]:h-full min-h-0 overflow-hidden">
             <AoiDetailsPanel
               aoi={selectedAoi}
               onEdit={() => {}}

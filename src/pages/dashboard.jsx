@@ -72,8 +72,8 @@ export default function Dashboard() {
             <StatsCard />
           </div>
 
-          <div className="flex flex-row gap-2.5 min-[1152px]:gap-3 xl:gap-3.5 items-stretch w-full flex-1 min-h-0 overflow-hidden">
-            <div className="h-full min-h-0 overflow-hidden transition-all duration-300 w-[clamp(260px,32%,360px)] xl:w-[380px] 2xl:w-[400px] shrink-0">
+          <div className="flex flex-col min-[1152px]:flex-row gap-2.5 min-[1152px]:gap-3 xl:gap-3.5 items-stretch w-full flex-1 min-h-0 overflow-y-auto min-[1152px]:overflow-hidden">
+            <div className="w-full min-[1152px]:w-[clamp(260px,32%,360px)] xl:w-[380px] 2xl:w-[400px] h-[320px] min-[1152px]:h-full min-h-0 overflow-hidden transition-all duration-300 shrink-0">
               <VehiclesList
                 search={vehicleSearch}
                 selectedVehicle={selectedVehicle}
@@ -84,7 +84,7 @@ export default function Dashboard() {
               />
             </div>
 
-            <div className="flex-1 min-w-[200px] h-full min-h-0 overflow-hidden">
+            <div className="w-full shrink-0 h-[360px] min-[1152px]:flex-1 min-[1152px]:h-full min-w-0 min-[1152px]:min-w-[200px] min-h-0 overflow-hidden">
               <LivePositions
                 selectedVehicle={selectedVehicle}
                 showRoutePath={false}
@@ -93,7 +93,7 @@ export default function Dashboard() {
             </div>
 
             {selectedVehicle && showDetailsPanel && (
-              <div className="w-[clamp(220px,24%,280px)] xl:w-[300px] 2xl:w-[320px] shrink-0 h-full min-h-0 overflow-hidden animate-in slide-in-from-right-5 duration-300">
+              <div className="w-full min-[1152px]:w-[clamp(220px,24%,280px)] xl:w-[300px] 2xl:w-[320px] shrink-0 h-[480px] min-[1152px]:h-full min-h-0 overflow-hidden animate-in slide-in-from-right-5 duration-300">
                 <DashboardVehicleDetails
                   vehicle={selectedVehicle}
                   onViewRoute={() => setIsRouteView(true)}

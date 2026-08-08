@@ -218,8 +218,9 @@ export default function Mobilize() {
           <MobilizeStats />
         </div>
 
-        <div className="flex-1 min-h-0 grid grid-cols-12 gap-3 overflow-hidden mt-1">
-          <div className="col-span-12 lg:col-span-7 xl:col-span-8 h-full min-h-0">
+    
+        <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-4 items-start">
+          <div className="h-full min-h-0">
             <MobilizeVehicleList
               vehicles={filteredVehicles}
               activeFilter={statusFilter}
@@ -230,12 +231,14 @@ export default function Mobilize() {
             />
           </div>
 
-          <div className="col-span-12 lg:col-span-5 xl:col-span-4 h-full min-h-0">
-            <VehicleControlCard
-              vehicle={selectedVehicle}
-              onRequestImmobilize={handleRequestImmobilize}
-              isListLoading={loadingVehicles}
-            />
+          
+          <div className="h-full min-h-0 flex justify-end">
+            {selectedVehicle && (
+              <VehicleControlCard
+                vehicle={selectedVehicle}
+                onRequestImmobilize={handleRequestImmobilize}
+              />
+            )}
           </div>
         </div>
 

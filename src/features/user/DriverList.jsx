@@ -123,16 +123,18 @@ export default function DriverList({ selectedUser, onSelectUser, refreshTrigger 
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto overflow-x-auto custom-scrollbar min-h-0">
-        <table className="w-full text-left border-collapse min-w-[620px]">
-          <thead className="sticky top-0 bg-[#18181b] z-10">
-            <tr className="border-b border-[#27272a] text-[9px] text-[#a1a1aa] font-medium uppercase tracking-wider">
-              <th className="py-2 px-3">User Details</th>
-              <th className="py-2 px-3">Contact</th>
-              <th className="py-2 px-3">Fleet</th>
-              <th className="py-2 px-3">Role</th>
-              <th className="py-2 px-3">Status</th>
-              <th className="py-2 px-3">Last Active</th>
+      {/* Users Table */}
+      <div className="flex-1 overflow-y-auto custom-scrollbar">
+        <table className="w-full text-left border-collapse">
+          <thead>
+            <tr className="border-b border-[#27272a] bg-[#18181b]/40 text-[10px] text-[#a1a1aa] font-medium uppercase tracking-wider">
+              <th className="py-2.5 px-4">User Details</th>
+              <th className="py-2.5 px-4">Contact</th>
+              <th className="py-2.5 px-4">Fleet</th>
+              <th className="py-2.5 px-4">Role</th>
+              <th className="py-2.5 px-4">Status</th>
+              <th className="py-2.5 px-4">Last Active</th>
+              
             </tr>
           </thead>
           <tbody className="divide-y divide-[#27272a]/50 text-[10px]">
