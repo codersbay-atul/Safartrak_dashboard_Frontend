@@ -1,12 +1,16 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { LoaderCircle } from "lucide-react";
 import Button from "../components/Ui/Button";
 import AuthShell, { AuthField } from "../features/auth/AuthShell";
 import { toast } from "../components/Ui/toast";
+import { resetPasswordRequest } from "../api/authApi";
 
 export default function ResetPassword() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const resetToken = searchParams.get("token");
+
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
@@ -36,9 +40,18 @@ export default function ResetPassword() {
     e.preventDefault();
     if (!validate()) return;
 
+    if (!resetToken) {
+      toast.error("Invalid or missing reset token.");
+      return;
+    }
+
     setIsLoading(true);
 
     try {
+      await resetPasswordRequest({
+        token: resetToken,
+        new_password: newPassword,
+      });
       toast.success("Password updated successfully!");
       navigate("/password-updated");
     } catch (err) {

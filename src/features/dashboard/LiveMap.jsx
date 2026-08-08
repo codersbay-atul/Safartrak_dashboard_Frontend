@@ -1,90 +1,18 @@
-import React, { useEffect, useRef, useState } from "react";
-import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
-import L from "leaflet";
-import "leaflet/dist/leaflet.css";
+﻿import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Layers, LocateFixed, Maximize2, Minimize2, Plus, Minus } from "lucide-react";
 import {
   displayOrDash,
   getTripField,
   shouldShowNoActiveTrip,
 } from "../route-details/routeVehicleDisplay";
-
-function MapBinder({ mapRef }) {
-  const map = useMap();
-
-  useEffect(() => {
-    mapRef.current = map;
-  }, [map, mapRef]);
-
-  return null;
-}
-
-
-const activeTruckIcon = L.divIcon({
-  className: "custom-leaflet-marker",
-  html: `
-    <div class="relative flex items-center justify-center" style="width: 48px; height: 48px;">
-      <div class="absolute w-12 h-12 rounded-full bg-[#FDBB24]/10 animate-ping" style="animation-duration: 2.5s;"></div>
-      <div class="absolute w-10 h-10 rounded-full bg-[#FDBB24]/15 animate-pulse"></div>
-      <div class="relative w-9 h-9 bg-[#111115] border-2 border-[#FDBB24] rounded-lg flex items-center justify-center shadow-[0_4px_16px_rgba(253,187,36,0.6)]">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#FDBB24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="w-5.5 h-5.5">
-          <path d="M14 17H3a1.5 1.5 0 0 1-1.5-1.5v-9A1.5 1.5 0 0 1 3 5h11v12z" fill="#FDBB24" fill-opacity="0.12" />
-          <path d="M14 8.5h3.5l3.5 3.5v5H14v-8.5z" fill="#FDBB24" fill-opacity="0.2" />
-          <path d="M17.5 8.5v3.5h3z" />
-          <circle cx="5" cy="17.5" r="1.8" fill="#111115" stroke="#FDBB24" stroke-width="2" />
-          <circle cx="9.5" cy="17.5" r="1.8" fill="#111115" stroke="#FDBB24" stroke-width="2" />
-          <circle cx="16.5" cy="17.5" r="1.8" fill="#111115" stroke="#FDBB24" stroke-width="2" />
-        </svg>
-      </div>
-    </div>
-  `,
-  iconSize: [48, 48],
-  iconAnchor: [24, 24],
-});
-
-const ambientMovingIcon = L.divIcon({
-  className: "custom-leaflet-marker",
-  html: `
-    <div class="relative flex items-center justify-center" style="width: 40px; height: 40px;">
-      <div class="absolute w-9 h-9 rounded-full bg-[#10b981]/10 animate-pulse"></div>
-      <div class="relative w-7.5 h-7.5 bg-[#111115] border border-[#10b981] rounded-md flex items-center justify-center shadow-[0_2px_10px_rgba(16,185,129,0.4)]">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" class="w-4.5 h-4.5">
-          <path d="M14 17H3a1.5 1.5 0 0 1-1.5-1.5v-9A1.5 1.5 0 0 1 3 5h11v12z" fill="#10b981" fill-opacity="0.08" />
-          <path d="M14 8.5h3.5l3.5 3.5v5H14v-8.5z" />
-          <circle cx="5" cy="17.5" r="1.5" fill="#111115" stroke="#10b981" stroke-width="1.8" />
-          <circle cx="16.5" cy="17.5" r="1.5" fill="#111115" stroke="#10b981" stroke-width="1.8" />
-        </svg>
-      </div>
-    </div>
-  `,
-  iconSize: [40, 40],
-  iconAnchor: [20, 20]
-});
-
-const ambientIdleIcon = L.divIcon({
-  className: "custom-leaflet-marker",
-  html: `
-    <div class="relative flex items-center justify-center" style="width: 40px; height: 40px;">
-      <div class="relative w-7.5 h-7.5 bg-[#111115] border border-zinc-600 rounded-md flex items-center justify-center shadow-lg opacity-75">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#8b8b93" stroke-width="2" class="w-4.5 h-4.5">
-          <path d="M14 17H3a1.5 1.5 0 0 1-1.5-1.5v-9A1.5 1.5 0 0 1 3 5h11v12z" />
-          <path d="M14 8.5h3.5l3.5 3.5v5H14v-8.5z" />
-          <circle cx="5" cy="17.5" r="1.5" fill="#111115" stroke="#8b8b93" stroke-width="1.8" />
-          <circle cx="16.5" cy="17.5" r="1.5" fill="#111115" stroke="#8b8b93" stroke-width="1.8" />
-        </svg>
-      </div>
-    </div>
-  `,
-  iconSize: [40, 40],
-  iconAnchor: [20, 20]
-});
+import useLiveTrackLocations from "../../hooks/useLiveTrackLocations";
 
 const FALLBACK_CENTER = [20.5937, 78.9629];
 
 const ambientVehicles = [
-  { id: "amb-1", position: [28.6250, 77.2210], plate: "MH09-1120", type: "moving" },
-  { id: "amb-2", position: [28.6050, 77.1890], plate: "MH12-9021", type: "idle" },
-  { id: "amb-3", position: [28.5910, 77.2310], plate: "DL03-4581", type: "moving" },
+  { id: "amb-1", position: [28.625, 77.221], plate: "MH09-1120", type: "moving" },
+  { id: "amb-2", position: [28.605, 77.189], plate: "MH12-9021", type: "idle" },
+  { id: "amb-3", position: [28.591, 77.231], plate: "DL03-4581", type: "moving" },
 ];
 
 function resolvePosition(vehicle) {
@@ -104,13 +32,48 @@ function resolvePosition(vehicle) {
 }
 
 export default function LiveMap({ selectedVehicle, showRoutePath }) {
-  const mapRef = useRef(null);
   const containerRef = useRef(null);
+  const leafletMapRef = useRef(null);
+  const markersLayerRef = useRef(null);
+  const markersMapRef = useRef(null);
+  const [leafletLoaded, setLeafletLoaded] = useState(false);
   const [isMaximized, setIsMaximized] = useState(false);
+  const [bboxParams, setBboxParams] = useState(null);
   const vehicle = selectedVehicle ?? null;
+
+  const { locations } = useLiveTrackLocations({
+    refetchInterval: 30_000,
+    params: bboxParams ?? {},
+  });
+
+  const liveVehicles = useMemo(() => {
+    if (!Array.isArray(locations?.vehicles)) return [];
+    return locations.vehicles
+      .map((item) => ({
+        id: item.unique_id ?? item.reg_no ?? item.vehicle_number ?? item.id,
+        plate: item.reg_no ?? item.vehicle_number ?? item.id,
+        reg_no: item.reg_no,
+        vehicle_number: item.vehicle_number,
+        status: item.status,
+        lat: Number(item.lat),
+        lng: Number(item.lng),
+        speed: item.speed_kmh,
+        lastSeenSec: item.last_seen_sec,
+      }))
+      .filter(
+        (vehicle) =>
+          Number.isFinite(vehicle.lat) && Number.isFinite(vehicle.lng)
+      );
+  }, [locations]);
+
   const position = resolvePosition(vehicle);
-  const mapCenter =
-    position ?? (showRoutePath ? FALLBACK_CENTER : [28.6139, 77.209]);
+  const mapCenter = position
+    ? position
+    : liveVehicles.length > 0
+      ? [liveVehicles[0].lat, liveVehicles[0].lng]
+      : showRoutePath
+        ? FALLBACK_CENTER
+        : [28.6139, 77.209];
   const noActiveTrip = shouldShowNoActiveTrip(vehicle);
 
   const startedAt = noActiveTrip
@@ -136,8 +99,6 @@ export default function LiveMap({ selectedVehicle, showRoutePath }) {
   useEffect(() => {
     const onFullscreenChange = () => {
       setIsMaximized(document.fullscreenElement === containerRef.current);
-      // Leaflet needs a resize after any fullscreen enter/exit (self or parent).
-      setTimeout(() => mapRef.current?.invalidateSize(), 150);
     };
 
     document.addEventListener("fullscreenchange", onFullscreenChange);
@@ -146,8 +107,275 @@ export default function LiveMap({ selectedVehicle, showRoutePath }) {
     };
   }, []);
 
-  const handleZoomIn = () => mapRef.current?.zoomIn();
-  const handleZoomOut = () => mapRef.current?.zoomOut();
+  const updateBboxParams = () => {
+    const map = leafletMapRef.current;
+    if (!map || !map.getBounds) return;
+    try {
+      const bounds = map.getBounds();
+      if (!bounds) return;
+      const ne = bounds.getNorthEast();
+      const sw = bounds.getSouthWest();
+      const bbox = `${sw.lat},${sw.lng},${ne.lat},${ne.lng}`;
+      setBboxParams({ bbox });
+    } catch (err) {}
+  };
+
+  const handleZoomIn = () => {
+    const map = leafletMapRef.current;
+    if (map) map.setZoom(map.getZoom() + 1);
+  };
+
+  const handleZoomOut = () => {
+    const map = leafletMapRef.current;
+    if (map) map.setZoom(map.getZoom() - 1);
+  };
+
+  useEffect(() => {
+    if (leafletLoaded) return;
+
+    const loadLeaflet = () => {
+      if (window.L) {
+        setLeafletLoaded(true);
+        return;
+      }
+
+      const cssHref = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
+      const jsSrc = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
+
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = cssHref;
+      document.head.appendChild(link);
+
+      const script = document.createElement("script");
+      script.src = jsSrc;
+      script.async = true;
+      script.onload = () => {
+        setLeafletLoaded(true);
+      };
+      script.onerror = () => {
+        console.error("Failed to load Leaflet from CDN");
+      };
+      document.body.appendChild(script);
+    };
+
+    loadLeaflet();
+  }, [leafletLoaded]);
+
+  useEffect(() => {
+    if (!leafletLoaded) return;
+    if (leafletMapRef.current) return;
+
+    const container = document.getElementById("leaflet-map");
+    if (!container) return;
+
+    const L = window.L;
+    if (!L) return;
+
+    if (container._leaflet_id != null) {
+      try {
+        delete container._leaflet_id;
+      } catch (e) {
+        container._leaflet_id = null;
+      }
+      container.innerHTML = "";
+    }
+
+    const map = L.map(container, { zoomControl: false, preferCanvas: true }).setView(
+      mapCenter,
+      showRoutePath ? 13 : 12
+    );
+
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+      attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
+      maxZoom: 19,
+      subdomains: "abcd",
+      detectRetina: true,
+    }).addTo(map);
+
+    const markersLayer = L.layerGroup().addTo(map);
+    leafletMapRef.current = map;
+    markersLayerRef.current = markersLayer;
+    markersMapRef.current = new Map();
+    setTimeout(updateBboxParams, 50);
+
+    map.on("moveend", updateBboxParams);
+
+    return () => {
+      try {
+        map.off("moveend", updateBboxParams);
+        map.remove();
+      } catch (e) {}
+      const cleanupContainer = document.getElementById("leaflet-map");
+      if (cleanupContainer) {
+        cleanupContainer.innerHTML = "";
+      }
+      leafletMapRef.current = null;
+      markersLayerRef.current = null;
+    };
+  }, [leafletLoaded]);
+
+  useEffect(() => {
+    const L = window.L;
+    const map = leafletMapRef.current;
+    const layer = markersLayerRef.current;
+    if (!L || !map || !layer) return;
+
+    const markersMap = markersMapRef.current || new Map();
+
+    const escapeHtml = (str) =>
+      String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+
+    const makeTruckDivIcon = (color, isSelected, labelText) => {
+      const boxSize = isSelected ? 48 : 42;
+      const borderThemeColor = color;
+
+      const truckSvg = encodeURIComponent(`
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="18" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/>
+          <path d="M15 18H9"/>
+          <path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/>
+          <circle cx="7" cy="18" r="2"/>
+          <circle cx="17" cy="18" r="2"/>
+        </svg>
+      `);
+
+      const labelHtml = labelText
+        ? `<div style="margin-top:4px;background:rgba(23,23,28,0.9);color:#fff;padding:2px 6px;border-radius:6px;font-size:10px;font-weight:600;white-space:nowrap;border:1px solid #2a2a2f;box-shadow:0 4px 12px rgba(0,0,0,0.5);">${escapeHtml(labelText)}</div>`
+        : "";
+
+      const html = `
+        <div style="display:flex;flex-direction:column;align-items:center;transform:translateY(-50%);">
+          <div style="
+            width:${boxSize}px;
+            height:${boxSize}px;
+            background:#141416;
+            border:2px solid ${borderThemeColor};
+            border-radius:12px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+          ">
+            <img src="data:image/svg+xml;charset=UTF-8,${truckSvg}" style="display:block;width:22px;height:18px;" />
+          </div>
+          ${labelHtml}
+        </div>
+      `;
+
+      return L.divIcon({
+        html,
+        className: "",
+        iconSize: [boxSize, boxSize + (labelText ? 22 : 0)],
+        iconAnchor: [Math.round(boxSize / 2), Math.round(boxSize / 2)],
+        _label: labelText,
+      });
+    };
+
+    const upsertTruck = (id, lat, lng, color, isSelected, label) => {
+      if (markersMap.has(id)) {
+        const m = markersMap.get(id);
+        try {
+          m.setLatLng([lat, lng]);
+          if (isSelected) {
+            map.setView([lat, lng], Math.max(map.getZoom(), 15));
+          }
+
+          const curIcon = m.options && m.options.icon;
+          const labelText = String(label || "");
+          if (curIcon && curIcon.options && String(curIcon.options._label || "") !== labelText) {
+            const newIcon = makeTruckDivIcon(color, isSelected, labelText);
+            m.setIcon(newIcon);
+            m.options.icon = newIcon;
+          }
+          const el = m.getElement && m.getElement();
+          if (el) el.style.transition = "transform 0.6s linear";
+        } catch (e) {}
+      } else {
+        const icon = makeTruckDivIcon(color, isSelected, String(label || ""));
+        const marker = L.marker([lat, lng], { icon, keyboard: false, title: String(id) });
+        marker.addTo(layer);
+
+        const el = marker.getElement && marker.getElement();
+        if (el) el.style.transition = "transform 0.6s linear";
+        markersMap.set(id, marker);
+      }
+    };
+
+    const seenIds = new Set();
+
+    const selectedId = vehicle
+      ? vehicle.unique_id ?? vehicle.reg_no ?? vehicle.vehicle_number ?? vehicle.id ?? "__selected__"
+      : null;
+    const selectedLabel = vehicle
+      ? vehicle.reg_no ?? vehicle.vehicle_number ?? vehicle.plate ?? vehicle.id ?? ""
+      : "";
+    if (position) {
+      const sid = selectedId || "__selected__";
+      upsertTruck(sid, position[0], position[1], "#FDBB24", true, selectedLabel);
+      seenIds.add(sid);
+    }
+
+    if (!showRoutePath && liveVehicles.length > 0) {
+      liveVehicles
+        .filter((lv) => {
+          if (!bboxParams || !bboxParams.bbox) return true;
+          const [south, west, north, east] = bboxParams.bbox.split(",").map(Number);
+          return lv.lat >= south && lv.lat <= north && lv.lng >= west && lv.lng <= east;
+        })
+        .forEach((live) => {
+          const color =
+            live.status && String(live.status).toLowerCase().includes("idle")
+              ? "#f59e0b"
+              : live.status && String(live.status).toLowerCase().includes("offline")
+              ? "#ef4444"
+              : "#10b981";
+          upsertTruck(
+            live.id,
+            live.lat,
+            live.lng,
+            color,
+            position && live.id === (vehicle?.id ?? vehicle?.unique_id),
+            live.reg_no ?? live.vehicle_number ?? live.plate ?? live.id
+          );
+          seenIds.add(live.id);
+        });
+    } else if (!showRoutePath && liveVehicles.length === 0) {
+      ambientVehicles.forEach((amb) => {
+        const color = amb.type === "moving" ? "#10b981" : "#8b8b93";
+        upsertTruck(amb.id, amb.position[0], amb.position[1], color, false, amb.plate);
+        seenIds.add(amb.id);
+      });
+    }
+
+    Array.from(markersMap.keys()).forEach((id) => {
+      if (!seenIds.has(id)) {
+        const m = markersMap.get(id);
+        try {
+          layer.removeLayer(m);
+        } catch (e) {}
+        markersMap.delete(id);
+      }
+    });
+
+    markersMapRef.current = markersMap;
+
+    return () => {
+      try {
+        Array.from((markersMapRef.current || new Map()).values()).forEach((m) => {
+          try {
+            layer.removeLayer(m);
+          } catch (e) {}
+        });
+        markersMapRef.current = new Map();
+      } catch (e) {}
+    };
+  }, [leafletLoaded, liveVehicles, position, bboxParams, showRoutePath]);
 
   const handleToggleMaximize = async () => {
     const el = containerRef.current;
@@ -158,64 +386,35 @@ export default function LiveMap({ selectedVehicle, showRoutePath }) {
         await document.exitFullscreen?.();
       } else if (el.requestFullscreen) {
         await el.requestFullscreen();
-      } else {
-        mapRef.current?.invalidateSize();
       }
-    } catch {
-      mapRef.current?.invalidateSize();
-    }
+    } catch {}
   };
 
   const handleLocate = () => {
+    const map = leafletMapRef.current;
+    if (!map) return;
     if (position) {
-      mapRef.current?.setView(position, Math.max(mapRef.current.getZoom(), 14), {
-        animate: true,
-      });
-      return;
+      map.panTo([position[0], position[1]]);
+      map.setZoom(Math.max(map.getZoom(), 14));
     }
-    mapRef.current?.locate({ setView: true, maxZoom: 14 });
   };
 
   return (
     <div ref={containerRef} className="relative h-full w-full bg-[#0c0c0e]">
-      
-      {/* 1. LEAFLET MAP CONTAINER */}
-      <MapContainer
-        center={mapCenter}
-        zoom={showRoutePath ? 13 : 12}
-        zoomControl={false}
+      {!leafletLoaded && (
+        <div className="h-full w-full flex items-center justify-center bg-[#0b0f19] text-white text-sm">
+          Loading map...
+        </div>
+      )}
+
+      <div
+        id="leaflet-map"
         className="h-full w-full z-0"
-        style={{ background: "#0B0F19" }}
-      >
-        <TileLayer 
-          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-          attribution='&copy; OpenStreetMap'
-        />
+        style={{ display: leafletLoaded ? "block" : "none" }}
+      />
 
-        <MapBinder mapRef={mapRef} />
-        
-        {position ? (
-          <Marker position={position} icon={activeTruckIcon} />
-        ) : null}
-
-        {/* Ambient markers only on dashboard (non-route) view */}
-        {!showRoutePath
-          ? ambientVehicles.map((amb) => (
-              <Marker
-                key={amb.id}
-                position={amb.position}
-                icon={
-                  amb.type === "moving" ? ambientMovingIcon : ambientIdleIcon
-                }
-              />
-            ))
-          : null}
-      </MapContainer>
-
-     
       {showRoutePath ? (
         <>
-          {/* Top Right Mini HUD */}
           <div className="absolute top-2.5 right-2.5 w-[calc(100%-20px)] sm:w-35 bg-[#17171C] border border-[#2A2A2F] rounded-lg p-2.5 shadow-2xl z-[1000] animate-in fade-in duration-300">
             {noActiveTrip ? (
               <p className="text-[9.5px] text-zinc-400 font-medium text-center py-1">
@@ -225,20 +424,26 @@ export default function LiveMap({ selectedVehicle, showRoutePath }) {
               <>
                 <div className="grid grid-cols-2 gap-1 border-b border-zinc-800/50 pb-1 mb-1">
                   <div>
-                    <p className="text-[7.5px] text-zinc-400 font-bold uppercase tracking-wider">Started</p>
+                    <p className="text-[7.5px] text-zinc-400 font-bold uppercase tracking-wider">
+                      Started
+                    </p>
                     <p className="text-[9.5px] text-white font-extrabold mt-0.5">
                       {displayOrDash(startedAt)}
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="text-[7.5px] text-zinc-400 font-bold uppercase tracking-wider">ETA</p>
+                    <p className="text-[7.5px] text-zinc-400 font-bold uppercase tracking-wider">
+                      ETA
+                    </p>
                     <p className="text-[9.5px] text-white font-extrabold mt-0.5">
                       {displayOrDash(eta)}
                     </p>
                   </div>
                 </div>
                 <div>
-                  <p className="text-[7.5px] text-zinc-400 font-bold uppercase tracking-wider">Destination</p>
+                  <p className="text-[7.5px] text-zinc-400 font-bold uppercase tracking-wider">
+                    Destination
+                  </p>
                   <p className="text-[9.5px] text-white font-bold truncate mt-0.5">
                     {displayOrDash(destination)}
                   </p>
@@ -247,7 +452,6 @@ export default function LiveMap({ selectedVehicle, showRoutePath }) {
             )}
           </div>
 
-          {/* Bottom Left Main HUD */}
           <div className="absolute bottom-2.5 left-2.5 w-[calc(100%-20px)] sm:w-[185px] bg-[#17171C] border border-[#2A2A2F] rounded-lg p-2.5 shadow-2xl z-[1000] animate-in fade-in duration-300">
             {noActiveTrip ? (
               <p className="text-[9px] text-zinc-400 font-medium text-center py-1">
@@ -257,19 +461,25 @@ export default function LiveMap({ selectedVehicle, showRoutePath }) {
               <>
                 <div className="grid grid-cols-3 gap-1 border-b border-zinc-800/50 pb-1 mb-1">
                   <div>
-                    <p className="text-[7px] text-zinc-400 font-bold uppercase tracking-wider">Trip ID</p>
+                    <p className="text-[7px] text-zinc-400 font-bold uppercase tracking-wider">
+                      Trip ID
+                    </p>
                     <p className="text-[9px] text-[#FDBB24] font-extrabold mt-0.5">
                       {displayOrDash(tripId)}
                     </p>
                   </div>
                   <div className="text-center">
-                    <p className="text-[7px] text-zinc-400 font-bold uppercase tracking-wider">ETA</p>
+                    <p className="text-[7px] text-zinc-400 font-bold uppercase tracking-wider">
+                      ETA
+                    </p>
                     <p className="text-[9px] text-white font-extrabold mt-0.5">
                       {displayOrDash(eta)}
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="text-[7px] text-zinc-400 font-bold uppercase tracking-wider">Started</p>
+                    <p className="text-[7px] text-zinc-400 font-bold uppercase tracking-wider">
+                      Started
+                    </p>
                     <p className="text-[9px] text-white font-extrabold mt-0.5">
                       {displayOrDash(startedAt)}
                     </p>
@@ -295,24 +505,19 @@ export default function LiveMap({ selectedVehicle, showRoutePath }) {
         </>
       ) : (
         <>
-          {/* Ambient Map City Labels (Kept completely safe for Page 1) */}
-          <span className="absolute top-16 left-[62%] text-[10px] font-bold text-zinc-500/40 uppercase tracking-widest pointer-events-none z-[1000]">Delhi</span>
-          <span className="absolute top-[36%] left-[50%] text-[11px] font-extrabold text-zinc-500/20 uppercase tracking-widest pointer-events-none z-[1000]">New Delhi</span>
-          <span className="absolute top-[52%] left-[12%] text-[8px] font-semibold text-zinc-500/20 uppercase tracking-tight pointer-events-none z-[1000]">Dhaula Kuan</span>
-          <span className="absolute top-[54%] left-[34%] text-[8px] font-semibold text-zinc-500/20 uppercase tracking-tight pointer-events-none z-[1000]">Chanakyapuri</span>
+          <span className="absolute top-16 left-[62%] text-[10px] font-bold text-zinc-500/40 uppercase tracking-widest pointer-events-none z-[1000]">
+            Delhi
+          </span>
+          <span className="absolute top-[36%] left-[50%] text-[11px] font-extrabold text-zinc-500/20 uppercase tracking-widest pointer-events-none z-[1000]">
+            New Delhi
+          </span>
+          <span className="absolute top-[52%] left-[12%] text-[8px] font-semibold text-zinc-500/20 uppercase tracking-tight pointer-events-none z-[1000]">
+            Dhaula Kuan
+          </span>
+          <span className="absolute top-[54%] left-[34%] text-[8px] font-semibold text-zinc-500/20 uppercase tracking-tight pointer-events-none z-[1000]">
+            Chanakyapuri
+          </span>
 
-          {/* HUD Status tags floating cleanly */}
-          <div className="absolute top-[15%] left-[54%] z-[1000] pointer-events-none bg-[#111115]/95 px-2 py-0.5 rounded border border-[#10b981]/30">
-            <span className="text-[7.5px] font-bold text-[#10b981] tracking-wider">MH09-1120</span>
-          </div>
-          <div className="absolute top-[34%] right-[22%] z-[1000] pointer-events-none bg-[#111115]/95 px-2 py-0.5 rounded border border-zinc-700/40">
-            <span className="text-[7.5px] font-bold text-zinc-400 tracking-wider">MH12-9021</span>
-          </div>
-          <div className="absolute bottom-[24%] left-[23%] z-[1000] pointer-events-none bg-[#111115]/95 px-2 py-0.5 rounded border border-[#10b981]/30">
-            <span className="text-[7.5px] font-bold text-[#10b981] tracking-wider">DL03-4581</span>
-          </div>
-
-          {/* Active Tooltip Map Bubble — selected vehicle only */}
           {vehicle ? (
             <div className="absolute top-[56%] left-2.5 right-2.5 sm:left-[24%] sm:right-auto z-[1000] flex flex-col items-start pointer-events-auto">
               <div className="w-full sm:w-[160px] bg-[#17171C] border border-[#2A2A2F] rounded-lg p-2.5 shadow-2xl">
@@ -348,7 +553,6 @@ export default function LiveMap({ selectedVehicle, showRoutePath }) {
         </>
       )}
 
-      {/* 4. CONTROLLER BUTTONS UTILITY SYSTEM */}
       <div className="absolute right-2.5 top-2.5 z-[1000]">
         <button
           type="button"
@@ -392,7 +596,6 @@ export default function LiveMap({ selectedVehicle, showRoutePath }) {
           <Minus size={11} />
         </button>
       </div>
-
     </div>
   );
 }

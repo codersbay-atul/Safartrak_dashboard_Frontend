@@ -1,4 +1,7 @@
-import { getTrackSummary as getTrackSummaryRequest } from "../api/trackApi";
+import {
+  getTrackSummary as getTrackSummaryRequest,
+  getTrackLocations as getTrackLocationsRequest,
+} from "../api/trackApi";
 
 /**
  * Track service layer.
@@ -11,4 +14,13 @@ import { getTrackSummary as getTrackSummaryRequest } from "../api/trackApi";
  */
 export function getTrackSummary(params) {
   return getTrackSummaryRequest(params);
+}
+
+/**
+ * Load live tracking locations from GET /v1/tracking/locations.
+ * @param {{}} [params]
+ * @returns {Promise<object>}
+ */
+export function getTrackLocations(params) {
+  return getTrackLocationsRequest(params);
 }

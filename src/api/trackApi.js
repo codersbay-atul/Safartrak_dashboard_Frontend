@@ -32,3 +32,15 @@ export async function getTrackSummary(params = {}) {
   });
   return unwrapPayload(response);
 }
+
+/**
+ * GET /v1/tracking/locations
+ * @param {{}} [params]
+ * @returns {Promise<object>}
+ */
+export async function getTrackLocations(params = {}) {
+  const response = await apiClient.get("/v1/tracking/locations", {
+    params,
+  });
+  return unwrapPayload(response);
+}

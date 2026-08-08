@@ -84,6 +84,10 @@ console.log("BASE URL =>", import.meta.env.VITE_API_BASE_URL);
 
 apiClient.interceptors.request.use(
   (config) => {
+    // attach a timestamp to measure request duration
+    try {
+      config.metadata = { startTime: new Date().getTime() };
+    } catch (e) {}
     // Optional: attach Bearer token when auth is introduced later.
     const token = getAccessToken();
     if (token) {
@@ -111,7 +115,19 @@ apiClient.interceptors.request.use(
 );
 
 apiClient.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    try {
+      const start = response.config?.metadata?.startTime;
+      if (start) {
+        const ms = new Date().getTime() - start;
+        // Warn on slow endpoints (>800ms) in dev only
+        if (import.meta.env.DEV && ms > 800) {
+          console.warn(`Slow API response: ${response.config.url} took ${ms}ms`);
+        }
+      }
+    } catch (e) {}
+    return response;
+  },
   (error) => Promise.reject(normalizeApiError(error))
 );
 

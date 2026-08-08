@@ -51,11 +51,7 @@ export default function Dashboard() {
       isRouteView={isRouteView}
       onExitRouteView={exitRouteView}
     >
-      {/*
-        Keep the standard dashboard mounted while route view is open.
-        Unmounting/remounting caused Live Position to re-enter with a
-        slide-in feel when returning from the route page.
-      */}
+    
       <div
         className={`relative flex-1 min-h-0 overflow-hidden ${
           isRouteView ? "" : "flex flex-col"

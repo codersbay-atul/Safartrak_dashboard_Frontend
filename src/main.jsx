@@ -4,7 +4,6 @@ import { Provider } from "react-redux";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "./index.css";
 import App from "./App.jsx";
-import "leaflet/dist/leaflet.css";
 import { store } from "./store";
 import { setupApiClient } from "./api/client";
 import ToastHost from "./components/Ui/ToastHost";
@@ -12,9 +11,13 @@ import ToastHost from "./components/Ui/ToastHost";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 30_000,
-      retry: 2,
-      refetchOnWindowFocus: true,
+      // Increase default cache lifetime to reduce frequent refetches across pages
+      staleTime: 120_000,
+      // Fewer automatic retries to avoid repeat load during transient issues
+      retry: 1,
+      // Avoid refetching whenever window regains focus — keep manual control
+      refetchOnWindowFocus: false,
+      refetchIntervalInBackground: false,
     },
   },
 });

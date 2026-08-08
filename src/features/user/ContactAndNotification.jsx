@@ -8,7 +8,7 @@ const DEFAULT_OPTIONS = {
   smsNotifications: false,
 };
 
-export default function ContactAndNotification({ isOpen, onClose, onSave, initialData }) {
+export default function ContactAndNotification({ isOpen, onClose, onSave, initialData, isSaving = false }) {
   const [options, setOptions] = useState(DEFAULT_OPTIONS);
 
   useEffect(() => {
@@ -86,15 +86,17 @@ export default function ContactAndNotification({ isOpen, onClose, onSave, initia
             <button
               type="button"
               onClick={onClose}
-              className="w-full py-2.5 rounded-xl text-[11px] font-semibold bg-[#27272a]/70 hover:bg-[#27272a] text-white transition-colors cursor-pointer"
+              disabled={isSaving}
+              className={`w-full py-2.5 rounded-xl text-[11px] font-semibold bg-[#27272a]/70 hover:bg-[#27272a] text-white transition-colors ${isSaving ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}`}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="w-full py-2.5 rounded-xl text-[11px] font-bold text-black bg-[#ffd60a] hover:bg-[#e6c200] transition-colors cursor-pointer"
+              disabled={isSaving}
+              className={`w-full py-2.5 rounded-xl text-[11px] font-bold text-black bg-[#ffd60a] hover:bg-[#e6c200] transition-colors ${isSaving ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}`}
             >
-              Save
+              {isSaving ? "Saving..." : "Save"}
             </button>
           </div>
         </form>

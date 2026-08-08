@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 import MobilizeHeader from "../features/mobilize/MobilizeHeader";
@@ -80,7 +81,7 @@ export default function Mobilize() {
     setPendingVehicle(null);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     let mounted = true;
     setLoadingVehicles(true);
 
@@ -94,13 +95,6 @@ export default function Mobilize() {
       .then((res) => {
         if (!mounted) return;
         const vehiclesList = Array.isArray(res) ? res : [];
-        // debug: log fetched raw response shape and extracted array
-        try {
-           
-          console.log("[Mobilize] getCommandVehicles response:", res);
-           
-          console.log("[Mobilize] extracted vehicles count:", vehiclesList.length);
-        } catch (e) {}
         const normalized = vehiclesList.map((v, idx) => ({
           ...v,
           id: v.id ?? v.unique_id ?? v.uniqueId ?? v.plate ?? `veh_${idx}`,
@@ -150,14 +144,12 @@ export default function Mobilize() {
     setPendingVehicle(null);
   };
 
-  // Step 1 -> Step 2: Open Confirmation Modal
   const handleRequestImmobilize = (vehicle) => {
     setPendingVehicle(vehicle);
     setSelectedVehicle(vehicle);
     setCurrentStep(2);
     setIsModalOpen(true);
   };
-
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -211,8 +203,7 @@ export default function Mobilize() {
 
   return (
     <MainLayout activeTab="Mobilize / Immobilize">
-      <div className="relative flex-1 flex flex-col gap-2.5 w-full h-full min-h-0 overflow-hidden bg-[#09090b] text-white">
-        {/* Header Section */}
+      <div className="h-[calc(100vh-2rem)] max-h-screen bg-[#09090b] flex flex-col gap-2 p-3 overflow-hidden text-white">
         <div className="shrink-0">
           <MobilizeHeader
             searchQuery={searchQuery}
@@ -223,14 +214,12 @@ export default function Mobilize() {
           />
         </div>
 
-        {/* Stats Row */}
         <div className="shrink-0">
           <MobilizeStats />
         </div>
 
-    
-        <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-4 items-start">
-          <div className="h-full min-h-0">
+        <div className="flex-1 min-h-0 grid grid-cols-12 gap-3 overflow-hidden mt-1">
+          <div className="col-span-12 lg:col-span-7 xl:col-span-8 h-full min-h-0">
             <MobilizeVehicleList
               vehicles={filteredVehicles}
               activeFilter={statusFilter}
@@ -241,14 +230,12 @@ export default function Mobilize() {
             />
           </div>
 
-          
-          <div className="h-full min-h-0 flex justify-end">
-            {selectedVehicle && (
-              <VehicleControlCard
-                vehicle={selectedVehicle}
-                onRequestImmobilize={handleRequestImmobilize}
-              />
-            )}
+          <div className="col-span-12 lg:col-span-5 xl:col-span-4 h-full min-h-0">
+            <VehicleControlCard
+              vehicle={selectedVehicle}
+              onRequestImmobilize={handleRequestImmobilize}
+              isListLoading={loadingVehicles}
+            />
           </div>
         </div>
 
@@ -261,7 +248,8 @@ export default function Mobilize() {
             />
           </div>
         )}
-            {isModalOpen && currentStep === 3 && (
+
+        {isModalOpen && currentStep === 3 && (
           <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-4">
             <VehiclesControlMobilized
               vehicle={pendingVehicle || selectedVehicle}
@@ -272,7 +260,6 @@ export default function Mobilize() {
             />
           </div>
         )}
-     
       </div>
     </MainLayout>
   );

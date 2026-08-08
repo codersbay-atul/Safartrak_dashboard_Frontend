@@ -73,3 +73,18 @@ export async function verifyOtpRequest(payload) {
 
   return response?.data?.data ?? response?.data ?? {};
 }
+
+/**
+ * Reset password via POST /v1/auth/reset-password.
+ *
+ * @param {{ token: string, new_password: string }} payload
+ * @returns {Promise<object>}
+ */
+export async function resetPasswordRequest(payload) {
+  const response = await apiClient.post("/v1/auth/reset-password", {
+    token: String(payload?.token ?? "").trim(),
+    new_password: String(payload?.new_password ?? "").trim(),
+  });
+
+  return response?.data?.data ?? response?.data ?? {};
+}

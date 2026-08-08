@@ -22,6 +22,7 @@ import {
   LogOut,
   ChevronRight
 } from 'lucide-react';
+import { useNotifications, useMarkNotificationsRead } from '../hooks/useNotifications';
 
 import { useOutsideClick } from '../hooks/UseOutsideClick';
 import Popover from '../components/Ui/Popover';
@@ -64,10 +65,11 @@ export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }
   const navigate = useNavigate();
   const showRouteBreadcrumb = activeTab === "Dashboard" && isRouteView;
 
-  const [unreadCount, setUnreadCount] = useState(2);
+  const [beforeCursor, setBeforeCursor] = useState(null);
   const [activePopover, setActivePopover] = useState(null); // 'notif' | 'calendar' | 'profile' | null
   
-  
+  const { notifications, isLoading: isNotificationsLoading, isFetching: isNotificationsFetching } = useNotifications({ limit: 20, before: beforeCursor });
+  const markReadMutation = useMarkNotificationsRead();
   const [currentDate, setCurrentDate] = useState(new Date());
 
   
@@ -92,7 +94,7 @@ export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }
         .join('')
         .slice(0, 2)
         .toUpperCase()
-    : 'U';
+    : undefined;
 
   const getGreeting = (date) => {
     const hour = date.getHours();
@@ -103,8 +105,24 @@ export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }
 
   const greetingText = displayName ? `${getGreeting(currentDate)}, ${displayName}` : getGreeting(currentDate);
 
+  const unreadCount = notifications?.unread_count ?? 0;
+
   const togglePopover = (key) => {
     setActivePopover(prev => (prev === key ? null : key));
+  };
+
+  const handleMarkAllRead = async () => {
+    try {
+      await markReadMutation.mutateAsync({ all: true });
+    } catch (error) {
+      console.error("Failed to mark notifications as read", error);
+    }
+  };
+
+  const handleLoadMore = () => {
+    if (notifications?.next_before) {
+      setBeforeCursor(notifications.next_before);
+    }
   };
 
   const closePopover = () => setActivePopover(null);
@@ -120,7 +138,6 @@ export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }
   return (
     <header className="flex items-center justify-between px-2.5 min-[1152px]:px-3 py-2.5 xl:py-3 border-b border-[#1f1f23] bg-[#09090b] sticky top-0 z-30 select-none gap-2 min-w-0">
       
-      {/* Left Side: Breadcrumb Title */}
       <div className="flex items-center gap-2 xl:gap-2.5 text-[14px] xl:text-[15px] text-[#a1a1aa] font-medium tracking-wide min-w-0 flex-1">
         <div className="w-10 h-1 shrink-0 lg:hidden" />
         <ActiveIcon size={20} className="text-[#71717a] shrink-0" />
@@ -154,35 +171,56 @@ export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }
             aria-label="Notifications"
           >
             <Bell size={15} />
-            {unreadCount > 0 && <span className="absolute top-1 right-1 w-1.5 h-1.5 bg-[#ef4444] rounded-full" />}
+            {unreadCount > 0 && (
+              <span className="absolute -top-1 -right-1 min-w-[18px] h-4 px-1.5 leading-4 text-[10px] font-semibold text-white bg-[#ef4444] rounded-full flex items-center justify-center">
+                {unreadCount > 9 ? "9+" : unreadCount}
+              </span>
+            )}
           </button>
 
-          <Popover isOpen={activePopover === 'notif'} className="w-72 right-0 p-3">
+          <Popover isOpen={activePopover === 'notif'} className="w-80 right-0 p-3">
             <div className="flex items-center justify-between border-b border-[#27272a] pb-2 mb-2">
               <h4 className="text-xs font-bold text-white">Notifications</h4>
               {unreadCount > 0 && (
                 <button 
-                  onClick={() => setUnreadCount(0)} 
-                  className="text-[10px] text-[#3b82f6] hover:underline cursor-pointer font-medium"
+                  onClick={handleMarkAllRead} 
+                  disabled={markReadMutation.isLoading}
+                  className="text-[10px] text-[#3b82f6] hover:underline disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer font-medium"
                 >
-                  Mark all as read
+                  {markReadMutation.isLoading ? "Marking..." : "Mark all as read"}
                 </button>
               )}
             </div>
-            <div className="flex flex-col gap-1.5">
-              <NotificationItem
-                title="Speed Threshold Exceeded" 
-                description="MH14-2394 crossed 80 km/h." 
-                time="2m ago" 
-                isUnread={true} 
-              />
-              <NotificationItem
-                title="Geofence Exit" 
-                description="MH12-9901 left Depot Terminal." 
-                time="1h ago" 
-                isUnread={false} 
-              />
+            <div className="flex flex-col gap-2 max-h-[320px] overflow-y-auto custom-scrollbar pb-2">
+              {isNotificationsLoading || isNotificationsFetching ? (
+                <div className="py-5 text-center text-[#71717a] text-[11px]">
+                  Loading notifications...
+                </div>
+              ) : notifications?.items?.length > 0 ? (
+                notifications.items.map((item) => (
+                  <NotificationItem
+                    key={item.id}
+                    title={item.title}
+                    description={item.body}
+                    time={item.created_at ? new Date(item.created_at).toLocaleString() : ""}
+                    isUnread={!item.read}
+                  />
+                ))
+              ) : (
+                <div className="py-5 text-center text-[#71717a] text-[11px]">
+                  No notifications available.
+                </div>
+              )}
             </div>
+            {notifications?.next_before ? (
+              <button
+                type="button"
+                onClick={handleLoadMore}
+                className="w-full py-2 rounded-xl bg-[#18181b] border border-[#27272a] text-[11px] text-white hover:bg-[#1f2023] transition-colors"
+              >
+                Load more
+              </button>
+            ) : null}
           </Popover>
         </NavPopoverWrapper>
 

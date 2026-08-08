@@ -42,7 +42,7 @@ export default function VehiclesControlMobilized({ vehicle, onCancel, onSendComm
               isOnline ? "bg-[#10b981] animate-pulse" : "bg-[#ef4444]"
             }`}
           />
-          <span className="text-[11px] font-medium text-[#10b981]">
+          <span className={`text-[11px] font-medium ${isOnline ? "text-[#10b981]" : "text-[#ef4444]"}`}>
             {isOnline === undefined ? "Unknown" : isOnline ? "Online" : "Offline"}
           </span>
         </div>
@@ -66,7 +66,7 @@ export default function VehiclesControlMobilized({ vehicle, onCancel, onSendComm
 
       <div className="flex flex-col gap-1 my-1">
         <span className="text-xs text-[#71717a] font-medium">Current Status</span>
-        <div className="flex items-center gap-2 text-[#10b981]">
+        <div className={`flex items-center gap-2 ${isOnline ? 'text-[#10b981]' : 'text-[#ef4444]'}`}>
           <ShieldCheck className="w-5 h-5 stroke-2" />
           <span className="text-lg font-bold">{String(status).toUpperCase()}</span>
         </div>
@@ -80,7 +80,7 @@ export default function VehiclesControlMobilized({ vehicle, onCancel, onSendComm
             <Zap className="w-4 h-4 text-[#8e8e93]" />
             <span>Ignition</span>
           </div>
-          <span className="font-bold text-[#10b981]">{ignition}</span>
+          <span className={`font-bold ${ignition === true ? 'text-[#10b981]' : ignition === false ? 'text-[#ef4444]' : 'text-white'}`}>{ignitionLabel}</span>
         </div>
 
         <div className="flex items-center justify-between">

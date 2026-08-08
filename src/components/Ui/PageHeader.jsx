@@ -29,7 +29,7 @@ export default function PageHeader({
 
   return (
     <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-2.5 xl:gap-4 w-full select-none mt-0 pt-0 shrink-0 min-w-0">
-      {/* 1. Left Title & Subtitle Area */}
+  
       <div className="min-w-0 flex-1">
         <h1 className="text-[15px] sm:text-[17px] font-bold text-white tracking-tight leading-tight truncate">
           {title}
@@ -40,8 +40,6 @@ export default function PageHeader({
           </p>
         )}
       </div>
-
-      {/* 2. Right Actions Container */}
       <div className="flex items-center gap-2 xl:gap-3 w-full lg:w-auto shrink-0 justify-between lg:justify-end min-w-0">
         {/* Search Bar */}
         {showSearch && (
@@ -78,8 +76,6 @@ export default function PageHeader({
             <Download size={18} className="shrink-0" />
           </Button>
         )}
-
-        {/* Dynamic Primary Action Button */}
         {children}
       </div>
     </div>

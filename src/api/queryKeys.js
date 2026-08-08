@@ -34,6 +34,7 @@ export const queryKeys = {
   tracking: {
     all: ["tracking"],
     live: ["tracking", "live"],
+    locations: ["tracking", "locations"],
     summary: (period) => ["tracking", "summary", period ?? "today"],
   },
   alerts: {
@@ -51,11 +52,15 @@ export const queryKeys = {
     list: (filters = {}) => ["aoi-list", filters],
     detail: (id) => ["aoi-detail", id],
   },
-    account: {
-        profile: ["account-profile"],
-        notifications: ["account-notifications"],
-        activity: (limit = 20) => ["account-activity", limit],
-    },
+  account: {
+    profile: ["account-profile"],
+    notifications: ["account-notifications"],
+    activity: (limit = 20) => ["account-activity", limit],
+  },
+  notifications: {
+    all: ["notifications"],
+    list: (params = {}) => ["notifications", params],
+  },
   reports: {
     all: ["reports"],
     types: ["reports", "types"],

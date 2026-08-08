@@ -57,6 +57,20 @@ export async function getUserDetails(userId) {
 }
 
 /**
+ * POST /v1/users
+ * @param {object} payload
+ * @returns {Promise<object>} new user payload
+ */
+export async function createUser(payload = {}) {
+  if (!payload || typeof payload !== "object") {
+    throw new Error("A valid user payload is required.");
+  }
+
+  const response = await apiClient.post("/v1/users", payload);
+  return response?.data?.data ?? response?.data ?? {};
+}
+
+/**
  * GET /v1/users?status=pending
  * @param {{ search?: string, role?: string, page?: number, page_size?: number }} [params]
  * @returns {Promise<{ results: array, counts: object, total: number, page: number, page_size: number }>}
@@ -99,5 +113,37 @@ export async function deactivateUser(userId) {
   }
 
   const response = await apiClient.post(`/v1/users/${encodeURIComponent(userId)}/deactivate`);
+  return response?.data?.data ?? response?.data ?? {};
+}
+
+/**
+ * POST /v1/users/:userId/activate
+ * @param {string|number} userId
+ * @returns {Promise<object>} activate response payload
+ */
+export async function activateUser(userId) {
+  if (!userId) {
+    throw new Error("A valid user ID is required.");
+  }
+
+  const response = await apiClient.post(`/v1/users/${encodeURIComponent(userId)}/activate`);
+  return response?.data?.data ?? response?.data ?? {};
+}
+
+/**
+ * POST /v1/users/:userId/status
+ * @param {string|number} userId
+ * @param {{ status: string }} payload
+ * @returns {Promise<object>} update status response payload
+ */
+export async function updateUserStatus(userId, payload = {}) {
+  if (!userId) {
+    throw new Error("A valid user ID is required.");
+  }
+
+  const response = await apiClient.post(
+    `/v1/users/${encodeURIComponent(userId)}/status`,
+    payload
+  );
   return response?.data?.data ?? response?.data ?? {};
 }

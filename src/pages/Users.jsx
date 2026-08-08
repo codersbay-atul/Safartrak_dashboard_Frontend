@@ -1,14 +1,17 @@
+
 import React, { useEffect, useState } from "react";
 import MainLayout from "../layouts/MainLayout";
 import UserHeader from "../features/user/UserHeader";
 import UserStats from "../features/user/UserStats";
 import DriverList from "../features/user/DriverList";
 import DriverDetailsPanel from "../features/user/DriverDetailsPanel";
-import { getUserDetails } from "../api/userApi";
+import { getUserDetails, createUser } from "../api/userApi";
+import { toast } from "../components/Ui/toast";
 
 import UserInfo from "../features/user/UserInfo";
 import AccountDetails from "../features/user/AccountDetails";
 import ContactAndNotification from "../features/user/ContactAndNotification";
+import UserResetPasswordModal from "../features/user/UserResetPassword";
 
 export default function Users() {
   const [selectedUser, setSelectedUser] = useState(null);
@@ -17,6 +20,8 @@ export default function Users() {
   const [usersRefreshKey, setUsersRefreshKey] = useState(0);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
+  const [newUserFormData, setNewUserFormData] = useState({});
+  const [isSavingNewUser, setIsSavingNewUser] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -54,12 +59,20 @@ export default function Users() {
 
   const handleAddUser = () => {
     setCurrentStep(1);
+    setNewUserFormData({});
+    setIsAddModalOpen(true);
+  };
+
+  const handleResetPasswordClick = () => {
+    setCurrentStep(4);
     setIsAddModalOpen(true);
   };
 
   const handleCloseModal = () => {
     setIsAddModalOpen(false);
     setCurrentStep(1);
+    setNewUserFormData({});
+    setIsSavingNewUser(false);
   };
 
   const handleUserUpdated = (updatedUser) => {
@@ -67,9 +80,72 @@ export default function Users() {
     setUsersRefreshKey((prev) => prev + 1);
   };
 
+  const handleUserInfoNext = (formData) => {
+    setNewUserFormData((prev) => ({ ...prev, userInfo: formData }));
+    setCurrentStep(2);
+  };
+
+  const handleAccountConfirm = (accountData) => {
+    setNewUserFormData((prev) => ({ ...prev, accountData }));
+    setCurrentStep(3);
+  };
+
+  const handleContactSave = async (options) => {
+    const userInfo = newUserFormData.userInfo || {};
+    const accountData = newUserFormData.accountData || {};
+
+    if (!userInfo.email || !accountData.username || !accountData.password) {
+      toast.error("Please complete personal information and account details before saving.");
+      return;
+    }
+
+    const payload = {
+      username: accountData.username,
+      name: userInfo.fullName,
+      email: userInfo.email,
+      phone: userInfo.phoneNumber,
+      role: userInfo.role,
+      fleet: userInfo.assignedFleet,
+      employee_id: userInfo.employeeId,
+      department: userInfo.department,
+      reporting_manager: userInfo.reportingManager,
+      temporary_password: accountData.password,
+      personal: {
+        full_name: userInfo.fullName,
+        email: userInfo.email,
+        phone: userInfo.phoneNumber,
+        employee_id: userInfo.employeeId,
+        department: userInfo.department,
+        reporting_manager: userInfo.reportingManager,
+      },
+      invite: {
+        welcome_email: Boolean(options.welcomeEmail),
+        login_credentials: Boolean(options.loginCredentials),
+      },
+      notifications: {
+        email_notifications: Boolean(options.emailNotifications),
+        sms_notifications: Boolean(options.smsNotifications),
+      },
+    };
+
+    try {
+      setIsSavingNewUser(true);
+      const createdUser = await createUser(payload);
+      toast.success("User created successfully.");
+      setUsersRefreshKey((prev) => prev + 1);
+      setSelectedUser(createdUser);
+      handleCloseModal();
+    } catch (error) {
+      console.error("Failed to create user", error);
+      toast.error(error?.message || "Unable to create user. Please try again.");
+    } finally {
+      setIsSavingNewUser(false);
+    }
+  };
+
   return (
     <MainLayout activeTab="Users">
-      <div className="h-screen max-h-screen bg-[#090b0e] flex flex-col gap-2.5 overflow-hidden text-gray-200">
+      <div className="h-[calc(100vh-2rem)] max-h-screen bg-[#090b0e] flex flex-col gap-2 p-3 overflow-hidden text-gray-200">
         <div className="shrink-0">
           <UserHeader onAddUserClick={handleAddUser} />
         </div>
@@ -78,8 +154,8 @@ export default function Users() {
           <UserStats />
         </div>
 
-        <div className="flex-1 min-h-0 grid grid-cols-12 gap-2.5 overflow-hidden mt-1">
-          <div className="col-span-8 h-full min-h-0">
+        <div className="flex-1 min-h-0 grid grid-cols-12 gap-3 overflow-hidden mt-1">
+          <div className="col-span-12 lg:col-span-7 xl:col-span-8 h-full min-h-0">
             <DriverList
               selectedUser={selectedUser}
               onSelectUser={setSelectedUser}
@@ -87,43 +163,50 @@ export default function Users() {
             />
           </div>
 
-          <div className="col-span-4 h-full min-h-0">
-            <DriverDetailsPanel user={selectedUser} onUserUpdated={handleUserUpdated} />
+          <div className="col-span-12 lg:col-span-5 xl:col-span-4 h-full min-h-0">
+            <DriverDetailsPanel
+              user={selectedUser}
+              onUserUpdated={handleUserUpdated}
+              onResetPassword={handleResetPasswordClick}
+            />
           </div>
         </div>
       </div>
 
-      {/* Step 1: User Info */}
       {currentStep === 1 && (
         <UserInfo
           isOpen={isAddModalOpen}
           onClose={handleCloseModal}
-          onNext={() => setCurrentStep(2)}
-          initialData={userApiData}
-          isLoading={isUserDetailsLoading}
+          onNext={handleUserInfoNext}
+          initialData={null}
+          isLoading={false}
         />
       )}
 
-      {/* Step 2: Account Details */}
       {currentStep === 2 && (
         <AccountDetails
           isOpen={isAddModalOpen}
           onClose={handleCloseModal}
-          onConfirm={() => setCurrentStep(3)}
-          initialData={userApiData}
+          onConfirm={handleAccountConfirm}
+          initialData={null}
         />
       )}
 
-      {/* Step 3: Contact & Notification */}
       {currentStep === 3 && (
         <ContactAndNotification
           isOpen={isAddModalOpen}
           onClose={handleCloseModal}
-          onSave={(options) => {
-            console.log("Saving user with contact options", options);
-            handleCloseModal();
-          }}
-          initialData={userApiData}
+          onSave={handleContactSave}
+          initialData={null}
+          isSaving={isSavingNewUser}
+        />
+      )}
+
+      {currentStep === 4 && (
+        <UserResetPasswordModal
+          isOpen={isAddModalOpen}
+          onClose={handleCloseModal}
+          userEmail={selectedUser?.email || userApiData?.email || ""}
         />
       )}
     </MainLayout>

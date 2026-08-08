@@ -47,8 +47,8 @@ export default function VehicleControlConfirmation({
             online ? "bg-[#0d2818] border border-[#164e27]" : "bg-[#2a1a1a] border border-[#3a3636]"
           }`}
         >
-          <span className="w-1.5 h-1.5 rounded-full bg-[#10b981] animate-pulse" />
-          <span className="text-[11px] font-medium text-[#10b981]">
+          <span className={`w-1.5 h-1.5 rounded-full ${online ? "bg-[#10b981] animate-pulse" : "bg-[#ef4444]"}`} />
+          <span className={`text-[11px] font-medium ${online ? "text-[#10b981]" : "text-[#ef4444]"}`}>
             {online === undefined ? "Unknown" : online ? "Online" : "Offline"}
           </span>
         </div>
@@ -72,7 +72,7 @@ export default function VehicleControlConfirmation({
 
       <div className="flex flex-col gap-1">
         <span className="text-xs text-[#71717a] font-medium">Current Status</span>
-        <div className="flex items-center gap-2 text-[#10b981]">
+        <div className={`flex items-center gap-2 ${online ? 'text-[#10b981]' : 'text-[#ef4444]'}`}>
           <ShieldCheck className="w-5 h-5" />
           <span className="text-base font-bold">{String(currentStatus).toUpperCase()}</span>
         </div>
@@ -86,7 +86,7 @@ export default function VehicleControlConfirmation({
             <Zap className="w-4 h-4 text-[#8e8e93]" />
             <span>Ignition</span>
           </div>
-          <span className="font-bold text-[#10b981]">{ignitionLabel}</span>
+          <span className={`font-bold ${ignition === true ? 'text-[#10b981]' : ignition === false ? 'text-[#ef4444]' : 'text-white'}`}>{ignitionLabel}</span>
         </div>
 
         <div className="flex items-center justify-between">

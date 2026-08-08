@@ -41,6 +41,13 @@ function matchesVehicleFilter(vehicle, filterLabel) {
   }
 }
 
+function getVehicleSortPriority(vehicle) {
+  const rawStatus = String(vehicle?.raw?.status ?? vehicle?.status ?? "").toLowerCase();
+  const speed = Number(vehicle?.raw?.speed_kmh ?? vehicle?.raw?.speedKmh ?? vehicle?.speed ?? 0);
+  const isRunning = rawStatus === "moving" || rawStatus === "running" || speed > 0;
+  return isRunning ? 0 : 1;
+}
+
 export default function VehiclesList({
   onSelectVehicle,
   selectedVehicle,
@@ -59,7 +66,10 @@ export default function VehiclesList({
 
   const filteredVehicles = useMemo(
     () =>
-      vehicles.filter((vehicle) => matchesVehicleFilter(vehicle, activeFilter)),
+      vehicles
+        .filter((vehicle) => matchesVehicleFilter(vehicle, activeFilter))
+        .slice()
+        .sort((a, b) => getVehicleSortPriority(a) - getVehicleSortPriority(b)),
     [vehicles, activeFilter]
   );
 

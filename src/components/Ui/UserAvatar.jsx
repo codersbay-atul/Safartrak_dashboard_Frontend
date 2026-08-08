@@ -9,7 +9,7 @@ export default function UserAvatar({ initials, name, role, onClick }) {
         .join('')
         .slice(0, 2)
         .toUpperCase()
-    : 'U');
+    : '');
 
   const displayRole = role ?? '';
 
@@ -21,10 +21,12 @@ export default function UserAvatar({ initials, name, role, onClick }) {
       <div className="w-7 h-7 rounded-full bg-[#3b82f6] flex items-center justify-center text-white font-bold text-xs shadow-sm shrink-0">
         {displayInitials}
       </div>
-      <div className="leading-none hidden md:block text-left">
-        <p className="text-[15px] font-semibold text-white truncate">{displayName}</p>
-        <p className="text-[10px] text-[#a1a1aa] mt-0.5 truncate">{displayRole}</p>
-      </div>
+      {displayName ? (
+        <div className="leading-none hidden md:block text-left">
+          <p className="text-[15px] font-semibold text-white truncate">{displayName}</p>
+          <p className="text-[10px] text-[#a1a1aa] mt-0.5 truncate">{displayRole}</p>
+        </div>
+      ) : null}
     </button>
   );
 }
