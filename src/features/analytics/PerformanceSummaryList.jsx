@@ -1,33 +1,138 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Search, ArrowUpDown } from "lucide-react";
+import { getAnalyticsPerformance } from "../../api/analyticsApi";
 
-const INITIAL_DATA = [
-  {
-    id: "1",
-    vehicleNumber: "MH12AB3482",
-    vehicleType: "Heavy Truck",
-    distance: "842 km",
-    change: "↑ 12.6%",
-    contribution: "25.9%",
-  },
-  {
-    id: "2",
-    vehicleNumber: "MH12AB3482",
-    vehicleType: "Container",
-    distance: "842 km",
-    change: "↑ 12.6%",
-    contribution: "25.9%",
-  },
-];
+function formatDistance(item) {
+  if (
+    item.distance &&
+    typeof item.distance === "string" &&
+    item.distance.toLowerCase().includes("km")
+  ) {
+    return item.distance;
+  }
+  const val = item.distance_km ?? item.distance ?? item.total_distance_km;
+  if (val == null || val === "" || String(val).toLowerCase() === "nan")
+    return "-";
+  const num = Number(val);
+  if (Number.isFinite(num)) {
+    return `${num.toLocaleString("en-US", { maximumFractionDigits: 1 })} km`;
+  }
+  return String(val);
+}
 
-export default function PerformanceSummaryList() {
+function formatChange(item) {
+  const val = item.change ?? item.change_pct ?? item.change_percentage;
+  if (val == null || val === "" || String(val).toLowerCase() === "nan")
+    return "-";
+  if (typeof val === "object") return "-";
+
+  if (typeof val === "number") {
+    const abs = Math.abs(val).toLocaleString("en-US", {
+      maximumFractionDigits: 1,
+    });
+    if (val > 0) return `↑ ${abs}%`;
+    if (val < 0) return `↓ ${abs}%`;
+    return `0%`;
+  }
+
+  const str = String(val).trim();
+  if (str.startsWith("↑") || str.startsWith("↓")) return str;
+  if (str.startsWith("+")) return `↑ ${str.slice(1).trim()}`;
+  if (str.startsWith("-")) return `↓ ${str.slice(1).trim()}`;
+
+  const num = Number(str.replace("%", "").trim());
+  if (Number.isFinite(num)) {
+    const abs = Math.abs(num).toLocaleString("en-US", {
+      maximumFractionDigits: 1,
+    });
+    if (num > 0) return `↑ ${abs}%`;
+    if (num < 0) return `↓ ${abs}%`;
+    return `0%`;
+  }
+
+  return str;
+}
+
+function formatContribution(item) {
+  const val =
+    item.contribution ?? item.contribution_pct ?? item.contribution_percentage;
+  if (val == null || val === "" || String(val).toLowerCase() === "nan")
+    return "-";
+  if (typeof val === "number") {
+    return `${val.toLocaleString("en-US", { maximumFractionDigits: 1 })}%`;
+  }
+  const str = String(val).trim();
+  if (str.endsWith("%")) return str;
+  const num = Number(str);
+  if (Number.isFinite(num)) {
+    return `${num.toLocaleString("en-US", { maximumFractionDigits: 1 })}%`;
+  }
+  return str;
+}
+
+export default function PerformanceSummaryList({ range = "24h" }) {
   const [searchTerm, setSearchTerm] = useState("");
-  const [data, setData] = useState(INITIAL_DATA);
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+    setLoading(true);
+
+    getAnalyticsPerformance({ range: range || "24h", sort: "distance" })
+      .then((res) => {
+        if (!isMounted) return;
+        const results = res?.results || [];
+        const mapped = results.map((item, idx) => ({
+          id:
+            item.id ??
+            item.vehicle_number ??
+            item.registration_number ??
+            item.plate ??
+            `row-${idx}`,
+          vehicleNumber:
+            item.vehicleNumber ??
+            item.vehicle_number ??
+            item.registration_number ??
+            item.plate ??
+            item.reg_no ??
+            item.registration ??
+            item.vehicle_reg ??
+            "-",
+          vehicleType:
+            item.vehicleType ??
+            item.vehicle_type ??
+            item.type ??
+            item.category ??
+            item.fleet_type ??
+            "-",
+          distance: formatDistance(item),
+          change: formatChange(item),
+          contribution: formatContribution(item),
+        }));
+        setData(mapped);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch analytics performance:", err);
+        if (isMounted) setData([]);
+      })
+      .finally(() => {
+        if (isMounted) setLoading(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [range]);
 
   const filteredData = data.filter(
     (item) =>
-      item.vehicleNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.vehicleType.toLowerCase().includes(searchTerm.toLowerCase()),
+      (item.vehicleNumber || "")
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      (item.vehicleType || "")
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -72,28 +177,42 @@ export default function PerformanceSummaryList() {
           </thead>
 
           <tbody className="divide-y divide-[#1c1c20] text-xs">
-            {filteredData.map((row) => (
-              <tr
-                key={row.id}
-                className="hover:bg-[#18181c]/40 transition-colors"
-              >
-                <td className="py-3 px-4 font-semibold text-white">
-                  {row.vehicleNumber}
-                </td>
-                <td className="py-3 px-4 text-[#d4d4d8] font-medium">
-                  {row.vehicleType}
-                </td>
-                <td className="py-3 px-4 text-white font-semibold">
-                  {row.distance}
-                </td>
-                <td className="py-3 px-4 text-[#e4e4e7] font-medium">
-                  {row.change}
-                </td>
-                <td className="py-3 px-4 text-white font-semibold">
-                  {row.contribution}
+            {loading ? (
+              <tr>
+                <td colSpan={5} className="py-8 text-center text-[#71717a]">
+                  Loading...
                 </td>
               </tr>
-            ))}
+            ) : filteredData.length === 0 ? (
+              <tr>
+                <td colSpan={5} className="py-8 text-center text-[#71717a]">
+                  No data available
+                </td>
+              </tr>
+            ) : (
+              filteredData.map((row) => (
+                <tr
+                  key={row.id}
+                  className="hover:bg-[#18181c]/40 transition-colors"
+                >
+                  <td className="py-3 px-4 font-semibold text-white">
+                    {row.vehicleNumber}
+                  </td>
+                  <td className="py-3 px-4 text-[#d4d4d8] font-medium">
+                    {row.vehicleType}
+                  </td>
+                  <td className="py-3 px-4 text-white font-semibold">
+                    {row.distance}
+                  </td>
+                  <td className="py-3 px-4 text-[#e4e4e7] font-medium">
+                    {row.change}
+                  </td>
+                  <td className="py-3 px-4 text-white font-semibold">
+                    {row.contribution}
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
