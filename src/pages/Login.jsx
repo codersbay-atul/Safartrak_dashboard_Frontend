@@ -1,14 +1,13 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, useLocation, useNavigate, Link } from "react-router-dom";
-import { LoaderCircle } from "lucide-react";
 import Button from "../components/Ui/Button";
 import AuthShell, { AuthField } from "../features/auth/AuthShell";
 import { toast } from "../components/Ui/toast";
-import { loginRequest } from "../api/authApi";
 import {
+  loginUser,
   selectIsAuthenticated,
-  setMockSession,
+  selectAuthStatus,
 } from "../store/slices/authSlice";
 
 const REMEMBERED_USERNAME_KEY = "rememberedUsername";
@@ -39,14 +38,17 @@ export default function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+  
   const isAuthenticated = useSelector(selectIsAuthenticated);
+  const authStatus = useSelector(selectAuthStatus);
 
   const rememberedUsername = getRememberedUsername();
   const [username, setUsername] = useState(rememberedUsername);
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(Boolean(rememberedUsername));
   const [fieldErrors, setFieldErrors] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
+
+  const isLoading = authStatus === "loading";
 
   if (isAuthenticated) {
     return <Navigate to="/dashboard" replace />;
@@ -59,42 +61,30 @@ export default function Login() {
     setFieldErrors(errors);
     if (Object.keys(errors).length > 0) return;
 
-    setIsLoading(true);
-
     try {
-      const result = await loginRequest({
-        username: username.trim(),
-        password,
-      });
-
-      dispatch(
-        setMockSession({
-          user: result.user ?? { username: username.trim() },
-          accessToken: result.accessToken ?? result.token,
+      const resultAction = await dispatch(
+        loginUser({
+          username: username.trim(),
+          password,
         })
       );
 
-      try {
-        if (rememberMe) {
-          localStorage.setItem(REMEMBERED_USERNAME_KEY, username.trim());
-        } else {
-          localStorage.removeItem(REMEMBERED_USERNAME_KEY);
-        }
-      } catch {
-        // Ignore storage failures (private mode / quota).
-      }
+      if (loginUser.fulfilled.match(resultAction)) {
+        try {
+          if (rememberMe) {
+            localStorage.setItem(REMEMBERED_USERNAME_KEY, username.trim());
+          } else {
+            localStorage.removeItem(REMEMBERED_USERNAME_KEY);
+          }
+        } catch {}
 
-      const redirectTo = location.state?.from?.pathname || "/dashboard";
-      navigate(redirectTo, { replace: true });
-    } catch (error) {
-      // API returns 403 for invalid credentials ("Vehk rejected..."), not only 401.
-      if (error?.status === 401 || error?.status === 403) {
-        toast.error("Invalid username or password");
+        const redirectTo = location.state?.from?.pathname || "/dashboard";
+        navigate(redirectTo, { replace: true });
       } else {
-        toast.error("Unable to sign in. Please try again.");
+        toast.error(resultAction.payload || "Invalid username or password");
       }
-    } finally {
-      setIsLoading(false);
+    } catch {
+      toast.error("Unable to sign in. Please try again.");
     }
   };
 
@@ -166,13 +156,7 @@ export default function Login() {
           disabled={isLoading}
           className="w-full h-[50px] mt-1 rounded-[10px] bg-[#F5B700] hover:bg-[#d9a200] text-black text-[14px] font-semibold"
         >
-          {isLoading ? (
-            <>
-              <span>Signing in...</span>
-            </>
-          ) : (
-            "Login"
-          )}
+          {isLoading ? "Signing in..." : "Login"}
         </Button>
       </form>
     </AuthShell>

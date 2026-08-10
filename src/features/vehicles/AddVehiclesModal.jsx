@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import Button from "../../components/Ui/Button";
 import Dropdown from "../../components/Ui/DropDown";
 
-// Dropdown Options
 const VEHICLE_TYPE_OPTIONS = [
   { label: "Truck", value: "Truck" },
   { label: "Van", value: "Van" },
@@ -42,37 +41,10 @@ export default function AddVehicleModal({ isOpen, onClose, onNext }) {
     vehicleColor: "",
   });
 
-  /* -------------------------------------------------------------
-     1. VALIDATION ERRORS STATE (Commented out for now)
-  ---------------------------------------------------------------- */
-  // const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState({});
 
   if (!isOpen) return null;
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-
-    /* -------------------------------------------------------------
-       2. CLEAR ERROR ON INPUT CHANGE (Commented out for now)
-    ---------------------------------------------------------------- */
-    // if (errors[name]) {
-    //   setErrors((prev) => ({ ...prev, [name]: "" }));
-    // }
-  };
-
-  // Helper for custom Dropdowns
-  const handleDropdownSelect = (field, value) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-    // if (errors[field]) {
-    //   setErrors((prev) => ({ ...prev, [field]: "" }));
-    // }
-  };
-
-  /* -------------------------------------------------------------
-     3. VALIDATION FUNCTION (Commented out for now)
-  ---------------------------------------------------------------- */
-  /*
   const validateForm = () => {
     let newErrors = {};
 
@@ -91,26 +63,35 @@ export default function AddVehicleModal({ isOpen, onClose, onNext }) {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-  */
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
+  };
+
+  const handleDropdownSelect = (field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    if (errors[field]) {
+      setErrors((prev) => ({ ...prev, [field]: "" }));
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    /* -------------------------------------------------------------
-       4. CHECK VALIDATION BEFORE NEXT PAGE (Commented out for now)
-    ---------------------------------------------------------------- */
-    // const isValid = validateForm();
-    // if (!isValid) return; 
-
-    if (onNext) onNext(formData);
+    if (validateForm()) {
+      if (onNext) onNext(formData);
+    }
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/70 backdrop-blur-xs select-none animate-fadeIn">
-      {/* Modal Card - set overflow-visible to prevent menu clipping */}
       <div className="relative w-full max-w-[480px] bg-[#121214] border border-[#27272a] rounded-2xl p-4 shadow-2xl flex flex-col overflow-visible">
         
-        {/* Header (Without Cross Button) */}
         <div className="pb-2 mb-2 border-b border-[#1d1d20]/60">
           <h2 className="text-[14px] font-bold text-white tracking-tight">
             Add Vehicle
@@ -119,7 +100,6 @@ export default function AddVehicleModal({ isOpen, onClose, onNext }) {
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-2 text-[10.5px]">
           
-          {/* Row 1: Vehicle Number & Registration Number */}
           <div className="grid grid-cols-2 gap-2">
             <div>
               <label className="block text-[#a1a1aa] mb-0.5 font-medium">Vehicle Number</label>
@@ -129,9 +109,11 @@ export default function AddVehicleModal({ isOpen, onClose, onNext }) {
                 placeholder="Enter Vehicle Number"
                 value={formData.vehicleNumber}
                 onChange={handleChange}
-                className="w-full bg-[#18181b]/60 border border-[#27272a] rounded-lg px-2.5 py-1.5 text-white placeholder-[#52525b] focus:outline-none focus:border-[#ffd60a] transition-all"
+                className={`w-full bg-[#18181b]/60 border rounded-lg px-2.5 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all ${
+                  errors.vehicleNumber ? "border-red-500 focus:border-red-500" : "border-[#27272a] focus:border-[#ffd60a]"
+                }`}
               />
-              {/* {errors.vehicleNumber && <p className="text-red-500 text-[9px] mt-0.5">{errors.vehicleNumber}</p>} */}
+              {errors.vehicleNumber && <p className="text-red-500 text-[9px] mt-0.5">{errors.vehicleNumber}</p>}
             </div>
             <div>
               <label className="block text-[#a1a1aa] mb-0.5 font-medium">Registration Number</label>
@@ -141,13 +123,14 @@ export default function AddVehicleModal({ isOpen, onClose, onNext }) {
                 placeholder="Enter Registration Number"
                 value={formData.registrationNumber}
                 onChange={handleChange}
-                className="w-full bg-[#18181b]/60 border border-[#27272a] rounded-lg px-2.5 py-1.5 text-white placeholder-[#52525b] focus:outline-none focus:border-[#ffd60a] transition-all"
+                className={`w-full bg-[#18181b]/60 border rounded-lg px-2.5 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all ${
+                  errors.registrationNumber ? "border-red-500 focus:border-red-500" : "border-[#27272a] focus:border-[#ffd60a]"
+                }`}
               />
-              {/* {errors.registrationNumber && <p className="text-red-500 text-[9px] mt-0.5">{errors.registrationNumber}</p>} */}
+              {errors.registrationNumber && <p className="text-red-500 text-[9px] mt-0.5">{errors.registrationNumber}</p>}
             </div>
           </div>
 
-          {/* Row 2: Vehicle Type & Manufacturer */}
           <div className="grid grid-cols-2 gap-2">
             <div>
               <label className="block text-[#a1a1aa] mb-0.5 font-medium">Vehicle Type</label>
@@ -156,9 +139,11 @@ export default function AddVehicleModal({ isOpen, onClose, onNext }) {
                 options={VEHICLE_TYPE_OPTIONS}
                 selectedValue={formData.vehicleType}
                 onSelect={(val) => handleDropdownSelect("vehicleType", val)}
-                className="w-full justify-between rounded-lg bg-[#18181b]/60 border-[#27272a] py-1.5 px-2.5 text-white"
+                className={`w-full justify-between rounded-lg bg-[#18181b]/60 border py-1.5 px-2.5 text-white ${
+                  errors.vehicleType ? "border-red-500" : "border-[#27272a]"
+                }`}
               />
-              {/* {errors.vehicleType && <p className="text-red-500 text-[9px] mt-0.5">{errors.vehicleType}</p>} */}
+              {errors.vehicleType && <p className="text-red-500 text-[9px] mt-0.5">{errors.vehicleType}</p>}
             </div>
 
             <div>
@@ -168,13 +153,14 @@ export default function AddVehicleModal({ isOpen, onClose, onNext }) {
                 options={MANUFACTURER_OPTIONS}
                 selectedValue={formData.manufacturer}
                 onSelect={(val) => handleDropdownSelect("manufacturer", val)}
-                className="w-full justify-between rounded-lg bg-[#18181b]/60 border-[#27272a] py-1.5 px-2.5 text-white"
+                className={`w-full justify-between rounded-lg bg-[#18181b]/60 border py-1.5 px-2.5 text-white ${
+                  errors.manufacturer ? "border-red-500" : "border-[#27272a]"
+                }`}
               />
-              {/* {errors.manufacturer && <p className="text-red-500 text-[9px] mt-0.5">{errors.manufacturer}</p>} */}
+              {errors.manufacturer && <p className="text-red-500 text-[9px] mt-0.5">{errors.manufacturer}</p>}
             </div>
           </div>
 
-          {/* Row 3: Model */}
           <div>
             <label className="block text-[#a1a1aa] mb-0.5 font-medium">Model</label>
             <input
@@ -183,12 +169,13 @@ export default function AddVehicleModal({ isOpen, onClose, onNext }) {
               placeholder="Enter Model Number"
               value={formData.model}
               onChange={handleChange}
-              className="w-full bg-[#18181b]/60 border border-[#27272a] rounded-lg px-2.5 py-1.5 text-white placeholder-[#52525b] focus:outline-none focus:border-[#ffd60a] transition-all"
+              className={`w-full bg-[#18181b]/60 border rounded-lg px-2.5 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all ${
+                errors.model ? "border-red-500 focus:border-red-500" : "border-[#27272a] focus:border-[#ffd60a]"
+              }`}
             />
-            {/* {errors.model && <p className="text-red-500 text-[9px] mt-0.5">{errors.model}</p>} */}
+            {errors.model && <p className="text-red-500 text-[9px] mt-0.5">{errors.model}</p>}
           </div>
 
-          {/* Row 4: Manufacturing Year & Fuel Type */}
           <div className="grid grid-cols-2 gap-2">
             <div>
               <label className="block text-[#a1a1aa] mb-0.5 font-medium">Manufacturing Year</label>
@@ -197,9 +184,11 @@ export default function AddVehicleModal({ isOpen, onClose, onNext }) {
                 options={MANUFACTURING_YEAR_OPTIONS}
                 selectedValue={formData.manufacturingYear}
                 onSelect={(val) => handleDropdownSelect("manufacturingYear", val)}
-                className="w-full justify-between rounded-lg bg-[#18181b]/60 border-[#27272a] py-1.5 px-2.5 text-white"
+                className={`w-full justify-between rounded-lg bg-[#18181b]/60 border py-1.5 px-2.5 text-white ${
+                  errors.manufacturingYear ? "border-red-500" : "border-[#27272a]"
+                }`}
               />
-              {/* {errors.manufacturingYear && <p className="text-red-500 text-[9px] mt-0.5">{errors.manufacturingYear}</p>} */}
+              {errors.manufacturingYear && <p className="text-red-500 text-[9px] mt-0.5">{errors.manufacturingYear}</p>}
             </div>
 
             <div>
@@ -209,13 +198,14 @@ export default function AddVehicleModal({ isOpen, onClose, onNext }) {
                 options={FUEL_TYPE_OPTIONS}
                 selectedValue={formData.fuelType}
                 onSelect={(val) => handleDropdownSelect("fuelType", val)}
-                className="w-full justify-between rounded-lg bg-[#18181b]/60 border-[#27272a] py-1.5 px-2.5 text-white"
+                className={`w-full justify-between rounded-lg bg-[#18181b]/60 border py-1.5 px-2.5 text-white ${
+                  errors.fuelType ? "border-red-500" : "border-[#27272a]"
+                }`}
               />
-              {/* {errors.fuelType && <p className="text-red-500 text-[9px] mt-0.5">{errors.fuelType}</p>} */}
+              {errors.fuelType && <p className="text-red-500 text-[9px] mt-0.5">{errors.fuelType}</p>}
             </div>
           </div>
 
-          {/* Row 5: Vehicle Capacity */}
           <div>
             <label className="block text-[#a1a1aa] mb-0.5 font-medium">Vehicle Capacity</label>
             <input
@@ -224,12 +214,13 @@ export default function AddVehicleModal({ isOpen, onClose, onNext }) {
               placeholder="Enter Vehicle Capacity"
               value={formData.vehicleCapacity}
               onChange={handleChange}
-              className="w-full bg-[#18181b]/60 border border-[#27272a] rounded-lg px-2.5 py-1.5 text-white placeholder-[#52525b] focus:outline-none focus:border-[#ffd60a] transition-all"
+              className={`w-full bg-[#18181b]/60 border rounded-lg px-2.5 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all ${
+                errors.vehicleCapacity ? "border-red-500 focus:border-red-500" : "border-[#27272a] focus:border-[#ffd60a]"
+              }`}
             />
-            {/* {errors.vehicleCapacity && <p className="text-red-500 text-[9px] mt-0.5">{errors.vehicleCapacity}</p>} */}
+            {errors.vehicleCapacity && <p className="text-red-500 text-[9px] mt-0.5">{errors.vehicleCapacity}</p>}
           </div>
 
-          {/* Row 6: Chassis Number */}
           <div>
             <label className="block text-[#a1a1aa] mb-0.5 font-medium">Chassis Number</label>
             <input
@@ -238,12 +229,13 @@ export default function AddVehicleModal({ isOpen, onClose, onNext }) {
               placeholder="Enter Chassis Number"
               value={formData.chassisNumber}
               onChange={handleChange}
-              className="w-full bg-[#18181b]/60 border border-[#27272a] rounded-lg px-2.5 py-1.5 text-white placeholder-[#52525b] focus:outline-none focus:border-[#ffd60a] transition-all"
+              className={`w-full bg-[#18181b]/60 border rounded-lg px-2.5 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all ${
+                errors.chassisNumber ? "border-red-500 focus:border-red-500" : "border-[#27272a] focus:border-[#ffd60a]"
+              }`}
             />
-            {/* {errors.chassisNumber && <p className="text-red-500 text-[9px] mt-0.5">{errors.chassisNumber}</p>} */}
+            {errors.chassisNumber && <p className="text-red-500 text-[9px] mt-0.5">{errors.chassisNumber}</p>}
           </div>
 
-          {/* Row 7: Engine Number & Vehicle Color */}
           <div className="grid grid-cols-2 gap-2">
             <div>
               <label className="block text-[#a1a1aa] mb-0.5 font-medium">Engine Number</label>
@@ -253,9 +245,11 @@ export default function AddVehicleModal({ isOpen, onClose, onNext }) {
                 placeholder="Enter Engine Number"
                 value={formData.engineNumber}
                 onChange={handleChange}
-                className="w-full bg-[#18181b]/60 border border-[#27272a] rounded-lg px-2.5 py-1.5 text-white placeholder-[#52525b] focus:outline-none focus:border-[#ffd60a] transition-all"
+                className={`w-full bg-[#18181b]/60 border rounded-lg px-2.5 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all ${
+                  errors.engineNumber ? "border-red-500 focus:border-red-500" : "border-[#27272a] focus:border-[#ffd60a]"
+                }`}
               />
-              {/* {errors.engineNumber && <p className="text-red-500 text-[9px] mt-0.5">{errors.engineNumber}</p>} */}
+              {errors.engineNumber && <p className="text-red-500 text-[9px] mt-0.5">{errors.engineNumber}</p>}
             </div>
             <div>
               <label className="block text-[#a1a1aa] mb-0.5 font-medium">Vehicle Color</label>
@@ -265,13 +259,14 @@ export default function AddVehicleModal({ isOpen, onClose, onNext }) {
                 placeholder="Enter Vehicle color"
                 value={formData.vehicleColor}
                 onChange={handleChange}
-                className="w-full bg-[#18181b]/60 border border-[#27272a] rounded-lg px-2.5 py-1.5 text-white placeholder-[#52525b] focus:outline-none focus:border-[#ffd60a] transition-all"
+                className={`w-full bg-[#18181b]/60 border rounded-lg px-2.5 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all ${
+                  errors.vehicleColor ? "border-red-500 focus:border-red-500" : "border-[#27272a] focus:border-[#ffd60a]"
+                }`}
               />
-              {/* {errors.vehicleColor && <p className="text-red-500 text-[9px] mt-0.5">{errors.vehicleColor}</p>} */}
+              {errors.vehicleColor && <p className="text-red-500 text-[9px] mt-0.5">{errors.vehicleColor}</p>}
             </div>
           </div>
 
-          {/* Bottom Action Buttons */}
           <div className="grid grid-cols-2 gap-2 pt-2 mt-2 border-t border-[#1d1d20]">
             <button
               type="button"

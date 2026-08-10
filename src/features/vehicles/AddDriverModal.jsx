@@ -16,79 +16,78 @@ export default function AddDriverModal({ isOpen, onClose, onNext, onBack }) {
     emergencyContact: "",
   });
 
-  /* -------------------------------------------------------------
-     1. VALIDATION ERRORS STATE (Commented out for now)
-  ---------------------------------------------------------------- */
-  // const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState({});
 
   if (!isOpen) return null;
+
+  const validateForm = () => {
+    let newErrors = {};
+
+    if (!formData.assignDriver) {
+      newErrors.assignDriver = "Please select a driver";
+    }
+
+    if (!formData.driverPhone.trim()) {
+      newErrors.driverPhone = "Driver phone is required";
+    } else if (!/^\+?[0-9]{7,15}$/.test(formData.driverPhone.replace(/\s+/g, ""))) {
+      newErrors.driverPhone = "Invalid phone number";
+    }
+
+    if (!formData.driverLicenseNumber.trim()) {
+      newErrors.driverLicenseNumber = "License number is required";
+    }
+
+    if (!formData.licenseExpiry.trim()) {
+      newErrors.licenseExpiry = "License expiry date is required";
+    }
+
+    if (!formData.emergencyContact.trim()) {
+      newErrors.emergencyContact = "Emergency contact is required";
+    } else if (!/^\+?[0-9]{7,15}$/.test(formData.emergencyContact.replace(/\s+/g, ""))) {
+      newErrors.emergencyContact = "Invalid phone number";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
 
-    /* -------------------------------------------------------------
-       2. CLEAR ERROR ON INPUT CHANGE (Commented out for now)
-    ---------------------------------------------------------------- */
-    // if (errors[name]) {
-    //   setErrors((prev) => ({ ...prev, [name]: "" }));
-    // }
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
   };
 
   const handleDriverSelect = (value) => {
     setFormData((prev) => ({ ...prev, assignDriver: value }));
 
-    // if (errors.assignDriver) {
-    //   setErrors((prev) => ({ ...prev, assignDriver: "" }));
-    // }
+    if (errors.assignDriver) {
+      setErrors((prev) => ({ ...prev, assignDriver: "" }));
+    }
   };
-
-  /* -------------------------------------------------------------
-     3. VALIDATION FUNCTION (Commented out for now)
-  ---------------------------------------------------------------- */
-  /*
-  const validateForm = () => {
-    let newErrors = {};
-
-    if (!formData.assignDriver) newErrors.assignDriver = "Please assign a driver";
-    if (!formData.driverPhone.trim()) newErrors.driverPhone = "Driver phone is required";
-    if (!formData.driverLicenseNumber.trim()) newErrors.driverLicenseNumber = "License number is required";
-    if (!formData.licenseExpiry.trim()) newErrors.licenseExpiry = "License expiry date is required";
-    if (!formData.emergencyContact.trim()) newErrors.emergencyContact = "Emergency contact is required";
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-  */
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    /* -------------------------------------------------------------
-       4. CHECK VALIDATION BEFORE NEXT (Commented out for now)
-    ---------------------------------------------------------------- */
-    // const isValid = validateForm();
-    // if (!isValid) return;
-
-    if (onNext) onNext(formData);
+    if (validateForm()) {
+      if (onNext) onNext(formData);
+    }
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/70 backdrop-blur-xs select-none animate-fadeIn">
-      {/* Modal Card */}
       <div className="relative w-full max-w-[480px] bg-[#121214] border border-[#27272a] rounded-2xl p-4 shadow-2xl flex flex-col overflow-hidden">
         
-        {/* Header (Without Cross Button) */}
         <div className="pb-3 mb-2 border-b border-[#1d1d20]/60">
           <h2 className="text-[14px] font-bold text-white tracking-tight">
             Add Driver
           </h2>
         </div>
 
-        {/* Compact Form Body */}
         <form onSubmit={handleSubmit} className="flex flex-col gap-3 text-[10.5px]">
           
-          {/* Assign Driver (Dropdown) */}
           <div>
             <label className="block text-[#a1a1aa] mb-1 font-medium">Assign Driver</label>
             <Dropdown
@@ -96,12 +95,13 @@ export default function AddDriverModal({ isOpen, onClose, onNext, onBack }) {
               options={DRIVER_OPTIONS}
               selectedValue={formData.assignDriver}
               onSelect={handleDriverSelect}
-              className="w-full justify-between rounded-xl bg-[#18181b]/60 border-[#27272a] py-2 text-white"
+              className={`w-full justify-between rounded-xl bg-[#18181b]/60 border py-2 text-white ${
+                errors.assignDriver ? "border-red-500" : "border-[#27272a]"
+              }`}
             />
-            {/* {errors.assignDriver && <p className="text-red-500 text-[9px] mt-1">{errors.assignDriver}</p>} */}
+            {errors.assignDriver && <p className="text-red-500 text-[9px] mt-1">{errors.assignDriver}</p>}
           </div>
 
-          {/* Row: Driver Phone & Driver License Number */}
           <div className="grid grid-cols-2 gap-2.5">
             <div>
               <label className="block text-[#a1a1aa] mb-1 font-medium">Driver Phone</label>
@@ -111,9 +111,11 @@ export default function AddDriverModal({ isOpen, onClose, onNext, onBack }) {
                 placeholder="Enter Driver Phone"
                 value={formData.driverPhone}
                 onChange={handleChange}
-                className="w-full bg-[#18181b]/60 border border-[#27272a] focus:border-[#FDBB24] rounded-xl px-3 py-2 text-white placeholder-[#52525b] focus:outline-none transition-all"
+                className={`w-full bg-[#18181b]/60 border rounded-xl px-3 py-2 text-white placeholder-[#52525b] focus:outline-none transition-all ${
+                  errors.driverPhone ? "border-red-500 focus:border-red-500" : "border-[#27272a] focus:border-[#FDBB24]"
+                }`}
               />
-              {/* {errors.driverPhone && <p className="text-red-500 text-[9px] mt-1">{errors.driverPhone}</p>} */}
+              {errors.driverPhone && <p className="text-red-500 text-[9px] mt-1">{errors.driverPhone}</p>}
             </div>
 
             <div>
@@ -124,27 +126,28 @@ export default function AddDriverModal({ isOpen, onClose, onNext, onBack }) {
                 placeholder="Enter Driver License Number"
                 value={formData.driverLicenseNumber}
                 onChange={handleChange}
-                className="w-full bg-[#18181b]/60 border border-[#27272a] focus:border-[#FDBB24] rounded-xl px-3 py-2 text-white placeholder-[#52525b] focus:outline-none transition-all"
+                className={`w-full bg-[#18181b]/60 border rounded-xl px-3 py-2 text-white placeholder-[#52525b] focus:outline-none transition-all ${
+                  errors.driverLicenseNumber ? "border-red-500 focus:border-red-500" : "border-[#27272a] focus:border-[#FDBB24]"
+                }`}
               />
-              {/* {errors.driverLicenseNumber && <p className="text-red-500 text-[9px] mt-1">{errors.driverLicenseNumber}</p>} */}
+              {errors.driverLicenseNumber && <p className="text-red-500 text-[9px] mt-1">{errors.driverLicenseNumber}</p>}
             </div>
           </div>
 
-          {/* License Expiry */}
           <div>
             <label className="block text-[#a1a1aa] mb-1 font-medium">License Expiry</label>
             <input
-              type="text"
+              type="date"
               name="licenseExpiry"
-              placeholder="Enter License Expiry"
               value={formData.licenseExpiry}
               onChange={handleChange}
-              className="w-full bg-[#18181b]/60 border border-[#27272a] focus:border-[#FDBB24] rounded-xl px-3 py-2 text-white placeholder-[#52525b] focus:outline-none transition-all"
+              className={`w-full bg-[#18181b]/60 border rounded-xl px-3 py-2 text-white placeholder-[#52525b] focus:outline-none transition-all ${
+                errors.licenseExpiry ? "border-red-500 focus:border-red-500" : "border-[#27272a] focus:border-[#FDBB24]"
+              }`}
             />
-            {/* {errors.licenseExpiry && <p className="text-red-500 text-[9px] mt-1">{errors.licenseExpiry}</p>} */}
+            {errors.licenseExpiry && <p className="text-red-500 text-[9px] mt-1">{errors.licenseExpiry}</p>}
           </div>
 
-          {/* Emergency Contact */}
           <div>
             <label className="block text-[#a1a1aa] mb-1 font-medium">Emergency Contact</label>
             <input
@@ -153,12 +156,13 @@ export default function AddDriverModal({ isOpen, onClose, onNext, onBack }) {
               placeholder="Enter Emergency Contact"
               value={formData.emergencyContact}
               onChange={handleChange}
-              className="w-full bg-[#18181b]/60 border border-[#27272a] focus:border-[#FDBB24] rounded-xl px-3 py-2 text-white placeholder-[#52525b] focus:outline-none transition-all"
+              className={`w-full bg-[#18181b]/60 border rounded-xl px-3 py-2 text-white placeholder-[#52525b] focus:outline-none transition-all ${
+                errors.emergencyContact ? "border-red-500 focus:border-red-500" : "border-[#27272a] focus:border-[#FDBB24]"
+              }`}
             />
-            {/* {errors.emergencyContact && <p className="text-red-500 text-[9px] mt-1">{errors.emergencyContact}</p>} */}
+            {errors.emergencyContact && <p className="text-red-500 text-[9px] mt-1">{errors.emergencyContact}</p>}
           </div>
 
-          {/* Buttons */}
           <div className="grid grid-cols-2 gap-2.5 pt-2 mt-2 border-t border-[#1d1d20]">
             <button
               type="button"

@@ -224,23 +224,6 @@ export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }
           </Popover>
         </NavPopoverWrapper>
 
-        <NavPopoverWrapper isOpen={activePopover === 'calendar'} onClose={closePopover}>
-          <button 
-            onClick={() => togglePopover('calendar')}
-            className="p-1.5 rounded-full bg-[#18181b] border border-[#27272a] text-[#a1a1aa] hover:text-white transition-colors cursor-pointer"
-            aria-label="Calendar Scope"
-          >
-            <Calendar size={15} />
-          </button>
-
-          <Popover isOpen={activePopover === 'calendar'} className="w-44 right-0 p-2 text-xs">
-            <p className="text-[10px] text-[#a1a1aa] font-bold uppercase tracking-wider px-2 py-1">Date Scope</p>
-            <button onClick={closePopover} className="w-full text-left px-2 py-1.5 hover:bg-[#18181b] rounded text-[#a1a1aa] hover:text-white cursor-pointer">Today</button>
-            <button onClick={closePopover} className="w-full text-left px-2 py-1.5 hover:bg-[#18181b] rounded text-[#a1a1aa] hover:text-white cursor-pointer">Last 7 Days</button>
-            <button onClick={closePopover} className="w-full text-left px-2 py-1.5 hover:bg-[#18181b] rounded text-[#a1a1aa] hover:text-white cursor-pointer">This Month</button>
-          </Popover>
-        </NavPopoverWrapper>
-
         {/* 3. Live System Date */}
         <div className="hidden lg:block text-right leading-none shrink-0">
           <p className="text-[14px] xl:text-[15px] font-semibold text-white">{weekday},</p>

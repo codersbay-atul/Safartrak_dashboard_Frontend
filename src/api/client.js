@@ -1,9 +1,5 @@
 import axios from "axios";
 
-/**
- * Shared Axios client.
- * Auth token wiring is optional and will be re-enabled when auth is added later.
- */
 let getAccessToken = () => null;
 
 export function setupApiClient({ getToken } = {}) {
@@ -12,10 +8,16 @@ export function setupApiClient({ getToken } = {}) {
   }
 }
 
-/**
- * Normalize Axios / network errors into a stable shape for UI + Redux.
- */
 export function normalizeApiError(error) {
+  if (axios.isCancel(error)) {
+    return {
+      message: "Request canceled",
+      status: null,
+      code: "CANCELED",
+      details: null,
+    };
+  }
+
   if (
     error &&
     typeof error === "object" &&
@@ -71,42 +73,80 @@ export function normalizeApiError(error) {
   };
 }
 
+const BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ||
+  "https://web.backend.safartrak.zevon.systems";
+
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || "",
+  baseURL: BASE_URL,
   timeout: 15000,
-  
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json",
   },
 });
-console.log("BASE URL =>", import.meta.env.VITE_API_BASE_URL);
+
+const pendingRequests = new Map();
+
+// Refresh Lock & Request Queue Variables to prevent multiple refresh triggers
+let isRefreshing = false;
+let failedQueue = [];
+
+const processQueue = (error, token = null) => {
+  failedQueue.forEach((prom) => {
+    if (error) {
+      prom.reject(error);
+    } else {
+      prom.resolve(token);
+    }
+  });
+  failedQueue = [];
+};
+
+function performLogout() {
+  localStorage.removeItem("access_token");
+  localStorage.removeItem("accessToken");
+  localStorage.removeItem("token");
+  localStorage.removeItem("authUser");
+  localStorage.removeItem("refresh_token");
+  localStorage.removeItem("refreshToken");
+
+  if (typeof window !== "undefined" && window.location.pathname !== "/login") {
+    window.location.href = "/login";
+  }
+}
 
 apiClient.interceptors.request.use(
   (config) => {
-    // attach a timestamp to measure request duration
-    try {
-      config.metadata = { startTime: new Date().getTime() };
-    } catch (e) {}
-    // Optional: attach Bearer token when auth is introduced later.
-    const token = getAccessToken();
+    config.metadata = { startTime: performance.now() };
+
+    const isGetRequest = (config.method || "").toLowerCase() === "get";
+    const requestKey = `${config.method}:${config.url}:${JSON.stringify(
+      config.params || {}
+    )}`;
+
+    if (isGetRequest) {
+      if (pendingRequests.has(requestKey)) {
+        const cancelController = pendingRequests.get(requestKey);
+        cancelController.abort();
+        pendingRequests.delete(requestKey);
+      }
+
+      const controller = new AbortController();
+      config.signal = config.signal || controller.signal;
+      pendingRequests.set(requestKey, controller);
+    }
+
+    const token =
+      getAccessToken() ||
+      localStorage.getItem("access_token") ||
+      localStorage.getItem("token") ||
+      localStorage.getItem("accessToken");
+
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     } else {
       delete config.headers.Authorization;
-    }
-
-    if (
-      import.meta.env.DEV &&
-      String(config.url || "").includes("/auth/login")
-    ) {
-      console.log("REQUEST CONFIG", {
-        method: config.method,
-        baseURL: config.baseURL,
-        url: config.url,
-        headers: config.headers,
-        data: config.data,
-      });
     }
 
     return config;
@@ -116,19 +156,106 @@ apiClient.interceptors.request.use(
 
 apiClient.interceptors.response.use(
   (response) => {
-    try {
-      const start = response.config?.metadata?.startTime;
-      if (start) {
-        const ms = new Date().getTime() - start;
-        // Warn on slow endpoints (>800ms) in dev only
-        if (import.meta.env.DEV && ms > 800) {
-          console.warn(`Slow API response: ${response.config.url} took ${ms}ms`);
-        }
-      }
-    } catch (e) {}
+    const requestKey = `${response.config.method}:${response.config.url}:${JSON.stringify(
+      response.config.params || {}
+    )}`;
+    pendingRequests.delete(requestKey);
     return response;
   },
-  (error) => Promise.reject(normalizeApiError(error))
+  async (error) => {
+    const originalRequest = error.config;
+
+    if (originalRequest) {
+      const requestKey = `${originalRequest.method}:${originalRequest.url}:${JSON.stringify(
+        originalRequest.params || {}
+      )}`;
+      pendingRequests.delete(requestKey);
+    }
+
+    if (error.response && error.response.status === 401 && originalRequest) {
+      const refreshToken =
+        localStorage.getItem("refresh_token") ||
+        localStorage.getItem("refreshToken");
+      const isRefreshRequest = originalRequest.url?.includes("/v1/auth/refresh");
+
+      // Don't refresh if request is already a refresh request or if retry flag is set
+      if (refreshToken && !isRefreshRequest && !originalRequest._retry) {
+        if (isRefreshing) {
+          // If already refreshing token, queue other failed requests
+          return new Promise((resolve, reject) => {
+            failedQueue.push({ resolve, reject });
+          })
+            .then((newToken) => {
+              originalRequest.headers.Authorization = `Bearer ${newToken}`;
+              return apiClient(originalRequest);
+            })
+            .catch((err) => Promise.reject(normalizeApiError(err)));
+        }
+
+        originalRequest._retry = true;
+        isRefreshing = true;
+
+        try {
+          const res = await axios.post(
+            "/v1/auth/refresh",
+            { refresh_token: refreshToken },
+            {
+              baseURL: BASE_URL,
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          const data = res?.data?.data ?? res?.data ?? {};
+          const newAccessToken =
+            data.access_token ?? data.accessToken ?? data.token ?? null;
+          const newRefreshToken =
+            data.refresh_token ?? data.refreshToken ?? null;
+
+          if (newAccessToken) {
+            localStorage.setItem("access_token", newAccessToken);
+            localStorage.setItem("accessToken", newAccessToken);
+            localStorage.setItem("token", newAccessToken);
+
+            if (newRefreshToken) {
+              localStorage.setItem("refresh_token", newRefreshToken);
+              localStorage.setItem("refreshToken", newRefreshToken);
+            }
+
+            if (typeof window !== "undefined" && window.dispatchEvent) {
+              window.dispatchEvent(
+                new CustomEvent("auth:tokens-updated", {
+                  detail: {
+                    accessToken: newAccessToken,
+                    refreshToken: newRefreshToken,
+                  },
+                })
+              );
+            }
+
+            processQueue(null, newAccessToken);
+            isRefreshing = false;
+
+            originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+            return apiClient(originalRequest);
+          }
+
+          throw new Error("Missing access token in refresh response");
+        } catch (refreshErr) {
+          processQueue(refreshErr, null);
+          isRefreshing = false;
+          performLogout();
+          return Promise.reject(normalizeApiError(refreshErr));
+        }
+      }
+
+      performLogout();
+    }
+
+    return Promise.reject(normalizeApiError(error));
+  }
 );
 
 export default apiClient;

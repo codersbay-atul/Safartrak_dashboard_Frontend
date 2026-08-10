@@ -205,7 +205,7 @@ export default function AoiDetailsPanel({ aoi, onEdit, onDelete, onViewVehicle }
 
             <div className="w-full h-[1px] bg-[#1f1f23]/60" />
 
-            {/* Vehicle Alert Status Section */}
+            
             <div>
               <h4 className="text-xs font-semibold text-white mb-3">
                 Vehicle Alert Status

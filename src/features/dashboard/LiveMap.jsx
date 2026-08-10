@@ -36,6 +36,8 @@ export default function LiveMap({ selectedVehicle, showRoutePath }) {
   const leafletMapRef = useRef(null);
   const markersLayerRef = useRef(null);
   const markersMapRef = useRef(null);
+  const lastBboxRef = useRef("");
+  
   const [leafletLoaded, setLeafletLoaded] = useState(false);
   const [isMaximized, setIsMaximized] = useState(false);
   const [bboxParams, setBboxParams] = useState(null);
@@ -106,19 +108,6 @@ export default function LiveMap({ selectedVehicle, showRoutePath }) {
       document.removeEventListener("fullscreenchange", onFullscreenChange);
     };
   }, []);
-
-  const updateBboxParams = () => {
-    const map = leafletMapRef.current;
-    if (!map || !map.getBounds) return;
-    try {
-      const bounds = map.getBounds();
-      if (!bounds) return;
-      const ne = bounds.getNorthEast();
-      const sw = bounds.getSouthWest();
-      const bbox = `${sw.lat},${sw.lng},${ne.lat},${ne.lng}`;
-      setBboxParams({ bbox });
-    } catch (err) {}
-  };
 
   const handleZoomIn = () => {
     const map = leafletMapRef.current;
@@ -197,13 +186,35 @@ export default function LiveMap({ selectedVehicle, showRoutePath }) {
     leafletMapRef.current = map;
     markersLayerRef.current = markersLayer;
     markersMapRef.current = new Map();
-    setTimeout(updateBboxParams, 50);
 
-    map.on("moveend", updateBboxParams);
+    let debounceTimer = null;
+
+    const handleMapMove = () => {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        try {
+          const bounds = map.getBounds();
+          if (!bounds) return;
+          const ne = bounds.getNorthEast();
+          const sw = bounds.getSouthWest();
+
+          const newBbox = `${sw.lat.toFixed(4)},${sw.lng.toFixed(4)},${ne.lat.toFixed(4)},${ne.lng.toFixed(4)}`;
+
+          if (lastBboxRef.current !== newBbox) {
+            lastBboxRef.current = newBbox;
+            setBboxParams({ bbox: newBbox });
+          }
+        } catch (err) {}
+      }, 400);
+    };
+
+    map.on("moveend", handleMapMove);
+    handleMapMove();
 
     return () => {
+      clearTimeout(debounceTimer);
       try {
-        map.off("moveend", updateBboxParams);
+        map.off("moveend", handleMapMove);
         map.remove();
       } catch (e) {}
       const cleanupContainer = document.getElementById("leaflet-map");
@@ -282,9 +293,6 @@ export default function LiveMap({ selectedVehicle, showRoutePath }) {
         const m = markersMap.get(id);
         try {
           m.setLatLng([lat, lng]);
-          if (isSelected) {
-            map.setView([lat, lng], Math.max(map.getZoom(), 15));
-          }
 
           const curIcon = m.options && m.options.icon;
           const labelText = String(label || "");

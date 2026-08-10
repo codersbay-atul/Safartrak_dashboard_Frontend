@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Check } from "lucide-react";
 import Dropdown from "../../components/Ui/DropDown";
 
-// Dropdown Options
 const NETWORK_PROVIDER_OPTIONS = [
   { label: "Airtel", value: "airtel" },
   { label: "Jio", value: "jio" },
@@ -18,43 +17,17 @@ export default function AddGPSDeviceModal({ isOpen, onClose, onNext }) {
     deviceModel: "",
   });
 
-  /* -------------------------------------------------------------
-     1. VALIDATION ERRORS STATE (Commented out for now)
-  ---------------------------------------------------------------- */
-  // const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState({});
 
   if (!isOpen) return null;
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-
-    /* -------------------------------------------------------------
-       2. CLEAR ERROR ON INPUT CHANGE (Commented out for now)
-    ---------------------------------------------------------------- */
-    // if (errors[name]) {
-    //   setErrors((prev) => ({ ...prev, [name]: "" }));
-    // }
-  };
-
-  // Helper function for Custom Dropdowns
-  const handleDropdownSelect = (field, value) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-    // if (errors[field]) {
-    //   setErrors((prev) => ({ ...prev, [field]: "" }));
-    // }
-  };
-
-  /* -------------------------------------------------------------
-     3. VALIDATION LOGIC FUNCTION (Commented out for now)
-  ---------------------------------------------------------------- */
-  /*
   const validateForm = () => {
     let newErrors = {};
 
     if (!formData.gpsDeviceId.trim()) {
       newErrors.gpsDeviceId = "GPS Device ID is required";
     }
+
     if (!formData.imeiNumber.trim()) {
       newErrors.imeiNumber = "IMEI Number is required";
     } else if (!/^\d{15}$/.test(formData.imeiNumber.trim())) {
@@ -63,10 +36,14 @@ export default function AddGPSDeviceModal({ isOpen, onClose, onNext }) {
 
     if (!formData.simNumber.trim()) {
       newErrors.simNumber = "SIM Number is required";
+    } else if (!/^\+?[0-9]{7,15}$/.test(formData.simNumber.replace(/\s+/g, ""))) {
+      newErrors.simNumber = "Invalid SIM Number";
     }
+
     if (!formData.networkProvider) {
       newErrors.networkProvider = "Please select a network provider";
     }
+
     if (!formData.deviceModel.trim()) {
       newErrors.deviceModel = "Device Model is required";
     }
@@ -74,26 +51,36 @@ export default function AddGPSDeviceModal({ isOpen, onClose, onNext }) {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-  */
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
+  };
+
+  const handleDropdownSelect = (field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+
+    if (errors[field]) {
+      setErrors((prev) => ({ ...prev, [field]: "" }));
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    /* -------------------------------------------------------------
-       4. FORM VALIDATION CHECK BEFORE NEXT (Commented out for now)
-    ---------------------------------------------------------------- */
-    // const isValid = validateForm();
-    // if (!isValid) return;
-
-    if (onNext) onNext(formData);
+    if (validateForm()) {
+      if (onNext) onNext(formData);
+    }
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/70 backdrop-blur-xs select-none animate-fadeIn">
-      {/* Modal Card - overflow-visible ensures dropdown menu isn't clipped */}
       <div className="relative w-full max-w-[480px] bg-[#121214] border border-[#27272a] rounded-2xl p-4 shadow-2xl flex flex-col overflow-visible">
         
-        {/* Header (Without Cross Button) */}
         <div className="flex items-center justify-between pb-3 mb-2 border-b border-[#1d1d20]/60">
           <h2 className="text-[14px] font-bold text-white tracking-tight">
             Add GPS Device
@@ -104,9 +91,7 @@ export default function AddGPSDeviceModal({ isOpen, onClose, onNext }) {
           </span>
         </div>
 
-        {/* Form Body */}
         <form onSubmit={handleSubmit} className="flex flex-col gap-2.5 text-[10.5px]">
-          {/* GPS Device ID */}
           <div>
             <label className="block text-[#a1a1aa] mb-1 font-medium">GPS Device ID</label>
             <input
@@ -115,12 +100,13 @@ export default function AddGPSDeviceModal({ isOpen, onClose, onNext }) {
               placeholder="Enter GPS Device ID"
               value={formData.gpsDeviceId}
               onChange={handleChange}
-              className="w-full bg-[#18181b]/60 border border-[#27272a] focus:border-[#ffd60a] rounded-xl px-3 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all"
+              className={`w-full bg-[#18181b]/60 border rounded-xl px-3 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all ${
+                errors.gpsDeviceId ? "border-red-500 focus:border-red-500" : "border-[#27272a] focus:border-[#ffd60a]"
+              }`}
             />
-            {/* {errors.gpsDeviceId && <p className="text-red-500 text-[9px] mt-0.5">{errors.gpsDeviceId}</p>} */}
+            {errors.gpsDeviceId && <p className="text-red-500 text-[9px] mt-0.5">{errors.gpsDeviceId}</p>}
           </div>
 
-          {/* IMEI Number */}
           <div>
             <label className="block text-[#a1a1aa] mb-1 font-medium">IMEI Number</label>
             <input
@@ -129,12 +115,13 @@ export default function AddGPSDeviceModal({ isOpen, onClose, onNext }) {
               placeholder="Enter IMEI Number"
               value={formData.imeiNumber}
               onChange={handleChange}
-              className="w-full bg-[#18181b]/60 border border-[#27272a] focus:border-[#ffd60a] rounded-xl px-3 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all"
+              className={`w-full bg-[#18181b]/60 border rounded-xl px-3 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all ${
+                errors.imeiNumber ? "border-red-500 focus:border-red-500" : "border-[#27272a] focus:border-[#ffd60a]"
+              }`}
             />
-            {/* {errors.imeiNumber && <p className="text-red-500 text-[9px] mt-0.5">{errors.imeiNumber}</p>} */}
+            {errors.imeiNumber && <p className="text-red-500 text-[9px] mt-0.5">{errors.imeiNumber}</p>}
           </div>
 
-          {/* SIM Number */}
           <div>
             <label className="block text-[#a1a1aa] mb-1 font-medium">SIM Number</label>
             <input
@@ -143,12 +130,13 @@ export default function AddGPSDeviceModal({ isOpen, onClose, onNext }) {
               placeholder="Enter SIM Number"
               value={formData.simNumber}
               onChange={handleChange}
-              className="w-full bg-[#18181b]/60 border border-[#27272a] focus:border-[#ffd60a] rounded-xl px-3 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all"
+              className={`w-full bg-[#18181b]/60 border rounded-xl px-3 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all ${
+                errors.simNumber ? "border-red-500 focus:border-red-500" : "border-[#27272a] focus:border-[#ffd60a]"
+              }`}
             />
-            {/* {errors.simNumber && <p className="text-red-500 text-[9px] mt-0.5">{errors.simNumber}</p>} */}
+            {errors.simNumber && <p className="text-red-500 text-[9px] mt-0.5">{errors.simNumber}</p>}
           </div>
 
-          {/* Network Provider & Device Model Row */}
           <div className="grid grid-cols-2 gap-2.5">
             <div>
               <label className="block text-[#a1a1aa] mb-1 font-medium">Network Provider</label>
@@ -157,9 +145,11 @@ export default function AddGPSDeviceModal({ isOpen, onClose, onNext }) {
                 options={NETWORK_PROVIDER_OPTIONS}
                 selectedValue={formData.networkProvider}
                 onSelect={(val) => handleDropdownSelect("networkProvider", val)}
-                className="w-full justify-between rounded-xl bg-[#18181b]/60 border-[#27272a] py-1.5 px-3 text-white"
+                className={`w-full justify-between rounded-xl bg-[#18181b]/60 border py-1.5 px-3 text-white ${
+                  errors.networkProvider ? "border-red-500" : "border-[#27272a]"
+                }`}
               />
-              {/* {errors.networkProvider && <p className="text-red-500 text-[9px] mt-0.5">{errors.networkProvider}</p>} */}
+              {errors.networkProvider && <p className="text-red-500 text-[9px] mt-0.5">{errors.networkProvider}</p>}
             </div>
 
             <div>
@@ -170,13 +160,14 @@ export default function AddGPSDeviceModal({ isOpen, onClose, onNext }) {
                 placeholder="Enter Device Model"
                 value={formData.deviceModel}
                 onChange={handleChange}
-                className="w-full bg-[#18181b]/60 border border-[#27272a] focus:border-[#ffd60a] rounded-xl px-3 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all"
+                className={`w-full bg-[#18181b]/60 border rounded-xl px-3 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all ${
+                  errors.deviceModel ? "border-red-500 focus:border-red-500" : "border-[#27272a] focus:border-[#ffd60a]"
+                }`}
               />
-              {/* {errors.deviceModel && <p className="text-red-500 text-[9px] mt-0.5">{errors.deviceModel}</p>} */}
+              {errors.deviceModel && <p className="text-red-500 text-[9px] mt-0.5">{errors.deviceModel}</p>}
             </div>
           </div>
 
-          {/* Action Buttons */}
           <div className="grid grid-cols-2 gap-2.5 pt-2 mt-2 border-t border-[#1d1d20]">
             <button
               type="button"

@@ -8,7 +8,7 @@ import RecentActivity from "../features/profile/RecentActivity";
 import NotificationPreference from "../features/profile/NotificationPreference";
 import SecuritySettings from "../features/profile/SecuritySettings";
 import SecuritySettingUpdate from "../features/profile/SecuritySettingUpdate";
-import SecurityCard from "../features/profile/SecurityCard";
+// import SecurityCard from "../features/profile/SecurityCard";
 
 export default function ProfilePage({ user: initialUser }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -54,9 +54,9 @@ export default function ProfilePage({ user: initialUser }) {
             <NotificationPreference />
           </div>
 
-          <div className="w-full min-h-0 flex flex-col min-[1152px]:h-full min-[1152px]:overflow-hidden">
+          {/* <div className="w-full min-h-0 flex flex-col min-[1152px]:h-full min-[1152px]:overflow-hidden">
             <SecurityCard user={user} />
-          </div>
+          </div> */}
         </div>
 
         {isModalOpen && currentStep === 1 && (

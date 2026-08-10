@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import {
   LayoutDashboard,
   BarChart3,
@@ -78,13 +78,7 @@ export default function Sidebar({ activeTab, setActiveTab }) {
     },
   ];
 
-  const handleNavigation = (label) => {
-    if (setActiveTab) {
-      setActiveTab(label);
-    }
-
-    const path = routeMap[label] || "/";
-    navigate(path);
+  const handleNavigation = () => {
     setIsOpen(false);
   };
 
@@ -144,30 +138,31 @@ export default function Sidebar({ activeTab, setActiveTab }) {
 
                 <div className="flex flex-col gap-2">
                   {section.items.map((item) => {
-                    const targetPath = routeMap[item.label];
-                    const isItemActive =
-                      targetPath && location.pathname === targetPath;
+                    const targetPath = routeMap[item.label] || "/";
 
                     return (
-                      <button
+                      <NavLink
                         key={item.label}
-                        onClick={() => handleNavigation(item.label)}
-                        className={`flex items-center w-full h-8 gap-3 rounded-lg px-2.5 transition cursor-pointer min-w-0 ${
-                          isItemActive
-                            ? "bg-[#232328] text-white"
-                            : "text-[#D4D4D8] hover:bg-[#232328]/70"
-                        }`}
+                        to={targetPath}
+                        onClick={handleNavigation}
+                        className={({ isActive }) =>
+                          `flex items-center w-full h-8 gap-3 rounded-lg px-2.5 transition min-w-0 ${
+                            isActive
+                              ? "bg-[#232328] text-white"
+                              : "text-[#D4D4D8] hover:bg-[#232328]/70"
+                          }`
+                        }
                       >
                         <item.icon
                           size={18}
                           className="text-[#F5B700] shrink-0"
-                          strokeWidth={isItemActive ? 2.5 : 2}
+                          strokeWidth={location.pathname === targetPath ? 2.5 : 2}
                         />
 
                         <span className="text-[14px] font-normal leading-[20px] truncate">
                           {item.label}
                         </span>
-                      </button>
+                      </NavLink>
                     );
                   })}
                 </div>

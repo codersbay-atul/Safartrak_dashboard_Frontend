@@ -85,7 +85,7 @@ export default function VehicleControlCard({ vehicle, onRequestImmobilize, isLis
   const location = detail?.location ?? vehicle?.city ?? "—";
 
   return (
-    <div className="w-full max-w-sm bg-[#141416] text-white rounded-xl p-3.5 border border-[#222226] shadow-xl font-sans flex flex-col gap-2.5">
+    <div className="w-full h-full min-h-0 bg-[#141416] text-white rounded-2xl p-3 border border-[#222226] shadow-2xl font-sans flex flex-col gap-2 overflow-hidden">
       <div className="flex items-center justify-between gap-2 shrink-0">
         <h2 className="text-[11px] font-semibold text-white tracking-wide uppercase">Vehicle Control</h2>
         <div

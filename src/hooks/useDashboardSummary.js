@@ -26,12 +26,15 @@ export function useDashboardSummary() {
   const query = useQuery({
     queryKey: queryKeys.dashboard.summary,
     queryFn: getDashboardSummary,
-    staleTime: 30_000,
+    staleTime: 5 * 60_000,
+    cacheTime: 10 * 60_000,
     gcTime: 5 * 60_000,
-    retry: 2,
+    retry: 1,
     retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 8_000),
-    refetchOnWindowFocus: true,
-    refetchOnReconnect: true,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    keepPreviousData: true,
+    refetchOnMount: false,
   });
 
   useEffect(() => {

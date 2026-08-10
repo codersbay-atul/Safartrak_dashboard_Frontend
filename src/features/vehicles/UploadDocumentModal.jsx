@@ -9,10 +9,7 @@ export default function UploadDocumentsModal({ isOpen, onClose, onNext }) {
     roadPermit: null,
   });
 
-  /* -------------------------------------------------------------
-     1. VALIDATION ERRORS STATE (Commented out for now)
-  ---------------------------------------------------------------- */
-  // const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState({});
 
   if (!isOpen) return null;
 
@@ -21,19 +18,12 @@ export default function UploadDocumentsModal({ isOpen, onClose, onNext }) {
       const fileName = e.target.files[0].name;
       setFiles((prev) => ({ ...prev, [field]: fileName }));
 
-      /* -------------------------------------------------------------
-         2. CLEAR ERROR ON FILE UPLOAD (Commented out for now)
-      ---------------------------------------------------------------- */
-      // if (errors[field]) {
-      //   setErrors((prev) => ({ ...prev, [field]: "" }));
-      // }
+      if (errors[field]) {
+        setErrors((prev) => ({ ...prev, [field]: "" }));
+      }
     }
   };
 
-  /* -------------------------------------------------------------
-     3. VALIDATION LOGIC FUNCTION (Commented out for now)
-  ---------------------------------------------------------------- */
-  /*
   const validateForm = () => {
     let newErrors = {};
 
@@ -53,18 +43,13 @@ export default function UploadDocumentsModal({ isOpen, onClose, onNext }) {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-  */
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    /* -------------------------------------------------------------
-       4. FORM VALIDATION CHECK BEFORE SUBMIT (Commented out for now)
-    ---------------------------------------------------------------- */
-    // const isValid = validateForm();
-    // if (!isValid) return;
-
-    if (onNext) onNext(files);
+    if (validateForm()) {
+      if (onNext) onNext(files);
+    }
   };
 
   const uploadFields = [
@@ -78,7 +63,6 @@ export default function UploadDocumentsModal({ isOpen, onClose, onNext }) {
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/70 backdrop-blur-xs select-none animate-fadeIn">
       <div className="relative w-full max-w-[480px] bg-[#121214] border border-[#27272a] rounded-2xl p-4 shadow-2xl flex flex-col overflow-hidden">
         
-        {/* Header (Without Cross Button) */}
         <div className="flex items-center justify-between pb-3 mb-2 border-b border-[#1d1d20]/60">
           <h2 className="text-[14px] font-bold text-white tracking-tight">
             Upload Documents
@@ -89,13 +73,14 @@ export default function UploadDocumentsModal({ isOpen, onClose, onNext }) {
           </span>
         </div>
 
-        {/* Form Body */}
         <form onSubmit={handleSubmit} className="flex flex-col gap-2.5 text-[10.5px]">
           {uploadFields.map((field) => (
             <div key={field.key}>
               <label className="block text-[#a1a1aa] mb-1 font-medium">{field.label}</label>
               <div
-                className="flex items-center bg-[#18181b]/60 border border-[#27272a] rounded-xl overflow-hidden focus-within:border-[#ffd60a] transition-all"
+                className={`flex items-center bg-[#18181b]/60 border rounded-xl overflow-hidden focus-within:border-[#ffd60a] transition-all ${
+                  errors[field.key] ? "border-red-500 focus-within:border-red-500" : "border-[#27272a]"
+                }`}
               >
                 <label className="flex items-center gap-1.5 px-3 py-2 bg-[#27272a]/60 text-white font-medium cursor-pointer hover:bg-[#27272a] transition-colors border-r border-[#27272a] shrink-0">
                   <Upload size={13} />
@@ -114,11 +99,10 @@ export default function UploadDocumentsModal({ isOpen, onClose, onNext }) {
                   )}
                 </span>
               </div>
-              {/* {errors[field.key] && <p className="text-red-500 text-[9px] mt-0.5">{errors[field.key]}</p>} */}
+              {errors[field.key] && <p className="text-red-500 text-[9px] mt-0.5">{errors[field.key]}</p>}
             </div>
           ))}
 
-          {/* Action Buttons */}
           <div className="grid grid-cols-2 gap-2.5 pt-2 mt-2 border-t border-[#1d1d20]">
             <button
               type="button"

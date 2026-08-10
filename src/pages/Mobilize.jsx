@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 import MobilizeHeader from "../features/mobilize/MobilizeHeader";
@@ -16,6 +16,7 @@ export default function Mobilize() {
   const [searchQuery, setSearchQuery] = useState("");
   const [fleetFilter, setFleetFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
   const [vehicles, setVehicles] = useState([]);
   const [selectedVehicle, setSelectedVehicle] = useState(null);
   const [loadingVehicles, setLoadingVehicles] = useState(false);
@@ -26,51 +27,49 @@ export default function Mobilize() {
   const [isSendingCommand, setIsSendingCommand] = useState(false);
   const [commandError, setCommandError] = useState(null);
 
-  const filteredVehicles = vehicles.filter((vehicle) => {
-    const query = searchQuery.trim().toLowerCase();
-    const plate = String(
-      vehicle.plate ||
-      vehicle.reg_no ||
-      vehicle.vehicle_number ||
-      vehicle.raw?.vehicle_number ||
-      vehicle.raw?.reg_no ||
-      ""
-    ).toLowerCase();
-    const driver = String(
-      vehicle.driver ||
-      vehicle.driver_name ||
-      vehicle.raw?.driver_name ||
-      ""
-    ).toLowerCase();
-    const city = String(
-      vehicle.city ||
-      vehicle.location ||
-      vehicle.raw?.city ||
-      vehicle.raw?.location ||
-      ""
-    ).toLowerCase();
-    const status = String(
-      vehicle.status ||
-      vehicle.current_status ||
-      vehicle.state ||
-      vehicle.raw?.status ||
-      vehicle.raw?.current_status ||
-      "offline"
-    ).toLowerCase();
+  const filteredVehicles = useMemo(() => {
+    const query = debouncedSearchQuery.trim().toLowerCase();
+    return vehicles.filter((vehicle) => {
+      const plate = String(
+        vehicle.plate ||
+        vehicle.reg_no ||
+        vehicle.vehicle_number ||
+        vehicle.raw?.vehicle_number ||
+        vehicle.raw?.reg_no ||
+        ""
+      ).toLowerCase();
+      const driver = String(
+        vehicle.driver ||
+        vehicle.driver_name ||
+        vehicle.raw?.driver_name ||
+        ""
+      ).toLowerCase();
+      const city = String(
+        vehicle.city ||
+        vehicle.location ||
+        vehicle.raw?.city ||
+        vehicle.raw?.location ||
+        ""
+      ).toLowerCase();
+      const status = String(
+        vehicle.status ||
+        vehicle.current_status ||
+        vehicle.state ||
+        vehicle.raw?.status ||
+        vehicle.raw?.current_status ||
+        "offline"
+      ).toLowerCase();
 
-    const matchesSearch =
-      !query ||
-      plate.includes(query) ||
-      driver.includes(query) ||
-      city.includes(query);
+      const matchesSearch =
+        !query || plate.includes(query) || driver.includes(query) || city.includes(query);
 
-    const matchesStatus = statusFilter === "all" || status === statusFilter;
+      const matchesStatus = statusFilter === "all" || status === statusFilter;
 
-    const matchesFleet =
-      fleetFilter === "all" || city === fleetFilter.toLowerCase();
+      const matchesFleet = fleetFilter === "all" || city === fleetFilter.toLowerCase();
 
-    return matchesSearch && matchesStatus && matchesFleet;
-  });
+      return matchesSearch && matchesStatus && matchesFleet;
+    });
+  }, [vehicles, debouncedSearchQuery, statusFilter, fleetFilter]);
 
   const handleAction = (vehicle) => {
     if (vehicle.status === "offline") return;
@@ -82,14 +81,17 @@ export default function Mobilize() {
   };
 
   useEffect(() => {
+    const timer = window.setTimeout(() => setDebouncedSearchQuery(searchQuery.trim()), 300);
+    return () => window.clearTimeout(timer);
+  }, [searchQuery]);
+
+  useEffect(() => {
     let mounted = true;
     setLoadingVehicles(true);
 
     const params = {};
-    const query = searchQuery.trim();
-    if (query) {
-      params.search = query;
-    }
+    const query = debouncedSearchQuery.trim();
+    if (query) params.search = query;
 
     getCommandVehicles(params)
       .then((res) => {
@@ -103,22 +105,14 @@ export default function Mobilize() {
           driver: v.driver ?? v.driver_name ?? v.raw?.driver_name ?? "Unknown",
           city: v.city ?? v.location ?? v.raw?.city ?? v.raw?.location ?? "Unknown",
           status: String(
-            v.status ??
-              v.current_status ??
-              v.command_state ??
-              v.state ??
-              v.raw?.status ??
-              v.raw?.current_status ??
-              v.raw?.command_state ??
-              "offline"
+            v.status ?? v.current_status ?? v.command_state ?? v.state ?? v.raw?.status ?? v.raw?.current_status ?? v.raw?.command_state ?? "offline"
           ).toLowerCase(),
           info: v.info ?? v.lastUpdated ?? v.raw?.last_updated ?? v.raw?.lastUpdated ?? "",
         }));
+
         setVehicles(normalized);
         setSelectedVehicle((prev) => {
-          if (prev && normalized.some((item) => item.id === prev.id)) {
-            return prev;
-          }
+          if (prev && normalized.some((item) => item.id === prev.id)) return prev;
           return normalized[0] ?? null;
         });
       })
@@ -135,7 +129,7 @@ export default function Mobilize() {
     return () => {
       mounted = false;
     };
-  }, [searchQuery]);
+  }, [debouncedSearchQuery]);
 
   const handleSelectVehicle = (vehicle) => {
     setSelectedVehicle(vehicle);
@@ -218,9 +212,8 @@ export default function Mobilize() {
           <MobilizeStats />
         </div>
 
-    
-        <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-4 items-start">
-          <div className="h-full min-h-0">
+        <div className="flex-1 min-h-0 grid grid-cols-12 gap-3 overflow-hidden mt-1">
+          <div className="col-span-12 lg:col-span-7 xl:col-span-8 h-full min-h-0">
             <MobilizeVehicleList
               vehicles={filteredVehicles}
               activeFilter={statusFilter}
@@ -231,14 +224,12 @@ export default function Mobilize() {
             />
           </div>
 
-          
-          <div className="h-full min-h-0 flex justify-end">
-            {selectedVehicle && (
-              <VehicleControlCard
-                vehicle={selectedVehicle}
-                onRequestImmobilize={handleRequestImmobilize}
-              />
-            )}
+          <div className="col-span-12 lg:col-span-5 xl:col-span-4 h-full min-h-0">
+            <VehicleControlCard
+              vehicle={selectedVehicle}
+              onRequestImmobilize={handleRequestImmobilize}
+              isListLoading={loadingVehicles}
+            />
           </div>
         </div>
 

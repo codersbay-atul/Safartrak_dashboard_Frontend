@@ -15,60 +15,60 @@ export default function DriverAssignmentDetails({ onNext, onCancel }) {
     shift: "",
   });
 
-  /* -------------------------------------------------------------
-     1. VALIDATION ERRORS STATE (Commented out for now)
-  ---------------------------------------------------------------- */
-  // const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState({});
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-
-    /* -------------------------------------------------------------
-       2. CLEAR ERROR ON INPUT  (Commented out for now)
-    ---------------------------------------------------------------- */
-    // if (errors[name]) {
-    //   setErrors((prev) => ({ ...prev, [name]: "" }));
-    // }
-  };
-
-  // Helper function for Custom Dropdowns
-  const handleDropdownSelect = (field, value) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-    // if (errors[field]) {
-    //   setErrors((prev) => ({ ...prev, [field]: "" }));
-    // }
-  };
-
-  /* -------------------------------------------------------------
-     3. VALIDATION LOGIC FUNCTION (Commented out for now)
-  ---------------------------------------------------------------- */
-  /*
   const validateForm = () => {
     let newErrors = {};
 
-    if (!formData.assignedDriver.trim()) newErrors.assignedDriver = "Assigned Driver required";
+    if (!formData.assignedDriver.trim()) {
+      newErrors.assignedDriver = "Assigned Driver is required";
+    }
+
     if (!formData.driverPhone.trim()) {
-      newErrors.driverPhone = "Driver Phone required";
-    } else if (!/^\d{10}$/.test(formData.driverPhone)) {
-      newErrors.driverPhone = "Enter valid 10-digit phone number";
+      newErrors.driverPhone = "Driver Phone is required";
+    } else if (!/^\+?[0-9]{7,15}$/.test(formData.driverPhone.replace(/\s+/g, ""))) {
+      newErrors.driverPhone = "Enter valid phone number";
+    }
+
+    if (!formData.licenseNumber.trim()) {
+      newErrors.licenseNumber = "License Number is required";
+    }
+
+    if (!formData.currentRoute.trim()) {
+      newErrors.currentRoute = "Current Route is required";
+    }
+
+    if (!formData.shift) {
+      newErrors.shift = "Please select a shift";
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-  */
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
+  };
+
+  const handleDropdownSelect = (field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+
+    if (errors[field]) {
+      setErrors((prev) => ({ ...prev, [field]: "" }));
+    }
+  };
 
   const handleNext = (e) => {
     e.preventDefault();
 
-    /* -------------------------------------------------------------
-       4. FORM VALIDATION CHECK BEFORE NEXT (Commented out for now)
-    ---------------------------------------------------------------- */
-    // const isValid = validateForm();
-    // if (!isValid) return;
-
-    if (onNext) onNext(formData);
+    if (validateForm()) {
+      if (onNext) onNext(formData);
+    }
   };
 
   return (
@@ -94,9 +94,11 @@ export default function DriverAssignmentDetails({ onNext, onCancel }) {
               placeholder="Enter Assigned Driver"
               value={formData.assignedDriver}
               onChange={handleChange}
-              className="w-full bg-[#18181b]/60 border border-[#27272a] focus:border-[#ffd60a] rounded-xl px-3 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all"
+              className={`w-full bg-[#18181b]/60 border rounded-xl px-3 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all ${
+                errors.assignedDriver ? "border-red-500 focus:border-red-500" : "border-[#27272a] focus:border-[#ffd60a]"
+              }`}
             />
-            {/* {errors.assignedDriver && <p className="text-red-500 text-[9px] mt-0.5">{errors.assignedDriver}</p>} */}
+            {errors.assignedDriver && <p className="text-red-500 text-[9px] mt-0.5">{errors.assignedDriver}</p>}
           </div>
 
           <div>
@@ -109,9 +111,11 @@ export default function DriverAssignmentDetails({ onNext, onCancel }) {
               placeholder="Enter Driver Phone"
               value={formData.driverPhone}
               onChange={handleChange}
-              className="w-full bg-[#18181b]/60 border border-[#27272a] focus:border-[#ffd60a] rounded-xl px-3 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all"
+              className={`w-full bg-[#18181b]/60 border rounded-xl px-3 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all ${
+                errors.driverPhone ? "border-red-500 focus:border-red-500" : "border-[#27272a] focus:border-[#ffd60a]"
+              }`}
             />
-            {/* {errors.driverPhone && <p className="text-red-500 text-[9px] mt-0.5">{errors.driverPhone}</p>} */}
+            {errors.driverPhone && <p className="text-red-500 text-[9px] mt-0.5">{errors.driverPhone}</p>}
           </div>
         </div>
 
@@ -126,8 +130,11 @@ export default function DriverAssignmentDetails({ onNext, onCancel }) {
               placeholder="Enter License Number"
               value={formData.licenseNumber}
               onChange={handleChange}
-              className="w-full bg-[#18181b]/60 border border-[#27272a] focus:border-[#ffd60a] rounded-xl px-3 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all"
+              className={`w-full bg-[#18181b]/60 border rounded-xl px-3 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all ${
+                errors.licenseNumber ? "border-red-500 focus:border-red-500" : "border-[#27272a] focus:border-[#ffd60a]"
+              }`}
             />
+            {errors.licenseNumber && <p className="text-red-500 text-[9px] mt-0.5">{errors.licenseNumber}</p>}
           </div>
 
           <div>
@@ -140,8 +147,11 @@ export default function DriverAssignmentDetails({ onNext, onCancel }) {
               placeholder="Enter Current Route"
               value={formData.currentRoute}
               onChange={handleChange}
-              className="w-full bg-[#18181b]/60 border border-[#27272a] focus:border-[#ffd60a] rounded-xl px-3 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all"
+              className={`w-full bg-[#18181b]/60 border rounded-xl px-3 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all ${
+                errors.currentRoute ? "border-red-500 focus:border-red-500" : "border-[#27272a] focus:border-[#ffd60a]"
+              }`}
             />
+            {errors.currentRoute && <p className="text-red-500 text-[9px] mt-0.5">{errors.currentRoute}</p>}
           </div>
         </div>
 
@@ -152,8 +162,11 @@ export default function DriverAssignmentDetails({ onNext, onCancel }) {
             options={SHIFT_OPTIONS}
             selectedValue={formData.shift}
             onSelect={(val) => handleDropdownSelect("shift", val)}
-            className="w-full justify-between rounded-xl bg-[#18181b]/60 border-[#27272a] py-1.5 px-3 text-white"
+            className={`w-full justify-between rounded-xl bg-[#18181b]/60 border py-1.5 px-3 text-white ${
+              errors.shift ? "border-red-500" : "border-[#27272a]"
+            }`}
           />
+          {errors.shift && <p className="text-red-500 text-[9px] mt-0.5">{errors.shift}</p>}
         </div>
 
         <div className="grid grid-cols-2 gap-2.5 pt-2 mt-2 border-t border-[#1d1d20]">
