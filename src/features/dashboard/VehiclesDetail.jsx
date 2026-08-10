@@ -5,7 +5,6 @@ export default function VehiclesDetail({ vehicle, onViewRoute, onClose }) {
   return (
     <div className="w-full h-full bg-[#16161a] border border-[#1f1f23] rounded-xl p-3 flex flex-col justify-between select-none overflow-hidden">
       
-      {/* 1. Top Header Row (Optimized with Refresh + Close side-by-side) */}
       <div className="flex items-center justify-between pb-1.5 shrink-0 border-b border-zinc-800/40">
         <div className="flex items-center gap-1.5 min-w-0">
           <h3 className="text-[11.5px] sm:text-xs font-bold text-white tracking-tight truncate">
@@ -16,9 +15,9 @@ export default function VehiclesDetail({ vehicle, onViewRoute, onClose }) {
           </span>
         </div>
         
-        {/* Right Controls Container */}
+       
         <div className="flex items-center gap-2 shrink-0">
-          {/* Refresh Action Trigger */}
+         
           <button 
             onClick={() => {/* Refresh telemetry log context logic handles here */}}
             className="text-zinc-550 hover:text-white transition-colors cursor-pointer"
@@ -26,7 +25,7 @@ export default function VehiclesDetail({ vehicle, onViewRoute, onClose }) {
             <RefreshCw size={11} className="stroke-[2.5]" />
           </button>
           
-          {/* Close Action Trigger (Right of Refresh) */}
+          
           <button 
             onClick={onClose}
             className="text-zinc-550 hover:text-rose-400 transition-colors cursor-pointer"
@@ -36,7 +35,7 @@ export default function VehiclesDetail({ vehicle, onViewRoute, onClose }) {
         </div>
       </div>
 
-      {/* 2. Profile Core Info Section */}
+  
       <div className="flex items-center justify-between my-2.5 shrink-0 gap-2">
         <div className="flex items-center gap-2 min-w-0">
           <div className="w-7 h-7 bg-zinc-800 border border-zinc-700/50 rounded-md shadow-inner shrink-0 flex items-center justify-center">
@@ -57,7 +56,7 @@ export default function VehiclesDetail({ vehicle, onViewRoute, onClose }) {
         </div>
       </div>
 
-      {/* 3. Timeline Tracker */}
+    
       <div className="mb-2 mt-0.5 px-1 shrink-0">
         <div className="relative w-full h-3 flex items-center">
           <div className="absolute left-0 right-0 h-[1.5px] bg-zinc-800 rounded-full" />
@@ -133,7 +132,6 @@ export default function VehiclesDetail({ vehicle, onViewRoute, onClose }) {
           </div>
         </div>
 
-        {/* ETA */}
         <div className="flex items-center justify-between shrink-0 gap-2">
           <div className="flex items-center gap-1.5 text-zinc-400 font-medium min-w-0">
             <Clock size={11.5} className="text-zinc-550 shrink-0" /> <span className="truncate">ETA</span>
@@ -141,7 +139,6 @@ export default function VehiclesDetail({ vehicle, onViewRoute, onClose }) {
           <span className="font-bold text-white shrink-0">1 hr 24m</span>
         </div>
 
-        {/* Current Address */}
         <div className="flex items-center justify-between shrink-0 gap-2">
           <div className="flex items-center gap-1.5 text-zinc-400 font-medium min-w-0">
             <MapPin size={11.5} className="text-zinc-550 shrink-0" /> <span className="truncate">Address</span>
@@ -151,7 +148,6 @@ export default function VehiclesDetail({ vehicle, onViewRoute, onClose }) {
           </span>
         </div>
 
-        {/* GPS Signal */}
         <div className="flex items-center justify-between shrink-0 gap-2">
           <div className="flex items-center gap-1.5 text-zinc-400 font-medium min-w-0">
             <Radio size={11.5} className="text-zinc-550 shrink-0" /> <span className="truncate">GPS</span>
@@ -159,7 +155,6 @@ export default function VehiclesDetail({ vehicle, onViewRoute, onClose }) {
           <span className="font-bold text-white shrink-0">Strong</span>
         </div>
 
-        {/* Ignition */}
         <div className="flex items-center justify-between shrink-0 gap-2">
           <div className="flex items-center gap-1.5 text-zinc-400 font-medium min-w-0">
             <Key size={11.5} className="text-zinc-550 shrink-0" /> <span className="truncate">Ignition</span>
@@ -167,7 +162,6 @@ export default function VehiclesDetail({ vehicle, onViewRoute, onClose }) {
           <span className="font-bold text-[#10b981] shrink-0">ON</span>
         </div>
 
-        {/* Last Updated */}
         <div className="flex items-center justify-between shrink-0 gap-2">
           <div className="flex items-center gap-1.5 text-zinc-400 font-medium min-w-0">
             <Calendar size={11.5} className="text-zinc-550 shrink-0" /> <span className="truncate">Last Updated</span>
@@ -177,7 +171,6 @@ export default function VehiclesDetail({ vehicle, onViewRoute, onClose }) {
 
       </div>
 
-      {/* 5. Action Footer Button */}
       <div className="pt-2 border-t border-zinc-800/20 shrink-0">
         <button 
           onClick={onViewRoute}
