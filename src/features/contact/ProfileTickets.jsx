@@ -1,28 +1,83 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Search } from "lucide-react";
+import { getTickets } from "../../api/ticketsApi";
 
-const DEFAULT_TICKETS = [
-  {
-    id: "#1042",
-    subject: "GPS not reporting on truck KA-04-1123",
-    status: "Resolved",
-    updated: "July 22",
-  },
-  {
-    id: "#1039",
-    subject: "Report export missing last week's data",
-    status: "In Progress",
-    updated: "July 18",
-  },
-];
+function formatStatus(status) {
+  if (!status) return "";
+  const statusMap = {
+    open: "Open",
+    in_progress: "In Progress",
+    resolved: "Resolved",
+    closed: "Closed",
+  };
+  const key = String(status).toLowerCase();
+  if (statusMap[key]) return statusMap[key];
+  return String(status)
+    .replace(/_/g, " ")
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+}
 
-export default function ProfileTickets({ tickets = DEFAULT_TICKETS }) {
+function formatDate(isoString) {
+  if (!isoString) return "";
+  const d = new Date(isoString);
+  if (isNaN(d.getTime())) return isoString;
+  return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+}
+
+function mapApiTicket(ticket) {
+  if (ticket.updated && !ticket.updated_at && !ticket.created_at) {
+    return ticket;
+  }
+  return {
+   id: ticket.id != null ? String(ticket.id) : "",
+    subject: ticket.subject || "",
+    status: formatStatus(ticket.status),
+    updated: formatDate(ticket.updated_at || ticket.created_at),
+  };
+}
+
+export default function ProfileTickets({ tickets: ticketsProp }) {
+  const [ticketList, setTicketList] = useState(() =>
+    Array.isArray(ticketsProp) ? ticketsProp.map(mapApiTicket) : []
+  );
   const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredTickets = tickets.filter(
+  useEffect(() => {
+    if (Array.isArray(ticketsProp)) {
+      setTicketList(ticketsProp.map(mapApiTicket));
+      return;
+    }
+
+    let isMounted = true;
+
+    async function fetchTickets() {
+      try {
+        const response = await getTickets({ page: 1, page_size: 25 });
+        const results = Array.isArray(response?.results)
+          ? response.results
+          : Array.isArray(response)
+          ? response
+          : [];
+
+        if (isMounted) {
+          setTicketList(results.map(mapApiTicket));
+        }
+      } catch (error) {
+        console.error("Failed to fetch tickets:", error);
+      }
+    }
+
+    fetchTickets();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [ticketsProp]);
+
+  const filteredTickets = ticketList.filter(
     (ticket) =>
-      ticket.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      ticket.subject.toLowerCase().includes(searchQuery.toLowerCase())
+      (ticket.id || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (ticket.subject || "").toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -54,7 +109,7 @@ export default function ProfileTickets({ tickets = DEFAULT_TICKETS }) {
           </thead>
           <tbody className="divide-y divide-transparent">
             {filteredTickets.map((ticket) => {
-              const isResolved = ticket.status.toLowerCase() === "resolved";
+              const isResolved = (ticket.status || "").toLowerCase() === "resolved";
 
               return (
                 <tr key={ticket.id} className="text-[11px] hover:bg-[#18181b]/50 transition-colors">
@@ -74,7 +129,6 @@ export default function ProfileTickets({ tickets = DEFAULT_TICKETS }) {
                     </span>
                   </td>
 
-        
                   <td className="py-2.5 text-right text-white font-medium">{ticket.updated}</td>
                 </tr>
               );

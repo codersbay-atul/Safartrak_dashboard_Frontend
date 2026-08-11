@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { ChevronDown } from "lucide-react";
+import { createTicket } from "../../api/ticketsApi";
+import { toast } from "../../components/Ui/toast";
 
 export default function PersonalInformation({ onSubmit, onCancel }) {
   const [formData, setFormData] = useState({
@@ -13,6 +15,7 @@ export default function PersonalInformation({ onSubmit, onCancel }) {
   });
 
   const [fileName, setFileName] = useState("Attach a screenshot or file");
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -27,9 +30,31 @@ export default function PersonalInformation({ onSubmit, onCancel }) {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (onSubmit) onSubmit(formData);
+    if (loading) return;
+
+    const categoryMap = {
+      hardware: "device",
+    };
+
+    const payload = {
+      subject: formData.subject,
+      category: categoryMap[formData.category] || formData.category,
+      priority: (formData.priority || "").toLowerCase(),
+      related_vehicle: formData.relatedVehicle,
+      description: formData.description,
+    };
+
+    try {
+      setLoading(true);
+      const response = await createTicket(payload);
+      if (onSubmit) onSubmit(formData);
+    } catch (error) {
+      toast.error(error?.message || "Failed to submit ticket.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -157,9 +182,10 @@ export default function PersonalInformation({ onSubmit, onCancel }) {
           </button>
           <button
             type="submit"
-            className="w-full bg-[#FFC107] hover:bg-[#e6ac00] text-black text-[10px] font-semibold py-1.5 rounded-lg transition-colors"
+            disabled={loading}
+            className="w-full bg-[#FFC107] hover:bg-[#e6ac00] text-black text-[10px] font-semibold py-1.5 rounded-lg transition-colors disabled:opacity-50"
           >
-            Submit Ticket
+            {loading ? "Submitting..." : "Submit Ticket"}
           </button>
         </div>
       </form>

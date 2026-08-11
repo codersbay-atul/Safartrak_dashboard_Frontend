@@ -49,7 +49,6 @@ export default function Dashboard() {
 
   const handleExport = async (opts = {}) => {
     try {
-      console.log("Dashboard handleExport called", opts);
       const { dateRange, region, status, fleet, search } = opts || {};
       const params = {};
       if (status && status !== "all") params.status = status;
@@ -57,22 +56,20 @@ export default function Dashboard() {
       if (search) params.search = search;
       if (dateRange) params.range = dateRange;
 
-      console.log("Calling getDashboardExport with params", params);
       const response = await getDashboardExport(params);
-      console.log("getDashboardExport response headers", response?.headers);
       const disposition =
         response.headers?.["content-disposition"] ||
         response.headers?.["Content-Disposition"];
-      let filename = "dashboard_export";
+      let filename = "dashboard-export.csv";
       if (disposition) {
         const match = /filename\*?=([^;]+)/i.exec(disposition);
         if (match) {
-          filename = match[1].replace(/UTF-8''/, "").replace(/\"/g, "");
+          filename = match[1].replace(/UTF-8''/, "").replace(/"/g, "");
         }
       }
 
       const blob = new Blob([response.data], {
-        type: response.data?.type || "application/octet-stream",
+        type: response.headers?.["content-type"] || "text/csv;charset=utf-8;",
       });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -95,7 +92,6 @@ export default function Dashboard() {
       isRouteView={isRouteView}
       onExitRouteView={exitRouteView}
     >
-    
       <div
         className={`relative flex-1 min-h-0 overflow-hidden ${
           isRouteView ? "" : "flex flex-col"
@@ -110,16 +106,7 @@ export default function Dashboard() {
           aria-hidden={isRouteView}
         >
           <div className="shrink-0">
-            <div className="flex items-center justify-between gap-2">
-              <DashboardHeader onSearch={setVehicleSearch} onExportClick={handleExport} onAddVehicleClick={() => navigate("/vehicles")} />
-              <button
-                type="button"
-                onClick={() => { console.log('Debug export button clicked'); handleExport({}); }}
-                className="ml-2 px-3 py-1 rounded bg-[#FFC107] text-black text-sm"
-              >
-                Debug Export
-              </button>
-            </div>
+            <DashboardHeader onSearch={setVehicleSearch} onExportClick={handleExport} onAddVehicleClick={() => navigate("/vehicles")} />
           </div>
           <div className="shrink-0">
             <StatsCard />
