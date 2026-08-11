@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate, useNavigate } from "react-route
 import { useDispatch } from "react-redux";
 import "./App.css";
 
-import Dashboard from "./pages/Dashboard";
+
 import Analytics from "./pages/Analytics";
 import Reports from "./pages/Reports";
 import Mobilize from "./pages/Mobilize";
@@ -27,6 +27,7 @@ import CommandHistoryPage from "./features/mobilize/CommandHistory";
 import { toast } from "./components/Ui/toast";
 import { setAuthTokens } from "./store/slices/authSlice";
 import ForgotPassword from "./pages/Forgotpassword";
+import Dashboard from "./pages/dashboard";
 
 function SecuritySettingUpdateRoute() {
   const navigate = useNavigate();
@@ -80,7 +81,7 @@ function AppContent() {
           path="/dashboard"
           element={
             <ProtectedRoute>
-              <Dashboard />
+              <Dashboard/>
             </ProtectedRoute>
           }
         />
