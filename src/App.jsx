@@ -13,7 +13,7 @@ import Activity from "./pages/Activity";
 import Vehicles from "./pages/Vehicles";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import ForgotPassword from "./pages/ForgotPassword";
+
 import OtpVerification from "./pages/OtpVerification";
 import ResetPassword from "./pages/ResetPassword";
 import PasswordUpdated from "./pages/PasswordUpdated";
@@ -26,6 +26,7 @@ import SecuritySettingUpdate from "./features/profile/SecuritySettingUpdate";
 import CommandHistoryPage from "./features/mobilize/CommandHistory";
 import { toast } from "./components/Ui/toast";
 import { setAuthTokens } from "./store/slices/authSlice";
+import ForgotPassword from "./pages/Forgotpassword";
 
 function SecuritySettingUpdateRoute() {
   const navigate = useNavigate();
