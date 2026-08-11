@@ -224,7 +224,6 @@ export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }
           </Popover>
         </NavPopoverWrapper>
 
-        {/* 3. Live System Date */}
         <div className="hidden lg:block text-right leading-none shrink-0">
           <p className="text-[14px] xl:text-[15px] font-semibold text-white">{weekday},</p>
           <p className="text-[10px] text-[#a1a1aa] mt-0.5">{monthDayYear}</p>

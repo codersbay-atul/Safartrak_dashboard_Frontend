@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { loginRequest } from "../api/authApi";
 import { featureFlags } from "../config/featureFlags";
 import { toast } from "../components/Ui/toast";
-import { setAuthError, setCredentials } from "../store/slices/authSlice";
+import { setAuthError, setAuthTokens } from "../store/slices/authSlice";
 
 function resolveLoginErrorMessage(error) {
   if (!error) return "Unable to sign in. Please try again.";
@@ -40,7 +40,7 @@ export function useLogin() {
     onSuccess: (tokens) => {
       // Store demo/real tokens in Redux (and persisted storage via authSlice).
       dispatch(
-        setCredentials({
+        setAuthTokens({
           accessToken: tokens.accessToken,
           refreshToken: tokens.refreshToken,
         })

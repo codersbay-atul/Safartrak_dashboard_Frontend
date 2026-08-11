@@ -1,6 +1,7 @@
 import {
   getDashboardSummary as getDashboardSummaryRequest,
   getDashboardHealth as getDashboardHealthRequest,
+  getDashboardExport as getDashboardExportRequest,
 } from "../api/dashboardApi";
 
 /**
@@ -25,4 +26,12 @@ export function getDashboardSummary() {
  */
 export function getDashboardHealth(params) {
   return getDashboardHealthRequest(params);
+}
+
+/**
+ * Download dashboard export (CSV/Excel) via GET /v1/dashboard/export
+ * @param {object} params
+ */
+export function getDashboardExport(params = {}) {
+  return getDashboardExportRequest(params);
 }

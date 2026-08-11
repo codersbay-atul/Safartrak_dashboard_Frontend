@@ -106,9 +106,8 @@ export default function Aoi() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [selectedId, setSelectedId] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-
-  
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [editingAoi, setEditingAoi] = useState(null);
 
   const { aois = [], isLoading, isError, error } = useAoiList({
     search: searchQuery,
@@ -301,7 +300,29 @@ export default function Aoi() {
     },
   });
 
+  const handleOpenCreateModal = () => {
+    setEditingAoi(null);
+    setIsCreateModalOpen(true);
+  };
+
+  const handleEditClick = (aoi) => {
+    if (!aoi) return;
+    setEditingAoi(aoi);
+    setIsCreateModalOpen(true);
+  };
+
+  const handleCloseCreateModal = () => {
+    setIsCreateModalOpen(false);
+    setEditingAoi(null);
+  };
+
   const handleCreateSubmit = (newAoiData) => {
+    if (editingAoi) {
+      toast.info("AOI edit mode opened, but update is not implemented yet.");
+      handleCloseCreateModal();
+      return;
+    }
+
     createMutation.mutate(newAoiData);
   };
 
@@ -321,7 +342,7 @@ export default function Aoi() {
     <MainLayout activeTab="Area of Interest (AOI)">
       <div className="flex-1 flex flex-col gap-2.5 min-h-0 overflow-y-auto min-[1152px]:overflow-hidden text-white bg-[#09090b]">
         <div className="shrink-0">
-          <AoiHeader onCreateClick={() => setIsCreateModalOpen(true)} />
+          <AoiHeader onCreateClick={handleOpenCreateModal} />
         </div>
 
         <div className="shrink-0">
@@ -351,7 +372,7 @@ export default function Aoi() {
           <div className="w-full min-[1152px]:w-[300px] xl:w-[320px] shrink-0 h-[420px] min-[1152px]:h-full min-h-0 overflow-hidden">
             <AoiDetailsPanel
               aoi={selectedAoi}
-              onEdit={() => {}}
+              onEdit={() => handleEditClick(selectedAoi)}
               onDelete={handleDeleteClick}
             />
           </div>
@@ -361,7 +382,9 @@ export default function Aoi() {
     
       <CreateAOI
         isOpen={isCreateModalOpen}
-        onClose={() => setIsCreateModalOpen(false)}
+        initialData={editingAoi}
+        mode={editingAoi ? "edit" : "create"}
+        onClose={handleCloseCreateModal}
         onSubmit={handleCreateSubmit}
       />
 

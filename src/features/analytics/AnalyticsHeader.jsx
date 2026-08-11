@@ -18,7 +18,7 @@ export default function AnalyticsHeader({
       subtitle={subtitle}
       searchPlaceholder={searchPlaceholder}
       onSearch={onSearch}
-      showFilter={false}
+      showFilters={false}
       showExport={false}
     >
       <div className="relative flex-1 sm:flex-initial min-w-[180px]">

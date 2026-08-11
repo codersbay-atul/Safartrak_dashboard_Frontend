@@ -15,7 +15,7 @@ function MapController({ center, zoom }) {
   return null;
 }
 
-export default function CreateAOI({ isOpen = true, onClose, onSubmit }) {
+export default function CreateAOI({ isOpen = true, initialData = null, mode = "create", onClose, onSubmit }) {
   const [name, setName] = useState("");
   const [alerts, setAlerts] = useState({ entry: false, exit: false });
   const [selectedVehicles, setSelectedVehicles] = useState([]);
@@ -24,17 +24,68 @@ export default function CreateAOI({ isOpen = true, onClose, onSubmit }) {
   const [mapCenter, setMapCenter] = useState([28.6139, 77.209]);
   const [mapZoom, setMapZoom] = useState(11);
 
+  const resetForm = () => {
+    setName("");
+    setAlerts({ entry: false, exit: false });
+    setSelectedVehicles([]);
+    setAoiType("polygon");
+    setSearchLocation("");
+    setMapCenter([28.6139, 77.209]);
+    setMapZoom(11);
+  };
+
   useEffect(() => {
     if (!isOpen) {
-      setName("");
-      setAlerts({ entry: false, exit: false });
-      setSelectedVehicles([]);
-      setAoiType("polygon");
-      setSearchLocation("");
-      setMapCenter([28.6139, 77.209]);
-      setMapZoom(11);
+      resetForm();
+      return;
     }
-  }, [isOpen]);
+
+    if (!initialData) {
+      resetForm();
+      return;
+    }
+
+    const raw = initialData.raw || initialData;
+
+    setName(raw.name || initialData.name || "");
+    setAlerts({
+      entry: Boolean(raw.entry_alert ?? raw.entryAlert ?? raw.alerts?.entry ?? initialData.alerts?.entry),
+      exit: Boolean(raw.exit_alert ?? raw.exitAlert ?? raw.alerts?.exit ?? initialData.alerts?.exit),
+    });
+
+    const assignedVehicles = Array.isArray(raw.assigned_vehicles)
+      ? raw.assigned_vehicles
+      : Array.isArray(raw.assignedVehicles)
+        ? raw.assignedVehicles
+        : Array.isArray(raw.vehicles)
+          ? raw.vehicles
+          : [];
+
+    setSelectedVehicles(
+      assignedVehicles.length > 0
+        ? [typeof assignedVehicles[0] === "string" ? assignedVehicles[0] : assignedVehicles[0]?.plate || assignedVehicles[0]?.vehicle_number || assignedVehicles[0]?.id || ""]
+        : []
+    );
+
+    const shape = raw.geometry?.shape || raw.shape || "polygon";
+    setAoiType(shape === "circle" ? "circle" : "polygon");
+
+    const parsedGeo = typeof raw.geo_position === "string" ? raw.geo_position.split(",").map(Number) : null;
+    if (parsedGeo?.length === 2 && !Number.isNaN(parsedGeo[0]) && !Number.isNaN(parsedGeo[1])) {
+      setMapCenter([parsedGeo[0], parsedGeo[1]]);
+      setMapZoom(13);
+      setSearchLocation(raw.geo_position || "");
+    } else if (Array.isArray(raw.center) && raw.center.length >= 2) {
+      const [lat, lng] = raw.center.map(Number);
+      if (!Number.isNaN(lat) && !Number.isNaN(lng)) {
+        setMapCenter([lat, lng]);
+        setMapZoom(13);
+        setSearchLocation(`${lat},${lng}`);
+      }
+    } else {
+      setSearchLocation("");
+    }
+  }, [isOpen, initialData]);
 
   useEffect(() => {
     const trimmedLocation = searchLocation.trim();
@@ -104,10 +155,12 @@ export default function CreateAOI({ isOpen = true, onClose, onSubmit }) {
         <div className="px-4 py-3 border-b border-[#232328] flex items-center justify-between">
           <div>
             <h2 className="text-lg font-semibold text-white tracking-wide">
-              Create New AOI
+              {mode === "edit" ? "Edit AOI" : "Create New AOI"}
             </h2>
             <p className="text-xs text-zinc-400 mt-1">
-              Fill in the details below and create the AOI.
+              {mode === "edit"
+                ? "Update the selected AOI details and save your changes."
+                : "Fill in the details below and create the AOI."}
             </p>
           </div>
           <button
@@ -237,7 +290,7 @@ export default function CreateAOI({ isOpen = true, onClose, onSubmit }) {
             onClick={handleSubmit}
             className="w-1/2 py-2 rounded-xl bg-[#10b981] hover:bg-[#059669] text-black font-semibold text-sm transition-colors cursor-pointer shadow-lg shadow-emerald-500/10"
           >
-            Create AOI
+            {mode === "edit" ? "Save Changes" : "Create AOI"}
           </button>
         </div>
       </div>

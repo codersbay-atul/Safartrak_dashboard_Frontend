@@ -53,7 +53,7 @@ export default function VehicleDetailsHeader({
       title={title}
       subtitle={subtitle}
       showSearch={false}
-      showFilter={false}
+      showFilters={false}
       showExport={false}
     >
     

@@ -206,6 +206,7 @@ export default function Users() {
         <UserResetPasswordModal
           isOpen={isAddModalOpen}
           onClose={handleCloseModal}
+          userId={selectedUser?.id || userApiData?.id || ""}
           userEmail={selectedUser?.email || userApiData?.email || ""}
         />
       )}

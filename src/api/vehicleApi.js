@@ -7,7 +7,7 @@ import apiClient from "./client";
 /**
  * GET /v1/vehicles
  *
- * @param {{ search?: string, page?: number, page_size?: number }} [params]
+ * @param {{ search?: string, page?: number, page_size?: number, tab?: string, fleet?: string, type?: string, tracking_status?: string }} [params]
  * @returns {Promise<{ results: array, counts: object, total: number, page: number, page_size: number }>}
  */
 export async function getVehicles(params = {}) {
@@ -15,11 +15,17 @@ export async function getVehicles(params = {}) {
   const page = params.page ?? 1;
   const page_size = params.page_size ?? 25;
   const tab = params.tab ?? "all";
+  const fleet = params.fleet ?? params.fleetGroup ?? "";
+  const type = params.type ?? params.vehicleType ?? "";
+  const tracking_status = params.tracking_status ?? params.trackingStatus ?? "";
 
   const response = await apiClient.get("/v1/vehicles", {
     params: {
       ...(search ? { search } : {}),
       ...(tab ? { tab } : {}),
+      ...(fleet ? { fleet } : {}),
+      ...(type ? { type } : {}),
+      ...(tracking_status ? { tracking_status } : {}),
       page,
       page_size,
     },

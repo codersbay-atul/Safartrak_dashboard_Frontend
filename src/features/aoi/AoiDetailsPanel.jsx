@@ -6,7 +6,7 @@ const TABS = ["Overview", "Vehicle", "Alerts", "Activity"];
 export default function AoiDetailsPanel({ aoi, onEdit, onDelete, onViewVehicle }) {
   const [activeTab, setActiveTab] = useState("Overview");
 
-  // Tab internal search and filter states
+  
   const [vehicleSearch, setVehicleSearch] = useState("");
   const [vehicleFilter, setVehicleFilter] = useState("all");
 
@@ -98,7 +98,6 @@ export default function AoiDetailsPanel({ aoi, onEdit, onDelete, onViewVehicle }
             type="button"
             className="text-[#71717a] hover:text-white transition-colors p-1"
           >
-            <MoreVertical size={18} />
           </button>
         </div>
 

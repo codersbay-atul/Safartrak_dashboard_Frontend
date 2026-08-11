@@ -9,7 +9,6 @@ import useAccountProfile from "../../hooks/useAccountProfile";
 export default function DashboardHeader({
   userName = '',
   onSearch,
-  onFilterClick,
   onExportClick,
   onAddVehicleClick,
 }) {
@@ -32,7 +31,7 @@ export default function DashboardHeader({
       subtitle="Monitor vehicle locations, movement and fleet status in real time."
       searchPlaceholder="Search"
       onSearch={onSearch}
-      onFilterClick={onFilterClick}
+      
       onExportClick={onExportClick}
     >
       {/* <HeaderActionButton icon={Plus} iconPosition="right" onClick={onAddVehicleClick} className="min-w-[120px]">

@@ -12,7 +12,7 @@ export default function TicketsHeader({
       title={title}
       subtitle={subtitle}
       showSearch={false}
-      showFilter={false}
+      showFilters={false}
       showExport={false}
     >
       <HeaderActionButton onClick={onNewTicketClick} className="min-w-[120px]">

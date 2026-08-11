@@ -131,6 +131,38 @@ export async function activateUser(userId) {
 }
 
 /**
+ * POST /v1/users/:userId/reset-password
+ * @param {string|number} userId
+ * @param {{ new_password: string, confirm_password: string }} payload
+ * @returns {Promise<object>} reset password response payload
+ */
+export async function resetUserPassword(userId, payload = {}) {
+  if (!userId) {
+    throw new Error("A valid user ID is required to reset password.");
+  }
+
+  const newPassword = String(payload?.new_password ?? "");
+  const confirmPassword = String(payload?.confirm_password ?? "");
+
+  if (!newPassword) {
+    throw new Error("New password is required.");
+  }
+  if (newPassword !== confirmPassword) {
+    throw new Error("Passwords do not match.");
+  }
+
+  const response = await apiClient.post(
+    `/v1/users/${encodeURIComponent(userId)}/reset-password`,
+    {
+      new_password: newPassword,
+      confirm_password: confirmPassword,
+    }
+  );
+
+  return response?.data?.data ?? response?.data ?? {};
+}
+
+/**
  * POST /v1/users/:userId/status
  * @param {string|number} userId
  * @param {{ status: string }} payload

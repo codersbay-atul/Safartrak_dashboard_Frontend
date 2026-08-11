@@ -51,5 +51,19 @@ export async function getDashboardHealth(params = {}) {
   };
 }
 
+/**
+ * GET /v1/dashboard/export
+ * Returns a file blob for download
+ * @param {object} [params]
+ */
+export async function getDashboardExport(params = {}) {
+  const response = await apiClient.get("/v1/dashboard/export", {
+    params,
+    responseType: "blob",
+  });
+
+  return response;
+}
+
 /** @deprecated Prefer getDashboardSummary — kept for existing imports. */
 export const fetchDashboardSummary = getDashboardSummary;

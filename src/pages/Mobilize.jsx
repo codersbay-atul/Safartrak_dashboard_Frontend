@@ -200,8 +200,7 @@ export default function Mobilize() {
       <div className="h-[calc(100vh-2rem)] max-h-screen bg-[#09090b] flex flex-col gap-2 p-3 overflow-hidden text-white">
         <div className="shrink-0">
           <MobilizeHeader
-            searchQuery={searchQuery}
-            onSearchChange={(e) => setSearchQuery(e.target.value)}
+            onSearch={(value) => setSearchQuery(value)}
             fleetFilter={fleetFilter}
             onFleetChange={setFleetFilter}
             onHistoryClick={() => navigate("/command-history")}

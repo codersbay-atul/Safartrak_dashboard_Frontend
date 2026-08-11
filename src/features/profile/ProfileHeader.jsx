@@ -12,13 +12,12 @@ export default function ProfileHeader({
       title={title}
       subtitle={subtitle}
       showSearch={false}
-      showFilter={false}
+      showFilters={false}
       showExport={false}
     >
       <HeaderActionButton onClick={onEditSettings} className="w-full max-w-[220px] min-w-0 sm:w-auto">
         Edit Account Settings
       </HeaderActionButton>
     </PageHeader>
-  
   );
 }

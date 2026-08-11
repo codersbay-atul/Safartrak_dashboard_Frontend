@@ -15,7 +15,7 @@ export default function VehiclesHeader({
       title={title}
       subtitle={subtitle}
       showSearch={false}
-      showFilter={false}
+      showFilters={false}
       showExport={false}
     >
       {/* 1. Import Data Button (Secondary) */}

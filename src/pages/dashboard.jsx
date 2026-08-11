@@ -9,6 +9,8 @@ import DashboardHeader from "../features/dashboard/DashboardHeader";
 import LivePositions from "../features/dashboard/LivePositions";
 import VehiclesList from "../features/dashboard/VehiclesList";
 import DashboardVehicleDetails from "../features/dashboard/DashboardVehicleDetails";
+import { getDashboardExport } from "../services/dashboardService";
+import { toast } from "../components/Ui/toast";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -45,6 +47,48 @@ export default function Dashboard() {
 
   const exitRouteView = () => setIsRouteView(false);
 
+  const handleExport = async (opts = {}) => {
+    try {
+      console.log("Dashboard handleExport called", opts);
+      const { dateRange, region, status, fleet, search } = opts || {};
+      const params = {};
+      if (status && status !== "all") params.status = status;
+      if (fleet && fleet !== "all") params.group = fleet;
+      if (search) params.search = search;
+      if (dateRange) params.range = dateRange;
+
+      console.log("Calling getDashboardExport with params", params);
+      const response = await getDashboardExport(params);
+      console.log("getDashboardExport response headers", response?.headers);
+      const disposition =
+        response.headers?.["content-disposition"] ||
+        response.headers?.["Content-Disposition"];
+      let filename = "dashboard_export";
+      if (disposition) {
+        const match = /filename\*?=([^;]+)/i.exec(disposition);
+        if (match) {
+          filename = match[1].replace(/UTF-8''/, "").replace(/\"/g, "");
+        }
+      }
+
+      const blob = new Blob([response.data], {
+        type: response.data?.type || "application/octet-stream",
+      });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+      toast.success("Export started");
+    } catch (err) {
+      console.error("Dashboard export failed", err);
+      toast.error(err?.message || "Dashboard export failed");
+    }
+  };
+
   return (
     <MainLayout
       activeTab="Dashboard"
@@ -66,7 +110,16 @@ export default function Dashboard() {
           aria-hidden={isRouteView}
         >
           <div className="shrink-0">
-            <DashboardHeader onSearch={setVehicleSearch} onAddVehicleClick={() => navigate("/vehicles")} />
+            <div className="flex items-center justify-between gap-2">
+              <DashboardHeader onSearch={setVehicleSearch} onExportClick={handleExport} onAddVehicleClick={() => navigate("/vehicles")} />
+              <button
+                type="button"
+                onClick={() => { console.log('Debug export button clicked'); handleExport({}); }}
+                className="ml-2 px-3 py-1 rounded bg-[#FFC107] text-black text-sm"
+              >
+                Debug Export
+              </button>
+            </div>
           </div>
           <div className="shrink-0">
             <StatsCard />

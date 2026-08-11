@@ -6,6 +6,7 @@ import "./App.css";
 
 import Analytics from "./pages/Analytics";
 import Reports from "./pages/Reports";
+import CreateReport from "./pages/CreateReport";
 import Mobilize from "./pages/Mobilize";
 import Alerts from "./pages/Alerts";
 import Aoi from "./pages/Aoi";
@@ -98,6 +99,14 @@ function AppContent() {
           element={
             <ProtectedRoute>
               <Reports />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/reports/create"
+          element={
+            <ProtectedRoute>
+              <CreateReport />
             </ProtectedRoute>
           }
         />

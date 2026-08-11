@@ -47,7 +47,7 @@ export default function Button({
       className={`${baseStyles} ${widthStyle} ${variants[variant]} ${sizes[size]} ${className}`}
       {...props}
     >
-      {/* Left Icon */}
+     
       {Icon && iconPosition === "left" && (
         <Icon size={iconSizes[size] || 12} className="shrink-0" />
       )}
