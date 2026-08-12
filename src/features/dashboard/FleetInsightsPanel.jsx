@@ -206,8 +206,8 @@ export function FleetInsightsRightColumn() {
 
   const scoreDisplay = showLoadingSkeleton
     ? VALUE_SKELETON
-    : health.scorePct === "-"
-      ? "-"
+    : health.scorePct === "Not Available" || health.scorePct === "-"
+      ? "Not Available"
       : `${health.scorePct}%`;
 
   const labelDisplay = showLoadingSkeleton ? VALUE_SKELETON : health.label;
@@ -219,12 +219,14 @@ export function FleetInsightsRightColumn() {
 
   const summaryRows = SUMMARY_ROWS_META.map((row) => ({
     ...row,
-    value: showTrackLoading ? VALUE_SKELETON : trackSummary[row.key] ?? "-",
+    value: showTrackLoading
+      ? VALUE_SKELETON
+      : trackSummary[row.key] ?? "Not Available",
   }));
 
   const totalVehiclesValue = showTrackLoading
     ? VALUE_SKELETON
-    : trackSummary.totalVehicles ?? "-";
+    : trackSummary.totalVehicles ?? "Not Available";
 
   return (
     <div className="flex flex-col gap-3 h-full overflow-hidden select-none">

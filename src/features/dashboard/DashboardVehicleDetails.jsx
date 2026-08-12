@@ -43,8 +43,16 @@ const STATUS_BADGE = {
 };
 
 function displayValue(value) {
-  if (value == null) return "-";
-  if (typeof value === "string" && value.trim() === "") return "-";
+  if (value == null) return "Not Available";
+
+  if (typeof value === "string") {
+    const normalizedValue = value.trim();
+
+    if (normalizedValue === "" || normalizedValue === "-") {
+      return "Not Available";
+    }
+  }
+
   return String(value);
 }
 
@@ -69,12 +77,12 @@ function resolveStatusLabel(vehicle) {
     return String(mapped);
   }
 
-  return "-";
+  return "Not Available";
 }
 
 /**
  * Build detail rows from the selected Vehicles API object only.
- * Fields not present in the API always render "-".
+ * Fields not present in the API always render "Not Available".
  */
 function getVehicleMetrics(vehicle) {
   return [
@@ -87,38 +95,38 @@ function getVehicleMetrics(vehicle) {
     {
       key: "fuel",
       label: "Fuel Level",
-      value: "-",
+      value: "Not Available",
       icon: Fuel,
     },
     {
       key: "battery",
       label: "Battery",
-      value: "-",
+      value: "Not Available",
       icon: Battery,
     },
     {
       key: "engineHealth",
       label: "Engine Health",
-      value: "-",
+      value: "Not Available",
       icon: ShieldCheck,
       valueColor: "text-zinc-200",
     },
     {
       key: "odometer",
       label: "Odometer",
-      value: "-",
+      value: "Not Available",
       icon: Milestone,
     },
     {
       key: "tripProgress",
       label: "Trip Progress",
-      value: "-",
+      value: "Not Available",
       icon: Waypoints,
     },
     {
       key: "eta",
       label: "ETA",
-      value: "-",
+      value: "Not Available",
       icon: Clock,
     },
     {
@@ -229,7 +237,9 @@ export default function DashboardVehicleDetails({ vehicle, onViewRoute }) {
           </div>
         </div>
         <div className="text-right leading-tight shrink-0">
-          <p className="text-[11px] sm:text-[12px] font-extrabold text-white">-</p>
+          <p className="text-[11px] sm:text-[12px] font-extrabold text-white">
+            Not Available
+          </p>
           <p className="text-[9px] text-zinc-550 font-medium">
             Remaining Distance
           </p>
@@ -244,7 +254,7 @@ export default function DashboardVehicleDetails({ vehicle, onViewRoute }) {
           <div className="absolute right-0 w-1.5 h-1.5 rounded-full bg-[#16161a] border-[1.5px] border-zinc-700 transform translate-x-1/2 z-10" />
         </div>
         <p className="text-[8.5px] font-bold text-[#FDBB24] tracking-wide mt-1">
-          -
+          Not Available
         </p>
       </div>
 

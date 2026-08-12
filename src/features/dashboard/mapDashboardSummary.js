@@ -5,12 +5,12 @@
  */
 
 export const DASHBOARD_SUMMARY_PLACEHOLDER = {
-  totalVehicles: "-",
-  activeVehicles: "-",
-  criticalAlerts: "-",
-  maintenanceDue: "-",
-  predictionAccuracy: "-",
-  noGps: "-",
+  totalVehicles: "Not Available",
+  activeVehicles: "Not Available",
+  criticalAlerts: "Not Available",
+  maintenanceDue: "Not Available",
+  predictionAccuracy: "Not Available",
+  noGps: "Not Available",
 };
 
 /**
@@ -31,13 +31,19 @@ function isMissingValue(value) {
   if (typeof value === "number" && Number.isNaN(value)) return true;
   if (typeof value === "string") {
     const trimmed = value.trim();
-    if (trimmed === "" || trimmed.toLowerCase() === "nan") return true;
+    if (
+      trimmed === "" ||
+      trimmed === "-" ||
+      trimmed.toLowerCase() === "nan"
+    ) {
+      return true;
+    }
   }
   return false;
 }
 
 function toDisplayValue(value, { asPercent = false } = {}) {
-  if (isMissingValue(value)) return "-";
+  if (isMissingValue(value)) return "Not Available";
 
   if (asPercent) {
     const raw = String(value).trim();

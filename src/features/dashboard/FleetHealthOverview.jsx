@@ -49,7 +49,7 @@ const CHIP_META = [
 ];
 
 function formatLastUpdated(value) {
-  if (value == null || value === "") return "-";
+  if (value == null || value === "" || value === "-") return "Not Available";
   try {
     const date = new Date(value);
     if (Number.isNaN(date.getTime())) return String(value);
@@ -139,7 +139,7 @@ function HealthSeriesChart({ series }) {
             key={`${point.label}-${index}`}
             className="text-[7.5px] text-zinc-500 font-medium truncate text-center flex-1 min-w-0"
           >
-            {point.label || "-"}
+            {point.label || "Not Available"}
           </span>
         ))}
       </div>
@@ -161,7 +161,7 @@ export default function FleetHealthOverview() {
 
   const summaryStats = CHIP_META.map((chip) => ({
     ...chip,
-    value: current?.[chip.id] ?? "-",
+    value: current?.[chip.id] ?? "Not Available",
   }));
 
   const hasSeries = series.length > 0;

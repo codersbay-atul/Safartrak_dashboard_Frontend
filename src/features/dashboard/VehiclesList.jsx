@@ -128,7 +128,16 @@ export default function VehiclesList({
       <div className="flex flex-col overflow-y-auto flex-1 scrollbar-thin scrollbar-thumb-zinc-800 scrollbar-track-transparent">
         {filteredVehicles.map((vehicle) => {
           const isSelected = selectedId === vehicle.id;
-          const plateDisplay = vehicle.plate || vehicle.registrationNumber || "N/A";
+          const plateDisplay =
+            vehicle.plate &&
+            vehicle.plate !== "-" &&
+            vehicle.plate !== "Not Available"
+              ? vehicle.plate
+              : vehicle.registrationNumber &&
+                  vehicle.registrationNumber !== "-" &&
+                  vehicle.registrationNumber !== "Not Available"
+                ? vehicle.registrationNumber
+                : "Not Available";
 
           return (
             <div
@@ -159,7 +168,13 @@ export default function VehiclesList({
                 </div>
 
                 <div className="flex items-center gap-1.5 text-[11px] text-[#8e8e93] truncate">
-                  <span className="truncate">{vehicle.driver || "-"}</span>
+                  <span className="truncate">
+                    {vehicle.driver &&
+                    vehicle.driver !== "-" &&
+                    vehicle.driver !== "Not Available"
+                      ? vehicle.driver
+                      : "Not Available"}
+                  </span>
                   <span className="shrink-0 text-[#52525b]">•</span>
                   <span className="truncate">{vehicle.info}</span>
                 </div>
@@ -169,10 +184,18 @@ export default function VehiclesList({
               <div className="flex items-center gap-2 xl:gap-3 shrink-0">
                 <div className="text-right leading-tight min-w-0 max-w-[72px] xl:max-w-none">
                   <p className="text-[12px] xl:text-[13px] font-bold text-white">
-                    {vehicle.speed}
+                    {vehicle.speed &&
+                    vehicle.speed !== "-" &&
+                    vehicle.speed !== "Not Available"
+                      ? vehicle.speed
+                      : "Not Available"}
                   </p>
                   <p className="text-[10px] text-[#8e8e93] mt-0.5 truncate text-right">
-                    {vehicle.location || "-"}
+                    {vehicle.location &&
+                    vehicle.location !== "-" &&
+                    vehicle.location !== "Not Available"
+                      ? vehicle.location
+                      : "Not Available"}
                   </p>
                 </div>
 

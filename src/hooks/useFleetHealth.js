@@ -7,13 +7,13 @@ import { getFleetHealth } from "../services/fleetService";
 const ERROR_TOAST = "Unable to load fleet health data.";
 
 const PLACEHOLDER = {
-  scorePct: "-",
+  scorePct: "Not Available",
   scoreWidth: 0,
-  label: "-",
-  healthy: "-",
-  warning: "-",
-  critical: "-",
-  offline: "-",
+  label: "Not Available",
+  healthy: "Not Available",
+  warning: "Not Available",
+  critical: "Not Available",
+  offline: "Not Available",
 };
 
 function isMissingValue(value) {
@@ -21,13 +21,19 @@ function isMissingValue(value) {
   if (typeof value === "number" && Number.isNaN(value)) return true;
   if (typeof value === "string") {
     const trimmed = value.trim();
-    if (trimmed === "" || trimmed.toLowerCase() === "nan") return true;
+    if (
+      trimmed === "" ||
+      trimmed === "-" ||
+      trimmed.toLowerCase() === "nan"
+    ) {
+      return true;
+    }
   }
   return false;
 }
 
 function toDisplayValue(value) {
-  if (isMissingValue(value)) return "-";
+  if (isMissingValue(value)) return "Not Available";
   return String(value);
 }
 
@@ -53,7 +59,7 @@ export function mapFleetHealth(payload) {
       : null;
 
   return {
-    scorePct: scoreNum == null ? "-" : String(scoreNum),
+    scorePct: scoreNum == null ? "Not Available" : String(scoreNum),
     scoreWidth: scoreNum == null ? 0 : Math.max(0, Math.min(100, scoreNum)),
     label: toDisplayValue(payload.label),
     healthy: toDisplayValue(payload.healthy),

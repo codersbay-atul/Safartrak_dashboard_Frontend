@@ -4,8 +4,15 @@
  */
 
 export function displayOrDash(value) {
-  if (value == null) return "-";
-  if (typeof value === "string" && value.trim() === "") return "-";
+  if (value == null) return "Not Available";
+
+  if (typeof value === "string") {
+    const normalizedValue = value.trim();
+    if (normalizedValue === "" || normalizedValue === "-") {
+      return "Not Available";
+    }
+  }
+
   return String(value);
 }
 
@@ -16,13 +23,20 @@ function readRaw(vehicle) {
 function readSpeedKmh(vehicle) {
   const raw = readRaw(vehicle);
   const fromRaw = raw.speed_kmh ?? raw.speedKmh;
-  if (fromRaw != null && fromRaw !== "") {
+  if (fromRaw != null && fromRaw !== "" && fromRaw !== "-") {
     const n = Number(fromRaw);
     return Number.isFinite(n) ? n : null;
   }
 
   const mapped = vehicle?.speed;
-  if (mapped == null || mapped === "-" || mapped === "") return null;
+  if (
+    mapped == null ||
+    mapped === "-" ||
+    mapped === "Not Available" ||
+    mapped === ""
+  ) {
+    return null;
+  }
   const parsed = Number(String(mapped).replace(/[^\d.-]/g, ""));
   return Number.isFinite(parsed) ? parsed : null;
 }
@@ -116,7 +130,7 @@ export function resolveRouteStatusLabel(vehicle) {
     return String(mapped);
   }
 
-  return "-";
+  return "Not Available";
 }
 
 export function getTripField(vehicle, keys) {

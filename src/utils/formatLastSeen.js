@@ -6,10 +6,12 @@
  * @returns {string}
  */
 export function formatLastSeen(seconds) {
-  if (seconds == null || seconds === "") return "-";
+  if (seconds == null || seconds === "" || seconds === "-") {
+    return "Not Available";
+  }
 
   const sec = Number(seconds);
-  if (Number.isNaN(sec) || sec < 0) return "-";
+  if (Number.isNaN(sec) || sec < 0) return "Not Available";
 
   const totalMinutes = Math.floor(sec / 60);
 

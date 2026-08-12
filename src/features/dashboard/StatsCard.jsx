@@ -25,6 +25,7 @@ function buildStatsData(summary, { isLoading = false } = {}) {
       icon: Truck,
       value: valueOrSkeleton(values.totalVehicles),
       subtitle:
+        values.activeVehicles === "Not Available" ||
         values.activeVehicles === "-"
           ? "Active Vehicles"
           : `${values.activeVehicles} Active Vehicles`,
@@ -82,7 +83,7 @@ export default function StatsCard() {
 
   const showLoadingSkeleton = isLoading && !data;
 
-  // Error / empty / unmapped → "-" (never hardcoded KPI numbers).
+  // Error / empty / unmapped → "Not Available" (never hardcoded KPI numbers).
   const resolvedSummary = isError
     ? DASHBOARD_SUMMARY_PLACEHOLDER
     : summary ??

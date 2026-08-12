@@ -33,15 +33,24 @@ function normalizeStatusLabel(status) {
 }
 
 function formatSpeed(speedKmh) {
-  if (speedKmh == null || speedKmh === "") return "-";
+  if (speedKmh == null || speedKmh === "" || speedKmh === "-") {
+    return "Not Available";
+  }
   const n = Number(speedKmh);
   if (Number.isNaN(n)) return String(speedKmh);
   return `${n} km/h`;
 }
 
 function displayOrDash(value) {
-  if (value == null) return "-";
-  if (typeof value === "string" && value.trim() === "") return "-";
+  if (value == null) return "Not Available";
+
+  if (typeof value === "string") {
+    const normalizedValue = value.trim();
+    if (normalizedValue === "" || normalizedValue === "-") {
+      return "Not Available";
+    }
+  }
+
   return String(value);
 }
 
@@ -92,11 +101,11 @@ export function mapVehicleItem(item) {
         ? inMaintenance
           ? "Yes"
           : "No"
-        : "-",
+        : "Not Available",
     lat: hasPosition ? lat : null,
     lng: hasPosition ? lng : null,
-    latDisplay: hasPosition ? String(lat) : "-",
-    lngDisplay: hasPosition ? String(lng) : "-",
+    latDisplay: hasPosition ? String(lat) : "Not Available",
+    lngDisplay: hasPosition ? String(lng) : "Not Available",
     position: hasPosition ? [lat, lng] : undefined,
     raw: item,
   };

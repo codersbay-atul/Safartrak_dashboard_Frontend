@@ -8,18 +8,18 @@ import {
 } from "./routeVehicleDisplay";
 
 function formatKm(value) {
-  if (value == null || value === "") return "-";
+  if (value == null || value === "" || value === "-") return "Not Available";
   const n = Number(value);
   if (!Number.isFinite(n)) return displayOrDash(value);
   return `${n.toLocaleString("en-US", { maximumFractionDigits: 1 })} km`;
 }
 
 function formatPct(value) {
-  if (value == null || value === "") return "-";
+  if (value == null || value === "" || value === "-") return "Not Available";
   const raw = String(value).trim();
   if (raw.endsWith("%")) return raw;
   const n = Number(value);
-  if (!Number.isFinite(n)) return "-";
+  if (!Number.isFinite(n)) return "Not Available";
   return `${n}%`;
 }
 
@@ -87,7 +87,9 @@ function buildTripStats(vehicle) {
 
   const speedDisplay = displayOrDash(vehicle?.speed);
   const remainingLabel =
-    remaining == null ? "-" : `${formatKm(remaining)} Remaining`;
+    remaining == null
+      ? "Not Available"
+      : `${formatKm(remaining)} Remaining`;
 
   return [
     {
@@ -106,7 +108,7 @@ function buildTripStats(vehicle) {
       value: speedDisplay,
           subtitle:
             avgSpeed == null
-              ? "-"
+              ? "Not Available"
               : `Average: ${Number(avgSpeed).toLocaleString("en-US", {
                   maximumFractionDigits: 1,
                 })} km/h`,
@@ -140,7 +142,9 @@ function buildTripStats(vehicle) {
       icon: Timer,
       value: displayOrDash(tripDuration),
       subtitle:
-        startedAt == null ? "-" : `Started at ${displayOrDash(startedAt)}`,
+        startedAt == null
+          ? "Not Available"
+          : `Started at ${displayOrDash(startedAt)}`,
       title: "Trip Duration",
       bgIcon: "bg-[#FDBB24]/10 border border-[#FDBB24]/20",
       colorIcon: "text-[#FDBB24]",

@@ -1,15 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import {
-  MoreVertical,
   Loader2,
   AlertCircle,
   RefreshCw,
-  Edit2,
-  Trash2,
 } from "lucide-react";
 import SearchInput from "../../components/Ui/SearchInput";
 import Dropdown from "../../components/Ui/DropDown";
-import Button from "../../components/Ui/Button";
 import useVehiclesList from "../../hooks/useVehiclesList";
 
 const FLEET_OPTIONS = [
@@ -46,10 +42,6 @@ export default function VehicleListTable() {
   const [activeTab, setActiveTab] = useState("all");
   const [page, setPage] = useState(1);
 
-  // State to track which row's action menu is open
-  const [openMenuId, setOpenMenuId] = useState(null);
-  const menuRef = useRef(null);
-
   const {
     vehicles = [],
     total = 0,
@@ -67,31 +59,6 @@ export default function VehicleListTable() {
     page,
     pageSize: 25,
   });
-
-  // Close menu when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setOpenMenuId(null);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  const handleEditStatus = (vehicle) => {
-    console.log("Edit status clicked for vehicle:", vehicle);
-    setOpenMenuId(null);
-    // Add your Edit Status modal/action logic here
-  };
-
-  const handleDeleteVehicle = (vehicle) => {
-    console.log("Delete clicked for vehicle:", vehicle);
-    setOpenMenuId(null);
-    // Add your Delete confirmation/action logic here
-  };
 
   return (
     <div className="w-full h-full flex flex-col min-h-0 bg-[#0d0e12] border border-[#1d1d20] rounded-xl overflow-hidden select-none">
@@ -220,8 +187,7 @@ export default function VehicleListTable() {
                 <th className="py-2.5 px-3">Driver</th>
                 <th className="py-2.5 px-3">Device Status</th>
                 <th className="py-2.5 px-3">Last Updated</th>
-                <th className="py-2.5 px-3">Status</th>
-                <th className="py-2.5 px-3 text-right pr-4">Action</th>
+                <th className="py-2.5 px-3 pr-4">Status</th>
               </tr>
             </thead>
 
@@ -236,8 +202,6 @@ export default function VehicleListTable() {
                 const lastUpdated = item.lastUpdated || item.info || item.raw?.last_updated || item.raw?.lastUpdated || "N/A";
                 const statusLabel = item.status || item.raw?.status || "Offline";
                 const isOffline = String(statusLabel).toLowerCase().includes("offline") || String(deviceStatus).toLowerCase().includes("disconnected");
-
-                const isMenuOpen = openMenuId === vehicleId;
 
                 return (
                   <tr key={vehicleId} className="hover:bg-[#18181b]/40 transition-colors">
@@ -296,7 +260,7 @@ export default function VehicleListTable() {
                       {lastUpdated}
                     </td>
 
-                    <td className="py-2.5 px-3">
+                    <td className="py-2.5 px-3 pr-4">
                       {isOffline ? (
                         <span className="inline-block px-2 py-0.5 text-[9px] font-semibold text-rose-400 bg-rose-950/50 border border-rose-900/60 rounded-full">
                           {statusLabel}
@@ -305,44 +269,6 @@ export default function VehicleListTable() {
                         <span className="inline-block px-2 py-0.5 text-[9px] font-semibold text-amber-400 bg-amber-950/50 border border-amber-900/60 rounded-full">
                           {statusLabel}
                         </span>
-                      )}
-                    </td>
-
-                    {/* Action Column with Dropdown */}
-                    <td className="py-2.5 px-3 text-right pr-4 relative">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        icon={MoreVertical}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setOpenMenuId(isMenuOpen ? null : vehicleId);
-                        }}
-                        className="p-1 text-[#71717a] hover:text-white hover:bg-[#27272a]/50"
-                      />
-
-                      {/* Dropdown Action Menu */}
-                      {isMenuOpen && (
-                        <div
-                          ref={menuRef}
-                          className="absolute right-4 top-9 w-36 bg-[#18181b] border border-[#27272a] rounded-lg shadow-xl z-50 py-1 text-left animate-in fade-in zoom-in-95 duration-100"
-                        >
-                          <button
-                            onClick={() => handleEditStatus(item)}
-                            className="w-full flex items-center gap-2 px-3 py-1.5 text-[11px] text-[#e4e4e7] hover:bg-[#27272a] hover:text-white transition-colors"
-                          >
-                            <Edit2 size={12} className="text-[#a1a1aa]" />
-                            <span>Edit Status</span>
-                          </button>
-                          
-                          <button
-                            onClick={() => handleDeleteVehicle(item)}
-                            className="w-full flex items-center gap-2 px-3 py-1.5 text-[11px] text-rose-400 hover:bg-rose-500/10 hover:text-rose-300 transition-colors"
-                          >
-                            <Trash2 size={12} className="text-rose-400" />
-                            <span>Delete</span>
-                          </button>
-                        </div>
                       )}
                     </td>
                   </tr>

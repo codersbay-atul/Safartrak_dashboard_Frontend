@@ -52,18 +52,18 @@ const STATUS_BADGE = {
 };
 
 function formatKm(value) {
-  if (value == null || value === "") return "-";
+  if (value == null || value === "" || value === "-") return "Not Available";
   const n = Number(value);
   if (!Number.isFinite(n)) return displayOrDash(value);
   return `${n.toLocaleString("en-US", { maximumFractionDigits: 1 })} km`;
 }
 
 function formatPct(value) {
-  if (value == null || value === "") return "-";
+  if (value == null || value === "" || value === "-") return "Not Available";
   const raw = String(value).trim();
   if (raw.endsWith("%")) return raw;
   const n = Number(value);
-  if (!Number.isFinite(n)) return "-";
+  if (!Number.isFinite(n)) return "Not Available";
   return `${n}%`;
 }
 
@@ -289,7 +289,7 @@ export default function VehicleRouteDetails({ vehicle, onViewRoute, onClose }) {
             <Milestone size={12.5} className="text-zinc-500 shrink-0" /> <span className="truncate">Odometer</span>
           </div>
           <span className="font-bold text-white shrink-0">
-            {odometer == null ? "-" : formatKm(odometer)}
+            {odometer == null ? "Not Available" : formatKm(odometer)}
           </span>
         </div>
 

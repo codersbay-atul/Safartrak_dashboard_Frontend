@@ -7,14 +7,14 @@ import { getTrackSummary } from "../services/trackService";
 const ERROR_TOAST = "Unable to load track summary.";
 
 export const TRACK_SUMMARY_PLACEHOLDER = {
-  running: "-",
-  distanceKm: "-",
-  fuelL: "-",
-  tripsCompleted: "-",
-  tripsActive: "-",
-  avgSpeedKmh: "-",
-  idleTimeMin: "-",
-  totalVehicles: "-",
+  running: "Not Available",
+  distanceKm: "Not Available",
+  fuelL: "Not Available",
+  tripsCompleted: "Not Available",
+  tripsActive: "Not Available",
+  avgSpeedKmh: "Not Available",
+  idleTimeMin: "Not Available",
+  totalVehicles: "Not Available",
 };
 
 function isMissingValue(value) {
@@ -22,7 +22,13 @@ function isMissingValue(value) {
   if (typeof value === "number" && Number.isNaN(value)) return true;
   if (typeof value === "string") {
     const trimmed = value.trim();
-    if (trimmed === "" || trimmed.toLowerCase() === "nan") return true;
+    if (
+      trimmed === "" ||
+      trimmed === "-" ||
+      trimmed.toLowerCase() === "nan"
+    ) {
+      return true;
+    }
   }
   return false;
 }
@@ -34,29 +40,29 @@ function formatNumber(value) {
 }
 
 function formatPlain(value) {
-  if (isMissingValue(value)) return "-";
+  if (isMissingValue(value)) return "Not Available";
   return formatNumber(value);
 }
 
 function formatKm(value) {
-  if (isMissingValue(value)) return "-";
+  if (isMissingValue(value)) return "Not Available";
   return `${formatNumber(value)} km`;
 }
 
 function formatLiters(value) {
-  if (isMissingValue(value)) return "-";
+  if (isMissingValue(value)) return "Not Available";
   return `${formatNumber(value)} L`;
 }
 
 function formatSpeed(value) {
-  if (isMissingValue(value)) return "-";
+  if (isMissingValue(value)) return "Not Available";
   return `${formatNumber(value)} km/h`;
 }
 
 function formatIdleMinutes(value) {
-  if (isMissingValue(value)) return "-";
+  if (isMissingValue(value)) return "Not Available";
   const mins = Math.round(Number(value));
-  if (!Number.isFinite(mins)) return "-";
+  if (!Number.isFinite(mins)) return "Not Available";
   const hours = Math.floor(mins / 60);
   const remainder = Math.abs(mins % 60);
   if (hours === 0) return `${remainder}m`;
