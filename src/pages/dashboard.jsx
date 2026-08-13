@@ -21,9 +21,13 @@ export default function Dashboard() {
 
   const [vehicleSearch, setVehicleSearch] = useState("");
 
+  // Route Details Page ke liye State
   const [isRouteView, setIsRouteView] = useState(() => {
     return localStorage.getItem("isRouteView") === "true";
   });
+
+  // Pure Full Screen Map ke liye State
+  const [isFullMapView, setIsFullMapView] = useState(false);
 
   const [showDetailsPanel, setShowDetailsPanel] = useState(() => {
     return localStorage.getItem("showDetailsPanel") === "true";
@@ -46,6 +50,16 @@ export default function Dashboard() {
   }, [showDetailsPanel]);
 
   const exitRouteView = () => setIsRouteView(false);
+
+  // 1. "View Map" Click -> Pure Full Screen Map Open Karega
+  const handleOpenFullMap = () => {
+    setIsFullMapView(true);
+  };
+
+  // 2. "View Details" Click -> Route Details Page Open Karega
+  const handleOpenRouteDetails = () => {
+    setIsRouteView(true);
+  };
 
   const handleExport = async (opts = {}) => {
     try {
@@ -92,21 +106,22 @@ export default function Dashboard() {
       isRouteView={isRouteView}
       onExitRouteView={exitRouteView}
     >
-      <div
-        className={`relative flex-1 min-h-0 overflow-hidden ${
-          isRouteView ? "" : "flex flex-col"
-        }`}
-      >
+      <div className="relative flex-1 min-h-0 overflow-hidden flex flex-col">
+        
+        {/* A. NORMAL DASHBOARD VIEW */}
         <div
           className={`absolute inset-0 flex flex-col gap-2.5 xl:gap-3 overflow-hidden min-h-0 ${
-            isRouteView
+            isRouteView || isFullMapView
               ? "invisible pointer-events-none"
               : "visible pointer-events-auto"
           }`}
-          aria-hidden={isRouteView}
         >
           <div className="shrink-0">
-            <DashboardHeader onSearch={setVehicleSearch} onExportClick={handleExport} onAddVehicleClick={() => navigate("/vehicles")} />
+            <DashboardHeader
+              onSearch={setVehicleSearch}
+              onExportClick={handleExport}
+              onAddVehicleClick={() => navigate("/vehicles")}
+            />
           </div>
           <div className="shrink-0">
             <StatsCard />
@@ -128,7 +143,8 @@ export default function Dashboard() {
               <LivePositions
                 selectedVehicle={selectedVehicle}
                 showRoutePath={false}
-                onViewMap={() => setIsRouteView(true)}
+                openInNewTab={true}
+                onViewDetails={handleOpenRouteDetails}
               />
             </div>
 
@@ -136,15 +152,16 @@ export default function Dashboard() {
               <div className="w-full min-[1152px]:w-[clamp(220px,24%,280px)] xl:w-[300px] 2xl:w-[320px] shrink-0 h-[480px] min-[1152px]:h-full min-h-0 overflow-hidden animate-in slide-in-from-right-5 duration-300">
                 <DashboardVehicleDetails
                   vehicle={selectedVehicle}
-                  onViewRoute={() => setIsRouteView(true)}
+                  onViewRoute={handleOpenRouteDetails}
                 />
               </div>
             )}
           </div>
         </div>
 
-        {isRouteView ? (
-          <div className="absolute inset-0 flex flex-col gap-2.5 overflow-hidden min-h-0">
+        {/* B. ROUTE DETAILS PAGE VIEW ("View Details" Tap Karne Par) */}
+        {isRouteView && !isFullMapView ? (
+          <div className="absolute inset-0 flex flex-col gap-2.5 overflow-hidden min-h-0 z-20 bg-[#070708]">
             <div className="shrink-0 flex items-center gap-3">
               <button
                 onClick={exitRouteView}
@@ -166,6 +183,7 @@ export default function Dashboard() {
                 <LivePositions
                   selectedVehicle={selectedVehicle}
                   showRoutePath={true}
+                  openInNewTab={true}
                 />
               </div>
               <div className="w-[clamp(260px,28%,320px)] xl:w-[320px] 2xl:w-[350px] shrink-0 h-full min-h-0 overflow-hidden">
@@ -181,6 +199,31 @@ export default function Dashboard() {
             </div>
           </div>
         ) : null}
+
+        {/* C. PURE FULL SCREEN MAP VIEW ("View Map" Tap Karne Par) */}
+        {isFullMapView && (
+          <div className="fixed inset-0 z-[9999] bg-[#0c0c0e] w-screen h-screen flex flex-col overflow-hidden">
+            <div className="absolute top-4 left-4 z-[10000]">
+              <button
+                type="button"
+                onClick={() => setIsFullMapView(false)}
+                className="px-3.5 py-2 text-xs font-bold bg-[#121214]/90 hover:bg-[#1f1f23] text-white border border-[#27272a] rounded-xl shadow-2xl backdrop-blur-md cursor-pointer transition-all flex items-center gap-1.5"
+              >
+                <span>&larr;</span>
+                <span>Back</span>
+              </button>
+            </div>
+
+            <div className="w-full h-full">
+              <LivePositions
+                selectedVehicle={selectedVehicle}
+                showRoutePath={true}
+                openInNewTab={true}
+              />
+            </div>
+          </div>
+        )}
+
       </div>
     </MainLayout>
   );

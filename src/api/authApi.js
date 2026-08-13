@@ -22,6 +22,19 @@ export async function loginRequest(credentials) {
     };
   }
 
+  // Check if user is active
+  if (user) {
+    const userStatus = String(user.status ?? "").toLowerCase();
+    if (userStatus === "inactive" || userStatus === "deactivated" || userStatus === "disabled") {
+      throw {
+        message: "Your account has been deactivated. Please contact administrator for assistance.",
+        status: 403,
+        code: "USER_DEACTIVATED",
+        details: { user },
+      };
+    }
+  }
+
   return {
     accessToken,
     refreshToken,

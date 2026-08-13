@@ -88,7 +88,6 @@ const apiClient = axios.create({
 
 const pendingRequests = new Map();
 
-// Refresh Lock & Request Queue Variables to prevent multiple refresh triggers
 let isRefreshing = false;
 let failedQueue = [];
 
@@ -103,7 +102,7 @@ const processQueue = (error, token = null) => {
   failedQueue = [];
 };
 
-function performLogout() {
+export function performLogout() {
   localStorage.removeItem("access_token");
   localStorage.removeItem("accessToken");
   localStorage.removeItem("token");
@@ -178,10 +177,8 @@ apiClient.interceptors.response.use(
         localStorage.getItem("refreshToken");
       const isRefreshRequest = originalRequest.url?.includes("/v1/auth/refresh");
 
-      // Don't refresh if request is already a refresh request or if retry flag is set
       if (refreshToken && !isRefreshRequest && !originalRequest._retry) {
         if (isRefreshing) {
-          // If already refreshing token, queue other failed requests
           return new Promise((resolve, reject) => {
             failedQueue.push({ resolve, reject });
           })

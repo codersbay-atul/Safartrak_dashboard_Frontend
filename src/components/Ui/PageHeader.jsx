@@ -22,12 +22,6 @@ const STATUS_OPTIONS = [
   { label: "Inactive", value: "inactive" },
 ];
 
-const FLEET_OPTIONS = [
-  { label: "All Fleets", value: "all" },
-  { label: "Fleet 01", value: "fleet1" },
-  { label: "Fleet 02", value: "fleet2" },
-];
-
 export default function PageHeader({
   title,
   subtitle,
@@ -40,6 +34,7 @@ export default function PageHeader({
   showSearch = true,
   showExport = true,
   showFilters = true,
+  customRightAction,
 
   children,
 }) {
@@ -65,6 +60,7 @@ export default function PageHeader({
 
   return (
     <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-2.5 xl:gap-4 w-full select-none mt-0 pt-0 shrink-0 min-w-0 overflow-visible">
+      {/* Title & Subtitle Section */}
       <div className="min-w-0 flex-1">
         <h1 className="text-[15px] sm:text-[17px] font-bold text-white tracking-tight leading-tight truncate">
           {title}
@@ -76,7 +72,10 @@ export default function PageHeader({
         )}
       </div>
 
+      {/* Right Action Controls */}
       <div className="flex items-center gap-2 xl:gap-2.5 w-full lg:w-auto shrink-0 justify-between lg:justify-end min-w-0 flex-wrap overflow-visible z-20">
+        {customRightAction && customRightAction}
+
         {showFilters && (
           <div className="flex items-center gap-2 overflow-visible relative z-30">
             <Dropdown
@@ -86,7 +85,6 @@ export default function PageHeader({
               onSelect={(val) => handleFilterSelect("dateRange", val)}
               className="rounded-full bg-[#05070B] border-[#22252B] px-3.5 py-1.5 text-[11px] text-[#d4d4d8] hover:bg-[#12151c]"
             />
-
             <Dropdown
               label="Region"
               options={REGION_OPTIONS}
@@ -94,20 +92,11 @@ export default function PageHeader({
               onSelect={(val) => handleFilterSelect("region", val)}
               className="rounded-full bg-[#05070B] border-[#22252B] px-3.5 py-1.5 text-[11px] text-[#d4d4d8] hover:bg-[#12151c]"
             />
-
             <Dropdown
               label="Status"
               options={STATUS_OPTIONS}
               selectedValue={filters.status}
               onSelect={(val) => handleFilterSelect("status", val)}
-              className="rounded-full bg-[#05070B] border-[#22252B] px-3.5 py-1.5 text-[11px] text-[#d4d4d8] hover:bg-[#12151c]"
-            />
-
-            <Dropdown
-              label="Fleet"
-              options={FLEET_OPTIONS}
-              selectedValue={filters.fleet}
-              onSelect={(val) => handleFilterSelect("fleet", val)}
               className="rounded-full bg-[#05070B] border-[#22252B] px-3.5 py-1.5 text-[11px] text-[#d4d4d8] hover:bg-[#12151c]"
             />
           </div>

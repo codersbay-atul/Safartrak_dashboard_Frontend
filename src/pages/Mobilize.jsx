@@ -197,7 +197,7 @@ export default function Mobilize() {
 
   return (
     <MainLayout activeTab="Mobilize / Immobilize">
-      <div className="h-[calc(100vh-2rem)] max-h-screen bg-[#09090b] flex flex-col gap-2 p-3 overflow-hidden text-white">
+      <div className="flex-1 flex flex-col gap-2.5 min-h-0 overflow-y-auto min-[1152px]:overflow-hidden text-white bg-[#09090b]">
         <div className="shrink-0">
           <MobilizeHeader
             onSearch={(value) => setSearchQuery(value)}
@@ -211,8 +211,8 @@ export default function Mobilize() {
           <MobilizeStats />
         </div>
 
-        <div className="flex-1 min-h-0 grid grid-cols-12 gap-3 overflow-hidden mt-1">
-          <div className="col-span-12 lg:col-span-7 xl:col-span-8 h-full min-h-0">
+        <div className="flex flex-col min-[1152px]:flex-row gap-3.5 items-stretch w-full flex-1 min-h-0 overflow-y-auto min-[1152px]:overflow-hidden">
+          <div className="w-full min-[1152px]:flex-1 shrink-0 h-[420px] min-[1152px]:h-full min-h-0 overflow-hidden">
             <MobilizeVehicleList
               vehicles={filteredVehicles}
               activeFilter={statusFilter}
@@ -223,7 +223,7 @@ export default function Mobilize() {
             />
           </div>
 
-          <div className="col-span-12 lg:col-span-5 xl:col-span-4 h-full min-h-0">
+          <div className="w-full min-[1152px]:w-[320px] xl:w-[340px] shrink-0 h-[380px] min-[1152px]:h-full min-h-0 overflow-hidden">
             <VehicleControlCard
               vehicle={selectedVehicle}
               onRequestImmobilize={handleRequestImmobilize}

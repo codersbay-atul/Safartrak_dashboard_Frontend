@@ -43,6 +43,17 @@ export async function getAoiList({ search = "", status = "all", geometry = false
 }
 
 /**
+ * PATCH /v1/aoi/:aoiId
+ * @param {string} aoiId - The AOI ID to update
+ * @param {object} payload - Update payload
+ * @returns {Promise<object>} Update response payload from the server
+ */
+export async function updateAoi(aoiId, payload = {}) {
+  const response = await apiClient.patch(`/v1/aoi/${aoiId}`, payload);
+  return response?.data?.data ?? response?.data ?? {};
+}
+
+/**
  * DELETE /v1/aoi/:aoiId
  * @returns {Promise<object>} Delete response payload from the server
  */

@@ -7,7 +7,7 @@ import AoiListPanel from "../features/aoi/AoiListPanel";
 import AoiMap from "../features/aoi/AoiMap";
 import AoiDetailsPanel from "../features/aoi/AoiDetailsPanel";
 import { useAoiList } from "../hooks/useAoiList";
-import { deleteAoi, createAoi } from "../services/aoiService";
+import { deleteAoi, createAoi, updateAoi } from "../services/aoiService";
 import { queryKeys } from "../api/queryKeys";
 import { toast } from "../components/Ui/toast";
 import CreateAOI from "../features/aoi/CreateAOI";
@@ -286,6 +286,83 @@ export default function Aoi() {
     },
   });
 
+  // Update AOI Mutation
+  const updateMutation = useMutation({
+    mutationFn: (formData) => {
+      const aoiId = editingAoi?.raw?.id || editingAoi?.id;
+      if (!aoiId) throw new Error("AOI ID is required for update");
+      
+      const payload = {
+        active: true,
+        entry_alert: Boolean(formData.entry_alert ?? formData.alerts?.entry),
+        exit_alert: Boolean(formData.exit_alert ?? formData.alerts?.exit),
+        assigned_vehicles: formData.assigned_vehicles || formData.selectedVehicles || [],
+      };
+      
+      return updateAoi(aoiId, payload);
+    },
+    onSuccess: async (updatedAoi) => {
+      const updatedPayload = updatedAoi?.data ?? updatedAoi ?? {};
+      const assignedVehicles = normalizeAssignedVehicles(updatedPayload);
+      const normalizedAoi = {
+        id: updatedPayload.id ?? updatedPayload._id ?? updatedPayload.aoi_id,
+        name: updatedPayload.name || "Untitled AOI",
+        type: updatedPayload.geometry?.shape === "circle" || updatedPayload.shape === "circle" ? "Circular" : "Polygon",
+        size: updatedPayload.geometry?.shape === "circle" || updatedPayload.shape === "circle"
+          ? `${(parseAoiRadiusMeters(updatedPayload) / 1000).toFixed(1)} km radius`
+          : `${updatedPayload.geometry?.points?.length ?? 4} points`,
+        vehicles: assignedVehicles.length,
+        assignedVehiclesCount: assignedVehicles.length,
+        status: updatedPayload.active ? "active" : "inactive",
+        color: updatedPayload.active ? "#10b981" : "#FDBB24",
+        center: parseAoiCenter(updatedPayload),
+        radiusMeters: parseAoiRadiusMeters(updatedPayload),
+        createdBy: "API",
+        createdAt: updatedPayload.created_at,
+        inside: 0,
+        enteredToday: 0,
+        exitedToday: 0,
+        assignedVehicles,
+        vehiclesList: assignedVehicles,
+        alertsText: updatedPayload.alerts_count ? `${updatedPayload.alerts_count} alerts this week` : "No recent alerts",
+        raw: updatedPayload,
+      };
+
+      queryClient.setQueriesData({ queryKey: queryKeys.aoi.list({}) }, (previous) => {
+        const previousItems = Array.isArray(previous?.areas)
+          ? previous.areas
+          : Array.isArray(previous)
+            ? previous
+            : [];
+        const mergedItems = [
+          ...previousItems.filter((item) => item?.id !== normalizedAoi.id),
+          normalizedAoi.raw ? { ...normalizedAoi.raw, id: normalizedAoi.id } : normalizedAoi,
+        ];
+
+        if (Array.isArray(previous)) {
+          return mergedItems;
+        }
+
+        return {
+          ...(previous ?? {}),
+          areas: mergedItems,
+          count: mergedItems.length,
+          total: mergedItems.length,
+        };
+      });
+
+      await queryClient.invalidateQueries({ queryKey: queryKeys.aoi.list({}) });
+      await queryClient.invalidateQueries({ queryKey: queryKeys.aoi.summary });
+      toast.success("AOI updated successfully");
+      setSelectedId(normalizedAoi.id);
+      setIsCreateModalOpen(false);
+      setEditingAoi(null);
+    },
+    onError: (err) => {
+      toast.error(err?.message || "Failed to update AOI");
+    },
+  });
+
   // Delete AOI Mutation
   const deleteMutation = useMutation({
     mutationFn: deleteAoi,
@@ -318,8 +395,7 @@ export default function Aoi() {
 
   const handleCreateSubmit = (newAoiData) => {
     if (editingAoi) {
-      toast.info("AOI edit mode opened, but update is not implemented yet.");
-      handleCloseCreateModal();
+      updateMutation.mutate(newAoiData);
       return;
     }
 

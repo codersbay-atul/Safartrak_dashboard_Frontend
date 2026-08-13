@@ -5,7 +5,6 @@ import ActivityStats from "../features/activity/ActivityStats";
 import ActivityList from "../features/activity/ActivityList";
 import RoutePlayback from "../features/activity/RoutePlayback";
 import ActivityDetails from "../features/activity/ActivityDetails";
-import { ACTIVITY_EVENTS } from "../features/activity/activityData";
 import { useActivityList } from "../hooks/useActivityList";
 import { getActivityExport } from "../services/activityService";
 import { toast } from "../components/Ui/toast";
@@ -15,12 +14,7 @@ export default function Activity() {
   const [eventFilter, setEventFilter] = useState("all");
   const [driverFilter, setDriverFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const [listSearch, setListSearch] = useState("");
-  const [selectedEvent, setSelectedEvent] = useState(
-    ACTIVITY_EVENTS.find((e) => e.severity === "alert") ||
-      ACTIVITY_EVENTS[0] ||
-      null
-  );
+  const [selectedEvent, setSelectedEvent] = useState(null);
   const [page, setPage] = useState(1);
   const [pageSize] = useState(25);
 
@@ -32,7 +26,8 @@ export default function Activity() {
     period: "today",
     vehicle: vehicleParam,
     driver: driverParam,
-    search: listSearch || undefined,
+    event: eventParam,
+    search: searchQuery || undefined,
     page,
     page_size: pageSize,
   });
@@ -42,8 +37,20 @@ export default function Activity() {
   }, [activityList.activities]);
 
   useEffect(() => {
-    if (events.length > 0 && !events.some((event) => event.id === selectedEvent?.id)) {
+    if (selectedEvent === null && events.length > 0) {
+      setSelectedEvent(events[0]);
+    }
+
+    if (
+      selectedEvent !== null &&
+      events.length > 0 &&
+      !events.some((event) => event.id === selectedEvent?.id)
+    ) {
       setSelectedEvent(events[0] ?? null);
+    }
+
+    if (events.length === 0) {
+      setSelectedEvent(null);
     }
   }, [events, selectedEvent]);
 
@@ -105,8 +112,8 @@ export default function Activity() {
               events={isLoading ? [] : events}
               selectedId={selectedEvent?.id}
               onSelect={(event) => setSelectedEvent(event)}
-              searchQuery={listSearch}
-              onSearchChange={(e) => setListSearch(e.target.value)}
+              searchQuery={searchQuery}
+              onSearchChange={(e) => setSearchQuery(e.target.value)}
               onFilterClick={() => {}}
             />
           </div>

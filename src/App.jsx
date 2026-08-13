@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route, Navigate, useNavigate } from "react-route
 import { useDispatch } from "react-redux";
 import "./App.css";
 
-
 import Analytics from "./pages/Analytics";
 import Reports from "./pages/Reports";
 import CreateReport from "./pages/CreateReport";
@@ -23,36 +22,16 @@ import VehiclesDetails from "./pages/VehiclesDetails";
 import Users from "./pages/Users";
 import Profile from "./pages/Profile";
 import Contact from "./pages/Contact";
-import SecuritySettingUpdate from "./features/profile/SecuritySettingUpdate";
 import CommandHistoryPage from "./features/mobilize/CommandHistory";
-import { toast } from "./components/Ui/toast";
 import { setAuthTokens } from "./store/slices/authSlice";
 import ForgotPassword from "./pages/Forgotpassword";
 import Dashboard from "./pages/dashboard";
-
-function SecuritySettingUpdateRoute() {
-  const navigate = useNavigate();
-
-  return (
-    <>
-      <Profile />
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-        <div className="w-full max-w-[460px] max-h-[90vh] overflow-y-auto rounded-2xl border border-[#1f1f23] bg-[#121214] shadow-2xl">
-          <SecuritySettingUpdate
-            onSave={() => {
-              toast.success("Settings updated successfully");
-              navigate("/profile");
-            }}
-            onDiscard={() => navigate("/profile")}
-          />
-        </div>
-      </div>
-    </>
-  );
-}
+import useAccountInactivity from "./hooks/useAccountInactivity";
+import FullMap from "./pages/FullMap";
 
 function AppContent() {
   const dispatch = useDispatch();
+  useAccountInactivity();
 
   useEffect(() => {
     const handleTokensUpdated = (event) => {
@@ -82,10 +61,19 @@ function AppContent() {
           path="/dashboard"
           element={
             <ProtectedRoute>
-              <Dashboard/>
+              <Dashboard />
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/full-map"
+          element={
+            <ProtectedRoute>
+              <FullMap />
+            </ProtectedRoute>
+          }
+        />
+
         <Route
           path="/analytics"
           element={
@@ -171,14 +159,6 @@ function AppContent() {
           element={
             <ProtectedRoute>
               <Profile />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/securitysettingupdate"
-          element={
-            <ProtectedRoute>
-              <SecuritySettingUpdateRoute />
             </ProtectedRoute>
           }
         />

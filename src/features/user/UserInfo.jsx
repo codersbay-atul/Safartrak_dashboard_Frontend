@@ -30,9 +30,19 @@ function normalizeDepartment(department) {
   return value;
 }
 
-export default function UserInfo({ isOpen, onClose, onNext, initialData }) {
+export default function UserInfo({
+  isOpen,
+  onClose,
+  onNext,
+  initialData,
+  existingUsers = [],
+  checkUserExists,
+}) {
   const [formData, setFormData] = useState(DEFAULT_FORM);
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const currentUserId = initialData?.id || initialData?.user?.id;
 
   useEffect(() => {
     setErrors({});
@@ -58,22 +68,24 @@ export default function UserInfo({ isOpen, onClose, onNext, initialData }) {
 
   if (!isOpen) return null;
 
-  const validate = () => {
+  const validate = async () => {
     const newErrors = {};
 
     if (!formData.fullName.trim()) {
       newErrors.fullName = "Full name is required";
     }
 
-    if (!formData.email.trim()) {
+    const cleanEmail = formData.email.trim().toLowerCase();
+    if (!cleanEmail) {
       newErrors.email = "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
       newErrors.email = "Invalid email format";
     }
 
+    const rawPhone = formData.phoneNumber.replace(/\s+/g, "");
     if (!formData.phoneNumber.trim()) {
       newErrors.phoneNumber = "Phone number is required";
-    } else if (!/^\+?[0-9]{7,15}$/.test(formData.phoneNumber.replace(/\s+/g, ""))) {
+    } else if (!/^\+?[0-9]{7,15}$/.test(rawPhone)) {
       newErrors.phoneNumber = "Invalid phone number";
     }
 
@@ -97,6 +109,43 @@ export default function UserInfo({ isOpen, onClose, onNext, initialData }) {
       newErrors.reportingManager = "Select a reporting manager";
     }
 
+    if (!newErrors.email || !newErrors.phoneNumber) {
+      const isDuplicateEmail = existingUsers.some((u) => {
+        const uId = u.id || u.user?.id;
+        const uEmail = (u.email || u.user?.email || u.personal?.email || "").toLowerCase();
+        return uId !== currentUserId && uEmail === cleanEmail;
+      });
+
+      const isDuplicatePhone = existingUsers.some((u) => {
+        const uId = u.id || u.user?.id;
+        const uPhone = (u.phone || u.user?.phone || u.personal?.phone || "").replace(/\s+/g, "");
+        return uId !== currentUserId && uPhone === rawPhone;
+      });
+
+      if (isDuplicateEmail) {
+        newErrors.email = "Email is already in use";
+      }
+
+      if (isDuplicatePhone) {
+        newErrors.phoneNumber = "Phone number is already in use";
+      }
+    }
+
+    if (typeof checkUserExists === "function" && !newErrors.email && !newErrors.phoneNumber) {
+      try {
+        const { emailExists, phoneExists } = await checkUserExists({
+          email: cleanEmail,
+          phone: rawPhone,
+          userId: currentUserId,
+        });
+
+        if (emailExists) newErrors.email = "Email is already in use";
+        if (phoneExists) newErrors.phoneNumber = "Phone number is already in use";
+      } catch (err) {
+        console.error("Error validating user existence:", err);
+      }
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -116,10 +165,14 @@ export default function UserInfo({ isOpen, onClose, onNext, initialData }) {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validate()) {
-      if (onNext) onNext(formData);
+    setIsSubmitting(true);
+    const isValid = await validate();
+    setIsSubmitting(false);
+
+    if (isValid && onNext) {
+      onNext(formData);
     }
   };
 
@@ -293,9 +346,10 @@ export default function UserInfo({ isOpen, onClose, onNext, initialData }) {
             </button>
             <button
               type="submit"
-              className="w-full py-2.5 rounded-xl text-[11px] font-bold text-black bg-[#ffd60a] hover:bg-[#e6c200] transition-colors cursor-pointer"
+              disabled={isSubmitting}
+              className="w-full py-2.5 rounded-xl text-[11px] font-bold text-black bg-[#ffd60a] hover:bg-[#e6c200] transition-colors cursor-pointer disabled:opacity-50"
             >
-              Next
+              {isSubmitting ? "Validating..." : "Next"}
             </button>
           </div>
         </form>

@@ -7,27 +7,20 @@ import ProfileStatsCard from "../features/profile/ProfileStatsCard";
 import RecentActivity from "../features/profile/RecentActivity";
 import NotificationPreference from "../features/profile/NotificationPreference";
 import SecuritySettings from "../features/profile/SecuritySettings";
-import SecuritySettingUpdate from "../features/profile/SecuritySettingUpdate";
-// import SecurityCard from "../features/profile/SecurityCard";
 
 export default function ProfilePage({ user: initialUser }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentStep, setCurrentStep] = useState(1);
-  const [settingsData, setSettingsData] = useState(null);
+  const { profile, isLoading, isError } = useAccountProfile();
+
+  const user = profile ?? initialUser ?? null;
 
   const handleEditSettings = () => {
-    setCurrentStep(1);
     setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    setCurrentStep(1);
   };
-
-  const { profile, isLoading, isError } = useAccountProfile();
-
-  const user = profile ?? initialUser ?? null;
 
   return (
     <MainLayout activeTab="Profile">
@@ -59,37 +52,13 @@ export default function ProfilePage({ user: initialUser }) {
           </div> */}
         </div>
 
-        {isModalOpen && currentStep === 1 && (
+        {isModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
-            <div className="w-full max-w-md max-h-[90vh] overflow-y-auto custom-scrollbar">
+            <div className="w-full max-w-md max-h-[90vh] overflow-hidden rounded-xl custom-scrollbar">
               <SecuritySettings
                 initialData={user}
-                onSave={(formData) => {
-                  setSettingsData(formData);
-                  setCurrentStep(2);
-                }}
                 onDiscard={handleCloseModal}
-              />
-            </div>
-          </div>
-        )}
-
-        {isModalOpen && currentStep === 2 && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
-            <div className="w-full max-w-md max-h-[90vh] overflow-y-auto custom-scrollbar">
-              <SecuritySettingUpdate
-                initialData={settingsData}
-                onBack={() => setCurrentStep(1)}
-                onSave={(finalData) => {
-                  console.log("Updated Security Settings Final:", finalData);
-                  handleCloseModal();
-                }}
-                onConfirm={(finalData) => {
-                  console.log("Updated Security Settings Final:", finalData);
-                  handleCloseModal();
-                }}
-                onDiscard={handleCloseModal}
-                onClose={handleCloseModal}
+                onSave={handleCloseModal}
               />
             </div>
           </div>
