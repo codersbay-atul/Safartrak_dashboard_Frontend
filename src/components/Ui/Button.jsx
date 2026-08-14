@@ -17,7 +17,7 @@ export default function Button({
 
   const widthStyle = fullWidthOnMobile ? "w-full sm:w-auto" : "";
 
-  // 3. Color Variants
+
   const variants = {
     primary:
       "bg-[#FDBB24] text-black hover:bg-[#e0a31f] active:scale-[0.98]",

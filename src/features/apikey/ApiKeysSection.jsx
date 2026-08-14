@@ -1,0 +1,18 @@
+import React from "react";
+import { Key } from "lucide-react";
+import ApiKeysTable from "./ApiKeysTable";
+
+export default function ApiKeysSection() {
+  return (
+    <div className="flex flex-col gap-2.5">
+      {/* Section Header */}
+      <div className="flex items-center gap-2">
+        <Key size={18} className="text-[#F5B700]" />
+        <h3 className="text-sm font-semibold text-white">API Keys Management</h3>
+      </div>
+
+      {/* API Keys Table */}
+      <ApiKeysTable />
+    </div>
+  );
+}

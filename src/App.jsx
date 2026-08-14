@@ -28,6 +28,7 @@ import ForgotPassword from "./pages/Forgotpassword";
 import Dashboard from "./pages/dashboard";
 import useAccountInactivity from "./hooks/useAccountInactivity";
 import FullMap from "./pages/FullMap";
+import ApiKeyCredentialsPage from "./pages/ApiKeyCredentials";
 
 function AppContent() {
   const dispatch = useDispatch();
@@ -115,7 +116,7 @@ function AppContent() {
           }
         />
         <Route
-          path="/aoi"
+          path="/saved-places"
           element={
             <ProtectedRoute>
               <Aoi />
@@ -175,6 +176,14 @@ function AppContent() {
           element={
             <ProtectedRoute>
               <CommandHistoryPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/api-credentials"
+          element={
+            <ProtectedRoute>
+              <ApiKeyCredentialsPage />
             </ProtectedRoute>
           }
         />

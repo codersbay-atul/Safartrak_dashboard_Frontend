@@ -49,7 +49,7 @@ const iconMap = {
   "Reports": Clock3,
   "Mobilize / Immobilize": Power,
   "Alerts": TriangleAlert,
-  "Area of Interest (AOI)": ScanSearch,
+  "Saved Places": ScanSearch,
   "Routes": Route,
   "Trips": GitBranch,
   "Activity": Send,

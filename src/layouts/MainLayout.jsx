@@ -10,16 +10,15 @@ export default function MainLayout({ children, activeTab, setActiveTab, isRouteV
   return (
     <div className="flex h-screen w-screen bg-[#09090b] text-white overflow-hidden select-none">
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
-      {/* Main Container */}
+      
       <div className="flex flex-1 flex-col min-w-0 h-full overflow-hidden">
-        {/* Persistent Navbar */}
+    
         <Navbar
           isRouteView={isRouteView}
           onExitRouteView={onExitRouteView}
           activeTab={activeTab}
           user={authUser}
         />
-        {/* Dynamic Page Workspace Content */}
         <main className="flex-1 p-2.5 min-[1152px]:p-3 xl:p-3 bg-[#070708] flex flex-col gap-2 min-[1152px]:gap-2.5 overflow-hidden min-h-0">
           {children}
         </main>

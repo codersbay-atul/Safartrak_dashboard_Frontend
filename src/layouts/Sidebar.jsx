@@ -17,6 +17,7 @@ import {
   Headphones,
   Menu,
   X,
+  Key,
 } from "lucide-react";
 import Logo from "../assets/images/Logo.svg";
 
@@ -31,7 +32,7 @@ export default function Sidebar({ activeTab, setActiveTab }) {
     Reports: "/reports",
     "Mobilize / Immobilize": "/mobilize",
     Alerts: "/alerts",
-    "Area of Interest (AOI)": "/aoi",
+    "Saved Places": "/saved-places",
     // Routes: "/routes",
     // Trips: "/trips",
     Activity: "/activity",
@@ -40,6 +41,7 @@ export default function Sidebar({ activeTab, setActiveTab }) {
     "Vehicle Details": "/vehicle-overview",
     Users: "/users",
     Contact: "/contact",
+    "API Credentials": "/api-credentials",
   };
 
   const sections = [
@@ -61,7 +63,7 @@ export default function Sidebar({ activeTab, setActiveTab }) {
     {
       title: "GEO SERVICES",
       items: [
-        { icon: ScanSearch, label: "Area of Interest (AOI)" },
+        { icon: ScanSearch, label: "Saved Places" },
         // { icon: Route, label: "Routes" },
         // { icon: GitBranch, label: "Trips" },
         { icon: Send, label: "Activity" },
@@ -74,6 +76,12 @@ export default function Sidebar({ activeTab, setActiveTab }) {
         // { icon: IdCard, label: "Drivers" },
         { icon: FileSearch, label: "Vehicle Details" },
         { icon: Users, label: "Users" },
+      ],
+    },
+    {
+      title: "DEVELOPER",
+      items: [
+        { icon: Key, label: "API Credentials" },
       ],
     },
   ];
@@ -129,7 +137,7 @@ export default function Sidebar({ activeTab, setActiveTab }) {
             )}
           </div>
 
-          <div className="px-3 overflow-y-auto flex-1 flex flex-col gap-4">
+          <div className="px-3 overflow-y-auto flex-1 flex flex-col gap-4 custom-scrollbar">
             {sections.map((section) => (
               <div key={section.title} className="flex flex-col gap-0.5">
                 <h4 className="text-[10px] font-semibold leading-[10px] tracking-wider uppercase text-[#71717A] mb-1 px-1">

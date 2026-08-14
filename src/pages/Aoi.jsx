@@ -415,7 +415,7 @@ export default function Aoi() {
   };
 
   return (
-    <MainLayout activeTab="Area of Interest (AOI)">
+    <MainLayout activeTab="Saved Places">
       <div className="flex-1 flex flex-col gap-2.5 min-h-0 overflow-y-auto min-[1152px]:overflow-hidden text-white bg-[#09090b]">
         <div className="shrink-0">
           <AoiHeader onCreateClick={handleOpenCreateModal} />
@@ -439,7 +439,7 @@ export default function Aoi() {
             />
           </div>
 
-          {/* Map View */}
+        
           <div className="w-full shrink-0 h-[350px] min-[1152px]:flex-1 min-[1152px]:h-full min-w-0 min-h-0 overflow-hidden">
             <AoiMap aois={formattedAois} selectedAoi={selectedAoi} />
           </div>

@@ -16,7 +16,7 @@ export default function AoiDetailsPanel({ aoi, onEdit, onDelete, onViewVehicle }
   if (!aoi) {
     return (
       <div className="w-full h-full bg-[#121214] border border-[#1f1f23] rounded-2xl p-4 flex items-center justify-center select-none text-white">
-        <p className="text-xs text-[#71717a]">Select an AOI to view details</p>
+        <p className="text-xs text-[#71717a]">Select an Saved Place to view details</p>
       </div>
     );
   }
@@ -64,7 +64,6 @@ export default function AoiDetailsPanel({ aoi, onEdit, onDelete, onViewVehicle }
   const totalInsideVehicles = vehiclesList.filter((item) => item.isInside).length;
   const totalOutsideVehicles = vehiclesList.filter((item) => !item.isInside).length;
 
-  // Filters for Vehicle tab
   const filteredVehicles = vehiclesList.filter((item) => {
     const matchesSearch =
       (item.plate || "").toLowerCase().includes(vehicleSearch.toLowerCase()) ||
@@ -75,7 +74,7 @@ export default function AoiDetailsPanel({ aoi, onEdit, onDelete, onViewVehicle }
     return matchesSearch;
   });
 
-  // Filters for Alerts tab
+
   const filteredAlerts = alertsList.filter((item) => {
     const matchesSearch =
       (item.title || "").toLowerCase().includes(alertSearch.toLowerCase()) ||
@@ -88,7 +87,6 @@ export default function AoiDetailsPanel({ aoi, onEdit, onDelete, onViewVehicle }
 
   return (
     <div className="w-full h-full bg-[#121214] border border-[#1f1f23] rounded-2xl p-4 flex flex-col select-none overflow-hidden text-white font-sans">
-      {/* Header Section */}
       <div className="shrink-0 mb-4">
         <div className="flex items-center justify-between">
           <h3 className="text-base font-bold text-white tracking-tight truncate">
@@ -140,10 +138,10 @@ export default function AoiDetailsPanel({ aoi, onEdit, onDelete, onViewVehicle }
       <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar pr-1">
         {activeTab === "Overview" && (
           <div className="space-y-6">
-            {/* AOI Information Section */}
+           
             <div>
               <h4 className="text-xs font-semibold text-white mb-3">
-                AOI Information
+                Place Information
               </h4>
               <div className="space-y-2.5 text-xs">
                 <div className="flex justify-between items-center">
@@ -185,7 +183,7 @@ export default function AoiDetailsPanel({ aoi, onEdit, onDelete, onViewVehicle }
                   <span className="font-semibold text-white">
                     {insideCount}
                   </span>
-                  <span className="text-[#71717a]">Inside AOI</span>
+                  <span className="text-[#71717a]">Inside Place</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="font-semibold text-white">
@@ -266,7 +264,6 @@ export default function AoiDetailsPanel({ aoi, onEdit, onDelete, onViewVehicle }
           </div>
         )}
 
-        {/* ==================== VEHICLE TAB ==================== */}
         {activeTab === "Vehicle" && (
           <div className="space-y-4">
             {/* Search Input */}
@@ -284,7 +281,7 @@ export default function AoiDetailsPanel({ aoi, onEdit, onDelete, onViewVehicle }
               />
             </div>
 
-            {/* Filter Pills */}
+          
             <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar shrink-0">
               <button
                 type="button"
@@ -467,7 +464,6 @@ export default function AoiDetailsPanel({ aoi, onEdit, onDelete, onViewVehicle }
           </div>
         )}
 
-        {/* ==================== ACTIVITY TAB ==================== */}
         {activeTab === "Activity" && (
           <div className="space-y-4 pt-1">
             {activitiesList.length > 0 ? (
@@ -489,7 +485,6 @@ export default function AoiDetailsPanel({ aoi, onEdit, onDelete, onViewVehicle }
         )}
       </div>
 
-      {/* Action Buttons Footer */}
       <div className="shrink-0 pt-4 mt-2 border-t border-[#1f1f23] flex items-center gap-3">
         <button
           type="button"
@@ -497,14 +492,14 @@ export default function AoiDetailsPanel({ aoi, onEdit, onDelete, onViewVehicle }
           className="flex-1 py-2.5 px-4 rounded-xl bg-[#27272a] hover:bg-[#3f3f46] text-white text-xs font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer"
         >
           <Pencil size={14} />
-          Edit AOI
+          Edit Places
         </button>
         <button
           type="button"
           onClick={onDelete}
           className="flex-1 py-2.5 px-4 rounded-xl bg-[#dc2626] hover:bg-[#b91c1c] text-white text-xs font-semibold transition-colors cursor-pointer"
         >
-          Delete AOI
+          Delete
         </button>
       </div>
     </div>

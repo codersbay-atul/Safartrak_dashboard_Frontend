@@ -108,7 +108,7 @@ export default function CreateAOI({ isOpen = true, initialData = null, mode = "c
           }
         }
       } catch (error) {
-        console.error("Failed to geocode AOI location", error);
+        console.error("Failed to geocode place location", error);
       }
     }, 600);
 
@@ -151,16 +151,15 @@ export default function CreateAOI({ isOpen = true, initialData = null, mode = "c
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
       <div className="w-full max-w-2xl bg-[#141416] border border-[#232328] rounded-2xl shadow-2xl overflow-hidden flex flex-col text-zinc-100 font-sans">
-        
         <div className="px-4 py-3 border-b border-[#232328] flex items-center justify-between">
           <div>
             <h2 className="text-lg font-semibold text-white tracking-wide">
-              {mode === "edit" ? "Edit AOI" : "Create New AOI"}
+              {mode === "edit" ? "Edit Place" : "Create New Places"}
             </h2>
             <p className="text-xs text-zinc-400 mt-1">
               {mode === "edit"
-                ? "Update the selected AOI details and save your changes."
-                : "Fill in the details below and create the AOI."}
+                ? "Update the selected place details and save your changes."
+                : "Fill in the details below and create the place."}
             </p>
           </div>
           <button
@@ -172,18 +171,17 @@ export default function CreateAOI({ isOpen = true, initialData = null, mode = "c
           </button>
         </div>
 
-        
         <div className="grid grid-cols-1 md:grid-cols-12 min-h-[360px]">
           <div className="md:col-span-5 p-4 flex flex-col gap-3 border-r border-[#232328] bg-[#141416]">
             <div className="flex flex-col gap-1.5">
               <label className="text-xs font-medium text-zinc-400 tracking-wide">
-                AOI Name
+                Place Name
               </label>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Enter AOI Name"
+                placeholder="Enter Place Name"
                 className="w-full px-3.5 py-2.5 rounded-xl bg-[#1c1c20] border border-[#2a2a30] text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-emerald-500/60 transition-colors"
               />
             </div>
@@ -233,7 +231,7 @@ export default function CreateAOI({ isOpen = true, initialData = null, mode = "c
 
             <div className="flex flex-col gap-1.5">
               <label className="text-xs font-medium text-zinc-400 tracking-wide">
-                AOI Type
+                Type of Place
               </label>
               <Dropdown
                 label="Select type"
@@ -290,7 +288,7 @@ export default function CreateAOI({ isOpen = true, initialData = null, mode = "c
             onClick={handleSubmit}
             className="w-1/2 py-2 rounded-xl bg-[#10b981] hover:bg-[#059669] text-black font-semibold text-sm transition-colors cursor-pointer shadow-lg shadow-emerald-500/10"
           >
-            {mode === "edit" ? "Save Changes" : "Create AOI"}
+            {mode === "edit" ? "Save Changes" : "Create Place"}
           </button>
         </div>
       </div>

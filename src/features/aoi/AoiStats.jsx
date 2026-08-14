@@ -43,7 +43,7 @@ export default function AoiStats() {
       icon: ScanSearch,
       value: data.total_aois,
       subtitle: `${data.inactive_aois} Inactive`,
-      title: "Total AOIs",
+      title: "Total Saved Places",
       accent: "red",
     },
     {
@@ -51,7 +51,7 @@ export default function AoiStats() {
       icon: CircleDot,
       value: data.active_aois,
       subtitle: "Monitoring enabled",
-      title: "Active AOIs",
+      title: "Active Places",
       accent: "orange",
     },
     {
