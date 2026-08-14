@@ -27,7 +27,7 @@ export default function AoiListPanel({
       <div className="relative w-full mb-3 shrink-0">
         <input
           type="text"
-          placeholder="Search Places..."
+          placeholder="Search vehicles..."
           value={searchQuery}
           onChange={onSearchChange}
           className="w-full rounded-full bg-[#09090b] border border-[#27272a] focus:border-[#3f3f46] text-xs py-2 pl-4 pr-10 text-white placeholder-[#52525b] outline-none transition-all"
