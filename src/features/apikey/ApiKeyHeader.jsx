@@ -16,7 +16,7 @@ export default function ApiKeyHeader({
   return (
     <PageHeader
       title="API Credentials"
-      subtitle="Manage your API keys used to access the SafarTrak API on behalf of Just Deliveries India"
+      subtitle="Manage your API keys used to access the SafarTrak Platform on behalf of Just Deliveries India"
       showSearch={false}
       showFilters={false}
       showExport={false}

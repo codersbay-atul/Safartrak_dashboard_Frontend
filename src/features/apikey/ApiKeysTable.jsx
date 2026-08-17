@@ -6,8 +6,7 @@ const DEFAULT_API_KEYS = [
     name: 'Default API key',
     author: 'JD India',
     created: '08-06-2026',
-    apiKey: '96e84702f24b68988fff8c1cf987a1d2e',
-    apiKeyTruncated: '96e84702f24b68988fff8c1cf98...',
+    apiKey: '96e84702f24b68988fff8c1cf98c0c26dbeabc33e143c84b',
     apiSecret: 'secret_live_8f93120194bc823194a20b',
   },
 ];
@@ -36,175 +35,163 @@ export default function ApiKeysTable({
   }
 
   return (
-    <div className="w-full space-y-2">
-      <div className="bg-[#080808] border border-[#1b1e22] rounded-xl overflow-hidden text-gray-300 w-full shadow-lg">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#1b1e22]">
-          <h2 className="text-white font-semibold text-base">
-            API Keys ({apiKeys.length})
-          </h2>
-          <button
-            onClick={onRefresh}
-            className="text-gray-400 hover:text-white transition-colors p-1.5 rounded-md focus:outline-none"
-            title="Refresh"
-            aria-label="Refresh API keys"
-          >
-            <RefreshIcon />
-          </button>
-        </div>
+    <div className="w-full max-w-full bg-[#0d0e12] border border-[#20242d] rounded-2xl shadow-xl overflow-hidden">
+      <div className="w-full overflow-x-auto [scrollbar-width:thin]">
+        {apiKeys.length === 0 ? (
+          <div className="py-12 text-center text-gray-500">
+            <p className="text-sm">No API keys found.</p>
+          </div>
+        ) : (
+          <table className="w-full min-w-[850px] text-left text-xs sm:text-sm border-collapse table-fixed">
+            <thead>
+              <tr className="bg-[#13161f] text-gray-500 font-semibold tracking-wider border-b border-[#20242d] uppercase text-[10px] sm:text-[11px]">
+                <th className="py-4 px-6 w-[180px] font-semibold">API KEY NAME</th>
+                <th className="py-4 px-6 w-[130px] font-semibold">CREATED ON</th>
+                <th className="py-4 px-6 w-[130px] font-semibold">CREATED BY</th>
+                <th className="py-4 px-6 w-[320px] font-semibold">API KEY (USERNAME)</th>
+                <th className="py-4 px-6 w-[220px] font-semibold">API TOKEN (PASSWORD)</th>
+                <th className="py-4 px-6 w-[120px] font-semibold text-right">ACTION</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-[#20242d] bg-[#0d0e12]">
+              {apiKeys.map(function (item) {
+                const isSecretVisible = showSecretId === item.id;
+                const isKeyCopied =
+                  copiedState.id === item.id && copiedState.type === 'key';
+                const isSecretCopied =
+                  copiedState.id === item.id && copiedState.type === 'secret';
 
-        <div className="overflow-x-auto w-full">
-          {apiKeys.length === 0 ? (
-            <div className="py-12 text-center text-gray-500">
-              <p className="text-sm">No API keys found.</p>
-            </div>
-          ) : (
-            <table className="w-full text-left text-sm border-collapse">
-              <thead>
-                <tr className="text-[#626875] text-[11px] font-semibold tracking-wider border-b border-[#1b1e22] bg-[#080808]">
-                  <th className="py-3.5 px-6 font-medium uppercase">NAME</th>
-                  <th className="py-3.5 px-6 font-medium uppercase">CREATED</th>
-                  <th className="py-3.5 px-6 font-medium uppercase">API KEY</th>
-                  <th className="py-3.5 px-6 font-medium uppercase">API SECRET</th>
-                  <th className="py-3.5 px-6 font-medium uppercase text-right">ACTIONS</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[#171a1e]/60">
-                {apiKeys.map(function (item) {
-                  const isSecretVisible = showSecretId === item.id;
-                  const isKeyCopied = copiedState.id === item.id && copiedState.type === 'key';
-                  const isSecretCopied = copiedState.id === item.id && copiedState.type === 'secret';
+                return (
+                  <tr
+                    key={item.id}
+                    className="align-middle hover:bg-[#141720] transition-colors text-gray-300"
+                  >
+                    <td className="py-4 px-6 font-medium text-white truncate">
+                      {item.name}
+                    </td>
 
-                  const authorText = item.author
-                    ? item.author.startsWith('by ')
-                      ? item.author
-                      : `by ${item.author}`
-                    : null;
+                    <td className="py-4 px-6 font-normal whitespace-nowrap text-gray-400">
+                      {item.created}
+                    </td>
 
-                  return (
-                    <tr
-                      key={item.id}
-                      className="align-middle hover:bg-[#0d0f12] transition-colors"
-                    >
-                      <td className="py-4 px-6 leading-tight max-w-[140px]">
-                        <div className="text-white font-medium text-sm sm:text-base break-words">
-                          {item.name}
-                        </div>
-                        {authorText && (
-                          <div className="text-xs text-[#5f6672] mt-1 font-normal break-words">
-                            {authorText}
-                          </div>
-                        )}
-                      </td>
+                    <td className="py-4 px-6 font-normal whitespace-nowrap text-gray-400">
+                      {item.author || ''}
+                    </td>
 
-                      <td className="py-4 px-6 text-gray-400 font-normal whitespace-nowrap">
-                        <div className="text-sm text-gray-300">{item.created}</div>
-                      </td>
+                    <td className="py-4 px-6 font-normal">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="font-mono text-xs text-gray-300 truncate">
+                          {item.apiKey}
+                        </span>
+                        <button
+                          onClick={function () {
+                            handleCopy(item.apiKey, item.id, 'key');
+                          }}
+                          className="text-gray-500 hover:text-gray-300 transition-colors shrink-0 p-1 focus:outline-none"
+                          title="Copy API Key"
+                        >
+                          {isKeyCopied ? <CheckIcon /> : <CopyIcon />}
+                        </button>
+                      </div>
+                    </td>
 
-                      <td className="py-4 px-6 font-mono text-xs sm:text-sm text-gray-300 whitespace-nowrap">
-                        <div className="flex items-center gap-2">
-                          <span>
-                            {item.apiKeyTruncated || `${item.apiKey.substring(0, 24)}...`}
-                          </span>
-                          <button
-                            onClick={function () {
-                              handleCopy(item.apiKey, item.id, 'key');
-                            }}
-                            className="text-gray-500 hover:text-gray-300 transition-colors p-1"
-                            title="Copy API Key"
-                          >
-                            {isKeyCopied ? <CheckIcon /> : <CopyIcon />}
-                          </button>
-                        </div>
-                      </td>
+                    <td className="py-4 px-6 font-normal whitespace-nowrap">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="tracking-widest text-gray-400 font-mono text-xs truncate">
+                          {isSecretVisible ? item.apiSecret : '...............'}
+                        </span>
+                        <button
+                          onClick={function () {
+                            handleCopy(item.apiSecret, item.id, 'secret');
+                          }}
+                          className="text-gray-500 hover:text-gray-300 transition-colors shrink-0 p-1 focus:outline-none"
+                          title="Copy API Secret"
+                        >
+                          {isSecretCopied ? <CheckIcon /> : <CopyIcon />}
+                        </button>
+                      </div>
+                    </td>
 
-                      <td className="py-4 px-6 font-mono text-xs sm:text-sm text-gray-300 whitespace-nowrap">
-                        <div className="flex items-center gap-2">
-                          <span className="tracking-widest">
-                            {isSecretVisible
-                              ? item.apiSecret
-                              : '••••••••••••••••••••...'}
-                          </span>
+                    <td className="py-4 px-6 text-right whitespace-nowrap">
+                      <div className="flex items-center justify-end gap-3 text-gray-500">
+                        <button
+                          onClick={function () {
+                            toggleShowSecret(item.id);
+                          }}
+                          className="hover:text-gray-300 transition-colors p-1 focus:outline-none"
+                          title={isSecretVisible ? 'Hide Secret' : 'Show Secret'}
+                        >
+                          {isSecretVisible ? <EyeOffIcon /> : <EyeIcon />}
+                        </button>
 
-                          <button
-                            onClick={function () {
-                              toggleShowSecret(item.id);
-                            }}
-                            className="text-gray-500 hover:text-gray-300 transition-colors p-1"
-                            title={isSecretVisible ? 'Hide Secret' : 'Show Secret'}
-                          >
-                            {isSecretVisible ? <EyeOffIcon /> : <EyeIcon />}
-                          </button>
+                        <button
+                          onClick={function () {
+                            onEdit && onEdit(item);
+                          }}
+                          className="hover:text-gray-300 transition-colors p-1 focus:outline-none"
+                          title="Edit API Key"
+                        >
+                          <EditIcon />
+                        </button>
 
-                          <button
-                            onClick={function () {
-                              handleCopy(item.apiSecret, item.id, 'secret');
-                            }}
-                            className="text-gray-500 hover:text-gray-300 transition-colors p-1"
-                            title="Copy API Secret"
-                          >
-                            {isSecretCopied ? <CheckIcon /> : <CopyIcon />}
-                          </button>
-                        </div>
-                      </td>
-
-                      <td className="py-4 px-6 text-right whitespace-nowrap">
-                        <div className="flex items-center justify-end gap-3 text-gray-500">
-                          <button
-                            onClick={function () {
-                              onEdit && onEdit(item);
-                            }}
-                            className="hover:text-gray-300 transition-colors p-1"
-                            title="Edit API Key"
-                          >
-                            <EditIcon />
-                          </button>
-                          <button
-                            onClick={function () {
-                              onDelete && onDelete(item.id);
-                            }}
-                            className="hover:text-red-400 transition-colors p-1"
-                            title="Delete API Key"
-                          >
-                            <TrashIcon />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          )}
-        </div>
+                        <button
+                          onClick={function () {
+                            onDelete && onDelete(item.id);
+                          }}
+                          className="hover:text-red-400 transition-colors p-1 focus:outline-none"
+                          title="Delete API Key"
+                        >
+                          <TrashIcon />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        )}
       </div>
-
-      <p className="text-xs text-gray-500 px-1">
-        Keep API secrets private. Anyone with a key and secret can access your fleet data.
-      </p>
     </div>
-  );
-}
-
-function RefreshIcon() {
-  return (
-    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-    </svg>
   );
 }
 
 function CopyIcon() {
   return (
-    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="1.75" viewBox="0 0 24 24">
-      <rect x="9" y="9" width="12" height="12" rx="2" strokeLinecap="round" strokeLinejoin="round"/>
-      <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" strokeLinecap="round" strokeLinejoin="round"/>
+    <svg
+      className="w-4 h-4"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      viewBox="0 0 24 24"
+    >
+      <rect
+        x="9"
+        y="9"
+        width="12"
+        height="12"
+        rx="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
 
 function CheckIcon() {
   return (
-    <svg className="w-4 h-4 text-green-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+    <svg
+      className="w-4 h-4 text-green-400"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      viewBox="0 0 24 24"
+    >
       <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
     </svg>
   );
@@ -212,33 +199,77 @@ function CheckIcon() {
 
 function EyeIcon() {
   return (
-    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="1.75" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-      <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+    <svg
+      className="w-4 h-4"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      viewBox="0 0 24 24"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+      />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+      />
     </svg>
   );
 }
 
 function EyeOffIcon() {
   return (
-    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="1.75" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858-5.908A8.982 8.982 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21M3 3l18 18" />
+    <svg
+      className="w-4 h-4"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      viewBox="0 0 24 24"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858-5.908A8.982 8.982 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21M3 3l18 18"
+      />
     </svg>
   );
 }
 
 function EditIcon() {
   return (
-    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="1.75" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+    <svg
+      className="w-4 h-4"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      viewBox="0 0 24 24"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+      />
     </svg>
   );
 }
 
 function TrashIcon() {
   return (
-    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="1.75" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+    <svg
+      className="w-4 h-4"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      viewBox="0 0 24 24"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+      />
     </svg>
   );
 }

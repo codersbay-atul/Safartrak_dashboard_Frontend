@@ -28,6 +28,7 @@ import ForgotPassword from "./pages/Forgotpassword";
 import Dashboard from "./pages/dashboard";
 import FullMap from "./pages/FullMap";
 import ApiKeyCredentialsPage from "./pages/ApiKeyCredentials";
+import Document from "./features/apikey/Document";
 
 function AppContent() {
   const dispatch = useDispatch();
@@ -182,6 +183,14 @@ function AppContent() {
           element={
             <ProtectedRoute>
               <ApiKeyCredentialsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/documents"
+          element={
+            <ProtectedRoute>
+              <Document />
             </ProtectedRoute>
           }
         />
