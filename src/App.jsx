@@ -29,6 +29,7 @@ import Dashboard from "./pages/dashboard";
 import FullMap from "./pages/FullMap";
 import ApiKeyCredentialsPage from "./pages/ApiKeyCredentials";
 import Document from "./features/apikey/Document";
+import Truck from "./pages/Truck";
 
 function AppContent() {
   const dispatch = useDispatch();

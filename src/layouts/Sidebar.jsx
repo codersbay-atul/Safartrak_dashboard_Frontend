@@ -191,7 +191,7 @@ export default function Sidebar({ activeTab, setActiveTab }) {
               </p>
               <p className="text-[14px] text-[#9CA3AF]">Contact support</p>
             </div>
-            <Headphones size={14} className="text-[#A1A1AA]" />
+            <Headphones size={24} className="text-[#A1A1AA]" />
           </button>
         </div>
       </aside>

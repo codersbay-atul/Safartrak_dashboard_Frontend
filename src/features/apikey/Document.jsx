@@ -3,10 +3,10 @@ import React from 'react';
 export default function Document() {
   return (
     <div className="px-0 py-3 flex flex-wrap items-center gap-2 text-sm text-gray-200 font-normal">
-      <span>Learn and explore Safar Trak APIs -</span>
+      <span>Learn and explore SafarTrak APIs -</span>
 
       <a
-        href="https://docs.example.com"
+        href="/Docs/SafarTrakDocs.pdf"
         target="_blank"
         rel="noopener noreferrer"
         className="inline-flex items-baseline gap-1.5 text-[#F5B700] transition-all duration-200 no-underline hover:underline hover:decoration-[#F5B700] hover:decoration-1 hover:underline-offset-[3px] focus-visible:underline focus-visible:decoration-[#F5B700] focus-visible:decoration-1 focus-visible:underline-offset-[3px]"
