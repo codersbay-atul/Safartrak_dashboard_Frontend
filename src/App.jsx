@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { BrowserRouter, Routes, Route, Navigate, useNavigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import "./App.css";
 
@@ -26,13 +26,11 @@ import CommandHistoryPage from "./features/mobilize/CommandHistory";
 import { setAuthTokens } from "./store/slices/authSlice";
 import ForgotPassword from "./pages/Forgotpassword";
 import Dashboard from "./pages/dashboard";
-import useAccountInactivity from "./hooks/useAccountInactivity";
 import FullMap from "./pages/FullMap";
 import ApiKeyCredentialsPage from "./pages/ApiKeyCredentials";
 
 function AppContent() {
   const dispatch = useDispatch();
-  useAccountInactivity();
 
   useEffect(() => {
     const handleTokensUpdated = (event) => {

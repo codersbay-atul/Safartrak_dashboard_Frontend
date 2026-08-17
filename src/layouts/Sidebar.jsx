@@ -7,11 +7,8 @@ import {
   Power,
   TriangleAlert,
   ScanSearch,
-  Route,
-  GitBranch,
   Send,
   Truck,
-  IdCard,
   FileSearch,
   Users,
   Headphones,
@@ -33,11 +30,8 @@ export default function Sidebar({ activeTab, setActiveTab }) {
     "Mobilize / Immobilize": "/mobilize",
     Alerts: "/alerts",
     "Saved Places": "/saved-places",
-    // Routes: "/routes",
-    // Trips: "/trips",
     Activity: "/activity",
     Vehicles: "/vehicles",
-    // Drivers: "/drivers",
     "Vehicle Details": "/vehicle-overview",
     Users: "/users",
     Contact: "/contact",
@@ -64,8 +58,6 @@ export default function Sidebar({ activeTab, setActiveTab }) {
       title: "GEO SERVICES",
       items: [
         { icon: ScanSearch, label: "Saved Places" },
-        // { icon: Route, label: "Routes" },
-        // { icon: GitBranch, label: "Trips" },
         { icon: Send, label: "Activity" },
       ],
     },
@@ -73,16 +65,13 @@ export default function Sidebar({ activeTab, setActiveTab }) {
       title: "MANAGEMENT",
       items: [
         { icon: Truck, label: "Vehicles" },
-        // { icon: IdCard, label: "Drivers" },
         { icon: FileSearch, label: "Vehicle Details" },
         { icon: Users, label: "Users" },
       ],
     },
     {
       title: "DEVELOPER",
-      items: [
-        { icon: Key, label: "API Credentials" },
-      ],
+      items: [{ icon: Key, label: "API Credentials" }],
     },
   ];
 
@@ -111,11 +100,12 @@ export default function Sidebar({ activeTab, setActiveTab }) {
       )}
 
       <aside
-        className={`fixed lg:static top-0 left-0 z-45 w-52 xl:w-56.25 h-screen bg-[#121212] border-r border-[#2A2A2F] flex flex-col justify-between overflow-hidden select-none py-3 transition-transform duration-300 ease-in-out
+        className={`fixed lg:static top-0 left-0 z-45 w-56 xl:w-60 h-screen bg-[#121212] border-r border-[#2A2A2F] flex flex-col justify-between overflow-hidden select-none py-2 transition-transform duration-300 ease-in-out
           ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}
       >
-        <div className="flex flex-col flex-1 min-h-0">
-          <div className="h-8 flex items-center justify-between px-4 mb-8 shrink-0">
+        <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
+          {/* Logo Section */}
+          <div className="h-7 flex items-center justify-between px-3.5 mb-2 shrink-0">
             <div
               onClick={() => navigate("/")}
               className="cursor-pointer flex items-center"
@@ -123,28 +113,29 @@ export default function Sidebar({ activeTab, setActiveTab }) {
               <img
                 src={Logo}
                 alt="SafarTrak"
-                className="h-5 w-auto object-contain"
+                className="h-4.5 w-auto object-contain"
               />
             </div>
 
             {isOpen && (
               <button
                 onClick={() => setIsOpen(false)}
-                className="lg:hidden flex items-center justify-center w-7 h-7 text-[#A1A1AA] hover:text-white hover:bg-[#232328] rounded-md cursor-pointer transition"
+                className="lg:hidden flex items-center justify-center w-6 h-6 text-[#A1A1AA] hover:text-white hover:bg-[#232328] rounded-md cursor-pointer transition"
               >
                 <X size={15} />
               </button>
             )}
           </div>
 
-          <div className="px-3 overflow-y-auto flex-1 flex flex-col gap-4 custom-scrollbar">
+          {/* Navigation Links Area */}
+          <div className="px-3 overflow-y-auto flex-1 flex flex-col gap-1.5 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             {sections.map((section) => (
-              <div key={section.title} className="flex flex-col gap-0.5">
-                <h4 className="text-[10px] font-semibold leading-[10px] tracking-wider uppercase text-[#71717A] mb-1 px-1">
+              <div key={section.title} className="flex flex-col shrink-0">
+                <h4 className="text-[10px] font-semibold leading-none tracking-wider uppercase text-[#71717A] mb-1 px-1">
                   {section.title}
                 </h4>
 
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-0.5">
                   {section.items.map((item) => {
                     const targetPath = routeMap[item.label] || "/";
 
@@ -154,7 +145,7 @@ export default function Sidebar({ activeTab, setActiveTab }) {
                         to={targetPath}
                         onClick={handleNavigation}
                         className={({ isActive }) =>
-                          `flex items-center w-full h-8 gap-3 rounded-lg px-2.5 transition min-w-0 ${
+                          `flex items-center w-full py-1 gap-2.5 rounded-lg px-2.5 transition min-w-0 ${
                             isActive
                               ? "bg-[#232328] text-white"
                               : "text-[#D4D4D8] hover:bg-[#232328]/70"
@@ -164,10 +155,12 @@ export default function Sidebar({ activeTab, setActiveTab }) {
                         <item.icon
                           size={18}
                           className="text-[#F5B700] shrink-0"
-                          strokeWidth={location.pathname === targetPath ? 2.5 : 2}
+                          strokeWidth={
+                            location.pathname === targetPath ? 2.5 : 2
+                          }
                         />
 
-                        <span className="text-[14px] font-normal leading-[20px] truncate">
+                        <span className="text-[14px] font-normal leading-tight truncate">
                           {item.label}
                         </span>
                       </NavLink>
@@ -179,19 +172,22 @@ export default function Sidebar({ activeTab, setActiveTab }) {
           </div>
         </div>
 
-        <div className="px-4 mt-2 shrink-0">
+        {/* Support Section */}
+        <div className="px-3 pt-1.5 shrink-0">
           <button
             type="button"
             onClick={() => navigate("/contact")}
-            className="w-full rounded-lg border border-[#303036] bg-[#1D1D22] px-3 py-1.5 flex items-center justify-between text-left hover:border-[#4d5563] hover:bg-[#22252c] transition-colors"
+            className="w-full rounded-lg border border-[#303036] bg-[#1D1D22] px-2.5 py-1 flex items-center justify-between text-left hover:border-[#4d5563] hover:bg-[#22252c] transition-colors"
           >
             <div>
-              <p className="text-[10.5px] font-semibold text-white">
+              <p className="text-[10px] font-semibold text-white leading-tight">
                 Need Help?
               </p>
-              <p className="text-[8.5px] text-[#9CA3AF]">Contact support</p>
+              <p className="text-[8px] text-[#9CA3AF] leading-tight">
+                Contact support
+              </p>
             </div>
-            <Headphones size={14} className="text-[#A1A1AA]" />
+            <Headphones size={13} className="text-[#A1A1AA] shrink-0" />
           </button>
         </div>
       </aside>
