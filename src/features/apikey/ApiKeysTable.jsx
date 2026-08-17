@@ -64,7 +64,7 @@ export default function ApiKeysTable({
                 return (
                   <tr
                     key={item.id}
-                    className="align-middle hover:bg-[#141720] transition-colors text-gray-300"
+                    className="align-middle text-gray-300 border border-[#1d1d20] bg-[#121214] hover:border-[#27272a] hover:bg-[#18181b] transition-all cursor-pointer"
                   >
                     <td className="py-4 px-6 font-medium text-white truncate">
                       {item.name}

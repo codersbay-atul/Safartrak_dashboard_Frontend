@@ -57,7 +57,8 @@ const iconMap = {
   "Vehicles": Truck,
   "Drivers": IdCard,
   "Vehicle Details": FileSearch,
-  "Users": Users
+  "Users": Users,
+  "API Credentials": Key
 };
 
 export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }) {
