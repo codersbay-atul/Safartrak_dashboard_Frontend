@@ -79,7 +79,7 @@ export default function Sidebar({ activeTab, setActiveTab }) {
       ],
     },
     {
-      title: "DEVELOPER",
+      title: "DEVELOPER SETTINGS",
       items: [
         { icon: Key, label: "API Credentials" },
       ],
