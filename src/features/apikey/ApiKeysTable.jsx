@@ -4,7 +4,7 @@ const DEFAULT_API_KEYS = [
   {
     id: '1',
     name: 'Default API key',
-    author: 'Safar Trak',
+    author: 'SafarTrak',
     created: '08-06-2026',
     apiKey: '96e84702f24b68988fff8c1cf98c0c26dbeabc33e143c84b',
     apiSecret: 'secret_live_8f93120194bc823194a20b',
@@ -44,13 +44,13 @@ export default function ApiKeysTable({
         ) : (
           <table className="w-full min-w-[850px] text-left text-xs sm:text-sm border-collapse table-fixed">
             <thead>
-              <tr className="bg-[#18181B] text-gray-500 font-semibold tracking-wider border-b border-[#20242d] uppercase text-[10px] sm:text-[11px]">
-                <th className="py-4 px-6 w-[180px] font-semibold">API KEY NAME</th>
-                <th className="py-4 px-6 w-[130px] font-semibold">CREATED ON</th>
-                <th className="py-4 px-6 w-[130px] font-semibold">CREATED BY</th>
-                <th className="py-4 px-6 w-[320px] font-semibold">API KEY (USERNAME)</th>
-                <th className="py-4 px-6 w-[220px] font-semibold">API TOKEN (PASSWORD)</th>
-                <th className="py-4 px-6 w-[120px] font-semibold text-right">ACTION</th>
+              <tr className="bg-[#18181B] text-gray-500 font-semibold tracking-wider border-b border-[#20242d] uppercase text-[12px]">
+                <th className="py-4 pl-4 pr-5 w-[180px] font-semibold">PRODUCTION CREDENTIALS</th>
+                <th className="py-4 pl-4 pr-5 w-[130px] font-semibold">CREATED ON</th>
+                <th className="py-4 pl-4 pr-5 w-[130px] font-semibold">CREATED BY</th>
+                <th className="py-4 pl-4 pr-5 w-[320px] font-semibold">API KEY (USERNAME)</th>
+                <th className="py-4 pl-4 pr-5 w-[220px] font-semibold">API TOKEN (PASSWORD)</th>
+                <th className="py-4 pl-4 pr-5 w-[120px] font-semibold text-right">ACTION</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#20242d] bg-[#0d0e12]">
@@ -66,28 +66,28 @@ export default function ApiKeysTable({
                     key={item.id}
                     className="align-middle text-gray-300 border border-[#1d1d20] bg-[#121214] hover:border-[#27272a] hover:bg-[#18181b] transition-all cursor-pointer"
                   >
-                    <td className="py-4 px-6 font-medium text-white truncate">
+                    <td className="py-4 pl-4 pr-5 font-medium text-white truncate">
                       {item.name}
                     </td>
 
-                    <td className="py-4 px-6 font-normal whitespace-nowrap text-gray-400">
+                    <td className="py-4 pl-4 pr-5 font-normal whitespace-nowrap text-gray-400">
                       {item.created}
                     </td>
 
-                    <td className="py-4 px-6 font-normal whitespace-nowrap text-gray-400">
+                    <td className="py-4 pl-4 pr-5 font-normal whitespace-nowrap text-gray-400">
                       {item.author || ''}
                     </td>
 
-                    <td className="py-4 px-6 font-normal">
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="font-mono text-xs text-gray-300 truncate">
+                    <td className="py-4 pl-4 pr-5 font-normal align-top">
+                      <div className="flex items-start justify-between gap-2 min-w-0">
+                        <span className="font-mono text-xs text-gray-300 break-all whitespace-normal leading-relaxed min-w-0 pt-1">
                           {item.apiKey}
                         </span>
                         <button
                           onClick={function () {
                             handleCopy(item.apiKey, item.id, 'key');
                           }}
-                          className="text-gray-500 hover:text-gray-300 transition-colors shrink-0 p-1 focus:outline-none"
+                          className="text-gray-500 hover:text-gray-300 transition-colors shrink-0 p-1 focus:outline-none self-start"
                           title="Copy API Key"
                         >
                           {isKeyCopied ? <CheckIcon /> : <CopyIcon />}
@@ -95,16 +95,16 @@ export default function ApiKeysTable({
                       </div>
                     </td>
 
-                    <td className="py-4 px-6 font-normal whitespace-nowrap">
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="tracking-widest text-gray-400 font-mono text-xs truncate">
+                    <td className="py-4 pl-4 pr-5 font-normal align-top">
+                      <div className="flex items-start justify-between gap-2 min-w-0">
+                        <span className="tracking-widest text-gray-400 font-mono text-xs break-all whitespace-normal leading-relaxed min-w-0 pt-1">
                           {isSecretVisible ? item.apiSecret : '...............'}
                         </span>
                         <button
                           onClick={function () {
                             handleCopy(item.apiSecret, item.id, 'secret');
                           }}
-                          className="text-gray-500 hover:text-gray-300 transition-colors shrink-0 p-1 focus:outline-none"
+                          className="text-gray-500 hover:text-gray-300 transition-colors shrink-0 p-1 focus:outline-none self-start"
                           title="Copy API Secret"
                         >
                           {isSecretCopied ? <CheckIcon /> : <CopyIcon />}
@@ -112,7 +112,7 @@ export default function ApiKeysTable({
                       </div>
                     </td>
 
-                    <td className="py-4 px-6 text-right whitespace-nowrap">
+                    <td className="py-4 pl-4 pr-5 text-right whitespace-nowrap">
                       <div className="flex items-center justify-end gap-3 text-gray-500">
                         <button
                           onClick={function () {
@@ -121,7 +121,7 @@ export default function ApiKeysTable({
                           className="hover:text-gray-300 transition-colors p-1 focus:outline-none"
                           title={isSecretVisible ? 'Hide Secret' : 'Show Secret'}
                         >
-                          {isSecretVisible ? <EyeOffIcon /> : <EyeIcon />}
+                          {isSecretVisible ? <EyeClosedIcon /> : <EyeIcon />}
                         </button>
 
                         <button
@@ -209,18 +209,14 @@ function EyeIcon() {
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
-        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+        d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z"
       />
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-      />
+      <circle cx="12" cy="12" r="3.2" fill="currentColor" stroke="none" />
     </svg>
   );
 }
 
-function EyeOffIcon() {
+function EyeClosedIcon() {
   return (
     <svg
       className="w-4 h-4"
@@ -232,7 +228,12 @@ function EyeOffIcon() {
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
-        d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858-5.908A8.982 8.982 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21M3 3l18 18"
+        d="M3 12s3.5-6 9-6 9 6 9 6-3.5 6-9 6-9-6-9-6z"
+      />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M4 20L20 4"
       />
     </svg>
   );

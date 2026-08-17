@@ -25,16 +25,17 @@ body {
 .custom-scrollbar {
   overflow-y: auto;
   overflow-x: hidden;
-
-
-  scrollbar-width: thin;
-  scrollbar-color: rgba(156, 163, 175, 0.25) transparent;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scrollbar-color: transparent transparent;
 }
 
 /* Width */
 .custom-scrollbar::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 0;
+  height: 0;
+  display: none;
 }
 
 /* Hide arrows (Ensures no arrow is displayed anywhere) */

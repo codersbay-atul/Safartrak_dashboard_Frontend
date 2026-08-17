@@ -17,8 +17,8 @@ export default function ApiKeyCredentialsPage() {
       <div className="flex-1 flex flex-col gap-2.5 h-full min-h-0 min-w-0 overflow-y-auto pr-0.5 custom-scrollbar">
         <div className="shrink-0">
           <PageHeader
-            title="API Credentials"
-            subtitle="Manage your API keys used to access the SafarTrak Platform on behalf of Just Deliveries India"
+            title="API Keys"
+            subtitle="Manage your API keys used to access the SafarTrak Platform."
             showSearch={false}
             showFilters={false}
             showExport={false}

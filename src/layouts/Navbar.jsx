@@ -140,7 +140,7 @@ export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }
   return (
     <header className="flex items-center justify-between px-2.5 min-[1152px]:px-3 py-2.5 xl:py-3 border-b border-[#1f1f23] bg-[#09090b] sticky top-0 z-30 select-none gap-2 min-w-0">
       
-      <div className="flex items-center gap-2 xl:gap-2.5 text-[14px] xl:text-[15px] text-[#a1a1aa] font-medium tracking-wide min-w-0 flex-1">
+      <div className="flex items-center gap-2 xl:gap-2.5 text-[18px] text-[#a1a1aa] font-medium tracking-wide min-w-0 flex-1">
         <div className="w-10 h-1 shrink-0 lg:hidden" />
         <ActiveIcon size={20} className="text-[#71717a] shrink-0" />
         {showRouteBreadcrumb ? (
