@@ -4,7 +4,7 @@ const DEFAULT_API_KEYS = [
   {
     id: '1',
     name: 'Default API key',
-    author: 'JD India',
+    author: 'Safar Trak',
     created: '08-06-2026',
     apiKey: '96e84702f24b68988fff8c1cf98c0c26dbeabc33e143c84b',
     apiSecret: 'secret_live_8f93120194bc823194a20b',
@@ -44,7 +44,7 @@ export default function ApiKeysTable({
         ) : (
           <table className="w-full min-w-[850px] text-left text-xs sm:text-sm border-collapse table-fixed">
             <thead>
-              <tr className="bg-[#13161f] text-gray-500 font-semibold tracking-wider border-b border-[#20242d] uppercase text-[10px] sm:text-[11px]">
+              <tr className="bg-[#18181B] text-gray-500 font-semibold tracking-wider border-b border-[#20242d] uppercase text-[10px] sm:text-[11px]">
                 <th className="py-4 px-6 w-[180px] font-semibold">API KEY NAME</th>
                 <th className="py-4 px-6 w-[130px] font-semibold">CREATED ON</th>
                 <th className="py-4 px-6 w-[130px] font-semibold">CREATED BY</th>

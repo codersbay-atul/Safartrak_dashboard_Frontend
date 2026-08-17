@@ -20,7 +20,8 @@ import {
   User,
   Settings,
   LogOut,
-  ChevronRight
+  ChevronRight,
+  Key
 } from 'lucide-react';
 import { useNotifications, useMarkNotificationsRead } from '../hooks/useNotifications';
 
