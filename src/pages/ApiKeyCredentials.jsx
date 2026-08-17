@@ -4,6 +4,7 @@ import PageHeader from "../components/Ui/PageHeader";
 import CreateApiKeyButton from "../components/common/CreateApiKeyButton";
 import AccountDetailsSection from "../features/apikey/AccountDetailsSection";
 import ApiKeysSection from "../features/apikey/ApiKeysSection";
+import Document from "../features/apikey/Document";
 
 export default function ApiKeyCredentialsPage() {
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -24,6 +25,10 @@ export default function ApiKeyCredentialsPage() {
             showExport={false}
             customRightAction={<CreateApiKeyButton onClick={handleCreateClick} />}
           />
+        </div>
+
+        <div className="shrink-0 w-full min-w-0">
+          <Document />
         </div>
 
         <div className="shrink-0 w-full min-w-0">

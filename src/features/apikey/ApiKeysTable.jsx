@@ -78,16 +78,16 @@ export default function ApiKeysTable({
                       {item.author || ''}
                     </td>
 
-                    <td className="py-4 pl-4 pr-5 font-normal align-top">
-                      <div className="flex items-start justify-between gap-2 min-w-0">
-                        <span className="font-mono text-xs text-gray-300 break-all whitespace-normal leading-relaxed min-w-0 pt-1">
+                    <td className="py-4 pl-4 pr-5 font-normal align-middle">
+                      <div className="flex items-center justify-between gap-2 min-w-0">
+                        <span className="font-mono text-xs text-gray-300 break-all whitespace-normal leading-relaxed min-w-0">
                           {item.apiKey}
                         </span>
                         <button
                           onClick={function () {
                             handleCopy(item.apiKey, item.id, 'key');
                           }}
-                          className="text-gray-500 hover:text-gray-300 transition-colors shrink-0 p-1 focus:outline-none self-start"
+                          className="text-gray-500 hover:text-gray-300 transition-colors shrink-0 p-1 focus:outline-none inline-flex items-center justify-center"
                           title="Copy API Key"
                         >
                           {isKeyCopied ? <CheckIcon /> : <CopyIcon />}
@@ -95,16 +95,16 @@ export default function ApiKeysTable({
                       </div>
                     </td>
 
-                    <td className="py-4 pl-4 pr-5 font-normal align-top">
-                      <div className="flex items-start justify-between gap-2 min-w-0">
-                        <span className="tracking-widest text-gray-400 font-mono text-xs break-all whitespace-normal leading-relaxed min-w-0 pt-1">
+                    <td className="py-4 pl-4 pr-5 font-normal align-middle">
+                      <div className="flex items-center justify-between gap-2 min-w-0">
+                        <span className="tracking-widest text-gray-400 font-mono text-xs break-all whitespace-normal leading-relaxed min-w-0">
                           {isSecretVisible ? item.apiSecret : '...............'}
                         </span>
                         <button
                           onClick={function () {
                             handleCopy(item.apiSecret, item.id, 'secret');
                           }}
-                          className="text-gray-500 hover:text-gray-300 transition-colors shrink-0 p-1 focus:outline-none self-start"
+                          className="text-gray-500 hover:text-gray-300 transition-colors shrink-0 p-1 focus:outline-none inline-flex items-center justify-center"
                           title="Copy API Secret"
                         >
                           {isSecretCopied ? <CheckIcon /> : <CopyIcon />}
@@ -112,13 +112,13 @@ export default function ApiKeysTable({
                       </div>
                     </td>
 
-                    <td className="py-4 pl-4 pr-5 text-right whitespace-nowrap">
-                      <div className="flex items-center justify-end gap-3 text-gray-500">
+                    <td className="py-4 pl-4 pr-5 text-right whitespace-nowrap align-middle">
+                      <div className="flex items-center justify-end gap-2.5 text-gray-500">
                         <button
                           onClick={function () {
                             toggleShowSecret(item.id);
                           }}
-                          className="hover:text-gray-300 transition-colors p-1 focus:outline-none"
+                          className="hover:text-gray-300 transition-colors p-1 focus:outline-none flex items-center justify-center"
                           title={isSecretVisible ? 'Hide Secret' : 'Show Secret'}
                         >
                           {isSecretVisible ? <EyeClosedIcon /> : <EyeIcon />}
@@ -128,7 +128,7 @@ export default function ApiKeysTable({
                           onClick={function () {
                             onEdit && onEdit(item);
                           }}
-                          className="hover:text-gray-300 transition-colors p-1 focus:outline-none"
+                          className="hover:text-gray-300 transition-colors p-1 focus:outline-none flex items-center justify-center"
                           title="Edit API Key"
                         >
                           <EditIcon />
@@ -138,7 +138,7 @@ export default function ApiKeysTable({
                           onClick={function () {
                             onDelete && onDelete(item.id);
                           }}
-                          className="hover:text-red-400 transition-colors p-1 focus:outline-none"
+                          className="hover:text-red-400 transition-colors p-1 focus:outline-none flex items-center justify-center"
                           title="Delete API Key"
                         >
                           <TrashIcon />

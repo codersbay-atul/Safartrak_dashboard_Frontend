@@ -62,11 +62,11 @@ export default function PageHeader({
     <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-2.5 xl:gap-4 w-full select-none mt-0 pt-0 shrink-0 min-w-0 overflow-visible">
       
       <div className="min-w-0 flex-1">
-        <h1 className="text-[16px] font-bold text-white tracking-tight leading-tight truncate">
+        <h1 className="text-[16px] font-bold text-white tracking-tight leading-tight truncate mb-1">
           {title}
         </h1>
         {subtitle && (
-          <p className="text-[12px] text-[#a1a1aa] leading-normal truncate max-w-full xl:max-w-xl 2xl:max-w-2xl">
+          <p className="text-[12px] text-[#a1a1aa] leading-normal truncate max-w-full xl:max-w-xl 2xl:max-w-2xl mt-1">
             {subtitle}
           </p>
         )}

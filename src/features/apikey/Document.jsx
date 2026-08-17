@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function Document() {
   return (
-    <div className="p-6 flex flex-wrap items-center gap-2 text-sm text-gray-200 font-normal">
+    <div className="px-0 py-3 flex flex-wrap items-center gap-2 text-sm text-gray-200 font-normal">
       <span>Learn and explore Safar Trak APIs -</span>
 
       <a
@@ -19,7 +19,7 @@ export default function Document() {
         href="https://www.postman.com"
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex items-center gap-1 text-[#3b82f6] hover:text-[#60a5fa] underline transition-colors ml-1"
+        className="inline-flex items-center gap-1 text-[#3b82f6] hover:text-[#60a5fa] underline transition-colors"
       >
         <span>Postman Collection</span>
         <ExternalLinkIcon />
