@@ -9,9 +9,9 @@ export default function Document() {
         href="https://docs.example.com"
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex items-center gap-1 text-[#3b82f6] hover:text-[#60a5fa] underline transition-colors"
+        className="inline-flex items-baseline gap-1.5 text-[#F5B700] transition-all duration-200 no-underline hover:underline hover:decoration-[#F5B700] hover:decoration-1 hover:underline-offset-[3px] focus-visible:underline focus-visible:decoration-[#F5B700] focus-visible:decoration-1 focus-visible:underline-offset-[3px]"
       >
-        <span>API documentation</span>
+        <span className="leading-none">API documentation</span>
         <ExternalLinkIcon />
       </a>
 
@@ -19,9 +19,9 @@ export default function Document() {
         href="https://www.postman.com"
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex items-center gap-1 text-[#3b82f6] hover:text-[#60a5fa] underline transition-colors"
+        className="inline-flex items-baseline gap-1.5 text-[#F5B700] transition-all duration-200 no-underline hover:underline hover:decoration-[#F5B700] hover:decoration-1 hover:underline-offset-[3px] focus-visible:underline focus-visible:decoration-[#F5B700] focus-visible:decoration-1 focus-visible:underline-offset-[3px]"
       >
-        <span>Postman Collection</span>
+        <span className="leading-none">Postman Collection</span>
         <ExternalLinkIcon />
       </a>
     </div>
@@ -31,7 +31,7 @@ export default function Document() {
 function ExternalLinkIcon() {
   return (
     <svg
-      className="w-3.5 h-3.5 shrink-0"
+      className="w-4 h-4 shrink-0 text-[#F5B700] translate-y-1"
       fill="none"
       stroke="currentColor"
       strokeWidth="2"

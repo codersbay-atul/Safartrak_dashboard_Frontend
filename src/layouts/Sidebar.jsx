@@ -73,7 +73,7 @@ export default function Sidebar({ activeTab, setActiveTab }) {
       title: "MANAGEMENT",
       items: [
         { icon: Truck, label: "Vehicles" },
-        // { icon: IdCard, label: "Drivers" },
+       
         { icon: FileSearch, label: "Vehicle Details" },
         { icon: Users, label: "Users" },
       ],
