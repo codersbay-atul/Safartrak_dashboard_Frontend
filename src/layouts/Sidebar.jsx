@@ -186,10 +186,10 @@ export default function Sidebar({ activeTab, setActiveTab }) {
             className="w-full rounded-lg border border-[#303036] bg-[#1D1D22] px-3 py-1.5 flex items-center justify-between text-left hover:border-[#4d5563] hover:bg-[#22252c] transition-colors"
           >
             <div>
-              <p className="text-[10.5px] font-semibold text-white">
+              <p className="text-[14px] font-semibold text-white">
                 Need Help?
               </p>
-              <p className="text-[8.5px] text-[#9CA3AF]">Contact support</p>
+              <p className="text-[14px] text-[#9CA3AF]">Contact support</p>
             </div>
             <Headphones size={14} className="text-[#A1A1AA]" />
           </button>
