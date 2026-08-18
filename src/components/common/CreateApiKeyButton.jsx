@@ -9,7 +9,7 @@ export default function CreateApiKeyButton({ onClick, className = "" }) {
       aria-label="Create API Key"
     >
       <Plus size={18} strokeWidth={2.5} />
-      <span className="text-sm font-medium">Create API Key</span>
+      <span className="text-sm font-medium">Request New Key</span>
     </button>
   );
 }

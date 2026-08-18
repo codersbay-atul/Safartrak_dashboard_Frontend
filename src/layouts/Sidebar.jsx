@@ -18,6 +18,7 @@ import {
   Menu,
   X,
   Key,
+  ChevronRight,
 } from "lucide-react";
 import Logo from "../assets/images/Logo.svg";
 
@@ -33,11 +34,8 @@ export default function Sidebar({ activeTab, setActiveTab }) {
     "Mobilize / Immobilize": "/mobilize",
     Alerts: "/alerts",
     "Saved Places": "/saved-places",
-    // Routes: "/routes",
-    // Trips: "/trips",
     Activity: "/activity",
     Vehicles: "/vehicles",
-    // Drivers: "/drivers",
     "Vehicle Details": "/vehicle-overview",
     Users: "/users",
     Contact: "/contact",
@@ -64,8 +62,6 @@ export default function Sidebar({ activeTab, setActiveTab }) {
       title: "GEO SERVICES",
       items: [
         { icon: ScanSearch, label: "Saved Places" },
-        // { icon: Route, label: "Routes" },
-        // { icon: GitBranch, label: "Trips" },
         { icon: Send, label: "Activity" },
       ],
     },
@@ -73,7 +69,6 @@ export default function Sidebar({ activeTab, setActiveTab }) {
       title: "MANAGEMENT",
       items: [
         { icon: Truck, label: "Vehicles" },
-       
         { icon: FileSearch, label: "Vehicle Details" },
         { icon: Users, label: "Users" },
       ],
@@ -81,7 +76,11 @@ export default function Sidebar({ activeTab, setActiveTab }) {
     {
       title: "DEVELOPER SETTINGS",
       items: [
-        { icon: Key, label: "API Credentials" },
+        { 
+          icon: Key, 
+          label: "API Credentials",
+          badge: "New Update" 
+        },
       ],
     },
   ];
@@ -111,7 +110,7 @@ export default function Sidebar({ activeTab, setActiveTab }) {
       )}
 
       <aside
-        className={`fixed lg:static top-0 left-0 z-45 w-52 xl:w-56.25 h-screen bg-[#121212] border-r border-[#2A2A2F] flex flex-col justify-between overflow-hidden select-none py-3 transition-transform duration-300 ease-in-out
+        className={`fixed lg:static top-0 left-0 z-45 w-56 xl:w-60 h-screen bg-[#121212] border-r border-[#2A2A2F] flex flex-col justify-between overflow-hidden select-none py-3 transition-transform duration-300 ease-in-out
           ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}
       >
         <div className="flex flex-col flex-1 min-h-0">
@@ -154,22 +153,31 @@ export default function Sidebar({ activeTab, setActiveTab }) {
                         to={targetPath}
                         onClick={handleNavigation}
                         className={({ isActive }) =>
-                          `flex items-center w-full h-8 gap-3 rounded-lg px-2.5 transition min-w-0 ${
+                          `flex items-center justify-between w-full h-8 px-2 rounded-lg transition ${
                             isActive
                               ? "bg-[#232328] text-white"
                               : "text-[#D4D4D8] hover:bg-[#232328]/70"
                           }`
                         }
                       >
-                        <item.icon
-                          size={18}
-                          className="text-[#F5B700] shrink-0"
-                          strokeWidth={location.pathname === targetPath ? 2.5 : 2}
-                        />
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <item.icon
+                            size={17}
+                            className="text-[#F5B700] shrink-0"
+                            strokeWidth={location.pathname === targetPath ? 2.5 : 2}
+                          />
 
-                        <span className="text-[14px] font-normal leading-[20px] truncate">
-                          {item.label}
-                        </span>
+                          <span className="text-[13px] font-normal leading-[18px] whitespace-nowrap">
+                            {item.label}
+                          </span>
+                        </div>
+
+                        {item.badge && (
+                          <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[9px] font-semibold bg-[#2a1f00] text-[#F5B700] border border-[#F5B700]/30 shrink-0 ml-1 leading-none whitespace-nowrap">
+                            {item.badge}
+                            <ChevronRight size={9} className="stroke-[2.5]" />
+                          </span>
+                        )}
                       </NavLink>
                     );
                   })}

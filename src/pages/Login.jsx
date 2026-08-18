@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Navigate, useLocation, useNavigate, Link } from "react-router-dom";
+import { Navigate, useNavigate, Link } from "react-router-dom";
 import Button from "../components/Ui/Button";
 import AuthShell, { AuthField } from "../features/auth/AuthShell";
 import { toast } from "../components/Ui/toast";
@@ -37,8 +37,7 @@ function validateLoginForm({ username, password }) {
 export default function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
-  
+
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const authStatus = useSelector(selectAuthStatus);
 
@@ -78,8 +77,7 @@ export default function Login() {
           }
         } catch {}
 
-        const redirectTo = location.state?.from?.pathname || "/dashboard";
-        navigate(redirectTo, { replace: true });
+        navigate("/dashboard", { replace: true });
       } else {
         toast.error(resultAction.payload || "Invalid username or password");
       }

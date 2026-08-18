@@ -136,11 +136,12 @@ apiClient.interceptors.request.use(
       pendingRequests.set(requestKey, controller);
     }
 
+    // LocalStorage ko pehle check karenge taaki refresh ke baad latest token hi jaye
     const token =
-      getAccessToken() ||
       localStorage.getItem("access_token") ||
+      localStorage.getItem("accessToken") ||
       localStorage.getItem("token") ||
-      localStorage.getItem("accessToken");
+      getAccessToken();
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -171,13 +172,21 @@ apiClient.interceptors.response.use(
       pendingRequests.delete(requestKey);
     }
 
+    // 401 Unauthorized Handling
     if (error.response && error.response.status === 401 && originalRequest) {
       const refreshToken =
         localStorage.getItem("refresh_token") ||
         localStorage.getItem("refreshToken");
+
       const isRefreshRequest = originalRequest.url?.includes("/v1/auth/refresh");
 
-      if (refreshToken && !isRefreshRequest && !originalRequest._retry) {
+      // Agar refresh request khud 401 de rahi hai toh logout karein
+      if (isRefreshRequest) {
+        performLogout();
+        return Promise.reject(normalizeApiError(error));
+      }
+
+      if (refreshToken && !originalRequest._retry) {
         if (isRefreshing) {
           return new Promise((resolve, reject) => {
             failedQueue.push({ resolve, reject });
@@ -193,9 +202,13 @@ apiClient.interceptors.response.use(
         isRefreshing = true;
 
         try {
+          // Backend body compatibility ke liye dono keys bheji gayi hain
           const res = await axios.post(
             "/v1/auth/refresh",
-            { refresh_token: refreshToken },
+            {
+              refresh_token: refreshToken,
+              refreshToken: refreshToken,
+            },
             {
               baseURL: BASE_URL,
               headers: {
@@ -208,25 +221,25 @@ apiClient.interceptors.response.use(
           const data = res?.data?.data ?? res?.data ?? {};
           const newAccessToken =
             data.access_token ?? data.accessToken ?? data.token ?? null;
-          const newRefreshToken =
-            data.refresh_token ?? data.refreshToken ?? null;
+
+          // Agar refresh endpoint naya refresh_token nahi bhejta, toh existing token retain rahega
+          const activeRefreshToken =
+            data.refresh_token ?? data.refreshToken ?? refreshToken;
 
           if (newAccessToken) {
             localStorage.setItem("access_token", newAccessToken);
             localStorage.setItem("accessToken", newAccessToken);
             localStorage.setItem("token", newAccessToken);
 
-            if (newRefreshToken) {
-              localStorage.setItem("refresh_token", newRefreshToken);
-              localStorage.setItem("refreshToken", newRefreshToken);
-            }
+            localStorage.setItem("refresh_token", activeRefreshToken);
+            localStorage.setItem("refreshToken", activeRefreshToken);
 
             if (typeof window !== "undefined" && window.dispatchEvent) {
               window.dispatchEvent(
                 new CustomEvent("auth:tokens-updated", {
                   detail: {
                     accessToken: newAccessToken,
-                    refreshToken: newRefreshToken,
+                    refreshToken: activeRefreshToken,
                   },
                 })
               );
@@ -243,11 +256,13 @@ apiClient.interceptors.response.use(
         } catch (refreshErr) {
           processQueue(refreshErr, null);
           isRefreshing = false;
+          console.error("[Auth] Token refresh failed:", refreshErr);
           performLogout();
           return Promise.reject(normalizeApiError(refreshErr));
         }
       }
 
+      console.warn("[Auth] No refresh token found, executing logout.");
       performLogout();
     }
 

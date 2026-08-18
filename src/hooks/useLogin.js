@@ -52,7 +52,7 @@ export function useLogin() {
           : "Signed in successfully."
       );
 
-      const redirectTo = location.state?.from?.pathname || "/";
+      const redirectTo = location.state?.from?.pathname || "/dashboard";
       navigate(redirectTo, { replace: true });
     },
     onError: (error) => {
