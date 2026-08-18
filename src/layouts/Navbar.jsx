@@ -21,7 +21,8 @@ import {
   Settings,
   LogOut,
   ChevronRight,
-  Key
+  Key,
+  ShoppingCart
 } from 'lucide-react';
 import { useNotifications, useMarkNotificationsRead } from '../hooks/useNotifications';
 
@@ -58,7 +59,8 @@ const iconMap = {
   "Drivers": IdCard,
   "Vehicle Details": FileSearch,
   "Users": Users,
-  "API Credentials": Key
+  "API Credentials": Key,
+  "Your Products": ShoppingCart
 };
 
 export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }) {

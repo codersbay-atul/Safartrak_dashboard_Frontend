@@ -29,7 +29,8 @@ import Dashboard from "./pages/dashboard";
 import FullMap from "./pages/FullMap";
 import ApiKeyCredentialsPage from "./pages/ApiKeyCredentials";
 import Document from "./features/apikey/Document";
-
+import Products from "./pages/Products";
+import BillandPayment from "./pages/BillandPayment";
 
 function AppContent() {
   const dispatch = useDispatch();
@@ -192,6 +193,23 @@ function AppContent() {
           element={
             <ProtectedRoute>
               <Document />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/products"
+          element={
+            <ProtectedRoute>
+              <Products />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/billing"
+          element={
+            <ProtectedRoute>
+              <BillandPayment />
             </ProtectedRoute>
           }
         />

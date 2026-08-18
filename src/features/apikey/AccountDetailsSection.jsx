@@ -1,4 +1,5 @@
 import React from "react";
+import { User } from "lucide-react";
 import earthIcon from "../../assets/images/earth.png";
 
 
@@ -13,6 +14,7 @@ export default function AccountDetailsSection() {
   return (
     <div className="flex flex-col gap-2.5">
       <div className="flex items-center gap-2">
+        <User size={18} className="text-[#ffd60a]" />
         <h3 className="text-sm font-semibold text-white">Account Details</h3>
       </div>
 

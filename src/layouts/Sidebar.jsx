@@ -18,7 +18,8 @@ import {
   Menu,
   X,
   Key,
-  ChevronRight,
+  ShoppingCart,
+  CreditCard,
 } from "lucide-react";
 import Logo from "../assets/images/Logo.svg";
 
@@ -40,6 +41,8 @@ export default function Sidebar({ activeTab, setActiveTab }) {
     Users: "/users",
     Contact: "/contact",
     "API Credentials": "/api-credentials",
+    "Your Products": "/products",
+    "Bills & Payments": "/billing",
   };
 
   const sections = [
@@ -81,6 +84,13 @@ export default function Sidebar({ activeTab, setActiveTab }) {
           label: "API Credentials",
           badge: "New Update" 
         },
+      ],
+    },
+    {
+      title: "BILLING",
+      items: [
+        { icon: ShoppingCart, label: "Your Products", badge: "New Update" },
+        { icon: CreditCard, label: "Bills & Payments", badge: "New Update" },
       ],
     },
   ];
@@ -153,29 +163,26 @@ export default function Sidebar({ activeTab, setActiveTab }) {
                         to={targetPath}
                         onClick={handleNavigation}
                         className={({ isActive }) =>
-                          `flex items-center justify-between w-full h-8 px-2 rounded-lg transition ${
+                          `flex items-center gap-2.5 w-full h-8 px-2 rounded-lg transition ${
                             isActive
                               ? "bg-[#232328] text-white"
                               : "text-[#D4D4D8] hover:bg-[#232328]/70"
                           }`
                         }
                       >
-                        <div className="flex items-center gap-2.5 min-w-0">
-                          <item.icon
-                            size={17}
-                            className="text-[#F5B700] shrink-0"
-                            strokeWidth={location.pathname === targetPath ? 2.5 : 2}
-                          />
+                        <item.icon
+                          size={17}
+                          className="text-[#F5B700] shrink-0"
+                          strokeWidth={location.pathname === targetPath ? 2.5 : 2}
+                        />
 
-                          <span className="text-[13px] font-normal leading-[18px] whitespace-nowrap">
-                            {item.label}
-                          </span>
-                        </div>
+                        <span className="text-[13px] font-normal leading-[18px] flex-1 min-w-0 truncate">
+                          {item.label}
+                        </span>
 
                         {item.badge && (
-                          <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[9px] font-semibold bg-[#2a1f00] text-[#F5B700] border border-[#F5B700]/30 shrink-0 ml-1 leading-none whitespace-nowrap">
+                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-semibold bg-[#2a1f00] text-[#F5B700] border border-[#F5B700]/30 shrink-0 leading-none whitespace-nowrap">
                             {item.badge}
-                            <ChevronRight size={9} className="stroke-[2.5]" />
                           </span>
                         )}
                       </NavLink>
