@@ -22,7 +22,8 @@ import {
   LogOut,
   ChevronRight,
   Key,
-  ShoppingCart
+  ShoppingCart,
+  CreditCard
 } from 'lucide-react';
 import { useNotifications, useMarkNotificationsRead } from '../hooks/useNotifications';
 
@@ -60,7 +61,8 @@ const iconMap = {
   "Vehicle Details": FileSearch,
   "Users": Users,
   "API Credentials": Key,
-  "Your Products": ShoppingCart
+  "Your Products": ShoppingCart,
+  "Bills & Payments": CreditCard
 };
 
 export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }) {
@@ -228,9 +230,9 @@ export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }
           </Popover>
         </NavPopoverWrapper>
 
-        <div className="hidden lg:block text-right leading-none shrink-0">
-          <p className="text-[14px] xl:text-[15px] font-semibold text-white">{weekday},</p>
-          <p className="text-[10px] text-[#a1a1aa] mt-0.5">{monthDayYear}</p>
+        <div className="hidden lg:block text-right leading-none shrink-0 ml-2.5">
+          <p className="text-[14px] font-semibold text-white">{weekday},</p>
+          <p className="text-[12px] text-[#a1a1aa] mt-0.5">{monthDayYear}</p>
         </div>
 
 

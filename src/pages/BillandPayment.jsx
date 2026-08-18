@@ -40,7 +40,7 @@ export default function BillandPayment() {
           </div>
 
           <div className="flex-1 min-h-0 w-full overflow-hidden">
-            <BillPaymentTable />
+            <BillPaymentTable onPayNow={handlePayNow} />
           </div>
         </div>
       </MainLayout>

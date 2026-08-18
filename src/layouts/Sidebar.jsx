@@ -82,15 +82,15 @@ export default function Sidebar({ activeTab, setActiveTab }) {
         { 
           icon: Key, 
           label: "API Credentials",
-          badge: "New Update" 
+          badge: "New" 
         },
       ],
     },
     {
       title: "BILLING",
       items: [
-        { icon: ShoppingCart, label: "Your Products", badge: "New Update" },
-        { icon: CreditCard, label: "Bills & Payments", badge: "New Update" },
+        { icon: ShoppingCart, label: "Your Products", badge: "New" },
+        { icon: CreditCard, label: "Bills & Payments", badge: "New" },
       ],
     },
   ];
@@ -176,7 +176,7 @@ export default function Sidebar({ activeTab, setActiveTab }) {
                           strokeWidth={location.pathname === targetPath ? 2.5 : 2}
                         />
 
-                        <span className="text-[13px] font-normal leading-[18px] flex-1 min-w-0 truncate">
+                        <span className="text-[14px] font-normal leading-[18px] flex-1 min-w-0 truncate">
                           {item.label}
                         </span>
 
@@ -198,13 +198,13 @@ export default function Sidebar({ activeTab, setActiveTab }) {
           <button
             type="button"
             onClick={() => navigate("/contact")}
-            className="w-full rounded-lg border border-[#303036] bg-[#1D1D22] px-3 py-1.5 flex items-center justify-between text-left hover:border-[#4d5563] hover:bg-[#22252c] transition-colors"
+            className="w-full rounded-lg border border-[#303036] bg-[#121214] px-3 py-1.5 flex items-center justify-between text-left hover:border-[#4d5563] hover:bg-[#22252c] transition-colors"
           >
             <div>
               <p className="text-[14px] font-semibold text-white">
                 Need Help?
               </p>
-              <p className="text-[14px] text-[#9CA3AF]">Contact support</p>
+              <p className="text-[13px] text-[#9CA3AF]">Contact support</p>
             </div>
             <Headphones size={24} className="text-[#A1A1AA]" />
           </button>

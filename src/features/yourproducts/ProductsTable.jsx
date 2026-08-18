@@ -62,17 +62,16 @@ export default function ProductsTable() {
 
   return (
     <div className="w-full h-full flex flex-col min-h-0 bg-[#0d0e12] border border-[#1d1d20] rounded-xl overflow-hidden select-none">
-    
-      <div className="px-4 py-3 flex flex-col gap-3 border-b border-[#1d1d20] shrink-0 bg-[#0d0e12] z-20">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <h2 className="text-sm font-bold text-white tracking-wide">
+      <div className="px-4 py-3 shrink-0 bg-[#0d0e12] z-20 text-[12px] border-b border-[#1d1d20]">
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+          <h2 className="text-[12px] font-bold text-white tracking-wide">
             Active Products
           </h2>
 
-          <div className="flex flex-wrap items-center justify-end gap-2.5">
+          <div className="flex flex-wrap items-center justify-start lg:justify-end gap-2.5">
             <button
               type="button"
-              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#121215] border border-[#27272a] text-[#a1a1aa] hover:text-white hover:border-[#3f3f46] text-[11px] transition cursor-pointer"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#121215] border border-[#27272a] text-[#a1a1aa] hover:text-white hover:border-[#3f3f46] text-[12px] transition cursor-pointer"
             >
               <span>Filter</span>
               <Filter size={12} />
@@ -80,7 +79,7 @@ export default function ProductsTable() {
 
             <button
               type="button"
-              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#121215] border border-[#27272a] text-[#a1a1aa] hover:text-white hover:border-[#3f3f46] text-[11px] transition cursor-pointer"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#121215] border border-[#27272a] text-[#a1a1aa] hover:text-white hover:border-[#3f3f46] text-[12px] transition cursor-pointer"
             >
               <span>Sort</span>
               <ArrowUpDown size={12} />
@@ -92,7 +91,7 @@ export default function ProductsTable() {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Search product..."
-                className="w-full h-8 pl-3 pr-7 bg-[#121215] border border-[#27272a] rounded-full text-[11px] text-white placeholder-[#71717a] focus:outline-none focus:border-[#3f3f46] transition"
+                className="w-full h-8 pl-3 pr-7 bg-[#121215] border border-[#27272a] rounded-full text-[12px] text-white placeholder-[#71717a] focus:outline-none focus:border-[#3f3f46] transition"
               />
               <Search
                 size={12}
@@ -104,18 +103,18 @@ export default function ProductsTable() {
       </div>
 
       <div className="flex-1 min-h-0 min-w-0 w-full overflow-x-auto overflow-y-auto custom-scrollbar">
-        <table className="w-full text-left border-collapse min-w-[900px]">
+        <table className="w-full text-left border-collapse min-w-[900px] text-[12px]">
           <thead className="sticky top-0 bg-[#09090b] border-b border-[#1d1d20] z-10">
-            <tr className="text-[#71717a] text-[12px] font-medium uppercase tracking-wider">
-              <th className="py-2.5 px-3 pl-4  font-normal">Product Name</th>
-              <th className="py-2.5 px-3 font-normal">Assigned</th>
-              <th className="py-2.5 px-3 font-normal">Available</th>
-              <th className="py-2.5 px-3 font-normal">Status</th>
-              <th className="py-2.5 px-3 font-normal">Renewal Date</th>
-              <th className="py-2.5 px-3 font-normal">Billing Profile</th>
-              <th className="py-2.5 px-3 font-normal">Purchase Channel</th>
-              <th className="py-2.5 px-3 font-normal">Product Type</th>
-              <th className="py-2.5 px-3 pr-4 font-normal">Pricing Model</th>
+            <tr className="text-white text-[12px] font-medium uppercase tracking-wider">
+              <th className="py-2.5 px-3 pl-4 font-normal text-[12px] text-white">Product Name</th>
+              <th className="py-2.5 px-3 font-normal text-[12px] text-white">Assigned</th>
+              <th className="py-2.5 px-3 font-normal text-[12px] text-white">Available</th>
+              <th className="py-2.5 px-3 font-normal text-[12px] text-white">Status</th>
+              <th className="py-2.5 px-3 font-normal text-[12px] text-white">Renewal Date</th>
+              <th className="py-2.5 px-3 font-normal text-[12px] text-white">Billing Profile</th>
+              <th className="py-2.5 px-3 font-normal text-[12px] text-white">Purchase Channel</th>
+              <th className="py-2.5 px-3 font-normal text-[12px] text-white">Product Type</th>
+              <th className="py-2.5 px-3 pr-4 font-normal text-[12px] text-white">Pricing Model</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-[#1d1d20]/50 text-[12px]">
@@ -138,7 +137,7 @@ export default function ProductsTable() {
 
                 <td className="py-3 px-3">
                   <span
-                    className={`inline-block px-2 py-1 rounded-full text-[10px] font-medium leading-none ${getStatusBadge(
+                    className={`inline-block px-2 py-1 rounded-full text-[12px] font-medium leading-none ${getStatusBadge(
                       item.status
                     )}`}
                   >

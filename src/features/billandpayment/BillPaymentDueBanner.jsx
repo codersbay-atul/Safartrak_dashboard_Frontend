@@ -15,7 +15,7 @@ export default function BillPaymentDueBanner({
         <button
         type="button"
         onClick={onPayNow}
-        className="shrink-0 px-5 py-2 rounded-lg bg-[#F5B700] hover:bg-[#d9a200] active:scale-[0.98] text-black text-[13px] font-semibold transition-all cursor-pointer shadow-sm"
+        className="shrink-0 px-5 py-2 rounded-lg bg-[#F5B700] hover:bg-[#d9a200] active:scale-[0.98] text-black text-[14px] font-semibold transition-all cursor-pointer shadow-sm"
       >
         Pay Now
       </button>
