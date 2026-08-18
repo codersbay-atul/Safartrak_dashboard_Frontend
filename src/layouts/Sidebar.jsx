@@ -181,7 +181,7 @@ export default function Sidebar({ activeTab, setActiveTab }) {
                         </span>
 
                         {item.badge && (
-                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-semibold bg-[#2a1f00] text-[#F5B700] border border-[#F5B700]/30 shrink-0 leading-none whitespace-nowrap">
+                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[12px] font-semibold bg-[#2a1f00] text-[#F5B700] border border-[#F5B700]/30 shrink-0 leading-none whitespace-nowrap">
                             {item.badge}
                           </span>
                         )}
@@ -198,7 +198,7 @@ export default function Sidebar({ activeTab, setActiveTab }) {
           <button
             type="button"
             onClick={() => navigate("/contact")}
-            className="w-full rounded-lg border border-[#303036] bg-[#121214] px-3 py-1.5 flex items-center justify-between text-left hover:border-[#4d5563] hover:bg-[#22252c] transition-colors"
+            className="w-full rounded-lg border border-[#303036] bg-[#121214] px-3 py-1.5 flex items-center justify-between text-left hover:border-[#4d5563] hover:bg-[#1f2025] transition-colors"
           >
             <div>
               <p className="text-[14px] font-semibold text-white">
@@ -206,7 +206,7 @@ export default function Sidebar({ activeTab, setActiveTab }) {
               </p>
               <p className="text-[13px] text-[#9CA3AF]">Contact support</p>
             </div>
-            <Headphones size={24} className="text-[#A1A1AA]" />
+            <Headphones size={16} className="text-[#A1A1AA]" />
           </button>
         </div>
       </aside>

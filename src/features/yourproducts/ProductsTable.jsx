@@ -61,14 +61,14 @@ export default function ProductsTable() {
   );
 
   return (
-    <div className="w-full h-full flex flex-col min-h-0 bg-[#0d0e12] border border-[#1d1d20] rounded-xl overflow-hidden select-none">
-      <div className="px-4 py-3 shrink-0 bg-[#0d0e12] z-20 text-[12px] border-b border-[#1d1d20]">
-        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+    <div className="w-full h-fit bg-[#0d0e12] border border-[#1d1d20] rounded-xl overflow-hidden select-none">
+      <div className="px-4 py-3 flex flex-col gap-3 border-b border-[#1d1d20] shrink-0 bg-[#0d0e12] z-20 text-[12px]">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <h2 className="text-[12px] font-bold text-white tracking-wide">
             Active Products
           </h2>
 
-          <div className="flex flex-wrap items-center justify-start lg:justify-end gap-2.5">
+          <div className="flex flex-wrap items-center justify-end gap-2.5">
             <button
               type="button"
               className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#121215] border border-[#27272a] text-[#a1a1aa] hover:text-white hover:border-[#3f3f46] text-[12px] transition cursor-pointer"
@@ -79,7 +79,7 @@ export default function ProductsTable() {
 
             <button
               type="button"
-              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#121215] border border-[#27272a] text-[#a1a1aa] hover:text-white hover:border-[#3f3f46] text-[12px] transition cursor-pointer"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#121215] border border-[#27272a] text-[#a1a1aa] hover:text-white hover:border-[#3f3f46] text-[11px] transition cursor-pointer"
             >
               <span>Sort</span>
               <ArrowUpDown size={12} />
@@ -102,9 +102,9 @@ export default function ProductsTable() {
         </div>
       </div>
 
-      <div className="flex-1 min-h-0 min-w-0 w-full overflow-x-auto overflow-y-auto custom-scrollbar">
+      <div className="w-full overflow-x-auto [scrollbar-width:thin]">
         <table className="w-full text-left border-collapse min-w-[900px] text-[12px]">
-          <thead className="sticky top-0 bg-[#09090b] border-b border-[#1d1d20] z-10">
+          <thead className="bg-[#09090b] border-b border-[#1d1d20]">
             <tr className="text-white text-[12px] font-medium uppercase tracking-wider">
               <th className="py-2.5 px-3 pl-4 font-normal text-[12px] text-white">Product Name</th>
               <th className="py-2.5 px-3 font-normal text-[12px] text-white">Assigned</th>
@@ -123,15 +123,15 @@ export default function ProductsTable() {
                 key={item.id}
                 className="hover:bg-[#12121610] transition-colors text-[#d4d4d8] align-middle"
               >
-                <td className="py-3 px-3 pl-4 font-normal">
+                <td className="py-3 px-3 pl-4 font-normal text-[14px]">
                   {item.productName}
                 </td>
 
-                <td className="py-3 px-3 font-normal text-[#a1a1aa]">
+                <td className="py-3 px-3 font-normal text-[#a1a1aa] text-[14px]">
                   {item.assignedLicense}
                 </td>
 
-                <td className="py-3 px-3 font-normal text-[#a1a1aa]">
+                <td className="py-3 px-3 font-normal text-[#a1a1aa] text-[14px]">
                   {item.availableLicense}
                 </td>
 
@@ -145,23 +145,23 @@ export default function ProductsTable() {
                   </span>
                 </td>
 
-                <td className="py-3 px-3 font-normal text-[#a1a1aa]">
+                <td className="py-3 px-3 font-normal text-[#a1a1aa] text-[14px]">
                   {item.renewalDate}
                 </td>
 
-                <td className="py-3 px-3 font-normal text-[#a1a1aa]">
+                <td className="py-3 px-3 font-normal text-[#a1a1aa] text-[14px]">
                   {item.billingProfile}
                 </td>
 
-                <td className="py-3 px-3 font-normal text-[#a1a1aa]">
+                <td className="py-3 px-3 font-normal text-[#a1a1aa] text-[14px]">
                   {item.purchaseChannel}
                 </td>
 
-                <td className="py-3 px-3 font-normal text-[#a1a1aa]">
+                <td className="py-3 px-3 font-normal text-[#a1a1aa] text-[14px]">
                   {item.productType}
                 </td>
 
-                <td className="py-3 px-3 pr-4 font-normal text-[#a1a1aa]">
+                <td className="py-3 px-3 pr-4 font-normal text-[#a1a1aa] text-[14px]">
                   {item.pricingModel}
                 </td>
               </tr>

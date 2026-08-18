@@ -174,19 +174,19 @@ export default function BillPaymentTable({ onPayNow }) {
                   key={item.id}
                   className="hover:bg-[#13151b] transition-colors align-middle"
                 >
-                  <td className="py-4 px-5 font-normal whitespace-nowrap text-white">
+                  <td className="py-4 px-5 font-normal whitespace-nowrap text-white text-[14px]">
                     {item.id}
                   </td>
 
-                  <td className="py-4 px-5 font-normal whitespace-nowrap text-[#a1a1aa]">
+                  <td className="py-4 px-5 font-normal whitespace-nowrap text-[#a1a1aa] text-[14px]">
                     {item.invoiceDate}
                   </td>
 
-                  <td className="py-4 px-5 font-normal whitespace-nowrap text-[#a1a1aa]">
+                  <td className="py-4 px-5 font-normal whitespace-nowrap text-[#a1a1aa] text-[14px]">
                     {item.billingPeriod}
                   </td>
 
-                  <td className="py-4 px-5 font-normal whitespace-nowrap text-white">
+                  <td className="py-4 px-5 font-normal whitespace-nowrap text-white text-[14px]">
                     {item.totalAmount}
                   </td>
 

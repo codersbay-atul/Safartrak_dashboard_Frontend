@@ -103,7 +103,7 @@ export default function VehiclesList({
         Vehicle List
       </h3>
 
-      {/* Filter Pills with Padding */}
+     
       <div className="flex items-center gap-1.5 xl:gap-2 overflow-x-auto pb-2 mb-2 px-3 xl:px-4 shrink-0 no-scrollbar flex-nowrap">
         {filters.map((filter) => (
           <button
@@ -124,7 +124,6 @@ export default function VehiclesList({
         ))}
       </div>
 
-      {/* Vehicle Rows - Full 100% Width Highlight */}
       <div className="flex flex-col overflow-y-auto flex-1 scrollbar-thin scrollbar-thumb-zinc-800 scrollbar-track-transparent">
         {filteredVehicles.map((vehicle) => {
           const isSelected = selectedId === vehicle.id;
