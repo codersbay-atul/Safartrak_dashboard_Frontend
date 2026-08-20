@@ -1,3 +1,4 @@
+import React from "react";
 import MainLayoutColor from "./MainLayoutColor";
 import MainLayoutTextSize from "./MainLayoutTextSize";
 
@@ -11,9 +12,9 @@ export default function MainLayoutHeader({
     <div className={`min-w-0 flex-1 select-none ${className}`.trim()}>
       <MainLayoutColor
         as={MainLayoutTextSize}
-        color="text"
+        color="white"
         size="title"
-        className="block truncate text-[16px] leading-[24px] font-bold"
+        className="block truncate"
       >
         {title}
       </MainLayoutColor>
@@ -21,9 +22,9 @@ export default function MainLayoutHeader({
       {subtitle && (
         <MainLayoutColor
           as={MainLayoutTextSize}
-          color="grey"
+          color="subtitle"
           size="subtitle"
-          className="mt-1 block truncate max-w-full xl:max-w-xl 2xl:max-w-2xl text-[12px] leading-[16px]"
+          className="mt-1 block truncate max-w-full xl:max-w-xl 2xl:max-w-2xl"
         >
           {subtitle}
         </MainLayoutColor>

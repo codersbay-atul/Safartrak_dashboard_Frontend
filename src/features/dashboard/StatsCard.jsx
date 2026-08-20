@@ -1,11 +1,11 @@
 import { Truck, TriangleAlert, Circle, CircleSmall, LocateOff } from "lucide-react";
-import { StatCard } from "../../components/Ui/StatsCards";
 import { useDashboardSummary } from "../../hooks/useDashboardSummary";
 import { useNavigate } from "react-router-dom";
 import {
   DASHBOARD_SUMMARY_PLACEHOLDER,
   mapDashboardSummary,
 } from "./mapDashboardSummary";
+import { MainStatsCard } from "../../components/Ui/MainLayoutUI/MainStatsCard";
 
 const VALUE_SKELETON = (
   <span
@@ -98,7 +98,7 @@ export default function StatsCard() {
     <div className="grid grid-cols-[repeat(5,minmax(0,1fr))] gap-1.5 min-[1152px]:gap-2 xl:gap-2.5 mt-0 pt-0 select-none w-full shrink-0 min-w-0">
       {statsData.map((card) => (
         <div key={card.id} className="min-h-[100px] xl:min-h-[112px] min-w-0 [&>*]:h-full">
-          <StatCard
+          <MainStatsCard
             {...card}
             onClick={card.id === "active_vehicles" ? () => navigate("/vehicles") : card.onClick}
           />

@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { ArrowLeft, Download, Loader2 } from "lucide-react";
-import Button from "../../components/Ui/Button";
+import MainLayoutButton from "../../components/Ui/MainLayoutUI/MainLayoutButton";
 
 function isMissingValue(value) {
   if (value == null) return true;
@@ -90,7 +90,7 @@ export default function ReportResults({
         </div>
 
         {onExport ? (
-          <Button
+          <MainLayoutButton
             variant="primary"
             size="sm"
             icon={isExporting ? Loader2 : Download}
@@ -100,7 +100,7 @@ export default function ReportResults({
             className="!w-[120px] min-w-[120px] !h-[35px] !rounded-[8px] !bg-[#FFC107] hover:!bg-[#e6ac00] active:scale-[0.98] !text-black !font-normal !text-[14px] !px-[14px] !py-0 gap-2 whitespace-nowrap flex-nowrap flex-shrink-0 [&_svg]:size-[14px]"
           >
             Export
-          </Button>
+          </MainLayoutButton>
         ) : null}
       </div>
 

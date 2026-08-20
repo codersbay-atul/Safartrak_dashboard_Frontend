@@ -1,5 +1,5 @@
 import { AlarmClock, Check, Truck } from "lucide-react";
-import { StatCard } from "../../components/Ui/StatsCards";
+import { MainStatsCard } from "../../components/Ui/MainLayoutUI/MainStatsCard";
 
 function formatDateParts(isoString) {
   if (!isoString) return { time: "", date: "" };
@@ -66,7 +66,7 @@ export default function ProfileStatsCard({ stats, isLoading = false }) {
     <div className="grid grid-cols-1 min-[1152px]:grid-cols-4 gap-2 mt-0 pt-0 select-none w-full shrink-0">
       {cardData.map((card) => (
         <div key={card.id} className="min-h-16 h-full min-w-0">
-          <StatCard
+          <MainStatsCard
             {...card}
             value={isLoading ? "Loading..." : card.value}
           />

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import {
   LayoutDashboard,
@@ -7,11 +7,8 @@ import {
   Power,
   TriangleAlert,
   ScanSearch,
-  Route,
-  GitBranch,
   Send,
   Truck,
-  IdCard,
   FileSearch,
   Users,
   Headphones,
@@ -22,8 +19,11 @@ import {
   CreditCard,
 } from "lucide-react";
 import Logo from "../assets/images/Logo.svg";
+import SideColor from "../components/Ui/SidebarUI/SideColor";
+import SideIcon from "../components/Ui/SidebarUI/SideIcon";
+import SideTextSize from "../components/Ui/SidebarUI/SideTextSize";
 
-export default function Sidebar({ activeTab, setActiveTab }) {
+export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -119,8 +119,10 @@ export default function Sidebar({ activeTab, setActiveTab }) {
         />
       )}
 
-      <aside
-        className={`fixed lg:static top-0 left-0 z-45 w-56 xl:w-60 h-screen bg-[#121212] border-r border-[#2A2A2F] flex flex-col justify-between overflow-hidden select-none py-3 transition-transform duration-300 ease-in-out
+      <SideColor
+        as="aside"
+        bg="background"
+        className={`fixed lg:static top-0 left-0 z-45 w-56 xl:w-60 h-screen border-r border-[#2A2A2F] flex flex-col justify-between overflow-hidden select-none py-3 transition-transform duration-300 ease-in-out
           ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}
       >
         <div className="flex flex-col flex-1 min-h-0">
@@ -166,19 +168,22 @@ export default function Sidebar({ activeTab, setActiveTab }) {
                           `flex items-center gap-2.5 w-full h-8 px-2 rounded-lg transition ${
                             isActive
                               ? "bg-[#232328] text-white"
-                              : "text-[#D4D4D8] hover:bg-[#232328]/70"
+                              : "hover:bg-[#232328]"
                           }`
                         }
                       >
-                        <item.icon
-                          size={17}
-                          className="text-[#F5B700] shrink-0"
+                        <SideIcon
+                          icon={item.icon}
                           strokeWidth={location.pathname === targetPath ? 2.5 : 2}
                         />
 
-                        <span className="text-[14px] font-normal leading-[18px] flex-1 min-w-0 truncate">
+                        <SideColor
+                          as={SideTextSize}
+                          color="text"
+                          className="flex-1 min-w-0 truncate"
+                        >
                           {item.label}
-                        </span>
+                        </SideColor>
 
                         {item.badge && (
                           <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[12px] font-semibold bg-[#2a1f00] text-[#F5B700] border border-[#F5B700]/30 shrink-0 leading-none whitespace-nowrap">
@@ -206,10 +211,12 @@ export default function Sidebar({ activeTab, setActiveTab }) {
               </p>
               <p className="text-[13px] text-[#9CA3AF]">Contact support</p>
             </div>
-            <Headphones size={16} className="text-[#A1A1AA]" />
+            <SideColor color="icon">
+              <Headphones size={16} />
+            </SideColor>
           </button>
         </div>
-      </aside>
+      </SideColor>
     </>
   );
 }

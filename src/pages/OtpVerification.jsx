@@ -1,10 +1,10 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { LoaderCircle } from "lucide-react";
-import Button from "../components/Ui/Button";
 import AuthShell from "../features/auth/AuthShell";
 import { toast } from "../components/Ui/toast";
 import { forgotPasswordRequest, verifyOtpRequest } from "../api/authApi";
+import MainLayoutButton from "../components/Ui/MainLayoutUI/MainLayoutButton";
 
 function maskEmail(email) {
   if (!email) return "your email";
@@ -156,7 +156,7 @@ export default function VerifyIdentity() {
         </div>
 
         <div className="flex flex-col gap-4 mt-2">
-          <Button
+          <MainLayoutButton
             type="submit"
             disabled={isLoading}
             className="w-full h-[48px] rounded-lg bg-[#F5B700] hover:bg-[#d9a200] text-black text-[14px] font-semibold transition-colors flex items-center justify-center gap-2 cursor-pointer"
@@ -169,7 +169,7 @@ export default function VerifyIdentity() {
             ) : (
               "Verify Code"
             )}
-          </Button>
+          </MainLayoutButton>
 
           <div className="text-center text-sm text-gray-400 py-1">
             {canResend ? (

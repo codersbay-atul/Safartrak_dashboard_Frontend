@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
-import Button from "../components/Ui/Button";
 import AuthShell, { AuthField, AuthLink } from "../features/auth/AuthShell";
 import { toast } from "../components/Ui/toast";
 import { selectIsAuthenticated } from "../store/slices/authSlice";
@@ -150,14 +149,14 @@ export default function Signup() {
           error={fieldErrors.confirmPassword}
         />
 
-        <Button
+        <MainLayoutButton
           type="submit"
           variant="primary"
           size="lg"
           className="w-full h-10 mt-1"
         >
           Create account
-        </Button>
+        </MainLayoutButton>
       </form>
     </AuthShell>
   );

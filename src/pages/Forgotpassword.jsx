@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowLeft, X, LoaderCircle } from "lucide-react";
-import Button from "../components/Ui/Button";
 import AuthShell, { AuthField } from "../features/auth/AuthShell";
 import { toast } from "../components/Ui/toast";
 import { forgotPasswordRequest } from "../api/authApi";
+import MainLayoutButton from "../components/Ui/MainLayoutUI/MainLayoutButton";
 
 export default function ForgotPassword() {
   const navigate = useNavigate();
@@ -58,7 +58,7 @@ export default function ForgotPassword() {
         />
 
         <div className="flex flex-col gap-4 mt-2">
-          <Button
+          <MainLayoutButton
             type="submit"
             disabled={isLoading}
             className="w-full h-[48px] rounded-lg bg-[#F5B700] hover:bg-[#d9a200] text-black text-[14px] font-semibold transition-colors flex items-center justify-center gap-2 cursor-pointer"
@@ -71,7 +71,7 @@ export default function ForgotPassword() {
             ) : (
               "Send Verification Code"
             )}
-          </Button>
+          </MainLayoutButton>
 
           <Link to="/login" className="flex items-center justify-center gap-2 text-sm font-medium text-[#F5B700] hover:text-[#d9a200] transition-colors py-2">
             <ArrowLeft size={16} />

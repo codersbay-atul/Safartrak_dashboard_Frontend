@@ -1,7 +1,7 @@
 const SIDEBAR_COLORS = {
   text: "text-[rgb(255,255,255)]",
   background: "bg-[#141414]",
-  icon: "text-[#FCBA12]",
+  icon: "text-[#FDB914]",
 };
 
 export default function SideColor({

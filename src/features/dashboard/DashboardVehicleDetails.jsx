@@ -1,4 +1,6 @@
+import React from "react";
 import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
+import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
 import {
   RefreshCw,
   Gauge,
@@ -11,12 +13,12 @@ import {
   Radio,
 } from "lucide-react";
 
-const STATUS_BADGE = {
-  Running: { text: "text-[#10b981]", bg: "bg-[#10b981]/10", dot: "bg-[#10b981]" },
-  Idle: { text: "text-[#f59e0b]", bg: "bg-[#f59e0b]/10", dot: "bg-[#f59e0b]" },
-  Critical: { text: "text-[#f97316]", bg: "bg-[#f97316]/10", dot: "bg-[#f97316]" },
-  Maintenance: { text: "text-[#f97316]", bg: "bg-[#f97316]/10", dot: "bg-[#f97316]" },
-  Offline: { text: "text-[#ef4444]", bg: "bg-[#ef4444]/10", dot: "bg-[#ef4444]" },
+const STATUS_KEYS = {
+  Running: { color: "running", bg: "runningBg", dot: "runningDot" },
+  Idle: { color: "idle", bg: "idleBg", dot: "idleDot" },
+  Critical: { color: "critical", bg: "criticalBg", dot: "criticalDot" },
+  Maintenance: { color: "maintenance", bg: "maintenanceBg", dot: "maintenanceDot" },
+  Offline: { color: "offline", bg: "offlineBg", dot: "offlineDot" },
 };
 
 function displayValue(value) {
@@ -44,7 +46,7 @@ function getVehicleMetrics(vehicle) {
     { key: "speed", label: "Speed", value: displayValue(vehicle?.speed), icon: Gauge },
     { key: "fuel", label: "Fuel Level", value: "Not Available", icon: Fuel },
     { key: "battery", label: "Battery", value: "Not Available", icon: Battery },
-    { key: "engineHealth", label: "Engine Health", value: "Not Available", icon: ShieldCheck, valueColor: "text-zinc-200" },
+    { key: "engineHealth", label: "Engine Health", value: "Not Available", icon: ShieldCheck },
     { key: "odometer", label: "Odometer", value: "Not Available", icon: Milestone },
     { key: "tripProgress", label: "Trip Progress", value: "Not Available", icon: Waypoints },
     { key: "eta", label: "ETA", value: "Not Available", icon: Clock },
@@ -57,10 +59,10 @@ function getVehicleMetrics(vehicle) {
 export default function DashboardVehicleDetails({ vehicle, onViewRoute }) {
   const metrics = getVehicleMetrics(vehicle);
   const statusLabel = resolveStatusLabel(vehicle);
-  const badge = STATUS_BADGE[statusLabel] || {
-    text: "text-zinc-300",
-    bg: "bg-zinc-500/10",
-    dot: "bg-zinc-400",
+  const badgeConfig = STATUS_KEYS[statusLabel] || {
+    color: "defaultStatus",
+    bg: "defaultStatusBg",
+    dot: "defaultStatusDot",
   };
 
   return (
@@ -71,51 +73,124 @@ export default function DashboardVehicleDetails({ vehicle, onViewRoute }) {
     >
       <div className="flex items-center justify-between pb-1.5 shrink-0 border-b border-zinc-800/40">
         <div className="flex items-center gap-1.5 min-w-0">
-          <h3 className="text-[14px] sm:text-xs font-bold text-white tracking-tight truncate">
+          <MainLayoutColor
+            as={MainLayoutTextSize}
+            color="title"
+            size="sectionTitle"
+            className="tracking-tight truncate block"
+          >
             Vehicle Details
-          </h3>
-          <span className={`text-[8px] font-bold ${badge.text} ${badge.bg} px-1.5 py-0.5 rounded-sm flex items-center gap-1 shrink-0`}>
-            <span className={`w-1 h-1 rounded-full ${badge.dot}`} /> {statusLabel}
-          </span>
+          </MainLayoutColor>
+
+          <MainLayoutColor
+            as={MainLayoutTextSize}
+            color={badgeConfig.color}
+            background={badgeConfig.bg}
+            size="badgeText"
+            className="px-1.5 py-0.5 rounded-sm flex items-center gap-1 shrink-0 font-bold"
+          >
+            <MainLayoutColor
+              as="span"
+              background={badgeConfig.dot}
+              className="w-1 h-1 rounded-full shrink-0"
+            />
+            {statusLabel}
+          </MainLayoutColor>
         </div>
-        <button type="button" onClick={() => {}} className="text-zinc-550 hover:text-white transition-colors cursor-pointer">
+
+        <button type="button" onClick={() => {}} className="text-zinc-500 hover:text-white transition-colors cursor-pointer">
           <RefreshCw size={11} className="stroke-[2.5]" />
         </button>
       </div>
 
+    
       <div className="flex items-center justify-between my-2.5 shrink-0 gap-2">
         <div className="flex items-center gap-2 min-w-0">
           <div className="w-7 h-7 bg-zinc-800 border border-zinc-700/50 rounded-md shadow-inner shrink-0" />
           <div className="leading-tight min-w-0">
-            <h4 className="text-[11px] sm:text-[12px] font-bold text-white tracking-tight truncate">{displayValue(vehicle?.plate)}</h4>
-            <p className="text-[9px] text-zinc-500 font-medium truncate">{displayValue(vehicle?.driver)}</p>
+            <MainLayoutColor
+              as={MainLayoutTextSize}
+              color="title"
+              size="subtitle"
+              className="font-bold tracking-tight truncate block"
+            >
+              {displayValue(vehicle?.plate)}
+            </MainLayoutColor>
+            <MainLayoutColor
+              as={MainLayoutTextSize}
+              color="subtitle"
+              size="captionText"
+              className="truncate block"
+            >
+              {displayValue(vehicle?.driver)}
+            </MainLayoutColor>
           </div>
         </div>
+
         <div className="text-right leading-tight shrink-0">
-          <p className="text-[11px] sm:text-[12px] font-extrabold text-white">Not Available</p>
-          <p className="text-[9px] text-zinc-550 font-medium">Remaining Distance</p>
+          <MainLayoutColor
+            as={MainLayoutTextSize}
+            color="title"
+            size="subtitle"
+            className="font-extrabold block"
+          >
+            Not Available
+          </MainLayoutColor>
+          <MainLayoutColor
+            as={MainLayoutTextSize}
+            color="subtitle"
+            size="captionText"
+            className="block"
+          >
+            Remaining Distance
+          </MainLayoutColor>
         </div>
       </div>
 
+      
       <div className="mb-2 mt-0.5 px-1 shrink-0">
         <div className="relative w-full h-3 flex items-center">
           <div className="absolute left-0 right-0 h-[1.5px] bg-zinc-800 rounded-full" />
           <div className="absolute left-0 w-1.5 h-1.5 rounded-full bg-[#141414] border-[1.5px] border-zinc-700 transform -translate-x-1/2 z-10" />
           <div className="absolute right-0 w-1.5 h-1.5 rounded-full bg-[#141414] border-[1.5px] border-zinc-700 transform translate-x-1/2 z-10" />
         </div>
-        <p className="text-[8.5px] font-bold text-[#FCBA12] tracking-wide mt-1">Not Available</p>
+        <MainLayoutColor
+          as="p"
+          color="yellow"
+          className="text-[8.5px] font-bold tracking-wide mt-1"
+        >
+          Not Available
+        </MainLayoutColor>
       </div>
 
       <div className="border-b border-zinc-800/20 w-full shrink-0 mb-1.5" />
 
-      <div className="flex flex-col flex-1 py-1 text-[9.5px] sm:text-[14px] gap-y-2 overflow-y-auto pr-0.5 mb-1.5 scrollbar-thin scrollbar-thumb-zinc-800 scrollbar-track-transparent">
-        {metrics.map(({ key, label, value, icon: Icon, valueColor = "text-white", valueClassName }) => (
+     
+      <div className="flex flex-col flex-1 py-1 gap-y-2 overflow-y-auto pr-0.5 mb-1.5 scrollbar-thin scrollbar-thumb-zinc-800 scrollbar-track-transparent">
+        {metrics.map(({ key, label, value, icon: Icon }) => (
           <div key={key} className="flex items-center justify-between shrink-0 gap-2">
-            <div className="flex items-center gap-1.5 text-zinc-400 font-medium min-w-0">
-              <Icon size={11.5} className="text-zinc-550 shrink-0" />
-              <span className="truncate">{label}</span>
+            <div className="flex items-center gap-1.5 min-w-0">
+              <MainLayoutColor color="metricIcon">
+                <Icon size={11.5} className="shrink-0" />
+              </MainLayoutColor>
+              <MainLayoutColor
+                as={MainLayoutTextSize}
+                color="metricLabel"
+                size="metricText"
+                className="truncate font-medium"
+              >
+                {label}
+              </MainLayoutColor>
             </div>
-            <span className={`font-bold ${valueColor} ${valueClassName || "shrink-0"}`}>{value}</span>
+
+            <MainLayoutColor
+              as={MainLayoutTextSize}
+              color="metricValue"
+              size="metricText"
+              className="shrink-0 font-bold"
+            >
+              {value}
+            </MainLayoutColor>
           </div>
         ))}
       </div>
@@ -123,7 +198,11 @@ export default function DashboardVehicleDetails({ vehicle, onViewRoute }) {
       <div className="border-b border-zinc-800/20 w-full shrink-0" />
 
       <div className="pt-2 shrink-0">
-        <button type="button" onClick={onViewRoute} className="w-full h-8 rounded-lg text-[10px] sm:text-[11px] font-bold text-[#FCBA12] border border-[#FCBA12]/30 bg-transparent hover:bg-[#FCBA12]/5 transition-all text-center flex items-center justify-center tracking-wide cursor-pointer">
+        <button
+          type="button"
+          onClick={onViewRoute}
+          className="w-full h-8 rounded-lg text-[10px] sm:text-[11px] font-bold text-[#FCBA12] border border-[#FCBA12]/30 bg-transparent hover:bg-[#FCBA12]/5 transition-all text-center flex items-center justify-center tracking-wide cursor-pointer"
+        >
           View Route
         </button>
       </div>

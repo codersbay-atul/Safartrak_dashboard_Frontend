@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Download } from "lucide-react";
-import Button from "./Button";
+import MainLayoutButton from "./MainLayoutUI/MainLayoutButton";
 import SearchInput from "./SearchInput";
 import Dropdown from "./DropDown";
 
@@ -19,7 +19,7 @@ export default function PageHeader({ title, subtitle, searchPlaceholder = "Searc
       {customRightAction}
       {showFilters && <div className="flex items-center gap-2 overflow-visible relative z-30"><Dropdown label="Select Date Range" options={DATE_RANGE_OPTIONS} selectedValue={filters.dateRange} onSelect={(value) => handleFilterSelect("dateRange", value)} /><Dropdown label="Region" options={REGION_OPTIONS} selectedValue={filters.region} onSelect={(value) => handleFilterSelect("region", value)} /><Dropdown label="Status" options={STATUS_OPTIONS} selectedValue={filters.status} onSelect={(value) => handleFilterSelect("status", value)} /></div>}
       {showSearch && <SearchInput value={searchQuery} onChange={handleSearchChange} placeholder={searchPlaceholder} aria-label={searchPlaceholder} containerClassName="w-full min-w-0 lg:w-[160px] xl:w-[200px]" className="w-full" />}
-      {showExport && <Button variant="secondary" size="sm" onClick={() => onExportClick?.({ ...filters, search: searchQuery })} aria-label="Download Data" className="!h-[38px] !w-[38px] !px-0 !py-0 !rounded-full !bg-[#05070B] !border-[#22252B] text-[#d4d4d8] hover:!bg-[#12151c] hover:text-white flex-shrink-0"><Download size={16} /></Button>}
+      {showExport && <MainLayoutButton variant="secondary" size="sm" onClick={() => onExportClick?.({ ...filters, search: searchQuery })} aria-label="Download Data" className="!h-[38px] !w-[38px] !px-0 !py-0 !rounded-full !bg-[#05070B] !border-[#22252B] text-[#d4d4d8] hover:!bg-[#12151c] hover:text-white flex-shrink-0"><Download size={16} /></MainLayoutButton>}
       {children}
     </div>
   </div>;

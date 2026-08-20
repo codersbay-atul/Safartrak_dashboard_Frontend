@@ -1,6 +1,5 @@
 import React from "react";
 import { Route, Map, Timer, Pause } from "lucide-react";
-import { StatCard } from "../../components/Ui/StatsCards";
 import { useVehicleSummary } from "../../hooks/useVehicleSummary";
 
 export default function VehicleStats() {
@@ -53,7 +52,7 @@ export default function VehicleStats() {
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 mt-0 pt-0 select-none w-full shrink-0">
       {cards.map((card) => (
         <div key={card.id} className="min-h-[72px] [&>*]:h-full">
-          <StatCard
+          <MainStatsCard
             {...card}
             value={isLoading && !summary ? "Loading..." : card.value}
           />

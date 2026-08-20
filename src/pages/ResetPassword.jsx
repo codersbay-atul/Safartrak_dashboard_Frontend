@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { LoaderCircle } from "lucide-react";
-import Button from "../components/Ui/Button";
 import AuthShell, { AuthField } from "../features/auth/AuthShell";
 import { toast } from "../components/Ui/toast";
 import { resetPasswordRequest } from "../api/authApi";
@@ -103,7 +102,7 @@ export default function ResetPassword() {
           Use at least 8 characters, including uppercase, lowercase, a number, and a special character.
         </p>
 
-        <Button
+        <MainLayoutButton
           type="submit"
           disabled={isLoading}
           className="w-full h-[48px] mt-2 rounded-lg bg-[#F5B700] hover:bg-[#d9a200] text-black text-[14px] font-semibold transition-colors flex items-center justify-center gap-2 cursor-pointer"
@@ -116,7 +115,7 @@ export default function ResetPassword() {
           ) : (
             "Update Password"
           )}
-        </Button>
+        </MainLayoutButton>
       </form>
     </AuthShell>
   );

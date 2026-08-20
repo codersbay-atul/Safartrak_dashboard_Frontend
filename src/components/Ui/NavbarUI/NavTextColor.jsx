@@ -2,7 +2,7 @@ const COLOR_MAP = {
   navbarText: "text-[rgb(255,255,255)]",
   monthText: "text-[rgb(161,161,170)]",
 
-  navbarBg: "bg-[#09090B]",
+  navbarBg: "bg-[#000000]",
 };
 
 export default function NavTextColor({

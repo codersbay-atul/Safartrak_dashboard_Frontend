@@ -1,6 +1,5 @@
 import React, { useMemo } from "react";
 import { Truck, Gauge, Clock, Route, Timer } from "lucide-react";
-import { StatCard } from "../../components/Ui/StatsCards";
 import {
   displayOrDash,
   getTripField,
@@ -160,7 +159,7 @@ export default function TripStatsCards({ vehicle = null }) {
     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-1.5 min-[1152px]:gap-2 xl:gap-2.5 mt-0 pt-0 select-none w-full shrink-0 min-w-0">
       {cards.map((card) => (
         <div key={card.id} className="min-w-0">
-          <StatCard {...card} />
+          <MainStatsCard {...card} />
         </div>
       ))}
     </div>

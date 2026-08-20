@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Check } from "lucide-react";
-import Button from "../components/Ui/Button";
 import AuthShell from "../features/auth/AuthShell";
+import MainLayoutButton from "../components/Ui/MainLayoutUI/MainLayoutButton";
 
 export default function PasswordUpdated() {
   const navigate = useNavigate();
@@ -23,13 +23,13 @@ export default function PasswordUpdated() {
         </div>
       </div>
 
-      <Button
+      <MainLayoutButton
         type="button"
         onClick={() => navigate("/login")}
         className="w-full h-[48px] mt-2 rounded-lg bg-[#F5B700] hover:bg-[#d9a200] text-black text-[14px] font-semibold transition-colors flex items-center justify-center cursor-pointer"
       >
         Back to Sign In
-      </Button>
+      </MainLayoutButton>
     </AuthShell>
   );
 }

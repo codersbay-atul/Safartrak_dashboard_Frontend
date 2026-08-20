@@ -6,7 +6,6 @@ import {
   CirclePause,
   BellRing,
 } from "lucide-react";
-import { StatCard } from "../../components/Ui/StatsCards";
 import { ACTIVITY_STATS } from "./activityData";
 import { useActivitySummary } from "../../hooks/useActivitySummary";
 
@@ -75,7 +74,7 @@ export default function ActivityStats() {
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-2.5 shrink-0">
       {stats.map((stat) => (
-        <StatCard
+        <MainStatsCard
           key={stat.id}
           value={stat.value}
           subtitle={stat.subtitle}

@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useVehiclesList } from "../../hooks/useVehiclesList";
 import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
+import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
+import MainLayoutButton from "../../components/Ui/MainLayoutUI/MainLayoutButton";
 
 const FILTER_DEFS = [
-  { label: "All", color: "bg-[#8e8e93]" },
-  { label: "Moving", color: "bg-[#10b981]" },
-  { label: "Idle", color: "bg-[#f59e0b]" },
-  { label: "Critical", color: "bg-[#f97316]" },
-  { label: "Offline", color: "bg-[#ef4444]" },
+  { label: "All", dotBg: "filterDotAll" },
+  { label: "Moving", dotBg: "filterDotMoving" },
+  { label: "Idle", dotBg: "filterDotIdle" },
+  { label: "Critical", dotBg: "filterDotCritical" },
+  { label: "Offline", dotBg: "filterDotOffline" },
 ];
 
 const statusDotClass = {
@@ -94,37 +96,61 @@ export default function VehiclesList({
     if (selectedVehicle) return;
     if (vehicles.length === 0) return;
     handleSelectVehicle(vehicles[0]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [vehicles, selectedVehicle]);
 
   return (
-    <MainLayoutColor as="div" background="surface" className="w-full h-full border border-[#232428] rounded-xl py-3 xl:py-4 flex flex-col select-none overflow-hidden text-white min-w-0">
-      {/* Title with Padding */}
-      <h3 className="text-[13px] xl:text-[14px] font-bold text-white tracking-tight mb-2.5 xl:mb-3 px-3 xl:px-4 shrink-0">
-        Vehicle List
-      </h3>
-
-     
-      <div className="flex items-center gap-1.5 xl:gap-2 overflow-x-auto pb-2 mb-2 px-3 xl:px-4 shrink-0 no-scrollbar flex-nowrap">
-        {filters.map((filter) => (
-          <button
-            key={filter.label}
-            onClick={() => setActiveFilter(filter.label)}
-            className={`flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-medium transition-colors shrink-0 cursor-pointer ${
-              activeFilter === filter.label
-                ? "bg-[#292a30] text-white"
-                : "bg-[#0d0e10] text-[#8e8e93] hover:text-white"
-            }`}
-          >
-            <span className={`w-2 h-2 rounded-[2px] shrink-0 ${filter.color}`} />
-            <span>{filter.label}</span>
-            {filter.count !== null && (
-              <span className="text-[#8e8e93]">({filter.count})</span>
-            )}
-          </button>
-        ))}
+    <MainLayoutColor
+      as="div"
+      background="surface"
+      className="w-full h-full border border-[#232428] rounded-xl py-3 xl:py-4 flex flex-col select-none overflow-hidden text-white min-w-0"
+    >
+      <div className="mb-2.5 xl:mb-3 px-3 xl:px-4 shrink-0">
+        <MainLayoutColor
+          as={MainLayoutTextSize}
+          color="title"
+          size="sectionTitle"
+          className="block tracking-tight"
+        >
+          Vehicle List
+        </MainLayoutColor>
       </div>
 
+      {/* Filter Tabs */}
+      <div className="flex items-center gap-1.5 xl:gap-2 overflow-x-auto pb-2 mb-2 px-3 xl:px-4 shrink-0 no-scrollbar flex-nowrap">
+        {filters.map((filter) => {
+          const isActive = activeFilter === filter.label;
+          return (
+            <MainLayoutColor
+              key={filter.label}
+              as="button"
+              background={isActive ? "filterActiveBg" : "filterInactiveBg"}
+              color={isActive ? "filterTextActive" : "filterTextInactive"}
+              onClick={() => setActiveFilter(filter.label)}
+              className="flex items-center gap-2 px-3 py-1 rounded-full transition-colors shrink-0 cursor-pointer hover:text-white"
+            >
+              <MainLayoutColor
+                as="span"
+                background={filter.dotBg}
+                className="w-2 h-2 rounded-[2px] shrink-0"
+              />
+              <MainLayoutTextSize size="filterText">
+                {filter.label}
+              </MainLayoutTextSize>
+              {filter.count !== null && (
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="filterCount"
+                  size="filterText"
+                >
+                  ({filter.count})
+                </MainLayoutColor>
+              )}
+            </MainLayoutColor>
+          );
+        })}
+      </div>
+
+      {/* Vehicle List Items */}
       <div className="flex flex-col overflow-y-auto flex-1 scrollbar-thin scrollbar-thumb-zinc-800 scrollbar-track-transparent">
         {filteredVehicles.map((vehicle) => {
           const isSelected = selectedId === vehicle.id;
@@ -139,6 +165,27 @@ export default function VehiclesList({
                 ? vehicle.registrationNumber
                 : "Not Available";
 
+          const driverDisplay =
+            vehicle.driver &&
+            vehicle.driver !== "-" &&
+            vehicle.driver !== "Not Available"
+              ? vehicle.driver
+              : "Not Available";
+
+          const speedDisplay =
+            vehicle.speed &&
+            vehicle.speed !== "-" &&
+            vehicle.speed !== "Not Available"
+              ? vehicle.speed
+              : "Not Available";
+
+          const locationDisplay =
+            vehicle.location &&
+            vehicle.location !== "-" &&
+            vehicle.location !== "Not Available"
+              ? vehicle.location
+              : "Not Available";
+
           return (
             <div
               key={vehicle.id}
@@ -149,12 +196,17 @@ export default function VehiclesList({
                   : "bg-transparent hover:bg-[#1f2025]"
               }`}
             >
-              {/* Left Side Info */}
+              {/* Left Side: Plate, Status, Driver, Info */}
               <div className="min-w-0 flex-1 flex flex-col gap-1">
                 <div className="flex items-center gap-2 leading-none min-w-0">
-                  <span className="text-[12px] xl:text-[13px] font-bold text-white tracking-tight shrink-0">
+                  <MainLayoutColor
+                    as={MainLayoutTextSize}
+                    color="vehiclePlate"
+                    size="plateText"
+                    className="tracking-tight shrink-0"
+                  >
                     {plateDisplay}
-                  </span>
+                  </MainLayoutColor>
                   <span
                     className={`w-1.5 h-1.5 rounded-full shrink-0 ${
                       statusDotClass[vehicle.status] || "bg-zinc-500"
@@ -167,47 +219,64 @@ export default function VehiclesList({
                   </span>
                 </div>
 
-                <div className="flex items-center gap-1.5 text-[11px] text-[#8e8e93] truncate">
-                  <span className="truncate">
-                    {vehicle.driver &&
-                    vehicle.driver !== "-" &&
-                    vehicle.driver !== "Not Available"
-                      ? vehicle.driver
-                      : "Not Available"}
-                  </span>
-                  <span className="shrink-0 text-[#52525b]">•</span>
-                  <span className="truncate">{vehicle.info}</span>
+                <div className="flex items-center gap-1.5 truncate">
+                  <MainLayoutColor
+                    as={MainLayoutTextSize}
+                    color="vehicleSubtext"
+                    size="subInfoText"
+                    className="truncate font-normal"
+                  >
+                    {driverDisplay}
+                  </MainLayoutColor>
+                  <MainLayoutColor
+                    color="separator"
+                    size="subInfoText"
+                    className="shrink-0"
+                  >
+                    •
+                  </MainLayoutColor>
+                  <MainLayoutColor
+                    as={MainLayoutTextSize}
+                    color="vehicleSubtext"
+                    size="subInfoText"
+                    className="truncate font-normal"
+                  >
+                    {vehicle.info}
+                  </MainLayoutColor>
                 </div>
               </div>
 
-              {/* Right Side Info */}
+              {/* Right Side: Speed, Location & Reusable Button */}
               <div className="flex items-center gap-2 xl:gap-3 shrink-0">
                 <div className="text-right leading-tight min-w-0 max-w-[72px] xl:max-w-none">
-                  <p className="text-[12px] xl:text-[13px] font-bold text-white">
-                    {vehicle.speed &&
-                    vehicle.speed !== "-" &&
-                    vehicle.speed !== "Not Available"
-                      ? vehicle.speed
-                      : "Not Available"}
-                  </p>
-                  <p className="text-[10px] text-[#8e8e93] mt-0.5 truncate text-right">
-                    {vehicle.location &&
-                    vehicle.location !== "-" &&
-                    vehicle.location !== "Not Available"
-                      ? vehicle.location
-                      : "Not Available"}
-                  </p>
+                  <MainLayoutColor
+                    as={MainLayoutTextSize}
+                    color="vehicleSpeed"
+                    size="speedText"
+                    className="block"
+                  >
+                    {speedDisplay}
+                  </MainLayoutColor>
+                  <MainLayoutColor
+                    as={MainLayoutTextSize}
+                    color="vehicleLocation"
+                    size="locationText"
+                    className="mt-0.5 truncate block text-right font-normal"
+                  >
+                    {locationDisplay}
+                  </MainLayoutColor>
                 </div>
 
-                <button
+                <MainLayoutButton
+                  variant="outlineYellow"
+                  size="xs"
                   onClick={(event) => {
                     event.stopPropagation();
                     handleSelectVehicle(vehicle);
                   }}
-                  className="h-7 px-2.5 xl:px-3 rounded-md text-[10px] xl:text-[11px] font-semibold transition-colors shrink-0 cursor-pointer flex items-center justify-center whitespace-nowrap text-[#eab308] border border-[#eab308]/70 bg-transparent hover:bg-[#eab308]/10"
                 >
                   View Details
-                </button>
+                </MainLayoutButton>
               </div>
             </div>
           );

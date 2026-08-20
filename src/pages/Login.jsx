@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, useNavigate, Link } from "react-router-dom";
-import Button from "../components/Ui/Button";
 import AuthShell, { AuthField } from "../features/auth/AuthShell";
 import { toast } from "../components/Ui/toast";
 import {
@@ -147,7 +146,7 @@ export default function Login() {
           </Link>
         </div>
 
-        <Button
+        <MainLayoutButton
           type="submit"
           variant="primary"
           size="lg"
@@ -155,7 +154,7 @@ export default function Login() {
           className="w-full h-[50px] mt-1 rounded-[10px] bg-[#F5B700] hover:bg-[#d9a200] text-black text-[14px] font-semibold"
         >
           {isLoading ? "Signing in..." : "Login"}
-        </Button>
+        </MainLayoutButton>
       </form>
     </AuthShell>
   );

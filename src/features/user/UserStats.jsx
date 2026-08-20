@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Users, UserCheck, UserPlus, UserX } from "lucide-react";
-import { StatCard } from "../../components/Ui/StatsCards";
 import { getUserSummary } from "../../api/userApi";
+import { MainStatsCard } from "../../components/Ui/MainLayoutUI/MainStatsCard";
 
 const DEFAULT_SUMMARY = {
   total_users: 0,
@@ -101,7 +101,7 @@ export default function UserStats() {
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 mt-0 pt-0 select-none w-full shrink-0">
       {cards.map((card) => (
         <div key={card.id} className="min-h-[72px] [&>*]:h-full">
-          <StatCard {...card} />
+          <MainStatsCard {...card} />
         </div>
       ))}
     </div>

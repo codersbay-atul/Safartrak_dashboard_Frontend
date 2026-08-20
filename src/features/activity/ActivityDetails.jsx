@@ -18,7 +18,7 @@ import {
   StickyNote,
   TriangleAlert,
 } from "lucide-react";
-import Button from "../../components/Ui/Button";
+import MainLayoutButton from "../../components/Ui/MainLayoutUI/MainLayoutButton";
 import StatusBadge from "../../components/Ui/StatusBadge";
 import { toast } from "../../components/Ui/toast";
 import { ACTIVITY_DETAILS } from "./activityData";
@@ -214,7 +214,7 @@ export default function ActivityDetails({
               className="w-full resize-none rounded-xl border border-[#27272a] bg-[#18181b] px-3 py-2 text-[10.5px] text-white placeholder:text-[#71717a] focus:outline-none focus:border-[#FDBB24]"
             />
             <div className="flex items-center gap-2">
-              <Button
+              <MainLayoutButton
                 variant="primary"
                 size="sm"
                 onClick={handleSaveNote}
@@ -222,8 +222,8 @@ export default function ActivityDetails({
                 className="flex-1 justify-center font-bold"
               >
                 {isSavingNote ? "Saving..." : "Save Note"}
-              </Button>
-              <Button
+              </MainLayoutButton>
+              <MainLayoutButton
                 variant="secondary"
                 size="sm"
                 onClick={() => setNoteBody("")}
@@ -231,13 +231,13 @@ export default function ActivityDetails({
                 className="flex-1 justify-center font-semibold"
               >
                 Clear
-              </Button>
+              </MainLayoutButton>
             </div>
           </div>
         )}
 
         <div className="flex items-center gap-2">
-          <Button
+          <MainLayoutButton
             variant="secondary"
             size="sm"
             icon={Share2}
@@ -245,8 +245,8 @@ export default function ActivityDetails({
             className="flex-1 justify-center font-semibold"
           >
             Share Event
-          </Button>
-          <Button
+          </MainLayoutButton>
+          <MainLayoutButton
             variant="primary"
             size="sm"
             icon={Pencil}
@@ -254,7 +254,7 @@ export default function ActivityDetails({
             className="flex-1 justify-center font-bold"
           >
             {showNoteEditor ? "Hide Note" : "Add Note"}
-          </Button>
+          </MainLayoutButton>
         </div>
       </div>
     </div>

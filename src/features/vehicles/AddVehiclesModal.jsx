@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Button from "../../components/Ui/Button";
+import MainLayoutButton from "../../components/Ui/MainLayoutUI/MainLayoutButton";
 import Dropdown from "../../components/Ui/DropDown";
 
 const VEHICLE_TYPE_OPTIONS = [
@@ -275,13 +275,13 @@ export default function AddVehicleModal({ isOpen, onClose, onNext }) {
             >
               Cancel
             </button>
-            <Button
+            <MainLayoutButton
               type="submit"
               variant="primary"
               className="w-full py-1.5 rounded-lg text-[11px] font-bold text-black bg-[#ffd60a] hover:bg-[#e6c200]"
             >
               Next
-            </Button>
+            </MainLayoutButton>
           </div>
 
         </form>

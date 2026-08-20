@@ -73,7 +73,7 @@ export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }
   const showRouteBreadcrumb = activeTab === "Dashboard" && isRouteView;
 
   const [beforeCursor, setBeforeCursor] = useState(null);
-  const [activePopover, setActivePopover] = useState(null); // 'notif' | 'calendar' | 'profile' | null
+  const [activePopover, setActivePopover] = useState(null);
   
   const { notifications, isLoading: isNotificationsLoading, isFetching: isNotificationsFetching } = useNotifications({ limit: 20, before: beforeCursor });
   const markReadMutation = useMarkNotificationsRead();
@@ -117,12 +117,14 @@ export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }
     navigate('/login', { replace: true });
   };
 
-  
-
   return (
-    <header className="flex items-center justify-between px-2.5 min-[1152px]:px-3 py-2.5 xl:py-3 border-b border-[#1f1f23] bg-[#09090b] sticky top-0 z-30 select-none gap-2 min-w-0">
-      
-      <div className="flex items-center gap-2 xl:gap-2.5 text-[18px] text-[#a1a1aa] font-medium tracking-wide min-w-0 flex-1">
+    <NavTextColor
+      as="header"
+      bg="navbarBg"
+      color=""
+      className="flex items-center justify-between px-2.5 min-[1152px]:px-3 py-2.5 xl:py-3 border-b border-[#1f1f23] sticky top-0 z-30 select-none gap-2 min-w-0"
+    >
+      <div className="flex items-center gap-2 xl:gap-2.5 min-w-0 flex-1">
         <div className="w-10 h-1 shrink-0 lg:hidden" />
         <ActiveIcon size={20} className="text-[#71717a] shrink-0" />
         {showRouteBreadcrumb ? (
@@ -135,16 +137,13 @@ export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }
             />
           </div>
         ) : (
-          <NavTextSize className="truncate">
-            <NavTextColor color="navbarText">
+          <NavTextColor color="navbarText" as={NavTextSize} size="moduleName" className="truncate">
             {activeTab || "Dashboard"}
-            </NavTextColor>
-          </NavTextSize>
+          </NavTextColor>
         )}
       </div>
+
       <div className="flex items-center gap-2 xl:gap-2.5 shrink-0">
-        
-      
         <NavPopoverWrapper isOpen={activePopover === 'notif'} onClose={closePopover}>
           <NavNotificationIcon
             count={unreadCount}
@@ -153,9 +152,12 @@ export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }
 
           <Popover isOpen={activePopover === 'notif'} className="w-80 right-0 p-3">
             <div className="flex items-center justify-between border-b border-[#27272a] pb-2 mb-2">
-              <h4 className="text-xs font-bold text-white">Notifications</h4>
+              <NavTextColor color="navbarText">
+                <h4 className="text-xs font-bold">Notifications</h4>
+              </NavTextColor>
               {unreadCount > 0 && (
                 <button 
+                  type="button"
                   onClick={handleMarkAllRead} 
                   disabled={markReadMutation.isLoading}
                   className="text-[10px] text-[#3b82f6] hover:underline disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer font-medium"
@@ -164,11 +166,12 @@ export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }
                 </button>
               )}
             </div>
+
             <div className="flex flex-col gap-2 max-h-[320px] overflow-y-auto custom-scrollbar pb-2">
               {isNotificationsLoading || isNotificationsFetching ? (
-                <div className="py-5 text-center text-[#71717a] text-[11px]">
+                <NavTextColor color="monthText" className="py-5 text-center text-[11px] block">
                   Loading notifications...
-                </div>
+                </NavTextColor>
               ) : notifications?.items?.length > 0 ? (
                 notifications.items.map((item) => (
                   <NavNotificationItem
@@ -180,16 +183,17 @@ export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }
                   />
                 ))
               ) : (
-                <div className="py-5 text-center text-[#71717a] text-[11px]">
+                <NavTextColor color="monthText" className="py-5 text-center text-[11px] block">
                   No notifications available.
-                </div>
+                </NavTextColor>
               )}
             </div>
+
             {notifications?.next_before ? (
               <button
                 type="button"
                 onClick={handleLoadMore}
-                className="w-full py-2 rounded-xl bg-[#18181b] border border-[#27272a] text-[11px] text-white hover:bg-[#1f2023] transition-colors"
+                className="w-full py-2 rounded-xl bg-[#18181b] border border-[#27272a] text-[11px] text-white hover:bg-[#1f2023] transition-colors mt-2 cursor-pointer"
               >
                 Load more
               </button>
@@ -199,14 +203,11 @@ export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }
 
         <NavDateDisplay />
 
-
         <div className="hidden xl:flex flex-col text-right leading-none shrink-0 pr-3">
-         
-          <NavTextSize as="p" size="monthText" className="mt-0.5">
-            <NavTextColor color="monthText">{displayRole}</NavTextColor>
-          </NavTextSize>
+          <NavTextColor as={NavTextSize} color="monthText" size="monthText" className="mt-0.5">
+            {displayRole}
+          </NavTextColor>
         </div>
-
 
         <NavPopoverWrapper isOpen={activePopover === 'profile'} onClose={closePopover}>
           <div className="pl-1.5 sm:pl-3 border-l border-[#27272a]">
@@ -232,8 +233,7 @@ export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }
             <NavMenuItem icon={LogOut} label="Logout" onClick={handleLogout} danger />
           </Popover>
         </NavPopoverWrapper>
-
       </div>
-    </header>
+    </NavTextColor>
   );
 }
