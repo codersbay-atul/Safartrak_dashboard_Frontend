@@ -8,7 +8,7 @@ import StatsCard from "../features/dashboard/StatsCard";
 import DashboardHeader from "../features/dashboard/DashboardHeader";
 import LivePositions from "../features/dashboard/LivePositions";
 import VehiclesList from "../features/dashboard/VehiclesList";
-import DashboardVehicleDetails from "../features/dashboard/DashboardVehicleDetails";
+import VehiclesDetail from "../features/dashboard/VehiclesDetail";
 import { getDashboardExport } from "../services/dashboardService";
 import { toast } from "../components/Ui/toast";
 
@@ -150,7 +150,7 @@ export default function Dashboard() {
 
             {selectedVehicle && showDetailsPanel && (
               <div className="w-full min-[1152px]:w-[clamp(220px,24%,280px)] xl:w-[300px] 2xl:w-[320px] shrink-0 h-[480px] min-[1152px]:h-full min-h-0 overflow-hidden animate-in slide-in-from-right-5 duration-300">
-                <DashboardVehicleDetails
+                <VehiclesDetail
                   vehicle={selectedVehicle}
                   onViewRoute={handleOpenRouteDetails}
                 />

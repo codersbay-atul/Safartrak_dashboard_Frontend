@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useVehiclesList } from "../../hooks/useVehiclesList";
+import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
 
 const FILTER_DEFS = [
   { label: "All", color: "bg-[#8e8e93]" },
@@ -97,7 +98,7 @@ export default function VehiclesList({
   }, [vehicles, selectedVehicle]);
 
   return (
-    <div className="w-full h-full bg-[#16171a] border border-[#232428] rounded-xl py-3 xl:py-4 flex flex-col select-none overflow-hidden text-white min-w-0">
+    <MainLayoutColor as="div" background="surface" className="w-full h-full border border-[#232428] rounded-xl py-3 xl:py-4 flex flex-col select-none overflow-hidden text-white min-w-0">
       {/* Title with Padding */}
       <h3 className="text-[13px] xl:text-[14px] font-bold text-white tracking-tight mb-2.5 xl:mb-3 px-3 xl:px-4 shrink-0">
         Vehicle List
@@ -212,6 +213,6 @@ export default function VehiclesList({
           );
         })}
       </div>
-    </div>
+    </MainLayoutColor>
   );
 }

@@ -1,6 +1,5 @@
-import React from "react";
-import PageHeader from "../../components/Ui/PageHeader";
-import HeaderActionButton from "../../components/Ui/HeaderActionButton";
+import MainLayoutHeader from "../../components/Ui/MainLayoutUI/MainLayoutHeader";
+
 
 export default function TicketsHeader({
   title = "My Tickets",
@@ -8,16 +7,11 @@ export default function TicketsHeader({
   onNewTicketClick,
 }) {
   return (
-    <PageHeader
-      title={title}
-      subtitle={subtitle}
-      showSearch={false}
-      showFilters={false}
-      showExport={false}
-    >
-      <HeaderActionButton onClick={onNewTicketClick} className="min-w-[120px]">
+    <div className="flex items-center justify-between gap-3 w-full shrink-0">
+      <MainLayoutHeader title={title} subtitle={subtitle} />
+      <MainHeaderActionButton onClick={onNewTicketClick} className="min-w-[120px]">
         New Ticket
-      </HeaderActionButton>
-    </PageHeader>
+      </MainHeaderActionButton>
+    </div>
   );
 }

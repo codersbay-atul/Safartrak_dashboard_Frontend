@@ -13,6 +13,7 @@ import {
   Truck,
   User,
 } from "lucide-react";
+import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
 
 export default function VehiclesAndDriverInfo() {
   const vehicleDetails = [
@@ -30,7 +31,7 @@ export default function VehiclesAndDriverInfo() {
   ];
 
   return (
-    <div className="w-full h-full bg-[#121214] border border-[#27272a] p-3 rounded-xl flex flex-col justify-between min-h-0 overflow-hidden select-none">
+    <MainLayoutColor as="div" background="surface" className="w-full h-full border border-[#27272a] p-3 rounded-xl flex flex-col justify-between min-h-0 overflow-hidden select-none">
       
       {/* Header */}
       <div className="flex items-center justify-between pb-2 border-b border-[#27272a] shrink-0">
@@ -179,6 +180,6 @@ export default function VehiclesAndDriverInfo() {
         </div>
 
       </div>
-    </div>
+    </MainLayoutColor>
   );
 }

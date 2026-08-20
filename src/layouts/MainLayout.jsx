@@ -19,7 +19,7 @@ export default function MainLayout({ children, activeTab, setActiveTab, isRouteV
           activeTab={activeTab}
           user={authUser}
         />
-        <main className="flex-1 p-2.5 min-[1152px]:p-3 xl:p-3 bg-[#070708] flex flex-col gap-2 min-[1152px]:gap-2.5 overflow-hidden min-h-0">
+        <main className="flex-1 p-2.5 min-[1152px]:p-3 xl:p-3 bg-[#09090B] flex flex-col gap-2 min-[1152px]:gap-2.5 overflow-hidden min-h-0">
           {children}
         </main>
       </div>

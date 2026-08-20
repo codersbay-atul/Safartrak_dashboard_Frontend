@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { RefreshCw, Radio } from "lucide-react";
 import { useDashboardHealth } from "../../hooks/useDashboardHealth";
+import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
 
 const RANGE_OPTIONS = [
   { key: "24h", label: "24H" },
@@ -167,7 +168,7 @@ export default function FleetHealthOverview() {
   const hasSeries = series.length > 0;
 
   return (
-    <div className="w-full h-full bg-[#121214] border border-[#1f1f23] rounded-xl p-5 flex flex-col select-none overflow-hidden">
+    <MainLayoutColor as="div" background="surface" className="w-full h-full border border-[#1f1f23] rounded-xl p-5 flex flex-col select-none overflow-hidden">
       {/* Header */}
       <div className="flex items-start justify-between gap-3 shrink-0">
         <div className="min-w-0">
@@ -256,6 +257,6 @@ export default function FleetHealthOverview() {
           </div>
         ))}
       </div>
-    </div>
+    </MainLayoutColor>
   );
 }

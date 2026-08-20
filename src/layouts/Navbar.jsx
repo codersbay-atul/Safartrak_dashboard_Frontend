@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { 
@@ -15,24 +15,25 @@ import {
   IdCard, 
   FileSearch, 
   Users, 
-  Bell, 
-  Calendar,
   User,
   Settings,
   LogOut,
-  ChevronRight,
   Key,
   ShoppingCart,
   CreditCard
 } from 'lucide-react';
 import { useNotifications, useMarkNotificationsRead } from '../hooks/useNotifications';
-
 import { useOutsideClick } from '../hooks/UseOutsideClick';
-import Popover from '../components/Ui/Popover';
-import NotificationItem from '../components/Ui/NotificationItem';
-import UserAvatar from '../components/Ui/UserAvatar';
+import NavTextSize from '../components/Ui/NavbarUI/NavTextSize';
+import NavTextColor from '../components/Ui/NavbarUI/NavTextColor';
+import NavBreadcrumb from '../components/Ui/NavbarUI/NavBreadCrumb';
+import NavDateDisplay from '../components/Ui/NavbarUI/NavDateDisplay';
+import { NavNotificationIcon, default as NavUserAvatar } from '../components/Ui/NavbarUI/NavUserAvatar';
+import NavMenuItem from '../components/Ui/NavbarUI/NavMenuItem';
 import { clearAuth } from '../store/slices/authSlice';
 import useAccountProfile from '../hooks/useAccountProfile';
+import NavNotificationItem from '../components/Ui/NavbarUI/NavNotificationItem';
+import Popover from '../components/Ui/Popover';
 
 function NavPopoverWrapper({ children, isOpen, onClose }) {
   const wrapperRef = useOutsideClick(() => {
@@ -76,20 +77,6 @@ export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }
   
   const { notifications, isLoading: isNotificationsLoading, isFetching: isNotificationsFetching } = useNotifications({ limit: 20, before: beforeCursor });
   const markReadMutation = useMarkNotificationsRead();
-  const [currentDate, setCurrentDate] = useState(new Date());
-
-  
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentDate(new Date());
-    }, 60000);
-
-    return () => clearInterval(timer);
-  }, []);
-
-  const weekday = currentDate.toLocaleDateString('en-US', { weekday: 'long' });
-  const monthDayYear = currentDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-
   const { profile: accountProfile } = useAccountProfile();
   const displayName = user?.name ?? accountProfile?.name ?? '';
   const displayRole = user?.role ?? '';
@@ -101,15 +88,6 @@ export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }
         .slice(0, 2)
         .toUpperCase()
     : undefined;
-
-  const getGreeting = (date) => {
-    const hour = date.getHours();
-    if (hour >= 5 && hour < 12) return 'Good morning';
-    if (hour >= 12 && hour < 17) return 'Good afternoon';
-    return 'Good evening';
-  };
-
-  const greetingText = displayName ? `${getGreeting(currentDate)}, ${displayName}` : getGreeting(currentDate);
 
   const unreadCount = notifications?.unread_count ?? 0;
 
@@ -148,41 +126,30 @@ export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }
         <div className="w-10 h-1 shrink-0 lg:hidden" />
         <ActiveIcon size={20} className="text-[#71717a] shrink-0" />
         {showRouteBreadcrumb ? (
-          <nav className="flex items-center gap-1.5 min-w-0" aria-label="Breadcrumb">
-            <button
-              type="button"
-              onClick={onExitRouteView}
-              className="text-[#a1a1aa] hover:text-white font-medium truncate transition-colors cursor-pointer"
-            >
-              Dashboard
-            </button>
-            <ChevronRight size={14} className="text-[#52525b] shrink-0" />
-            <span className="text-white font-semibold truncate" aria-current="page">
-              Route Details
-            </span>
-          </nav>
+          <div className="flex items-center gap-1.5 min-w-0">
+            <NavBreadcrumb
+              items={[
+                { label: "Dashboard", onClick: onExitRouteView },
+                { label: "Route Details" },
+              ]}
+            />
+          </div>
         ) : (
-          <span className="text-white font-semibold truncate">
+          <NavTextSize className="truncate">
+            <NavTextColor color="navbarText">
             {activeTab || "Dashboard"}
-          </span>
+            </NavTextColor>
+          </NavTextSize>
         )}
       </div>
       <div className="flex items-center gap-2 xl:gap-2.5 shrink-0">
         
       
         <NavPopoverWrapper isOpen={activePopover === 'notif'} onClose={closePopover}>
-          <button 
+          <NavNotificationIcon
+            count={unreadCount}
             onClick={() => togglePopover('notif')}
-            className="p-1.5 rounded-full bg-[#18181b] border border-[#27272a] text-[#a1a1aa] hover:text-white transition-colors relative cursor-pointer"
-            aria-label="Notifications"
-          >
-            <Bell size={15} />
-            {unreadCount > 0 && (
-              <span className="absolute -top-1 -right-1 min-w-[18px] h-4 px-1.5 leading-4 text-[10px] font-semibold text-white bg-[#ef4444] rounded-full flex items-center justify-center">
-                {unreadCount > 9 ? "9+" : unreadCount}
-              </span>
-            )}
-          </button>
+          />
 
           <Popover isOpen={activePopover === 'notif'} className="w-80 right-0 p-3">
             <div className="flex items-center justify-between border-b border-[#27272a] pb-2 mb-2">
@@ -204,7 +171,7 @@ export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }
                 </div>
               ) : notifications?.items?.length > 0 ? (
                 notifications.items.map((item) => (
-                  <NotificationItem
+                  <NavNotificationItem
                     key={item.id}
                     title={item.title}
                     description={item.body}
@@ -230,21 +197,20 @@ export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }
           </Popover>
         </NavPopoverWrapper>
 
-        <div className="hidden lg:block text-right leading-none shrink-0 ml-2.5">
-          <p className="text-[14px] font-semibold text-white">{weekday},</p>
-          <p className="text-[12px] text-[#a1a1aa] mt-0.5">{monthDayYear}</p>
-        </div>
+        <NavDateDisplay />
 
 
         <div className="hidden xl:flex flex-col text-right leading-none shrink-0 pr-3">
          
-          <p className="text-[10px] text-[#a1a1aa] mt-0.5">{displayRole}</p>
+          <NavTextSize as="p" size="monthText" className="mt-0.5">
+            <NavTextColor color="monthText">{displayRole}</NavTextColor>
+          </NavTextSize>
         </div>
 
 
         <NavPopoverWrapper isOpen={activePopover === 'profile'} onClose={closePopover}>
           <div className="pl-1.5 sm:pl-3 border-l border-[#27272a]">
-            <UserAvatar 
+            <NavUserAvatar 
               initials={initials} 
               name={displayName} 
               role={displayRole} 
@@ -253,22 +219,17 @@ export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }
           </div>
 
           <Popover isOpen={activePopover === 'profile'} className="w-40 right-0 p-1.5 text-xs">
-            <button
+            <NavMenuItem
+              icon={User}
+              label="Profile"
               onClick={() => {
                 closePopover();
                 navigate('/profile');
               }}
-              className="w-full flex items-center gap-2 px-2.5 py-1.5 hover:bg-[#18181b] rounded-lg text-[#a1a1aa] hover:text-white cursor-pointer"
-            >
-              <User size={15} /> Profile
-            </button>
-            <button onClick={closePopover} className="w-full flex items-center gap-2 px-2.5 py-1.5 hover:bg-[#18181b] rounded-lg text-[#a1a1aa] hover:text-white cursor-pointer">
-              <Settings size={13} /> Settings
-            </button>
+            />
+            <NavMenuItem icon={Settings} label="Settings" onClick={closePopover} />
             <div className="h-[1px] bg-[#27272a] my-1" />
-            <button onClick={handleLogout} className="w-full flex items-center gap-2 px-2.5 py-1.5 hover:bg-[#18181b] rounded-lg text-[#ef4444] cursor-pointer">
-              <LogOut size={15} /> Logout
-            </button>
+            <NavMenuItem icon={LogOut} label="Logout" onClick={handleLogout} danger />
           </Popover>
         </NavPopoverWrapper>
 

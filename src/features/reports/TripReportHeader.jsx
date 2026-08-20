@@ -1,17 +1,10 @@
-import React from "react";
-import PageHeader from "../../components/Ui/PageHeader";
+import MainLayoutHeader from "../../components/Ui/MainLayoutUI/MainLayoutHeader";
 
-export default function TripReportHeader({
-  onExportClick,
-  onFilterChange,
-}) {
+export default function TripReportHeader() {
   return (
-    <PageHeader
+    <MainLayoutHeader
       title="Trip Report"
       subtitle="Generate and review trip activity for selected vehicles and date ranges."
-      showSearch={false}
-      showFilters={false}
-      showExport={false}
     />
   );
 }

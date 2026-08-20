@@ -22,6 +22,7 @@ import {
   resolveRouteStatusLabel,
   shouldShowNoActiveTrip,
 } from "./routeVehicleDisplay";
+import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
 
 const STATUS_BADGE = {
   Running: {
@@ -143,7 +144,7 @@ export default function VehicleRouteDetails({ vehicle, onViewRoute, onClose }) {
   const showRunningIndicator = !noActiveTrip && statusLabel === "Running";
 
   return (
-    <div className="w-full h-full bg-[#16161a] border border-[#1f1f23] rounded-xl p-3.5 flex flex-col justify-between select-none overflow-hidden font-sans text-zinc-100">
+    <MainLayoutColor as="div" background="surface" className="w-full h-full border border-[#1f1f23] rounded-xl p-3.5 flex flex-col justify-between select-none overflow-hidden font-sans text-zinc-100">
       
       {/* 1. Top Header Row (Reflects exact layout without X icon) */}
       <div className="flex items-center justify-between pb-2 shrink-0">
@@ -212,7 +213,7 @@ export default function VehicleRouteDetails({ vehicle, onViewRoute, onClose }) {
                 />
               ) : null}
 
-              <div className="absolute left-0 w-2.5 h-2.5 rounded-full bg-[#16161a] border-2 border-[#FDBB24] transform -translate-x-1/2 z-10" />
+              <div className="absolute left-0 w-2.5 h-2.5 rounded-full bg-[#141414] border-2 border-[#FDBB24] transform -translate-x-1/2 z-10" />
               {progressWidth > 0 ? (
                 <div
                   className="absolute text-[11px] transform -translate-x-1/2 z-20 select-none pb-0.5 pointer-events-none"
@@ -221,7 +222,7 @@ export default function VehicleRouteDetails({ vehicle, onViewRoute, onClose }) {
                   🚚
                 </div>
               ) : null}
-              <div className="absolute right-0 w-2.5 h-2.5 rounded-full bg-[#16161a] border-2 border-[#2e2e36] transform translate-x-1/2 z-10" />
+              <div className="absolute right-0 w-2.5 h-2.5 rounded-full bg-[#141414] border-2 border-[#2e2e36] transform translate-x-1/2 z-10" />
             </div>
 
             <div className="flex items-center justify-between mt-1 text-[9px] text-zinc-400 font-medium">
@@ -405,6 +406,6 @@ export default function VehicleRouteDetails({ vehicle, onViewRoute, onClose }) {
         </button>
       </div>
 
-    </div>
+    </MainLayoutColor>
   );
 }

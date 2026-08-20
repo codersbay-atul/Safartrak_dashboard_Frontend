@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import MainLayout from "../layouts/MainLayout";
+import MainLayoutColor from "../components/Ui/MainLayoutUI/MainLayoutColor";
 import useVehiclesList from "../hooks/useVehiclesList";
 
 import VehiclesBasicInfo from "../features/vehiclesDetails/VehiclesBasicInfo";
@@ -56,7 +57,7 @@ export default function VehiclesDetails() {
 
   return (
     <MainLayout activeTab="Vehicles">
-      <div className="h-screen max-h-screen flex flex-col gap-2.5 bg-[#090b0e] text-gray-200 overflow-y-auto min-[1152px]:overflow-hidden">
+      <MainLayoutColor as="div" background="surface" className="h-screen max-h-screen flex flex-col gap-2.5 text-gray-200 overflow-y-auto min-[1152px]:overflow-hidden">
         <div className="shrink-0">
           <VehicleDetailsHeader
             onImportClick={handleImport}
@@ -99,7 +100,7 @@ export default function VehiclesDetails() {
             </div>
           </div>
         </div>
-      </div>
+      </MainLayoutColor>
 
       {isAddModalOpen && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-md p-4 overflow-y-auto">

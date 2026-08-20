@@ -1,14 +1,13 @@
-import React from "react";
 import { Upload, Plus } from "lucide-react";
-import PageHeader from "../../components/Ui/PageHeader";
-import HeaderActionButton from "../../components/Ui/HeaderActionButton";
+import MainLayoutHeader from "../../components/Ui/MainLayoutUI/MainLayoutHeader";
+
 import { getVehiclesExport } from "../../services/vehicleService";
 import { toast } from "../../components/Ui/toast";
+import MainHeaderActionButton from "../../components/Ui/MainLayoutUI/MainHeaderActionButton";
 
 export default function VehicleDetailsHeader({
   title = "Vehicles Details",
   subtitle = "View complete vehicle information, tracking device details, documents, trip history, and operational status.",
-  onImportClick,
   onExportClick,
   onAddVehicleClick,
 }) {
@@ -49,22 +48,17 @@ export default function VehicleDetailsHeader({
   };
 
   return (
-    <PageHeader
-      title={title}
-      subtitle={subtitle}
-      showSearch={false}
-      showFilters={false}
-      showExport={false}
-    >
+    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-2.5 w-full shrink-0">
+      <MainLayoutHeader title={title} subtitle={subtitle} />
     
 
-      <HeaderActionButton icon={Upload} onClick={onExportClick} className="min-w-[110px]">
+      <MainHeaderActionButton icon={Upload} onClick={handleExport} className="min-w-[110px]">
         Export Data
-      </HeaderActionButton>
+      </MainHeaderActionButton>
 
-      <HeaderActionButton icon={Plus} iconPosition="right" onClick={onAddVehicleClick} className="min-w-[120px]">
+      <MainHeaderActionButton icon={Plus} iconPosition="right" onClick={onAddVehicleClick} className="min-w-[120px]">
         Add Vehicle
-      </HeaderActionButton>
-    </PageHeader>
+      </MainHeaderActionButton>
+    </div>
   );
 }

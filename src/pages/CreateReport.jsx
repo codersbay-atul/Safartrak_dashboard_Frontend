@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 import MainLayout from "../layouts/MainLayout";
+import MainLayoutHeader from "../components/Ui/MainLayoutUI/MainLayoutHeader";
 import { getVehiclesList } from "../services/vehicleService";
 import { generateReport } from "../services/reportsService";
 import ReportResults from "../features/reports/ReportResults";
@@ -72,10 +73,10 @@ export default function CreateReport() {
     <MainLayout activeTab="Reports">
       <div className="flex-1 flex flex-col gap-3 min-h-0 p-4">
         <div className="flex items-center justify-between gap-3">
-          <div>
-            <h1 className="text-lg font-bold text-white">Create Custom Report</h1>
-            <p className="text-sm text-[#a1a1aa]">Generate trip reports for selected vehicles and date ranges.</p>
-          </div>
+          <MainLayoutHeader
+            title="Create Custom Report"
+            subtitle="Generate trip reports for selected vehicles and date ranges."
+          />
           <div className="flex items-center gap-2">
             <select value={vehicle} onChange={(e) => setVehicle(e.target.value)} className="rounded bg-[#0f1113] border p-2 text-sm">
               <option value="">All Vehicles</option>

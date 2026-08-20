@@ -1,8 +1,7 @@
-import React from "react";
 import { Plus } from "lucide-react";
-import SearchInput from "../../components/Ui/SearchInput";
-import Dropdown from "../../components/Ui/DropDown";
-import HeaderActionButton from "../../components/Ui/HeaderActionButton";
+import MainDropDown from "../../components/Ui/MainLayoutUI/MainDropDown";
+import MainSearchInput from "../../components/Ui/MainLayoutUI/MainSearchInput";
+import MainLayoutHeader from "../../components/Ui/MainLayoutUI/MainLayoutHeader";
 import {
   VEHICLE_OPTIONS,
   EVENT_OPTIONS,
@@ -22,17 +21,13 @@ export default function ActivityHeader({
 }) {
   return (
     <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-2.5 w-full select-none shrink-0">
-      <div className="flex-1 min-w-0">
-        <h1 className="text-[16px] sm:text-lg font-bold text-white tracking-tight leading-none">
-          Activity
-        </h1>
-        <p className="mt-1 text-[10px] text-[#a1a1aa] leading-normal max-w-2xl">
-          Review historical trips, movement timeline, and vehicle events.
-        </p>
-      </div>
+      <MainLayoutHeader
+        title="Activity"
+        subtitle="Review historical trips, movement timeline, and vehicle events."
+      />
 
       <div className="flex flex-wrap items-center gap-2 w-full lg:w-auto shrink-0 justify-start sm:justify-end">
-        <Dropdown
+        <MainDropDown
           label="Select Vehicle"
           options={VEHICLE_OPTIONS}
           selectedValue={vehicleFilter}
@@ -40,7 +35,7 @@ export default function ActivityHeader({
           className="rounded-xl bg-[#18181b] py-1.5"
         />
 
-        <Dropdown
+        <MainDropDown
           label="Select Event"
           options={EVENT_OPTIONS}
           selectedValue={eventFilter}
@@ -48,7 +43,7 @@ export default function ActivityHeader({
           className="rounded-xl bg-[#18181b] py-1.5"
         />
 
-        <Dropdown
+        <MainDropDown
           label="Select Driver"
           options={DRIVER_OPTIONS}
           selectedValue={driverFilter}
@@ -56,7 +51,7 @@ export default function ActivityHeader({
           className="rounded-xl bg-[#18181b] py-1.5"
         />
 
-        <SearchInput
+        <MainSearchInput
           placeholder="Search Vehicle..."
           value={searchQuery}
           onChange={onSearchChange}
@@ -65,9 +60,9 @@ export default function ActivityHeader({
           className="sm:w-44 rounded-xl bg-[#18181b] py-1.5"
         />
 
-        <HeaderActionButton icon={Plus} onClick={onExportClick}>
+        <MainHeaderActionButton icon={Plus} onClick={onExportClick}>
           Export
-        </HeaderActionButton>
+        </MainHeaderActionButton>
       </div>
     </div>
   );

@@ -1,7 +1,6 @@
-import React from "react";
-import SearchInput from "../../components/Ui/SearchInput";
-import Dropdown from "../../components/Ui/DropDown";
-import HeaderActionButton from "../../components/Ui/HeaderActionButton";
+import MainDropDown from "../../components/Ui/MainLayoutUI/MainDropDown";
+import MainSearchInput from "../../components/Ui/MainLayoutUI/MainSearchInput";
+import MainLayoutHeader from "../../components/Ui/MainLayoutUI/MainLayoutHeader";
 import { FLEET_OPTIONS, SEVERITY_OPTIONS } from "./alertsData";
 
 export default function AlertsHeader({
@@ -15,17 +14,13 @@ export default function AlertsHeader({
 }) {
   return (
     <div className="flex flex-col md:flex-row md:items-center justify-between gap-2.5 w-full select-none shrink-0">
-      <div className="flex-1 min-w-0">
-        <h1 className="text-[16px] sm:text-lg font-bold text-white tracking-tight leading-none">
-          Alerts
-        </h1>
-        <p className="mt-1 text-[10px] text-[#a1a1aa] leading-normal max-w-2xl">
-          Monitor fleet alerts, review severity, and manage configurations.
-        </p>
-      </div>
+      <MainLayoutHeader
+        title="Alerts"
+        subtitle="Monitor fleet alerts, review severity, and manage configurations."
+      />
 
       <div className="flex flex-wrap items-center gap-2 w-full md:w-auto shrink-0 justify-start sm:justify-end">
-        <SearchInput
+        <MainSearchInput
           placeholder="Search Vehicle..."
           value={searchQuery}
           onChange={onSearchChange}
@@ -34,7 +29,7 @@ export default function AlertsHeader({
           className="sm:w-52 rounded-xl bg-[#18181b] py-1.5"
         />
 
-        <Dropdown
+        <MainDropDown
           label="All Fleets"
           options={FLEET_OPTIONS}
           selectedValue={fleetFilter}
@@ -42,7 +37,7 @@ export default function AlertsHeader({
           className="rounded-xl bg-[#18181b] py-1.5"
         />
 
-        <Dropdown
+        <MainDropDown
           label="All Severity"
           options={SEVERITY_OPTIONS}
           selectedValue={severityFilter}
@@ -50,9 +45,9 @@ export default function AlertsHeader({
           className="rounded-xl bg-[#18181b] py-1.5"
         />
 
-        <HeaderActionButton onClick={onConfigClick} className="min-w-[130px]">
+        <MainHeaderActionButton onClick={onConfigClick} className="min-w-[130px]">
           Configurations
-        </HeaderActionButton>
+        </MainHeaderActionButton>
       </div>
     </div>
   );

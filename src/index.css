@@ -1,16 +1,9 @@
 @import "tailwindcss";
 
-/* =========================
-    Global
-========================= */
+
 
 body,
-#root {
-  width: 100%;
-  min-height: 100vh;
-  margin: 0;
-  background: #0B0F19;
-}
+
 
 body {
   overflow-x: hidden;
@@ -109,7 +102,7 @@ body {
   box-shadow: 0 0 0 1000px #0a0a0f inset !important;
   -webkit-box-shadow: 0 0 0 1000px #0a0a0f inset !important;
   transition: background-color 99999s ease-in-out 0s;
-  background-color: #0a0a0f !important;
+  /* background-color: #0a0a0f !important; */
   border-color: #2a2a32;
 }
 

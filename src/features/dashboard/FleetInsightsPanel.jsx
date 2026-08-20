@@ -6,7 +6,7 @@ import { useTrackSummary } from "../../hooks/useTrackSummary";
 import { useActions } from "../../hooks/useActions";
 
 const CARD_STYLE =
-  "bg-[#121214] border border-[#1f1f23] rounded-xl p-3 flex flex-col overflow-hidden";
+  "bg-[#141414] border border-[#1f1f23] rounded-xl p-3 flex flex-col overflow-hidden";
 
 const VALUE_SKELETON = (
   <span

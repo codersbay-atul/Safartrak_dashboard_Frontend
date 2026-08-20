@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Search, ChevronRight, Loader2 } from "lucide-react";
+import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
 
 export default function VehiclesDetailsInfo({ selectedVehicle, onSelectVehicle, vehicles: apiVehicles = [], isLoading, isError }) {
   const [activeFilter, setActiveFilter] = useState("Active");
@@ -65,7 +66,7 @@ export default function VehiclesDetailsInfo({ selectedVehicle, onSelectVehicle, 
   });
 
   return (
-    <aside className="w-full h-full bg-[#121214] border border-[#27272a] flex flex-col p-2.5 rounded-xl min-h-0 overflow-hidden select-none">
+    <MainLayoutColor as="aside" background="surface" className="w-full h-full border border-[#27272a] flex flex-col p-2.5 rounded-xl min-h-0 overflow-hidden select-none">
       
       {/* Title */}
       <div className="flex items-center justify-between mb-2 shrink-0">
@@ -177,6 +178,6 @@ export default function VehiclesDetailsInfo({ selectedVehicle, onSelectVehicle, 
           </div>
         )}
       </div>
-    </aside>
+    </MainLayoutColor>
   );
 }

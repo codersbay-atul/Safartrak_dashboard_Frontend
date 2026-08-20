@@ -16,14 +16,7 @@ function emitToast(type, message, description) {
   );
 }
 
-/**
- * Imperative toast API for production messaging.
- * Usage:
- *   toast.success("message")
- *   toast.error("message")
- *   toast.success("Title", "Optional description")
- *   toast.warning("message") | toast.info("message")
- */
+
 export const toast = {
   error(message, description) {
     emitToast("error", message, description);

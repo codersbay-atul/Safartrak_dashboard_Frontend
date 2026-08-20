@@ -1,5 +1,4 @@
-import React from "react";
-import PageHeader from "../../components/Ui/PageHeader";
+import MainLayoutHeader from "../../components/Ui/MainLayoutUI/MainLayoutHeader";
 import CreateApiKeyButton from "../../components/common/CreateApiKeyButton";
 
 export default function ApiKeyHeader({
@@ -14,13 +13,12 @@ export default function ApiKeyHeader({
   };
 
   return (
-    <PageHeader
-      title="API Keys"
-      subtitle="Manage your API keys used to access the SafarTrak Platform."
-      showSearch={false}
-      showFilters={false}
-      showExport={false}
-      customRightAction={<CreateApiKeyButton onClick={handleCreateClick} />}
-    />
+    <div className="flex items-center justify-between gap-3 w-full shrink-0">
+      <MainLayoutHeader
+        title="API Keys"
+        subtitle="Manage your API keys used to access the SafarTrak Platform."
+      />
+      <CreateApiKeyButton onClick={handleCreateClick} />
+    </div>
   );
 }

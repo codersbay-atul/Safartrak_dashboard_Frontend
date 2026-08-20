@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
 import PageHeader from "../../components/Ui/PageHeader";
+import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
 
 const MONTH_NAMES = [
   "January", "February", "March", "April", "May", "June",
@@ -234,7 +235,7 @@ export default function RouteDashboardHeader({ onSearch, onDateRangeChange }) {
         </button>
 
         {showStartCalendar && (
-          <SingleDatePickerPopover
+          <SingleDatePickerPopover 
             title="Select Start Date"
             initialDate={startDate}
             onSave={handleSaveStartDate}
@@ -269,8 +270,8 @@ export default function RouteDashboardHeader({ onSearch, onDateRangeChange }) {
 
   return (
     <PageHeader
-      title="Current Route"
-      subtitle="Track the selected vehicle's current trip and route progress."
+      title={<MainLayoutTextSize as="span">Current Route</MainLayoutTextSize>}
+      subtitle={<MainLayoutTextSize as="span" size="subtitle">Track the selected vehicle's current trip and route progress.</MainLayoutTextSize>}
       showBack={false}
       showSearch={true}
       searchPlaceholder="Search Vehicle.."

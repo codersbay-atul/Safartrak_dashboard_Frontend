@@ -1,6 +1,6 @@
-import React from "react";
-import PageHeader from "../../components/Ui/PageHeader";
-import HeaderActionButton from "../../components/Ui/HeaderActionButton";
+import MainHeaderActionButton from "../../components/Ui/MainLayoutUI/MainHeaderActionButton";
+import MainLayoutHeader from "../../components/Ui/MainLayoutUI/MainLayoutHeader";
+
 
 export default function ProfileHeader({
   title = "Account",
@@ -8,16 +8,11 @@ export default function ProfileHeader({
   onEditSettings,
 }) {
   return (
-    <PageHeader
-      title={title}
-      subtitle={subtitle}
-      showSearch={false}
-      showFilters={false}
-      showExport={false}
-    >
-      <HeaderActionButton onClick={onEditSettings} className="w-full max-w-[220px] min-w-0 sm:w-auto">
+    <div className="flex items-center justify-between gap-3 w-full shrink-0">
+      <MainLayoutHeader title={title} subtitle={subtitle} />
+      <MainHeaderActionButton onClick={onEditSettings} className="w-full max-w-[220px] min-w-0 sm:w-auto">
         Edit Account Settings
-      </HeaderActionButton>
-    </PageHeader>
+      </MainHeaderActionButton>
+    </div>
   );
 }

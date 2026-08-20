@@ -34,10 +34,10 @@ export default function LivePositions({ selectedVehicle, showRoutePath, onViewMa
   return (
     <div
       ref={panelRef}
-      className="w-full h-full min-h-0 bg-[#121214] border border-[#1f1f23]/60 rounded-xl flex flex-col select-none overflow-hidden relative"
+      className="w-full h-full min-h-0 bg-[#141414] border border-[#1f1f23]/60 rounded-xl flex flex-col select-none overflow-hidden relative"
     >
       {/* Header Area */}
-      <div className="flex items-center justify-between p-3 border-b border-[#1f1f23]/60 bg-[#121214]/90 z-10 shrink-0">
+      <div className="flex items-center justify-between p-3 border-b border-[#1f1f23]/60 bg-[#141414]/90 z-10 shrink-0">
         <h3 className="text-[12px] font-bold text-white tracking-tight">
           Live Position
         </h3>
