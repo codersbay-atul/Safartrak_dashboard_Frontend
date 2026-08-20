@@ -2,7 +2,7 @@ import React from "react";
 
 export const MAIN_LAYOUT_TEXT_SIZES = {
   title: "text-[16px] leading-[20px]",
-  subtitle: "text-[12px] leading-[20px]",
+  subtitle: "text-[13px] leading-[20px]",
   sectionTitle: "text-[14px] leading-[21px]",
   livePositionTitle: "text-[14px] leading-[21px] font-bold",
   badgeText: "text-[8px] leading-tight",

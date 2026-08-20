@@ -15,11 +15,28 @@ const FILTER_DEFS = [
   { label: "Offline", dotBg: "filterDotOffline" },
 ];
 
-const statusDotClass = {
-  Running: "bg-[#10b981]",
-  Idle: "bg-[#f59e0b]",
-  Critical: "bg-[#f97316]",
-  Offline: "bg-[#ef4444]",
+const STATUS_BADGE_CONFIG = {
+  Running: {
+    dot: "bg-[#10b981]",
+    badge: "bg-[#10b981]/10 text-[#10b981] border-[#10b981]/25",
+  },
+  Idle: {
+    dot: "bg-[#f59e0b]",
+    badge: "bg-[#f59e0b]/10 text-[#f59e0b] border-[#f59e0b]/25",
+  },
+  Critical: {
+    dot: "bg-[#f97316]",
+    badge: "bg-[#f97316]/10 text-[#f97316] border-[#f97316]/25",
+  },
+  Offline: {
+    dot: "bg-[#ef4444]",
+    badge: "bg-[#ef4444]/10 text-[#ef4444] border-[#ef4444]/25",
+  },
+};
+
+const DEFAULT_STATUS_BADGE = {
+  dot: "bg-zinc-500",
+  badge: "bg-zinc-800/60 text-zinc-400 border-zinc-700/50",
 };
 
 function matchesVehicleFilter(vehicle, filterLabel) {
@@ -107,7 +124,7 @@ export default function VehiclesList({
       background="surface"
       className="w-full h-full border border-[#232428] rounded-xl py-3 xl:py-4 flex flex-col select-none overflow-hidden text-white min-w-0"
     >
-      {/* Title */}
+      {/* Header */}
       <div className="mb-2.5 xl:mb-3 px-3 xl:px-4 shrink-0">
         <MainLayoutColor
           as={MainLayoutTextSize}
@@ -154,8 +171,8 @@ export default function VehiclesList({
         })}
       </div>
 
-      {/* Vehicle List Items */}
-      <div className="flex flex-col overflow-y-auto flex-1 scrollbar-thin scrollbar-thumb-zinc-800 scrollbar-track-transparent">
+      {/* Vehicle List Items with Clean Fixed Sections */}
+      <div className="flex flex-col overflow-y-auto flex-1 scrollbar-thin scrollbar-thumb-zinc-800 scrollbar-track-transparent divide-y divide-[#232428]/40">
         {filteredVehicles.map((vehicle) => {
           const isSelected = selectedId === vehicle.id;
 
@@ -164,81 +181,73 @@ export default function VehiclesList({
           );
           const driverDisplay = formatDisplayValue(vehicle.driver);
           const speedDisplay = formatDisplayValue(vehicle.speed);
-          const locationDisplay = formatVehicleLocation(vehicle, "Not Available");
+          const locationDisplay = formatVehicleLocation(vehicle, "");
+
+          const statusConfig =
+            STATUS_BADGE_CONFIG[vehicle.status] || DEFAULT_STATUS_BADGE;
 
           return (
             <div
               key={vehicle.id}
               onClick={() => handleSelectVehicle(vehicle)}
-              className={`flex items-center justify-between py-2.5 xl:py-3 px-3 xl:px-4 w-full transition-colors duration-150 gap-2 xl:gap-3 cursor-pointer min-w-0 ${
+              className={`flex items-center justify-between py-2.5 xl:py-3 px-3 xl:px-4 w-full transition-colors duration-150 gap-2 cursor-pointer min-w-0 ${
                 isSelected
                   ? "bg-[#07080a]"
                   : "bg-transparent hover:bg-[#1f2025]"
               }`}
             >
-              {/* Left Side: Plate, Status, Driver, Info */}
-              <div className="min-w-0 flex-1 flex flex-col gap-1">
-                <div className="flex items-center gap-2 leading-none min-w-0">
-                  <MainLayoutColor
-                    as={MainLayoutTextSize}
-                    color="vehiclePlate"
-                    size="plateText"
-                    className="tracking-tight shrink-0"
-                  >
-                    {plateDisplay}
-                  </MainLayoutColor>
+              {/* Left Section: Vehicle Plate & Driver / Info */}
+              <div className="min-w-0 flex-1 flex flex-col gap-1 overflow-hidden pr-1">
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="vehiclePlate"
+                  size="plateText"
+                  className="tracking-tight truncate block"
+                >
+                  {plateDisplay}
+                </MainLayoutColor>
 
-                  <span
-                    className={`w-1.5 h-1.5 rounded-full shrink-0 ${
-                      statusDotClass[vehicle.status] || "bg-zinc-500"
-                    }`}
-                  />
-
-                  <MainLayoutTextSize
-                    size="subInfoText"
-                    className={`font-semibold ${vehicle.statusColor || "text-zinc-400"} truncate`}
-                  >
-                    {vehicle.status}
-                  </MainLayoutTextSize>
-                </div>
-
-                <div className="flex items-center gap-1.5 truncate">
+                <div className="flex items-center gap-1.5 text-zinc-400 min-w-0 text-[11px] xl:text-[12px] leading-tight">
                   <MainLayoutColor
                     as={MainLayoutTextSize}
                     color="vehicleSubtext"
                     size="subInfoText"
-                    className="truncate font-normal"
+                    className="truncate font-normal shrink-0 max-w-[85px]"
                   >
                     {driverDisplay}
                   </MainLayoutColor>
 
-                  <MainLayoutColor
-                    color="separator"
-                    size="subInfoText"
-                    className="shrink-0"
-                  >
-                    •
-                  </MainLayoutColor>
+                  <span className="shrink-0 text-[#52525b]">•</span>
 
                   <MainLayoutColor
                     as={MainLayoutTextSize}
                     color="vehicleSubtext"
                     size="subInfoText"
-                    className="truncate font-normal"
+                    className="truncate font-normal min-w-0 flex-1"
                   >
                     {vehicle.info || "—"}
                   </MainLayoutColor>
                 </div>
               </div>
 
-              {/* Right Side: Speed, Location & Reusable Button */}
-              <div className="flex items-center gap-2 xl:gap-3 shrink-0">
-                <div className="text-right leading-tight min-w-0 max-w-[72px] xl:max-w-none">
+              <div className="flex items-center gap-2 xl:gap-2.5 shrink-0 ml-auto">
+                <div className="w-[62px] xl:w-[68px] flex items-center justify-center shrink-0">
+                  <span
+                    className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full border text-[9px] xl:text-[12px] font-semibold leading-none shrink-0 ${statusConfig.badge}`}
+                  >
+                    <span
+                      className={`w-1.5 h-1.5 rounded-full shrink-0 ${statusConfig.dot}`}
+                    />
+                    <span className="truncate">{vehicle.status || "Unknown"}</span>
+                  </span>
+                </div>
+
+                <div className="text-right leading-tight w-[48px] xl:w-[54px] shrink-0 flex flex-col items-end justify-center">
                   <MainLayoutColor
                     as={MainLayoutTextSize}
                     color="vehicleSpeed"
                     size="speedText"
-                    className="block"
+                    className="block font-bold tracking-tight whitespace-nowrap text-right"
                   >
                     {speedDisplay}
                   </MainLayoutColor>
@@ -247,22 +256,25 @@ export default function VehiclesList({
                     as={MainLayoutTextSize}
                     color="vehicleLocation"
                     size="locationText"
-                    className="mt-0.5 truncate block text-right font-normal"
+                    className="mt-0.5 truncate block text-right font-normal text-zinc-400 max-w-full"
                   >
                     {locationDisplay}
                   </MainLayoutColor>
                 </div>
 
-                <MainLayoutButton
-                  variant="outlineYellow"
-                  size="xs"
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    handleSelectVehicle(vehicle);
-                  }}
-                >
-                  View Details
-                </MainLayoutButton>
+                {/* 3. Button */}
+                <div className="shrink-0">
+                  <MainLayoutButton
+                    variant="outlineYellow"
+                    size="xs"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      handleSelectVehicle(vehicle);
+                    }}
+                  >
+                    View Details
+                  </MainLayoutButton>
+                </div>
               </div>
             </div>
           );
