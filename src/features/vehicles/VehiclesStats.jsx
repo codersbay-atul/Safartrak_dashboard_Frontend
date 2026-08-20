@@ -1,6 +1,7 @@
 import React from "react";
 import { Route, Map, Timer, Pause } from "lucide-react";
 import { useVehicleSummary } from "../../hooks/useVehicleSummary";
+import { MainStatsCard } from "../../components/Ui/MainLayoutUI/MainStatsCard";
 
 export default function VehicleStats() {
   const { summary, isLoading } = useVehicleSummary();

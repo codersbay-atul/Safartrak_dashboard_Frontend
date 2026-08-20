@@ -5,6 +5,7 @@ export default function MainLayoutButton({
   children,
   variant = "primary",
   size = "md",
+  textSize = "buttonText",
   icon: Icon,
   iconPosition = "left",
   fullWidthOnMobile = false,
@@ -14,6 +15,7 @@ export default function MainLayoutButton({
 }) {
   const baseStyles =
     "inline-flex flex-row items-center justify-center transition-all duration-150 rounded-lg select-none disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer focus:outline-none shrink-0 min-w-0";
+  
   const widthStyle = fullWidthOnMobile ? "w-full sm:w-auto" : "";
   
   const variants = {
@@ -24,8 +26,9 @@ export default function MainLayoutButton({
     ghost: "text-[#71717a] hover:text-white hover:bg-[#18181b]",
   };
 
+  // Only padding and gap (font sizes removed from here so MainLayoutTextSize takes full control)
   const sizes = {
-    xs: "h-7 px-2.5 xl:px-3",
+    xs: "h-7 px-2.5 xl:px-3 gap-1",
     sm: "px-2.5 py-1 gap-1.5",
     md: "px-3 py-1.5 gap-1.5",
     lg: "px-3.5 sm:px-4 py-2 gap-2",
@@ -44,7 +47,7 @@ export default function MainLayoutButton({
       )}
       
       {children && (
-        <MainLayoutTextSize size="buttonText" className="truncate max-w-full leading-none">
+        <MainLayoutTextSize size={textSize} className="truncate max-w-full leading-none whitespace-nowrap">
           {children}
         </MainLayoutTextSize>
       )}

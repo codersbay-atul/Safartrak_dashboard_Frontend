@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
 import { Truck, Gauge, Clock, Route, Timer } from "lucide-react";
+import { MainStatsCard } from "../../components/Ui/MainLayoutUI/MainStatsCard";
 import {
   displayOrDash,
   getTripField,

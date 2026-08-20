@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useVehiclesList } from "../../hooks/useVehiclesList";
 import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
-import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
+import MainLayoutTextSize, {
+  formatDisplayValue,
+  formatVehicleLocation,
+} from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
 import MainLayoutButton from "../../components/Ui/MainLayoutUI/MainLayoutButton";
 
 const FILTER_DEFS = [
@@ -104,6 +107,7 @@ export default function VehiclesList({
       background="surface"
       className="w-full h-full border border-[#232428] rounded-xl py-3 xl:py-4 flex flex-col select-none overflow-hidden text-white min-w-0"
     >
+      {/* Title */}
       <div className="mb-2.5 xl:mb-3 px-3 xl:px-4 shrink-0">
         <MainLayoutColor
           as={MainLayoutTextSize}
@@ -154,37 +158,13 @@ export default function VehiclesList({
       <div className="flex flex-col overflow-y-auto flex-1 scrollbar-thin scrollbar-thumb-zinc-800 scrollbar-track-transparent">
         {filteredVehicles.map((vehicle) => {
           const isSelected = selectedId === vehicle.id;
-          const plateDisplay =
-            vehicle.plate &&
-            vehicle.plate !== "-" &&
-            vehicle.plate !== "Not Available"
-              ? vehicle.plate
-              : vehicle.registrationNumber &&
-                  vehicle.registrationNumber !== "-" &&
-                  vehicle.registrationNumber !== "Not Available"
-                ? vehicle.registrationNumber
-                : "Not Available";
 
-          const driverDisplay =
-            vehicle.driver &&
-            vehicle.driver !== "-" &&
-            vehicle.driver !== "Not Available"
-              ? vehicle.driver
-              : "Not Available";
-
-          const speedDisplay =
-            vehicle.speed &&
-            vehicle.speed !== "-" &&
-            vehicle.speed !== "Not Available"
-              ? vehicle.speed
-              : "Not Available";
-
-          const locationDisplay =
-            vehicle.location &&
-            vehicle.location !== "-" &&
-            vehicle.location !== "Not Available"
-              ? vehicle.location
-              : "Not Available";
+          const plateDisplay = formatDisplayValue(
+            vehicle.plate || vehicle.registrationNumber
+          );
+          const driverDisplay = formatDisplayValue(vehicle.driver);
+          const speedDisplay = formatDisplayValue(vehicle.speed);
+          const locationDisplay = formatVehicleLocation(vehicle, "Not Available");
 
           return (
             <div
@@ -207,16 +187,19 @@ export default function VehiclesList({
                   >
                     {plateDisplay}
                   </MainLayoutColor>
+
                   <span
                     className={`w-1.5 h-1.5 rounded-full shrink-0 ${
                       statusDotClass[vehicle.status] || "bg-zinc-500"
                     }`}
                   />
-                  <span
-                    className={`text-[11px] font-semibold ${vehicle.statusColor} truncate`}
+
+                  <MainLayoutTextSize
+                    size="subInfoText"
+                    className={`font-semibold ${vehicle.statusColor || "text-zinc-400"} truncate`}
                   >
                     {vehicle.status}
-                  </span>
+                  </MainLayoutTextSize>
                 </div>
 
                 <div className="flex items-center gap-1.5 truncate">
@@ -228,6 +211,7 @@ export default function VehiclesList({
                   >
                     {driverDisplay}
                   </MainLayoutColor>
+
                   <MainLayoutColor
                     color="separator"
                     size="subInfoText"
@@ -235,13 +219,14 @@ export default function VehiclesList({
                   >
                     •
                   </MainLayoutColor>
+
                   <MainLayoutColor
                     as={MainLayoutTextSize}
                     color="vehicleSubtext"
                     size="subInfoText"
                     className="truncate font-normal"
                   >
-                    {vehicle.info}
+                    {vehicle.info || "—"}
                   </MainLayoutColor>
                 </div>
               </div>
@@ -257,6 +242,7 @@ export default function VehiclesList({
                   >
                     {speedDisplay}
                   </MainLayoutColor>
+
                   <MainLayoutColor
                     as={MainLayoutTextSize}
                     color="vehicleLocation"

@@ -50,7 +50,7 @@ export const MainStatsCard = ({
               <MainLayoutColor
                 as="p"
                 color="subtitle"
-                className="text-[10px] truncate mt-0.5"
+                className="text-[12px] truncate mt-0.5"
               >
                 {subtitle}
               </MainLayoutColor>
@@ -81,7 +81,7 @@ export const MainStatsCard = ({
           <MainLayoutColor
             as="span"
             color="footerText"
-            className="text-[12px] font-medium tracking-wide truncate"
+            className="text-[14px] font-medium tracking-wide truncate"
           >
             {footerText}
           </MainLayoutColor>
@@ -89,7 +89,7 @@ export const MainStatsCard = ({
           {showArrow && (
             <MainLayoutColor color="arrowIcon">
               <ArrowRight
-                size={12}
+                size={14}
                 className="group-hover:translate-x-0.5 transition-transform shrink-0"
               />
             </MainLayoutColor>

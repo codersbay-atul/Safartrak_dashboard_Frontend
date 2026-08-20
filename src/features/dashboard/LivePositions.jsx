@@ -61,15 +61,16 @@ export default function LivePositions({
           <button
             type="button"
             onClick={handleViewMap}
-            className="flex items-center gap-0.5 transition-colors cursor-pointer"
+            className="flex items-center gap-0.5 transition-colors cursor-pointer group"
           >
             <MainLayoutColor
               as={MainLayoutTextSize}
               color="yellow"
-              size="subtitle"
-              className="flex items-center gap-0.5 text-[10.5px] hover:opacity-90"
+              size="buttonText"
+              className="flex items-center gap-0.5 group-hover:opacity-90 leading-none"
             >
-              View Map <ChevronRight size={13} />
+              <span>View Map</span>
+              <ChevronRight size={14} className="shrink-0" />
             </MainLayoutColor>
           </button>
         )}
