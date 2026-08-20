@@ -6,6 +6,7 @@ import {
   CirclePause,
   BellRing,
 } from "lucide-react";
+import { MainStatsCard } from "../../components/Ui/MainLayoutUI/MainStatsCard";
 import { ACTIVITY_STATS } from "./activityData";
 import { useActivitySummary } from "../../hooks/useActivitySummary";
 

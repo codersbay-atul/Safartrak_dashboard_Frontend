@@ -19,10 +19,10 @@ import {
   TriangleAlert,
 } from "lucide-react";
 import MainLayoutButton from "../../components/Ui/MainLayoutUI/MainLayoutButton";
-import StatusBadge from "../../components/Ui/StatusBadge";
 import { toast } from "../../components/Ui/toast";
 import { ACTIVITY_DETAILS } from "./activityData";
 import useActivityNote from "../../hooks/useActivityNote";
+import MainStatusBadge from "../../components/Ui/MainLayoutUI/MainStatusBadge";
 
 const ATTACHMENT_ICONS = {
   "Dashcam Snap": Image,
@@ -120,7 +120,7 @@ export default function ActivityDetails({
         <h3 className="text-[12.5px] font-bold text-white tracking-tight">
           Activity Details
         </h3>
-        <StatusBadge label={detailsData.status} variant="active" pulse />
+        <MainStatusBadge label={detailsData.status} variant="active" pulse />
       </div>
 
       <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar px-3 py-3 flex flex-col gap-3">

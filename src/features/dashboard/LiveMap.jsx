@@ -243,11 +243,11 @@ export default function LiveMap({ selectedVehicle, showRoutePath }) {
         .replace(/'/g, "&#39;");
 
     const makeTruckDivIcon = (color, isSelected, labelText) => {
-      const boxSize = isSelected ? 48 : 42;
+      const boxSize = isSelected ? 40 : 36;
       const borderThemeColor = color;
 
       const truckSvg = encodeURIComponent(`
-        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="18" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="15" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/>
           <path d="M15 18H9"/>
           <path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/>
@@ -257,7 +257,7 @@ export default function LiveMap({ selectedVehicle, showRoutePath }) {
       `);
 
       const labelHtml = labelText
-        ? `<div style="margin-top:4px;background:rgba(23,23,28,0.9);color:#fff;padding:2px 6px;border-radius:6px;font-size:10px;font-weight:600;white-space:nowrap;border:1px solid #2a2a2f;box-shadow:0 4px 12px rgba(0,0,0,0.5);">${escapeHtml(labelText)}</div>`
+        ? `<div style="margin-top:3px;background:rgba(23,23,28,0.95);color:#fff;padding:1px 5px;border-radius:4px;font-size:9px;font-weight:600;white-space:nowrap;border:1px solid #2a2a2f;box-shadow:0 2px 8px rgba(0,0,0,0.5);">${escapeHtml(labelText)}</div>`
         : "";
 
       const html = `
@@ -267,13 +267,13 @@ export default function LiveMap({ selectedVehicle, showRoutePath }) {
             height:${boxSize}px;
             background:#141416;
             border:2px solid ${borderThemeColor};
-            border-radius:12px;
+            border-radius:10px;
             display:flex;
             align-items:center;
             justify-content:center;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+            box-shadow: 0 3px 14px rgba(0,0,0,0.6);
           ">
-            <img src="data:image/svg+xml;charset=UTF-8,${truckSvg}" style="display:block;width:22px;height:18px;" />
+            <img src="data:image/svg+xml;charset=UTF-8,${truckSvg}" style="display:block;width:18px;height:15px;" />
           </div>
           ${labelHtml}
         </div>
@@ -282,7 +282,7 @@ export default function LiveMap({ selectedVehicle, showRoutePath }) {
       return L.divIcon({
         html,
         className: "",
-        iconSize: [boxSize, boxSize + (labelText ? 22 : 0)],
+        iconSize: [boxSize, boxSize + (labelText ? 18 : 0)],
         iconAnchor: [Math.round(boxSize / 2), Math.round(boxSize / 2)],
         _label: labelText,
       });
@@ -423,36 +423,37 @@ export default function LiveMap({ selectedVehicle, showRoutePath }) {
 
       {showRoutePath ? (
         <>
-          <div className="absolute top-2.5 right-2.5 w-[calc(100%-20px)] sm:w-35 bg-[#17171C] border border-[#2A2A2F] rounded-lg p-2.5 shadow-2xl z-[1000] animate-in fade-in duration-300">
+          {/* Top-Right Mini Trip Card */}
+          <div className="absolute top-2 right-11 w-[125px] sm:w-[135px] bg-[#17171C]/95 backdrop-blur-sm border border-[#2A2A2F] rounded-lg p-2 shadow-xl z-[1000] animate-in fade-in duration-300">
             {noActiveTrip ? (
-              <p className="text-[9.5px] text-zinc-400 font-medium text-center py-1">
-                No active trip available
+              <p className="text-[8.5px] text-zinc-400 font-medium text-center py-0.5">
+                No active trip
               </p>
             ) : (
               <>
                 <div className="grid grid-cols-2 gap-1 border-b border-zinc-800/50 pb-1 mb-1">
                   <div>
-                    <p className="text-[7.5px] text-zinc-400 font-bold uppercase tracking-wider">
+                    <p className="text-[7px] text-zinc-400 font-bold uppercase tracking-wider">
                       Started
                     </p>
-                    <p className="text-[9.5px] text-white font-extrabold mt-0.5">
+                    <p className="text-[8.5px] text-white font-extrabold mt-0.5 truncate">
                       {displayOrDash(startedAt)}
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="text-[7.5px] text-zinc-400 font-bold uppercase tracking-wider">
+                    <p className="text-[7px] text-zinc-400 font-bold uppercase tracking-wider">
                       ETA
                     </p>
-                    <p className="text-[9.5px] text-white font-extrabold mt-0.5">
+                    <p className="text-[8.5px] text-white font-extrabold mt-0.5 truncate">
                       {displayOrDash(eta)}
                     </p>
                   </div>
                 </div>
                 <div>
-                  <p className="text-[7.5px] text-zinc-400 font-bold uppercase tracking-wider">
-                    Destination
+                  <p className="text-[7px] text-zinc-400 font-bold uppercase tracking-wider">
+                    Dest.
                   </p>
-                  <p className="text-[9.5px] text-white font-bold truncate mt-0.5">
+                  <p className="text-[8.5px] text-white font-bold truncate mt-0.5">
                     {displayOrDash(destination)}
                   </p>
                 </div>
@@ -460,49 +461,50 @@ export default function LiveMap({ selectedVehicle, showRoutePath }) {
             )}
           </div>
 
-          <div className="absolute bottom-2.5 left-2.5 w-[calc(100%-20px)] sm:w-[185px] bg-[#17171C] border border-[#2A2A2F] rounded-lg p-2.5 shadow-2xl z-[1000] animate-in fade-in duration-300">
+          {/* Bottom-Left Mini Route Card */}
+          <div className="absolute bottom-2 left-2 w-[140px] sm:w-[155px] bg-[#17171C]/95 backdrop-blur-sm border border-[#2A2A2F] rounded-lg p-2 shadow-xl z-[1000] animate-in fade-in duration-300">
             {noActiveTrip ? (
-              <p className="text-[9px] text-zinc-400 font-medium text-center py-1">
-                No active trip available
+              <p className="text-[8.5px] text-zinc-400 font-medium text-center py-0.5">
+                No active trip
               </p>
             ) : (
               <>
                 <div className="grid grid-cols-3 gap-1 border-b border-zinc-800/50 pb-1 mb-1">
                   <div>
-                    <p className="text-[7px] text-zinc-400 font-bold uppercase tracking-wider">
-                      Trip ID
+                    <p className="text-[6.5px] text-zinc-400 font-bold uppercase tracking-wider">
+                      Trip
                     </p>
-                    <p className="text-[9px] text-[#FDBB24] font-extrabold mt-0.5">
+                    <p className="text-[8px] text-[#FDBB24] font-extrabold mt-0.5 truncate">
                       {displayOrDash(tripId)}
                     </p>
                   </div>
                   <div className="text-center">
-                    <p className="text-[7px] text-zinc-400 font-bold uppercase tracking-wider">
+                    <p className="text-[6.5px] text-zinc-400 font-bold uppercase tracking-wider">
                       ETA
                     </p>
-                    <p className="text-[9px] text-white font-extrabold mt-0.5">
+                    <p className="text-[8px] text-white font-extrabold mt-0.5 truncate">
                       {displayOrDash(eta)}
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="text-[7px] text-zinc-400 font-bold uppercase tracking-wider">
-                      Started
+                    <p className="text-[6.5px] text-zinc-400 font-bold uppercase tracking-wider">
+                      Start
                     </p>
-                    <p className="text-[9px] text-white font-extrabold mt-0.5">
+                    <p className="text-[8px] text-white font-extrabold mt-0.5 truncate">
                       {displayOrDash(startedAt)}
                     </p>
                   </div>
                 </div>
-                <div className="flex flex-col gap-0.5 text-[8.5px]">
+                <div className="flex flex-col gap-0.5 text-[8px]">
                   <div className="flex items-center justify-between">
-                    <span className="text-zinc-400">Origin</span>
-                    <span className="text-white font-bold truncate max-w-[95px]">
+                    <span className="text-zinc-400">Orig.</span>
+                    <span className="text-white font-bold truncate max-w-[80px]">
                       {displayOrDash(origin)}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-zinc-400">Dest.</span>
-                    <span className="text-white font-bold truncate max-w-[95px]">
+                    <span className="text-white font-bold truncate max-w-[80px]">
                       {displayOrDash(destination)}
                     </span>
                   </div>
@@ -513,39 +515,34 @@ export default function LiveMap({ selectedVehicle, showRoutePath }) {
         </>
       ) : (
         <>
-          <span className="absolute top-16 left-[62%] text-[10px] font-bold text-zinc-500/40 uppercase tracking-widest pointer-events-none z-[1000]">
+          <span className="absolute top-12 left-[62%] text-[9px] font-bold text-zinc-500/30 uppercase tracking-widest pointer-events-none z-[1000]">
             Delhi
           </span>
-          <span className="absolute top-[36%] left-[50%] text-[11px] font-extrabold text-zinc-500/20 uppercase tracking-widest pointer-events-none z-[1000]">
+          <span className="absolute top-[34%] left-[45%] text-[10px] font-extrabold text-zinc-500/20 uppercase tracking-widest pointer-events-none z-[1000]">
             New Delhi
-          </span>
-          <span className="absolute top-[52%] left-[12%] text-[8px] font-semibold text-zinc-500/20 uppercase tracking-tight pointer-events-none z-[1000]">
-            Dhaula Kuan
-          </span>
-          <span className="absolute top-[54%] left-[34%] text-[8px] font-semibold text-zinc-500/20 uppercase tracking-tight pointer-events-none z-[1000]">
-            Chanakyapuri
           </span>
 
           {vehicle ? (
-            <div className="absolute top-[56%] left-2.5 right-2.5 sm:left-[24%] sm:right-auto z-[1000] flex flex-col items-start pointer-events-auto">
-              <div className="w-full sm:w-[160px] bg-[#17171C] border border-[#2A2A2F] rounded-lg p-2.5 shadow-2xl">
-                <div className="flex items-center justify-between border-b border-zinc-800/80 pb-1.5 mb-1.5">
-                  <span className="text-[9.5px] font-extrabold text-white tracking-tight">
+            /* Vehicle Detail Mini Card (Narrower width: 125px) */
+            <div className="absolute top-[52%] left-2 z-[1000] flex flex-col items-start pointer-events-auto">
+              <div className="w-[125px] sm:w-[135px] bg-[#17171C]/95 backdrop-blur-sm border border-[#2A2A2F] rounded-lg p-2 shadow-xl">
+                <div className="flex items-center justify-between border-b border-zinc-800/80 pb-1 mb-1">
+                  <span className="text-[8.5px] font-extrabold text-white tracking-tight truncate max-w-[75px]">
                     {displayOrDash(vehicle.plate)}
                   </span>
-                  <span className="text-[8px] text-[#FDBB24] font-semibold tracking-wide uppercase">
+                  <span className="text-[7.5px] text-[#FDBB24] font-semibold tracking-wide uppercase shrink-0">
                     {displayOrDash(vehicle.type)}
                   </span>
                 </div>
-                <div className="flex justify-between text-[8.5px] leading-tight mb-1">
+                <div className="flex justify-between text-[8px] leading-tight mb-0.5">
                   <span className="text-zinc-400 font-medium">Speed</span>
                   <span className="font-bold text-white">
                     {displayOrDash(vehicle.speed)}
                   </span>
                 </div>
-                <div className="flex justify-between text-[8.5px] leading-tight">
-                  <span className="text-zinc-400 font-medium">Distance</span>
-                  <span className="font-bold text-white">
+                <div className="flex justify-between text-[8px] leading-tight">
+                  <span className="text-zinc-400 font-medium">Dist.</span>
+                  <span className="font-bold text-white truncate max-w-[50px] text-right">
                     {displayOrDash(
                       getTripField(vehicle, [
                         "distance_km",
@@ -561,47 +558,49 @@ export default function LiveMap({ selectedVehicle, showRoutePath }) {
         </>
       )}
 
-      <div className="absolute right-2.5 top-2.5 z-[1000]">
+      {/* Top-Right Layer Button */}
+      <div className="absolute right-2 top-2 z-[1000]">
         <button
           type="button"
-          className="w-7.5 h-7.5 rounded-lg bg-[#17171C] border border-[#2A2A2F] text-zinc-400 hover:text-white flex items-center justify-center transition-colors shadow-lg cursor-pointer"
+          className="w-6.5 h-6.5 rounded-md bg-[#17171C]/90 backdrop-blur-sm border border-[#2A2A2F] text-zinc-400 hover:text-white flex items-center justify-center transition-colors shadow-lg cursor-pointer"
         >
-          <Layers size={12} />
+          <Layers size={11} />
         </button>
       </div>
 
-      <div className="absolute right-2.5 bottom-2.5 z-[1000] flex flex-col bg-[#17171C] border border-[#2A2A2F] rounded-lg shadow-xl overflow-hidden">
+      {/* Bottom-Right Controls */}
+      <div className="absolute right-2 bottom-2 z-[1000] flex flex-col bg-[#17171C]/90 backdrop-blur-sm border border-[#2A2A2F] rounded-md shadow-xl overflow-hidden">
         <button
           type="button"
           onClick={handleToggleMaximize}
           aria-label={isMaximized ? "Minimize map" : "Maximize map"}
-          className="w-7.5 h-7.5 text-zinc-400 hover:text-white border-b border-[#2A2A2F]/60 flex items-center justify-center transition-colors cursor-pointer"
+          className="w-6.5 h-6.5 text-zinc-400 hover:text-white border-b border-[#2A2A2F]/60 flex items-center justify-center transition-colors cursor-pointer"
         >
-          {isMaximized ? <Minimize2 size={11} /> : <Maximize2 size={11} />}
+          {isMaximized ? <Minimize2 size={10} /> : <Maximize2 size={10} />}
         </button>
         <button
           type="button"
           onClick={handleLocate}
           aria-label="Locate vehicle"
-          className="w-7.5 h-7.5 text-zinc-400 hover:text-white border-b border-[#2A2A2F]/60 flex items-center justify-center transition-colors cursor-pointer"
+          className="w-6.5 h-6.5 text-zinc-400 hover:text-white border-b border-[#2A2A2F]/60 flex items-center justify-center transition-colors cursor-pointer"
         >
-          <LocateFixed size={11} />
+          <LocateFixed size={10} />
         </button>
         <button
           type="button"
           onClick={handleZoomIn}
           aria-label="Zoom in"
-          className="w-7.5 h-7.5 text-zinc-400 hover:text-white border-b border-[#2A2A2F]/60 flex items-center justify-center transition-colors cursor-pointer"
+          className="w-6.5 h-6.5 text-zinc-400 hover:text-white border-b border-[#2A2A2F]/60 flex items-center justify-center transition-colors cursor-pointer"
         >
-          <Plus size={11} />
+          <Plus size={10} />
         </button>
         <button
           type="button"
           onClick={handleZoomOut}
           aria-label="Zoom out"
-          className="w-7.5 h-7.5 text-zinc-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+          className="w-6.5 h-6.5 text-zinc-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
         >
-          <Minus size={11} />
+          <Minus size={10} />
         </button>
       </div>
     </div>

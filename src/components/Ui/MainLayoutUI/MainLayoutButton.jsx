@@ -3,58 +3,40 @@ import MainLayoutTextSize from "./MainLayoutTextSize";
 
 export default function MainLayoutButton({
   children,
-  variant = "primary",
-  size = "md",
-  textSize = "buttonText",
-  icon: Icon,
-  iconPosition = "left",
-  fullWidthOnMobile = false,
+  variant = "outlineYellow",
+  size = "xs",
   className = "",
-  type = "button",
+  onClick,
   ...props
 }) {
-  const baseStyles =
-    "inline-flex flex-row items-center justify-center transition-all duration-150 rounded-lg select-none disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer focus:outline-none shrink-0 min-w-0";
-  
-  const widthStyle = fullWidthOnMobile ? "w-full sm:w-auto" : "";
-  
-  const variants = {
-    primary: "bg-[#FDB914] text-black hover:bg-[#e0a31f] active:scale-[0.98]",
-    secondary: "bg-[#18181b]/60 border border-[#27272a] text-[#d4d4d8] hover:bg-[#27272a] hover:text-white",
-    outlineYellow: "border border-[#FDB914]/70 text-[#FDB914] bg-transparent hover:bg-[#FDB914]/10 active:scale-[0.98]",
-    danger: "bg-rose-500/10 border border-rose-500/20 text-rose-400 hover:bg-rose-500/20",
-    ghost: "text-[#71717a] hover:text-white hover:bg-[#18181b]",
+  const sizeClasses = {
+    xs: "px-2.5 py-1 text-[11px] xl:text-[12px] h-7 rounded-lg",
+    sm: "px-3 py-1.5 text-[12px] xl:text-[13px] h-8 rounded-lg",
+    md: "px-4 py-2 text-[13px] xl:text-[14px] h-9 rounded-xl",
   };
 
-  // Only padding and gap (font sizes removed from here so MainLayoutTextSize takes full control)
-  const sizes = {
-    xs: "h-7 px-2.5 xl:px-3 gap-1",
-    sm: "px-2.5 py-1 gap-1.5",
-    md: "px-3 py-1.5 gap-1.5",
-    lg: "px-3.5 sm:px-4 py-2 gap-2",
+  const variantClasses = {
+    outlineYellow:
+      "border border-[#FDB914]/70 text-[#FDB914] bg-transparent hover:bg-[#FDB914]/10 transition-colors duration-150 font-medium",
+    solidYellow:
+      "bg-[#FDB914] text-black hover:bg-[#FDB914]/90 transition-colors duration-150 font-semibold",
+    outlineMuted:
+      "border border-zinc-700 text-zinc-300 hover:bg-zinc-800 transition-colors duration-150",
   };
 
-  const iconSizes = { xs: 11, sm: 11, md: 12, lg: 14 };
+  const chosenSize = sizeClasses[size] || sizeClasses.xs;
+  const chosenVariant = variantClasses[variant] || variantClasses.outlineYellow;
 
   return (
     <button
-      type={type}
-      className={`${baseStyles} ${widthStyle} ${variants[variant] || variants.primary} ${sizes[size] || sizes.md} ${className}`.trim()}
+      type="button"
+      onClick={onClick}
+      className={`inline-flex items-center justify-center cursor-pointer select-none whitespace-nowrap focus:outline-none ${chosenSize} ${chosenVariant} ${className}`.trim()}
       {...props}
     >
-      {Icon && iconPosition === "left" && (
-        <Icon size={iconSizes[size] || 12} className="shrink-0" />
-      )}
-      
-      {children && (
-        <MainLayoutTextSize size={textSize} className="truncate max-w-full leading-none whitespace-nowrap">
-          {children}
-        </MainLayoutTextSize>
-      )}
-
-      {Icon && iconPosition === "right" && (
-        <Icon size={iconSizes[size] || 12} className="shrink-0" />
-      )}
+      <MainLayoutTextSize size="buttonText">
+        {children}
+      </MainLayoutTextSize>
     </button>
   );
 }

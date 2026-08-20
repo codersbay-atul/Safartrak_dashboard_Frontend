@@ -1,5 +1,5 @@
 const SIDEBAR_TEXT_SIZES = {
-  item: "text-[14px] leading-[18px] font-normal not-italic",
+  item: "text-[14px] leading-[18px] font-medium",
 };
 
 export default function SideTextSize({

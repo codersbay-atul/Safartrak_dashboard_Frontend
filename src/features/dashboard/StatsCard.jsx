@@ -1,11 +1,12 @@
-import { Truck, TriangleAlert, Circle, CircleSmall, LocateOff } from "lucide-react";
+import React from "react";
+import { Truck, Circle, LocateOff } from "lucide-react";
 import { useDashboardSummary } from "../../hooks/useDashboardSummary";
 import { useNavigate } from "react-router-dom";
+import { MainStatsCard } from "../../components/Ui/MainLayoutUI/MainStatsCard";
 import {
   DASHBOARD_SUMMARY_PLACEHOLDER,
   mapDashboardSummary,
 } from "./mapDashboardSummary";
-import { MainStatsCard } from "../../components/Ui/MainLayoutUI/MainStatsCard";
 
 const VALUE_SKELETON = (
   <span
@@ -16,7 +17,6 @@ const VALUE_SKELETON = (
 
 function buildStatsData(summary, { isLoading = false } = {}) {
   const values = summary ?? DASHBOARD_SUMMARY_PLACEHOLDER;
-
   const valueOrSkeleton = (value) => (isLoading ? VALUE_SKELETON : value);
 
   return [
@@ -83,7 +83,6 @@ export default function StatsCard() {
 
   const showLoadingSkeleton = isLoading && !data;
 
-  // Error / empty / unmapped → "Not Available" (never hardcoded KPI numbers).
   const resolvedSummary = isError
     ? DASHBOARD_SUMMARY_PLACEHOLDER
     : summary ??

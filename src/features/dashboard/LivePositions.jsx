@@ -44,15 +44,15 @@ export default function LivePositions({
       as="div"
       background="surface"
       ref={panelRef}
-      className="w-full h-full min-h-0 border border-[#1f1f23]/60 rounded-xl flex flex-col select-none overflow-hidden relative"
+      className="w-full h-full min-h-0 min-w-0 border border-[#1f1f23]/60 rounded-xl flex flex-col select-none overflow-hidden relative"
     >
-      {/* Header Area */}
-      <div className="flex items-center justify-between p-3 border-b border-[#1f1f23]/60 bg-[#141414]/90 z-10 shrink-0">
+      {/* Header Area - Compact padding and sizing */}
+      <div className="flex items-center justify-between px-3 py-2 xl:px-3.5 xl:py-2.5 border-b border-[#1f1f23]/60 bg-[#141414]/90 z-10 shrink-0">
         <MainLayoutColor
           as={MainLayoutTextSize}
           color="title"
           size="sectionTitle"
-          className="tracking-tight block truncate"
+          className="tracking-tight block truncate text-[13px] xl:text-[14px]"
         >
           Live Position
         </MainLayoutColor>
@@ -61,22 +61,23 @@ export default function LivePositions({
           <button
             type="button"
             onClick={handleViewMap}
-            className="flex items-center gap-0.5 transition-colors cursor-pointer group"
+            className="flex items-center gap-0.5 transition-opacity hover:opacity-85 cursor-pointer shrink-0"
           >
             <MainLayoutColor
               as={MainLayoutTextSize}
               color="yellow"
-              size="buttonText"
-              className="flex items-center gap-0.5 group-hover:opacity-90 leading-none"
+              size="captionText"
+              className="flex items-center gap-0.5 leading-none font-semibold text-[11px] xl:text-[12px]"
             >
               <span>View Map</span>
-              <ChevronRight size={14} className="shrink-0" />
+              <ChevronRight size={13} className="shrink-0" />
             </MainLayoutColor>
           </button>
         )}
       </div>
 
-      <div className="flex-1 min-h-0 w-full h-full relative overflow-hidden bg-[#161619]">
+      {/* Map Area */}
+      <div className="flex-1 min-h-0 w-full relative overflow-hidden bg-[#161619]">
         <LiveMap selectedVehicle={selectedVehicle} showRoutePath={showRoutePath} />
       </div>
     </MainLayoutColor>

@@ -14,7 +14,7 @@ export default function MainLayoutHeader({
         as={MainLayoutTextSize}
         color="white"
         size="title"
-        className="block truncate"
+        className="block truncate font-medium"
       >
         {title}
       </MainLayoutColor>
@@ -24,7 +24,7 @@ export default function MainLayoutHeader({
           as={MainLayoutTextSize}
           color="subtitle"
           size="subtitle"
-          className="mt-1 block truncate max-w-full xl:max-w-xl 2xl:max-w-2xl"
+          className="mt-1 block truncate max-w-full xl:max-w-xl 2xl:max-w-2xl font-normal"
         >
           {subtitle}
         </MainLayoutColor>

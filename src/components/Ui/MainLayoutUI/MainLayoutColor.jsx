@@ -12,18 +12,19 @@ const MAIN_LAYOUT_COLORS = {
   title: "text-[rgb(255,255,255)]",
   white: "text-[rgb(255,255,255)]",
   text: "text-[rgb(255,255,255)]",
-  subtitle: "text-[#71717A]",
+  subtitle: "text-[#A8A8A8]",
   footerText: "text-[#9D6F00]",
+  kpiTitle: "text-[#9D6F00]",
   grey: "text-[#A8A8A8]",
   muted: "text-[#A1A1AA]",
-  yellow: "text-[#FCBA12]",
+  yellow: "text-[#FDB914]", 
 
   // Filter Buttons & Counts
   filterTextActive: "text-[rgb(255,255,255)]",
   filterTextInactive: "text-[#8e8e93]",
   filterCount: "text-[#8e8e93]",
 
-  // Filter Indicator Dots (Backgrounds)
+  // Filter Indicator Dots
   filterDotAll: "bg-[#8e8e93]",
   filterDotMoving: "bg-[#10b981]",
   filterDotIdle: "bg-[#f59e0b]",
@@ -32,7 +33,7 @@ const MAIN_LAYOUT_COLORS = {
 
   // Vehicle List & Card Specific
   vehiclePlate: "text-[rgb(255,255,255)]",
-  vehicleSubtext: "text-[#8e8e93]",
+  vehicleSubtext: "text-[#A8A8A8]",
   vehicleSpeed: "text-[rgb(255,255,255)]",
   vehicleLocation: "text-[#8e8e93]",
   separator: "text-[#52525b]",
@@ -67,10 +68,13 @@ const MAIN_LAYOUT_COLORS = {
   defaultStatusBg: "bg-zinc-500/10",
   defaultStatusDot: "bg-[#a1a1aa]",
 
-  // Action / UI Elements
-  arrowIcon: "text-[#ffd60a]",
-  buttonText: "text-[#eab308]",
-  buttonBorder: "border-[#eab308]/70",
+  // Action / UI Elements & Buttons
+  arrowIcon: "text-[#FDB914]",
+  buttonText: "text-[#FDB914]",
+  buttonBorder: "border-[#FDB914]/70",
+  actionButtonText: "text-[#FDB914]",
+  actionButtonBorder: "border-[#FDB914]/70",
+  actionButtonHoverBg: "hover:bg-[#FDB914]/10",
 };
 
 export default function MainLayoutColor({

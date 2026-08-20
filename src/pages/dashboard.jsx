@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 import RouteDashboardHeader from "../features/route-details/RouteDashboardHeader";
@@ -14,49 +14,20 @@ import { toast } from "../components/Ui/toast";
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const [selectedVehicle, setSelectedVehicle] = useState(() => {
-    const savedVehicle = localStorage.getItem("selectedVehicle");
-    return savedVehicle ? JSON.parse(savedVehicle) : null;
-  });
 
+  // Refresh par initial state humesha null & false rahegi
+  const [selectedVehicle, setSelectedVehicle] = useState(null);
   const [vehicleSearch, setVehicleSearch] = useState("");
-
-  // Route Details Page ke liye State
-  const [isRouteView, setIsRouteView] = useState(() => {
-    return localStorage.getItem("isRouteView") === "true";
-  });
-
-  // Pure Full Screen Map ke liye State
+  const [isRouteView, setIsRouteView] = useState(false);
   const [isFullMapView, setIsFullMapView] = useState(false);
-
-  const [showDetailsPanel, setShowDetailsPanel] = useState(() => {
-    return localStorage.getItem("showDetailsPanel") === "true";
-  });
-
-  useEffect(() => {
-    if (selectedVehicle) {
-      localStorage.setItem("selectedVehicle", JSON.stringify(selectedVehicle));
-    } else {
-      localStorage.removeItem("selectedVehicle");
-    }
-  }, [selectedVehicle]);
-
-  useEffect(() => {
-    localStorage.setItem("isRouteView", isRouteView);
-  }, [isRouteView]);
-
-  useEffect(() => {
-    localStorage.setItem("showDetailsPanel", showDetailsPanel);
-  }, [showDetailsPanel]);
+  const [showDetailsPanel, setShowDetailsPanel] = useState(false);
 
   const exitRouteView = () => setIsRouteView(false);
 
-  // 1. "View Map" Click -> Pure Full Screen Map Open Karega
   const handleOpenFullMap = () => {
     setIsFullMapView(true);
   };
 
-  // 2. "View Details" Click -> Route Details Page Open Karega
   const handleOpenRouteDetails = () => {
     setIsRouteView(true);
   };
@@ -107,7 +78,6 @@ export default function Dashboard() {
       onExitRouteView={exitRouteView}
     >
       <div className="relative flex-1 min-h-0 overflow-hidden flex flex-col">
-        
         {/* A. NORMAL DASHBOARD VIEW */}
         <div
           className={`absolute inset-0 flex flex-col gap-2.5 xl:gap-3 overflow-hidden min-h-0 ${
@@ -128,38 +98,49 @@ export default function Dashboard() {
           </div>
 
           <div className="flex flex-col min-[1152px]:flex-row gap-2.5 min-[1152px]:gap-3 xl:gap-3.5 items-stretch w-full flex-1 min-h-0 overflow-y-auto min-[1152px]:overflow-hidden">
-            <div className="w-full min-[1152px]:w-[clamp(260px,32%,360px)] xl:w-[380px] 2xl:w-[400px] h-[320px] min-[1152px]:h-full min-h-0 overflow-hidden transition-all duration-300 shrink-0">
+            {/* 1. Vehicles List Panel */}
+            <div className="w-full min-[1152px]:w-[clamp(380px,38%,440px)] xl:w-[450px] 2xl:w-[480px] h-[340px] min-[1152px]:h-full min-h-0 overflow-hidden transition-all duration-300 shrink-0">
               <VehiclesList
                 search={vehicleSearch}
                 selectedVehicle={selectedVehicle}
                 onSelectVehicle={(v) => {
                   setSelectedVehicle(v);
-                  setShowDetailsPanel(true);
+                  // Row click par details card open nahi hoga
+                }}
+                onViewDetails={(v) => {
+                  setSelectedVehicle(v);
+                  setShowDetailsPanel(true); // Sirf "View Details" tap par card open hoga
                 }}
               />
             </div>
 
-            <div className="w-full shrink-0 h-[360px] min-[1152px]:flex-1 min-[1152px]:h-full min-w-0 min-[1152px]:min-w-[200px] min-h-0 overflow-hidden">
+            {/* 2. Live Position Map Panel */}
+            <div className="w-full shrink-0 h-[360px] min-[1152px]:flex-1 min-[1152px]:h-full min-w-0 min-[1152px]:min-w-[240px] min-h-0 overflow-hidden">
               <LivePositions
                 selectedVehicle={selectedVehicle}
                 showRoutePath={false}
-                openInNewTab={true}
-                onViewDetails={handleOpenRouteDetails}
+                openInNewTab={false}
+                onViewMap={handleOpenFullMap}
               />
             </div>
 
+            {/* 3. Vehicle Details Panel (Only opens when View Details button is clicked) */}
             {selectedVehicle && showDetailsPanel && (
-              <div className="w-full min-[1152px]:w-[clamp(220px,24%,280px)] xl:w-[300px] 2xl:w-[320px] shrink-0 h-[480px] min-[1152px]:h-full min-h-0 overflow-hidden animate-in slide-in-from-right-5 duration-300">
+              <div className="w-full min-[1152px]:w-[clamp(240px,22%,290px)] xl:w-[310px] 2xl:w-[330px] shrink-0 h-[480px] min-[1152px]:h-full min-h-0 overflow-hidden animate-in slide-in-from-right-5 duration-300">
                 <VehiclesDetail
                   vehicle={selectedVehicle}
                   onViewRoute={handleOpenRouteDetails}
+                  onClose={() => {
+                    setShowDetailsPanel(false);
+                    setSelectedVehicle(null);
+                  }}
                 />
               </div>
             )}
           </div>
         </div>
 
-        {/* B. ROUTE DETAILS PAGE VIEW ("View Details" Tap Karne Par) */}
+        {/* B. ROUTE DETAILS VIEW */}
         {isRouteView && !isFullMapView ? (
           <div className="absolute inset-0 flex flex-col gap-2.5 overflow-hidden min-h-0 z-20 bg-[#070708]">
             <div className="shrink-0 flex items-center gap-3">
@@ -183,7 +164,8 @@ export default function Dashboard() {
                 <LivePositions
                   selectedVehicle={selectedVehicle}
                   showRoutePath={true}
-                  openInNewTab={true}
+                  openInNewTab={false}
+                  onViewMap={handleOpenFullMap}
                 />
               </div>
               <div className="w-[clamp(260px,28%,320px)] xl:w-[320px] 2xl:w-[350px] shrink-0 h-full min-h-0 overflow-hidden">
@@ -200,7 +182,7 @@ export default function Dashboard() {
           </div>
         ) : null}
 
-        {/* C. PURE FULL SCREEN MAP VIEW ("View Map" Tap Karne Par) */}
+        {/* C. FULL SCREEN MAP VIEW */}
         {isFullMapView && (
           <div className="fixed inset-0 z-[9999] bg-[#0c0c0e] w-screen h-screen flex flex-col overflow-hidden">
             <div className="absolute top-4 left-4 z-[10000]">
@@ -218,12 +200,11 @@ export default function Dashboard() {
               <LivePositions
                 selectedVehicle={selectedVehicle}
                 showRoutePath={true}
-                openInNewTab={true}
+                hideViewMapButton={true}
               />
             </div>
           </div>
         )}
-
       </div>
     </MainLayout>
   );

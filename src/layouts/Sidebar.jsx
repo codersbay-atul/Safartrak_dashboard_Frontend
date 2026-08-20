@@ -151,9 +151,14 @@ export default function Sidebar() {
           <div className="px-3 overflow-y-auto flex-1 flex flex-col gap-4 custom-scrollbar">
             {sections.map((section) => (
               <div key={section.title} className="flex flex-col gap-0.5">
-                <h4 className="text-[10px] font-semibold leading-[10px] tracking-wider uppercase text-[#71717A] mb-1 px-1">
+                {/* Reusable Title Color Apply kiya gaya hai */}
+                <SideColor
+                  as="h4"
+                  color="title"
+                  className="text-[10px] font-semibold leading-[10px] tracking-wider uppercase mb-1 px-1"
+                >
                   {section.title}
-                </h4>
+                </SideColor>
 
                 <div className="flex flex-col gap-2">
                   {section.items.map((item) => {

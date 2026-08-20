@@ -1,6 +1,7 @@
 import React from "react";
 import { ArrowRight } from "lucide-react";
 import MainLayoutColor from "./MainLayoutColor";
+import MainLayoutTextSize from "./MainLayoutTextSize";
 
 export const MainStatsCard = ({
   value,
@@ -40,17 +41,19 @@ export const MainStatsCard = ({
 
             <div className="leading-tight min-w-0">
               <MainLayoutColor
-                as="h2"
+                as={MainLayoutTextSize}
                 color="title"
-                className="text-[13px] sm:text-[14px] font-bold tracking-tight truncate"
+                size="title"
+                className="text-[13px] sm:text-[14px] font-medium tracking-tight truncate block"
               >
                 {value}
               </MainLayoutColor>
 
               <MainLayoutColor
-                as="p"
+                as={MainLayoutTextSize}
                 color="subtitle"
-                className="text-[12px] truncate mt-0.5"
+                size="subtitle"
+                className="text-[12px] truncate mt-0.5 block"
               >
                 {subtitle}
               </MainLayoutColor>
@@ -63,8 +66,9 @@ export const MainStatsCard = ({
                 <div key={metric.label} className="flex items-center gap-1 justify-end">
                   <span className={`w-1.5 h-1.5 rounded-sm shrink-0 ${metric.color}`} />
                   <MainLayoutColor
-                    as="span"
+                    as={MainLayoutTextSize}
                     color="subtitle"
+                    size="captionText"
                     className="text-[10px] whitespace-nowrap"
                   >
                     {metric.label}
@@ -79,9 +83,10 @@ export const MainStatsCard = ({
       {footerText && (
         <div className="flex items-center justify-between w-full pt-1.5 mt-1 border-t border-[#1d1d20]/40 shrink-0">
           <MainLayoutColor
-            as="span"
-            color="footerText"
-            className="text-[14px] font-medium tracking-wide truncate"
+            as={MainLayoutTextSize}
+            color="kpiTitle"
+            size="kpiTitle"
+            className="truncate block"
           >
             {footerText}
           </MainLayoutColor>

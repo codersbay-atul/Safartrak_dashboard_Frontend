@@ -1,5 +1,8 @@
+import React from "react";
+
 const SIDEBAR_COLORS = {
   text: "text-[rgb(255,255,255)]",
+  title: "text-[#A8A8A8]", // Reusable title color (#A8A8A8)
   background: "bg-[#141414]",
   icon: "text-[#FDB914]",
 };
