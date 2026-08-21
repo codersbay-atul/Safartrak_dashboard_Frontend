@@ -44,7 +44,6 @@ export const MainStatsCard = ({
                 as={MainLayoutTextSize}
                 color="title"
                 size="title"
-                className="text-[13px] sm:text-[14px] font-medium tracking-tight truncate block"
               >
                 {value}
               </MainLayoutColor>
@@ -52,8 +51,7 @@ export const MainStatsCard = ({
               <MainLayoutColor
                 as={MainLayoutTextSize}
                 color="subtitle"
-                size="subtitle"
-                className="text-[12px] truncate mt-0.5 block"
+                size="subtitle" 
               >
                 {subtitle}
               </MainLayoutColor>
@@ -69,7 +67,7 @@ export const MainStatsCard = ({
                     as={MainLayoutTextSize}
                     color="subtitle"
                     size="captionText"
-                    className="text-[10px] whitespace-nowrap"
+                    
                   >
                     {metric.label}
                   </MainLayoutColor>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Dropdown from "../../components/Ui/DropDown";
+import MainDropDown from "../../components/Ui/MainLayoutUI/MainDropDown";
 
 // Dropdown Options
 const MAINTENANCE_INTERVAL_OPTIONS = [
@@ -149,7 +149,7 @@ export default function MaintenanceInfo({ onNext, onCancel }) {
             <label className="block text-[#a1a1aa] mb-1 font-medium">
               Maintenance Interval
             </label>
-            <Dropdown
+            <MainDropDown
               label="Select Interval"
               options={MAINTENANCE_INTERVAL_OPTIONS}
               selectedValue={formData.maintenanceInterval}

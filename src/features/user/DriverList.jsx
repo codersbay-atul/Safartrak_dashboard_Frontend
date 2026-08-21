@@ -1,8 +1,8 @@
 
 import React, { useState, useEffect } from "react";
 import { Search } from "lucide-react";
-import Dropdown from "../../components/Ui/DropDown";
 import { getPendingUsers, getUsers } from "../../api/userApi";
+import MainDropDown from "../../components/Ui/MainLayoutUI/MainDropDown";
 
 const ROLE_OPTIONS = [
   { label: "Role", value: "All" },
@@ -94,7 +94,7 @@ export default function DriverList({ selectedUser, onSelectUser, refreshTrigger 
         </h2>
 
         <div className="flex items-center gap-1.5">
-          <Dropdown
+          <MainDropDown
             label="Role"
             options={ROLE_OPTIONS}
             selectedValue={roleFilter}
@@ -102,7 +102,7 @@ export default function DriverList({ selectedUser, onSelectUser, refreshTrigger 
             className="rounded-full bg-[#18181b]/80 border-[#27272a] py-0.5 px-2 text-[10px] text-[#a1a1aa] hover:border-[#3f3f46] hover:text-white transition-colors"
           />
 
-          <Dropdown
+          <MainDropDown
             label="Status"
             options={STATUS_OPTIONS}
             selectedValue={statusFilter}

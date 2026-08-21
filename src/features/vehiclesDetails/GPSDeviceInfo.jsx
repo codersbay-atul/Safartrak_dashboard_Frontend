@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import Dropdown from "../../components/Ui/DropDown";
+import MainDropDown from "../../components/Ui/MainLayoutUI/MainDropDown";
+
 
 const NETWORK_PROVIDER_OPTIONS = [
   { label: "Airtel", value: "Airtel" },
@@ -131,7 +132,7 @@ export default function GPSDeviceInfo({ onNext, onCancel }) {
             <label className="block text-[#a1a1aa] mb-1 font-medium">
               Network Provider
             </label>
-            <Dropdown
+            <MainDropDown
               label="Select Provider"
               options={NETWORK_PROVIDER_OPTIONS}
               selectedValue={formData.networkProvider}

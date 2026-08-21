@@ -5,8 +5,7 @@ import {
   Unlock,
   ArrowDown,
 } from "lucide-react";
-import MainLayout from "../../layouts/MainLayout";
-import Dropdown from "../../components/Ui/DropDown";
+import MainDropDown from "../../components/Ui/MainLayoutUI/MainDropDown";
 import { getCommands } from "../../api/mobilizeApi";
 
 const getStatusBadge = (status) => {
@@ -78,7 +77,7 @@ const normalizeCommandRow = (row = {}, index) => {
   };
 };
 
-export default function CommandHistoryPage() {
+export default function CommandHistory() {
   const [historyData, setHistoryData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCommand, setSelectedCommand] = useState("All commands");
@@ -126,8 +125,7 @@ export default function CommandHistoryPage() {
   }, [historyData, searchTerm]);
 
   return (
-    <MainLayout activeTab="Command History">
-      <div className="w-full min-h-full bg-[#09090b] text-white p-6 font-sans">
+    <div className="w-full min-h-full text-white font-sans">
         <div className="mb-6">
           <h1 className="text-xl font-semibold text-white tracking-tight mb-1">
             Command History
@@ -145,7 +143,7 @@ export default function CommandHistoryPage() {
 
             <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto">
               <div className="w-full sm:w-auto">
-                <Dropdown
+                <MainDropDown
                   label="All commands"
                   options={COMMAND_OPTIONS}
                   selectedValue={selectedCommand}
@@ -155,7 +153,7 @@ export default function CommandHistoryPage() {
               </div>
 
               <div className="w-full sm:w-auto">
-                <Dropdown
+                <MainDropDown
                   label="All Status"
                   options={STATUS_OPTIONS}
                   selectedValue={selectedStatus}
@@ -243,7 +241,6 @@ export default function CommandHistoryPage() {
             </table>
           </div>
         </div>
-      </div>
-    </MainLayout>
+    </div>
   );
 }

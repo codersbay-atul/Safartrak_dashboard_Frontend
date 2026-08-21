@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Dropdown from "../../components/Ui/DropDown";
 import { toast } from "../../components/Ui/toast";
+import MainDropDown from "../../components/Ui/MainLayoutUI/MainDropDown";
 
 // Dropdown Options
 const VEHICLE_TYPE_OPTIONS = [
@@ -149,7 +149,7 @@ export default function VehiclesBasicInfo({ onNext, onCancel, uniqueId, onSaved,
 
           <div>
             <label className="block text-[#a1a1aa] mb-1 font-medium">Vehicle Type</label>
-            <Dropdown
+            <MainDropdown
               label="Select Vehicle Type"
               options={VEHICLE_TYPE_OPTIONS}
               selectedValue={formData.vehicleType}
@@ -164,7 +164,7 @@ export default function VehiclesBasicInfo({ onNext, onCancel, uniqueId, onSaved,
         <div className="grid grid-cols-2 gap-2.5">
           <div>
             <label className="block text-[#a1a1aa] mb-1 font-medium">Manufacturer</label>
-            <Dropdown
+            <MainDropDown
               label="Select Manufacturer Name"
               options={MANUFACTURER_OPTIONS}
               selectedValue={formData.manufacturer}
@@ -205,7 +205,7 @@ export default function VehiclesBasicInfo({ onNext, onCancel, uniqueId, onSaved,
         <div className="grid grid-cols-2 gap-2.5">
           <div>
             <label className="block text-[#a1a1aa] mb-1 font-medium">Capacity (Ton)</label>
-            <Dropdown
+            <MainDropDown
               label="Enter Capacity (Ton)"
               options={CAPACITY_OPTIONS}
               selectedValue={formData.capacity}
@@ -216,7 +216,7 @@ export default function VehiclesBasicInfo({ onNext, onCancel, uniqueId, onSaved,
 
           <div>
             <label className="block text-[#a1a1aa] mb-1 font-medium">Fuel Type</label>
-            <Dropdown
+            <MainDropdown
               label="Enter Fuel Type"
               options={FUEL_TYPE_OPTIONS}
               selectedValue={formData.fuelType}

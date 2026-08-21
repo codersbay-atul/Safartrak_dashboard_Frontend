@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Check } from "lucide-react";
-import Dropdown from "../../components/Ui/DropDown";
+import MainDropDown from "../../components/Ui/MainLayoutUI/MainDropDown";
 
 const NETWORK_PROVIDER_OPTIONS = [
   { label: "Airtel", value: "airtel" },
@@ -140,7 +140,7 @@ export default function AddGPSDeviceModal({ isOpen, onClose, onNext }) {
           <div className="grid grid-cols-2 gap-2.5">
             <div>
               <label className="block text-[#a1a1aa] mb-1 font-medium">Network Provider</label>
-              <Dropdown
+              <MainDropDown
                 label="Select Network Provider"
                 options={NETWORK_PROVIDER_OPTIONS}
                 selectedValue={formData.networkProvider}

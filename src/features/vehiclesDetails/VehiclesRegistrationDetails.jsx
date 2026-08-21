@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import Dropdown from "../../components/Ui/DropDown";
+
 import { toast } from "../../components/Ui/toast";
+import MainDropDown from "../../components/Ui/MainLayoutUI/MainDropDown";
 
 // Dropdown Options
 const PERMIT_TYPE_OPTIONS = [
@@ -175,7 +176,7 @@ export default function VehiclesRegistrationDetails({ onNext, onCancel, uniqueId
 
           <div>
             <label className="block text-[#a1a1aa] mb-1 font-medium">Permit Type</label>
-            <Dropdown
+            <MainDropDown
               label="Select Permit Type"
               options={PERMIT_TYPE_OPTIONS}
               selectedValue={formData.permitType}

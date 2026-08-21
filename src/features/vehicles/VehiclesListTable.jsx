@@ -4,9 +4,10 @@ import {
   AlertCircle,
   RefreshCw,
 } from "lucide-react";
-import Dropdown from "../../components/Ui/DropDown";
+
 import useVehiclesList from "../../hooks/useVehiclesList";
 import MainSearchInput from "../../components/Ui/MainLayoutUI/MainSearchInput";
+import MainDropDown from "../../components/Ui/MainLayoutUI/MainDropDown";
 
 const FLEET_OPTIONS = [
   { label: "Fleet Group", value: "" },
@@ -82,7 +83,7 @@ export default function VehicleListTable() {
           </div>
 
           <div className="flex flex-wrap items-center justify-end gap-2.5">
-            <Dropdown
+            <MainDropDown
               label="Fleet Group"
               options={FLEET_OPTIONS}
               selectedValue={selectedFleet}
@@ -93,7 +94,7 @@ export default function VehicleListTable() {
               className="rounded-full bg-[#121215] border-[#27272a] text-[#a1a1aa] py-1.5"
             />
 
-            <Dropdown
+            <MainDropDown
               label="Vehicle Type"
               options={VEHICLE_OPTIONS}
               selectedValue={selectedVehicleType}
@@ -104,7 +105,7 @@ export default function VehicleListTable() {
               className="rounded-full bg-[#121215] border-[#27272a] text-[#a1a1aa] py-1.5"
             />
 
-            <Dropdown
+            <MainDropDown
               label="Tracking status"
               options={TRACKING_OPTIONS}
               selectedValue={selectedTrackingStatus}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useLayoutEffect } from "react";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import {
   LayoutDashboard,
@@ -23,10 +23,23 @@ import SideColor from "../components/Ui/SidebarUI/SideColor";
 import SideIcon from "../components/Ui/SidebarUI/SideIcon";
 import SideTextSize from "../components/Ui/SidebarUI/SideTextSize";
 
+let globalSidebarScrollTop = 0;
+
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const scrollContainerRef = useRef(null);
+
+  const handleScroll = (e) => {
+    globalSidebarScrollTop = e.currentTarget.scrollTop;
+  };
+
+  useLayoutEffect(() => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTop = globalSidebarScrollTop;
+    }
+  });
 
   const routeMap = {
     Dashboard: "/dashboard",
@@ -148,10 +161,14 @@ export default function Sidebar() {
             )}
           </div>
 
-          <div className="px-3 overflow-y-auto flex-1 flex flex-col gap-4 custom-scrollbar">
+          <div
+            ref={scrollContainerRef}
+            onScroll={handleScroll}
+            style={{ scrollBehavior: "auto" }}
+            className="px-3 overflow-y-auto flex-1 flex flex-col gap-4 custom-scrollbar"
+          >
             {sections.map((section) => (
               <div key={section.title} className="flex flex-col gap-0.5">
-                {/* Reusable Title Color Apply kiya gaya hai */}
                 <SideColor
                   as="h4"
                   color="title"
@@ -168,6 +185,7 @@ export default function Sidebar() {
                       <NavLink
                         key={item.label}
                         to={targetPath}
+                        preventScrollReset={true}
                         onClick={handleNavigation}
                         className={({ isActive }) =>
                           `flex items-center gap-2.5 w-full h-8 px-2 rounded-lg transition ${

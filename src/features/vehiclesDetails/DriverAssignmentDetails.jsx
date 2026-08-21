@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import Dropdown from "../../components/Ui/DropDown";
+import MainDropDown from "../../components/Ui/MainLayoutUI/MainDropDown";
+
 
 const SHIFT_OPTIONS = [
   { label: "Day Shift", value: "Day Shift" },
@@ -157,7 +158,7 @@ export default function DriverAssignmentDetails({ onNext, onCancel }) {
 
         <div>
           <label className="block text-[#a1a1aa] mb-1 font-medium">Shift</label>
-          <Dropdown
+          <MainDropDown
             label="Select Shift"
             options={SHIFT_OPTIONS}
             selectedValue={formData.shift}

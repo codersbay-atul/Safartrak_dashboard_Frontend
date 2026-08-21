@@ -1,18 +1,19 @@
-
 import React, { useState, useEffect, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 import MobilizeHeader from "../features/mobilize/MobilizeHeader";
 import MobilizeStats from "../features/mobilize/MobilizeStats";
 import MobilizeVehicleList from "../features/mobilize/MobilizeVehicleList";
 import VehicleControlCard from "../features/mobilize/VehicleControlCard";
+
 import { getCommandVehicles, sendVehicleCommand } from "../api/mobilizeApi";
 
 import VehicleControlConfirmation from "../features/mobilize/VehicleControlConfirmation";
 import VehiclesControlMobilized from "../features/mobilize/VehiclesControlMobilized";
+import CommandHistoryHeader from "../features/mobilize/CommandHistoryHeader";
+import CommandHistory from "../features/mobilize/CommandHistory";
 
 export default function Mobilize() {
-  const navigate = useNavigate();
+  const [activeView, setActiveView] = useState("mobilize"); // "mobilize" | "history"
   const [searchQuery, setSearchQuery] = useState("");
   const [fleetFilter, setFleetFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -21,11 +22,29 @@ export default function Mobilize() {
   const [selectedVehicle, setSelectedVehicle] = useState(null);
   const [loadingVehicles, setLoadingVehicles] = useState(false);
 
+  // Command History Filter States
+  const [commandSearch, setCommandSearch] = useState("");
+  const [selectedCommand, setSelectedCommand] = useState("All commands");
+  const [selectedStatus, setSelectedStatus] = useState("All Status");
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [pendingVehicle, setPendingVehicle] = useState(null);
   const [isSendingCommand, setIsSendingCommand] = useState(false);
   const [commandError, setCommandError] = useState(null);
+
+  const COMMAND_OPTIONS = [
+    { label: "All commands", value: "All commands" },
+    { label: "Immobilize", value: "Immobilize" },
+    { label: "Mobilize", value: "Mobilize" },
+  ];
+
+  const STATUS_OPTIONS = [
+    { label: "All Status", value: "All Status" },
+    { label: "Completed", value: "Completed" },
+    { label: "Pending", value: "Pending" },
+    { label: "Failed", value: "Failed" },
+  ];
 
   const filteredVehicles = useMemo(() => {
     const query = debouncedSearchQuery.trim().toLowerCase();
@@ -64,7 +83,6 @@ export default function Mobilize() {
         !query || plate.includes(query) || driver.includes(query) || city.includes(query);
 
       const matchesStatus = statusFilter === "all" || status === statusFilter;
-
       const matchesFleet = fleetFilter === "all" || city === fleetFilter.toLowerCase();
 
       return matchesSearch && matchesStatus && matchesFleet;
@@ -155,7 +173,6 @@ export default function Mobilize() {
 
   const handleConfirmImmobilize = () => {
     if (!pendingVehicle) return;
-
     setCommandError(null);
     setCurrentStep(3);
   };
@@ -197,63 +214,82 @@ export default function Mobilize() {
 
   return (
     <MainLayout activeTab="Mobilize / Immobilize">
-      <div className="flex-1 flex flex-col gap-2.5 min-h-0 overflow-y-auto min-[1152px]:overflow-hidden text-white bg-[#09090b]">
-        <div className="shrink-0">
-          <MobilizeHeader
-            onSearch={(value) => setSearchQuery(value)}
-            fleetFilter={fleetFilter}
-            onFleetChange={setFleetFilter}
-            onHistoryClick={() => navigate("/command-history")}
+      {activeView === "history" ? (
+        <div className="flex-1 flex flex-col gap-4 min-h-0 overflow-y-auto pr-0.5 text-white custom-scrollbar">
+          <div className="shrink-0">
+            <CommandHistoryHeader
+              commandOptions={COMMAND_OPTIONS}
+              onCommandChange={setSelectedCommand}
+              statusOptions={STATUS_OPTIONS}
+              onStatusChange={setSelectedStatus}
+              onSearchChange={setCommandSearch}
+            />
+          </div>
+          <CommandHistory
+            selectedCommand={selectedCommand}
+            selectedStatus={selectedStatus}
+            searchTerm={commandSearch}
           />
         </div>
+      ) : (
+        <div className="flex-1 flex flex-col gap-2.5 min-h-0 overflow-y-auto min-[1152px]:overflow-hidden pr-0.5 text-white custom-scrollbar">
+          <div className="shrink-0">
+            <MobilizeHeader
+              onSearch={(value) => setSearchQuery(value)}
+              fleetFilter={fleetFilter}
+              onFleetChange={setFleetFilter}
+              onHistoryClick={() => setActiveView("history")}
+            />
+          </div>
 
-        <div className="shrink-0">
-          <MobilizeStats />
+          <div className="shrink-0">
+            <MobilizeStats />
+          </div>
+
+          <div className="flex flex-col min-[1152px]:flex-row gap-3.5 items-stretch w-full flex-1 min-h-0 overflow-y-auto min-[1152px]:overflow-hidden">
+            <div className="w-full min-[1152px]:flex-1 shrink-0 h-[420px] min-[1152px]:h-full min-h-0 overflow-hidden">
+              <MobilizeVehicleList
+                vehicles={filteredVehicles}
+                activeFilter={statusFilter}
+                onFilterChange={setStatusFilter}
+                onAction={handleAction}
+                onSelectVehicle={handleSelectVehicle}
+                selectedVehicle={selectedVehicle}
+              />
+            </div>
+
+            <div className="w-full min-[1152px]:w-[320px] xl:w-[340px] shrink-0 h-[380px] min-[1152px]:h-full min-h-0 overflow-hidden">
+              <VehicleControlCard
+                vehicle={selectedVehicle}
+                onRequestImmobilize={handleRequestImmobilize}
+                isListLoading={loadingVehicles}
+              />
+            </div>
+          </div>
+
+          {isModalOpen && currentStep === 2 && (
+            <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-4">
+              <VehicleControlConfirmation
+                vehicle={pendingVehicle || selectedVehicle}
+                onCancel={handleCloseModal}
+                onConfirm={handleConfirmImmobilize}
+              />
+            </div>
+          )}
+
+          {isModalOpen && currentStep === 3 && (
+            <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-4">
+              <VehiclesControlMobilized
+                vehicle={pendingVehicle || selectedVehicle}
+                onCancel={handleCloseModal}
+                onSendCommand={handleSendCommand}
+                isSending={isSendingCommand}
+                error={commandError}
+              />
+            </div>
+          )}
         </div>
-
-        <div className="flex flex-col min-[1152px]:flex-row gap-3.5 items-stretch w-full flex-1 min-h-0 overflow-y-auto min-[1152px]:overflow-hidden">
-          <div className="w-full min-[1152px]:flex-1 shrink-0 h-[420px] min-[1152px]:h-full min-h-0 overflow-hidden">
-            <MobilizeVehicleList
-              vehicles={filteredVehicles}
-              activeFilter={statusFilter}
-              onFilterChange={setStatusFilter}
-              onAction={handleAction}
-              onSelectVehicle={handleSelectVehicle}
-              selectedVehicle={selectedVehicle}
-            />
-          </div>
-
-          <div className="w-full min-[1152px]:w-[320px] xl:w-[340px] shrink-0 h-[380px] min-[1152px]:h-full min-h-0 overflow-hidden">
-            <VehicleControlCard
-              vehicle={selectedVehicle}
-              onRequestImmobilize={handleRequestImmobilize}
-              isListLoading={loadingVehicles}
-            />
-          </div>
-        </div>
-
-        {isModalOpen && currentStep === 2 && (
-          <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-4">
-            <VehicleControlConfirmation
-              vehicle={pendingVehicle || selectedVehicle}
-              onCancel={handleCloseModal}
-              onConfirm={handleConfirmImmobilize}
-            />
-          </div>
-        )}
-
-        {isModalOpen && currentStep === 3 && (
-          <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-4">
-            <VehiclesControlMobilized
-              vehicle={pendingVehicle || selectedVehicle}
-              onCancel={handleCloseModal}
-              onSendCommand={handleSendCommand}
-              isSending={isSendingCommand}
-              error={commandError}
-            />
-          </div>
-        )}
-      </div>
+      )}
     </MainLayout>
   );
 }

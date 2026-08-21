@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import MainLayoutButton from "../../components/Ui/MainLayoutUI/MainLayoutButton";
-import Dropdown from "../../components/Ui/DropDown";
+import MainDropDown from "../../components/Ui/MainLayoutUI/MainDropDown";
+
 
 const VEHICLE_TYPE_OPTIONS = [
   { label: "Truck", value: "Truck" },
@@ -134,7 +135,7 @@ export default function AddVehicleModal({ isOpen, onClose, onNext }) {
           <div className="grid grid-cols-2 gap-2">
             <div>
               <label className="block text-[#a1a1aa] mb-0.5 font-medium">Vehicle Type</label>
-              <Dropdown
+              <MainDropDown
                 label="Enter Vehicle Type"
                 options={VEHICLE_TYPE_OPTIONS}
                 selectedValue={formData.vehicleType}

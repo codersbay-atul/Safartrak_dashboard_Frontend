@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Dropdown from "../../components/Ui/DropDown";
+import MainDropDown from "../../components/Ui/MainLayoutUI/MainDropDown";
 
 const DRIVER_OPTIONS = [
   { label: "John Doe", value: "driver1" },
@@ -90,7 +90,7 @@ export default function AddDriverModal({ isOpen, onClose, onNext, onBack }) {
           
           <div>
             <label className="block text-[#a1a1aa] mb-1 font-medium">Assign Driver</label>
-            <Dropdown
+            <MainDropDown
               label="Select Assign Driver"
               options={DRIVER_OPTIONS}
               selectedValue={formData.assignDriver}

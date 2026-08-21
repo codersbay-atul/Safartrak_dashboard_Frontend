@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Dropdown from "../../components/Ui/DropDown";
+import MainDropDown from "../../components/Ui/MainLayoutUI/MainDropDown";
 
 const DEFAULT_FORM = {
   fullName: "",
@@ -273,7 +273,7 @@ export default function UserInfo({
             <div className="w-full flex flex-col min-w-0">
               <label className="block text-[#71717a] mb-1 font-medium">Department</label>
               <div className="w-full [&>div]:w-full [&_button]:w-full [&_button]:justify-between">
-                <Dropdown
+                <MainDropDown
                   label="Select Department"
                   options={departmentOptions}
                   selectedValue={formData.department}
@@ -291,7 +291,7 @@ export default function UserInfo({
             <div className="w-full flex flex-col min-w-0">
               <label className="block text-[#71717a] mb-1 font-medium">Role</label>
               <div className="w-full [&>div]:w-full [&_button]:w-full [&_button]:justify-between">
-                <Dropdown
+                <MainDropDown
                   label="Select Role"
                   options={roleOptions}
                   selectedValue={formData.role}
@@ -306,7 +306,7 @@ export default function UserInfo({
             <div className="w-full flex flex-col min-w-0">
               <label className="block text-[#71717a] mb-1 font-medium">Assigned Fleet</label>
               <div className="w-full [&>div]:w-full [&_button]:w-full [&_button]:justify-between">
-                <Dropdown
+                <MainDropdown
                   label="Select Assigned Fleet"
                   options={fleetOptions}
                   selectedValue={formData.assignedFleet}
@@ -323,7 +323,7 @@ export default function UserInfo({
           <div className="w-full flex flex-col">
             <label className="block text-[#71717a] mb-1 font-medium">Reporting Manager</label>
             <div className="w-full [&>div]:w-full [&_button]:w-full [&_button]:justify-between">
-              <Dropdown
+              <MainDropdown
                 label="Select Reporting Manager"
                 options={managerOptions}
                 selectedValue={formData.reportingManager}

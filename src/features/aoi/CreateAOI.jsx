@@ -3,8 +3,8 @@ import { X } from "lucide-react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
-import Dropdown from "../../components/Ui/DropDown";
 import MainSearchInput from "../../components/Ui/MainLayoutUI/MainSearchInput";
+import MainDropDown from "../../components/Ui/MainLayoutUI/MainDropDown";
 
 function MapController({ center, zoom }) {
   const map = useMap();
@@ -221,7 +221,7 @@ export default function CreateAOI({ isOpen = true, initialData = null, mode = "c
               <label className="text-xs font-medium text-zinc-400 tracking-wide">
                 Assign Vehicles
               </label>
-              <Dropdown
+              <MainDropDown
                 label="Select vehicles..."
                 options={vehicleOptions}
                 selectedValue={selectedVehicles[0] || ""}
@@ -234,7 +234,7 @@ export default function CreateAOI({ isOpen = true, initialData = null, mode = "c
               <label className="text-xs font-medium text-zinc-400 tracking-wide">
                 Type of Place
               </label>
-              <Dropdown
+              <MainDropDown
                 label="Select type"
                 options={aoiTypeOptions}
                 selectedValue={aoiType}

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { CheckCircle2, Calendar, Clock, AlertCircle } from "lucide-react";
-import Dropdown from "../../components/Ui/DropDown";
+import MainDropDown from "../../components/Ui/MainLayoutUI/MainDropDown";
 
 const MAINTENANCE_TYPE_OPTIONS = [
   { label: "Preventive Maintenance", value: "Preventive" },
@@ -110,7 +110,7 @@ export default function ScheduleMaintenance({ onClose, onCancel, onNext }) {
             <label className="block text-[#a1a1aa] mb-1 font-medium">
               Maintenance Type
             </label>
-            <Dropdown
+            <MainDropDown
               label="Select Maintenance Type"
               options={MAINTENANCE_TYPE_OPTIONS}
               selectedValue={maintData.maintenanceType}
@@ -155,7 +155,7 @@ export default function ScheduleMaintenance({ onClose, onCancel, onNext }) {
             <label className="block text-[#a1a1aa] mb-1 font-medium">
               Estimated Duration
             </label>
-            <Dropdown
+            <MainDropDown
               label="Select Duration"
               options={DURATION_OPTIONS}
               selectedValue={maintData.duration}

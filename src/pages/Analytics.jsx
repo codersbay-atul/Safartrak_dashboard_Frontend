@@ -46,7 +46,7 @@ export default function Analytics() {
 
   return (
     <MainLayout activeTab="Analytics">
-      <div className="flex-1 flex flex-col gap-2.5 min-h-0 overflow-y-auto text-white bg-[#09090b] custom-scrollbar">
+      <div className="flex-1 flex flex-col gap-2.5 min-h-0 overflow-y-auto min-[1152px]:overflow-hidden pr-0.5 text-white custom-scrollbar">
         <div className="shrink-0">
           <AnalyticsHeader onExportClick={handleExport} />
         </div>

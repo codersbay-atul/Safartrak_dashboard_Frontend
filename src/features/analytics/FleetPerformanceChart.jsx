@@ -74,7 +74,7 @@ export default function FleetPerformanceChart({
   range = "24h",
   onRangeChange,
 }) {
-  const { series, lastUpdated, isLoading, isFetching, refetch, isError } =
+  const { series, lastUpdated, isLoading, isFetching, refetch } =
     useAnalyticsDistanceSeries(range);
 
   const geometry = useMemo(() => buildChartGeometry(series), [series]);
@@ -86,7 +86,7 @@ export default function FleetPerformanceChart({
     <MainLayoutColor
       as="div"
       background="surface"
-      className="w-full h-full border border-[#1f1f23] rounded-2xl p-4 flex flex-col justify-between shadow-xl select-none"
+      className="w-full h-full flex flex-col justify-between select-none"
     >
       <div className="flex flex-wrap items-center justify-between gap-4 pb-2">
         <div className="flex items-center gap-3">
@@ -95,7 +95,6 @@ export default function FleetPerformanceChart({
               as={MainLayoutTextSize}
               color="title"
               size="sectionTitle"
-              className="font-bold tracking-tight block"
             >
               Fleet Distance
             </MainLayoutColor>
@@ -108,7 +107,7 @@ export default function FleetPerformanceChart({
               Last Updated: {formatLastUpdated(lastUpdated)}
             </MainLayoutColor>
           </div>
-          
+
           <MainLayoutTextSize
             as="span"
             size="badgeText"
@@ -143,11 +142,11 @@ export default function FleetPerformanceChart({
                   onClick={() => onRangeChange?.(option.key)}
                   className={`px-2.5 py-0.5 rounded-md transition-colors ${
                     isActive
-                      ? "bg-[#27272a] text-white font-bold shadow"
+                      ? "bg-[#27272a] text-white shadow"
                       : "text-zinc-400 hover:text-zinc-200 font-semibold cursor-pointer"
                   }`}
                 >
-                  <MainLayoutTextSize size="metricText">
+                  <MainLayoutTextSize size="filterText">
                     {option.label}
                   </MainLayoutTextSize>
                 </button>

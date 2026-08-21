@@ -1,13 +1,12 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import MainLayout from "../layouts/MainLayout";
 import ReportsHeader from "../features/reports/ReportsHeader";
-import ReportCard from "../components/Ui/ReportCard";
+import ReportCard from "../features/reports/ReportCard";
 import ReportResults from "../features/reports/ReportResults";
 import TripReportHeader from "../features/reports/TripReportHeader";
 import VehicleFilterReport from "../features/reports/VehiclesFilterReport";
 import TripPerformanceSummary from "../features/reports/TripPerformanceSummary";
 
-import { useReportTypes } from "../hooks/useReportTypes";
 import {
   isReportTypeUnavailableError,
   useGenerateReport,
@@ -56,6 +55,7 @@ export default function Reports() {
   const [reportResult, setReportResult] = useState(null);
   const [resultError, setResultError] = useState(null);
   const [lastPayload, setLastPayload] = useState(null);
+  const [isGenerating, setIsGenerating] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
 
   const [filterData, setFilterData] = useState({
@@ -65,58 +65,18 @@ export default function Reports() {
     toDate: defaultDateRange().to,
   });
 
-  const { reports, isLoading, isError } = useReportTypes();
   const generateMutation = useGenerateReport();
 
-  const filteredReports = useMemo(() => {
-    const query = searchQuery.trim().toLowerCase();
-    if (!query) return reports;
-    return reports.filter((report) => {
-      return (
-        report.title.toLowerCase().includes(query) ||
-        report.description.toLowerCase().includes(query)
-      );
-    });
-  }, [reports, searchQuery]);
-
-  const handleGenerateCardReport = async (report) => {
+  const handleReportSelect = ({ report, result, error, lastPayload: payload, isLoading }) => {
     setActiveReport(report);
-    setReportResult(null);
-    setResultError(null);
-
-    if (report.type === "prediction") {
-      setResultError("Report type currently unavailable");
-      return;
-    }
-
-    const { from, to } = defaultDateRange();
-    let vehicles = [];
-
-    try {
-      if (report.type === "trip" || report.raw?.requires_vehicles === true) {
-        const vehiclePayload = await getVehiclesList({ page: 1, page_size: 100 });
-        vehicles = (vehiclePayload?.results ?? [])
-          .map((v) => v.unique_id ?? v.uniqueId)
-          .filter(Boolean);
-      }
-
-      const body = buildGenerateBody(report, { from, to, vehicles });
-      setLastPayload(body);
-
-      const result = await generateMutation.mutateAsync(body);
-      setReportResult(result ?? { rows: [], totals: {}, count: 0 });
-    } catch (error) {
-      if (isReportTypeUnavailableError(error)) {
-        setResultError("Report type currently unavailable");
-      } else {
-        setResultError(error?.message || "Failed to generate report");
-      }
-      setReportResult(null);
-    }
+    setReportResult(result);
+    setResultError(error);
+    setLastPayload(payload);
+    setIsGenerating(isLoading);
   };
 
   const handleGenerateCustomReport = async (filtersOverride) => {
-    const targetReport = reports.find((r) => r.type === "trip") || reports[0] || { type: "trip" };
+    const targetReport = { type: "trip" };
     setResultError(null);
 
     const currentFilters = filtersOverride || filterData;
@@ -137,7 +97,7 @@ export default function Reports() {
     try {
       if (currentFilters.vehicle) {
         vehicles = [currentFilters.vehicle];
-      } else if (targetReport.type === "trip" || targetReport.raw?.requires_vehicles === true) {
+      } else {
         const vehiclePayload = await getVehiclesList({ page: 1, page_size: 100 });
         vehicles = (vehiclePayload?.results ?? [])
           .map((v) => v.unique_id ?? v.uniqueId)
@@ -150,7 +110,6 @@ export default function Reports() {
       const result = await generateMutation.mutateAsync(body);
       const apiResult = result ?? { rows: [], totals: {}, count: 0 };
 
-      // Map API rows into UI-friendly shape for TripPerformanceSummary
       const mappedRows = (apiResult.rows ?? []).map((r) => ({
         id: r.unique_id ?? r.uniqueId ?? r.id,
         vehicleName: r.vehicle ?? r.vehicle_number ?? r.plate ?? "-",
@@ -214,6 +173,7 @@ export default function Reports() {
     setReportResult(null);
     setResultError(null);
     setLastPayload(null);
+    setIsGenerating(false);
     setIsCustomReportView(false);
   };
 
@@ -280,42 +240,17 @@ export default function Reports() {
               <ReportResults
                 title={activeReport.title}
                 result={reportResult}
-                isLoading={generateMutation.isPending}
+                isLoading={isGenerating || generateMutation.isPending}
                 isExporting={isExporting}
                 errorMessage={resultError}
                 onBack={handleBack}
                 onExport={handleExport}
               />
-            ) : isLoading ? (
-              <div className="flex flex-1 items-center justify-center rounded-xl border border-dashed border-[#27272a] bg-[#121214]/60 px-4 py-16">
-                <p className="text-[11px] text-[#71717a]">Loading...</p>
-              </div>
-            ) : isError ? (
-              <div className="flex flex-1 items-center justify-center rounded-xl border border-dashed border-[#27272a] bg-[#121214]/60 px-4 py-16">
-                <p className="text-[11px] text-[#71717a]">Failed to load reports</p>
-              </div>
-            ) : reports.length === 0 ? (
-              <div className="flex flex-1 items-center justify-center rounded-xl border border-dashed border-[#27272a] bg-[#121214]/60 px-4 py-16">
-                <p className="text-[11px] text-[#71717a]">No reports available</p>
-              </div>
-            ) : filteredReports.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 pb-1">
-                {filteredReports.map((report) => (
-                  <ReportCard
-                    key={report.id}
-                    title={report.title}
-                    description={report.description}
-                    icon={report.icon}
-                    onClick={() => handleGenerateCardReport(report)}
-                  />
-                ))}
-              </div>
             ) : (
-              <div className="flex flex-1 items-center justify-center rounded-xl border border-dashed border-[#27272a] bg-[#121214]/60 px-4 py-16">
-                <p className="text-[11px] text-[#71717a]">
-                  No reports match &ldquo;{searchQuery}&rdquo;
-                </p>
-              </div>
+              <ReportCard
+                searchQuery={searchQuery}
+                onReportSelect={handleReportSelect}
+              />
             )}
           </>
         )}

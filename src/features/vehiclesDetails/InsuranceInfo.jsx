@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Dropdown from "../../components/Ui/DropDown";
+import MainDropDown from "../../components/Ui/MainLayoutUI/MainDropDown";
 
 // Dropdown Options
 const COVERAGE_TYPE_OPTIONS = [
@@ -121,7 +121,7 @@ export default function InsuranceInfo({ onNext, onCancel }) {
         <div className="grid grid-cols-2 gap-2.5">
           <div>
             <label className="block text-[#a1a1aa] mb-1 font-medium">Coverage Type</label>
-            <Dropdown
+            <MainDropDown
               label="Select Coverage Type"
               options={COVERAGE_TYPE_OPTIONS}
               selectedValue={formData.coverageType}

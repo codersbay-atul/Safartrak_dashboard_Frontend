@@ -145,7 +145,7 @@ export default function Users() {
 
   return (
     <MainLayout activeTab="Users">
-      <div className="flex-1 flex flex-col gap-2.5 min-h-0 overflow-y-auto min-[1152px]:overflow-hidden text-white bg-[#09090b]">
+      <div className="flex-1 flex flex-col gap-2.5 min-h-0 overflow-y-auto min-[1152px]:overflow-hidden pr-0.5 text-white custom-scrollbar">
         <div className="shrink-0">
           <UserHeader onAddUserClick={handleAddUser} />
         </div>

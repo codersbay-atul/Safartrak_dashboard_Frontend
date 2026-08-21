@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Search, ArrowUpDown } from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
 import { getAnalyticsPerformance } from "../../api/analyticsApi";
+import MainSearchInput from "../../components/Ui/MainLayoutUI/MainSearchInput";
+import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
+import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
 
 function formatDistance(item) {
   if (
@@ -136,57 +139,121 @@ export default function PerformanceSummaryList({ range = "24h" }) {
   );
 
   return (
-    <div className="w-full bg-[#121214] border border-[#1f1f23] rounded-2xl p-4 font-sans text-white shadow-xl">
+    <MainLayoutColor
+      as="div"
+      background="surface"
+      className="w-full h-full flex flex-col justify-between font-sans text-white select-none"
+    >
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
-        <h3 className="text-sm font-semibold tracking-wide text-white">
+        <MainLayoutColor
+          as={MainLayoutTextSize}
+          color="title"
+          size="sectionTitle"
+          className="text-white"
+        >
           Performance Summary
-        </h3>
+        </MainLayoutColor>
 
         <div className="flex items-center gap-2">
           <button
             type="button"
-            className="flex items-center gap-2 px-3 py-1.5 bg-[#18181c] hover:bg-[#222226] border border-[#27272a] rounded-xl text-xs font-medium text-[#a1a1aa] transition-colors"
+            className="flex items-center gap-2 px-3 py-1.5 bg-[#18181c] hover:bg-[#222226] border border-[#27272a] rounded-full text-xs font-medium text-[#a1a1aa] transition-colors h-[34px]"
           >
             <span>Sort by</span>
             <ArrowUpDown className="w-3.5 h-3.5 text-[#a1a1aa]" />
           </button>
 
-          <div className="relative flex items-center">
-            <input
-              type="text"
-              placeholder="Search Vehicle..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-48 sm:w-56 bg-[#09090b] border border-[#27272a] focus:border-[#3f3f46] rounded-xl pl-3 pr-8 py-1.5 text-xs text-white placeholder-[#71717a] outline-none transition-all"
-            />
-            <Search className="w-3.5 h-3.5 text-[#71717a] absolute right-2.5 pointer-events-none" />
-          </div>
+          <MainSearchInput
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Search Vehicle..."
+            iconPosition="right"
+            containerClassName="w-48 sm:w-56"
+            className="!rounded-full !bg-[#09090b] !border-[#27272a] h-[34px] py-1.5 text-xs text-white placeholder-[#71717a]"
+          />
         </div>
       </div>
 
       <div className="w-full overflow-x-auto">
-        <table className="w-full text-left border-collapse min-w-[600px]">
+        <table className="w-full table-fixed border-collapse min-w-[650px]">
           <thead>
-            <tr className="bg-[#18181c]/60 text-[11px] font-normal text-[#8e8e93]">
-              <th className="py-2.5 px-4 rounded-l-lg">Vehicle Number</th>
-              <th className="py-2.5 px-4">Vehicle Type</th>
-              <th className="py-2.5 px-4">Distance</th>
-              <th className="py-2.5 px-4">Change</th>
-              <th className="py-2.5 px-4 rounded-r-lg">Contribution</th>
+            <tr className="bg-[#18181c]/60 font-normal">
+              <th className="w-1/5 py-2.5 px-4 text-left rounded-l-lg">
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="metricText"
+                  className="font-normal"
+                >
+                  Vehicle Number
+                </MainLayoutColor>
+              </th>
+              <th className="w-1/5 py-2.5 px-4 text-left">
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="metricText"
+                  className="font-normal"
+                >
+                  Vehicle Type
+                </MainLayoutColor>
+              </th>
+              <th className="w-1/5 py-2.5 px-4 text-left">
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="metricText"
+                  className="font-normal"
+                >
+                  Distance
+                </MainLayoutColor>
+              </th>
+              <th className="w-1/5 py-2.5 px-4 text-left">
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="metricText"
+                  className="font-normal"
+                >
+                  Change
+                </MainLayoutColor>
+              </th>
+              <th className="w-1/5 py-2.5 px-4 text-left rounded-r-lg">
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="metricText"
+                  className="font-normal"
+                >
+                  Contribution
+                </MainLayoutColor>
+              </th>
             </tr>
           </thead>
 
           <tbody className="divide-y divide-[#1c1c20] text-xs">
             {loading ? (
               <tr>
-                <td colSpan={5} className="py-8 text-center text-[#71717a]">
-                  Loading...
+                <td colSpan={5} className="py-8 text-center">
+                  <MainLayoutColor
+                    as={MainLayoutTextSize}
+                    color="subtitle"
+                    size="subInfoText"
+                  >
+                    Loading...
+                  </MainLayoutColor>
                 </td>
               </tr>
             ) : filteredData.length === 0 ? (
               <tr>
-                <td colSpan={5} className="py-8 text-center text-[#71717a]">
-                  No data available
+                <td colSpan={5} className="py-8 text-center">
+                  <MainLayoutColor
+                    as={MainLayoutTextSize}
+                    color="subtitle"
+                    size="subInfoText"
+                  >
+                    No data available
+                  </MainLayoutColor>
                 </td>
               </tr>
             ) : (
@@ -195,19 +262,19 @@ export default function PerformanceSummaryList({ range = "24h" }) {
                   key={row.id}
                   className="hover:bg-[#18181c]/40 transition-colors"
                 >
-                  <td className="py-3 px-4 font-semibold text-white">
+                  <td className="w-1/5 py-3 px-4 text-left font-semibold text-white truncate">
                     {row.vehicleNumber}
                   </td>
-                  <td className="py-3 px-4 text-[#d4d4d8] font-medium">
+                  <td className="w-1/5 py-3 px-4 text-left text-[#d4d4d8] font-medium truncate">
                     {row.vehicleType}
                   </td>
-                  <td className="py-3 px-4 text-white font-semibold">
+                  <td className="w-1/5 py-3 px-4 text-left text-white font-semibold truncate">
                     {row.distance}
                   </td>
-                  <td className="py-3 px-4 text-[#e4e4e7] font-medium">
+                  <td className="w-1/5 py-3 px-4 text-left text-[#e4e4e7] font-medium truncate">
                     {row.change}
                   </td>
-                  <td className="py-3 px-4 text-white font-semibold">
+                  <td className="w-1/5 py-3 px-4 text-left text-white font-semibold truncate">
                     {row.contribution}
                   </td>
                 </tr>
@@ -216,6 +283,6 @@ export default function PerformanceSummaryList({ range = "24h" }) {
           </tbody>
         </table>
       </div>
-    </div>
+    </MainLayoutColor>
   );
 }

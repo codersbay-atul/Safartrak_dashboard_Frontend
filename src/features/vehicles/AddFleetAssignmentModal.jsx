@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import Dropdown from "../../components/Ui/DropDown";
+import MainDropDown from "../../components/Ui/MainLayoutUI/MainDropDown";
+
 
 const FLEET_GROUP_OPTIONS = [
   { label: "North Region Fleet", value: "group1" },
@@ -91,7 +92,7 @@ export default function AddFleetAssignmentModal({ isOpen, onClose, onNext }) {
         <form onSubmit={handleSubmit} className="flex flex-col gap-3 text-[10.5px]">
           <div>
             <label className="block text-[#a1a1aa] mb-1 font-medium">Fleet Group</label>
-            <Dropdown
+            <MainDropDown
               label="Select Fleet Group"
               options={FLEET_GROUP_OPTIONS}
               selectedValue={formData.fleetGroup}
@@ -106,7 +107,7 @@ export default function AddFleetAssignmentModal({ isOpen, onClose, onNext }) {
           <div className="grid grid-cols-2 gap-2.5">
             <div>
               <label className="block text-[#a1a1aa] mb-1 font-medium">Operating Region</label>
-              <Dropdown
+              <MainDropDown
                 label="Select Operating Region"
                 options={OPERATING_REGION_OPTIONS}
                 selectedValue={formData.operatingRegion}
@@ -120,7 +121,7 @@ export default function AddFleetAssignmentModal({ isOpen, onClose, onNext }) {
 
             <div>
               <label className="block text-[#a1a1aa] mb-1 font-medium">Depot / Warehouse</label>
-              <Dropdown
+              <MainDropDown
                 label="Select Depot / Warehouse"
                 options={DEPOT_WAREHOUSE_OPTIONS}
                 selectedValue={formData.depotWarehouse}

@@ -126,7 +126,7 @@ export default function PerformanceSummary({ range = "24h" }) {
     <MainLayoutColor
       as="div"
       background="surface"
-      className="w-full h-full border border-[#1f1f23] rounded-2xl p-4 flex flex-col justify-between shadow-xl select-none"
+      className="w-full h-full p-4 flex flex-col justify-between select-none"
     >
       <div className="flex items-start justify-between border-b border-zinc-800/50 pb-3">
         <div>
