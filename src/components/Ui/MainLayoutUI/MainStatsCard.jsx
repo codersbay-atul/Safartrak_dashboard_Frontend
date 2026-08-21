@@ -43,7 +43,8 @@ export const MainStatsCard = ({
               <MainLayoutColor
                 as={MainLayoutTextSize}
                 color="title"
-                size="title"
+                size="sectionTitle"
+                className="block truncate leading-tight"
               >
                 {value}
               </MainLayoutColor>
@@ -51,7 +52,8 @@ export const MainStatsCard = ({
               <MainLayoutColor
                 as={MainLayoutTextSize}
                 color="subtitle"
-                size="subtitle" 
+                size="subtitle"
+                className="block truncate leading-tight"
               >
                 {subtitle}
               </MainLayoutColor>
