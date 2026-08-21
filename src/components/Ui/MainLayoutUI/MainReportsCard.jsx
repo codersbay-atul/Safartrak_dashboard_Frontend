@@ -42,13 +42,13 @@ export default function MainReportCard({
       </MainLayoutColor>
 
       <div className="mt-auto pt-3.5 flex items-center justify-between gap-2 w-full">
-        <MainLayoutColor
-          as="span"
-          color="kpiTitle"
-          size="kpiTitle"
-        >
-          {actionLabel}
-        </MainLayoutColor>
+      <MainLayoutColor
+  as="span"
+  color="kpiTitle"
+  className="text-[13px] font-medium"
+>
+  {actionLabel}
+</MainLayoutColor>
 
         <ArrowUpRight
           size={14}
