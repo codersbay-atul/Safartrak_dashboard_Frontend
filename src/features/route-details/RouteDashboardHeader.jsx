@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
-import PageHeader from "../../components/Ui/PageHeader";
+
 import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
+import MainLayoutHeader from "../../components/Ui/MainLayoutUI/MainLayoutHeader";
 
 const MONTH_NAMES = [
   "January", "February", "March", "April", "May", "June",
@@ -269,7 +270,7 @@ export default function RouteDashboardHeader({ onSearch, onDateRangeChange }) {
   );
 
   return (
-    <PageHeader
+    <MainLayoutHeader
       title={<MainLayoutTextSize as="span">Current Route</MainLayoutTextSize>}
       subtitle={<MainLayoutTextSize as="span" size="subtitle">Track the selected vehicle's current trip and route progress.</MainLayoutTextSize>}
       showBack={false}

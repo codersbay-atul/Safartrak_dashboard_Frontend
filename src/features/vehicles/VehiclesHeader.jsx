@@ -1,7 +1,6 @@
+import React from "react";
 import { Download, Upload, Plus } from "lucide-react";
 import MainLayoutHeader from "../../components/Ui/MainLayoutUI/MainLayoutHeader";
-import MainHeaderActionButton from "../../components/Ui/MainLayoutUI/MainHeaderActionButton";
-
 
 export default function VehiclesHeader({
   title = "Vehicles",
@@ -11,20 +10,36 @@ export default function VehiclesHeader({
   onAddVehicleClick,
 }) {
   return (
-    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-2.5 w-full shrink-0">
-      <MainLayoutHeader title={title} subtitle={subtitle} />
-    
-      <MainHeaderActionButton icon={Download} onClick={onImportClick} variant="secondary" className="min-w-[110px]">
-        Import Data
-      </MainHeaderActionButton>
-
-      <MainHeaderActionButton icon={Upload} onClick={onExportClick} className="min-w-[110px]">
-        Export Data
-      </MainHeaderActionButton>
-
-      <MainHeaderActionButton icon={Plus} iconPosition="right" onClick={onAddVehicleClick} className="min-w-[120px]">
-        Add Vehicle
-      </MainHeaderActionButton>
-    </div>
+    <MainLayoutHeader
+      title={title}
+      subtitle={subtitle}
+      showSearch={false}
+      showExport={false}
+      showFilters={false}
+      actionButtons={[
+        {
+          label: "Import Data",
+          icon: Download,
+          iconPosition: "left",
+          onClick: onImportClick,
+          variant: "secondary",
+          className: "min-w-[110px]",
+        },
+        {
+          label: "Export Data",
+          icon: Upload,
+          iconPosition: "left",
+          onClick: onExportClick,
+          className: "min-w-[110px]",
+        },
+        {
+          label: "Add Vehicle",
+          icon: Plus,
+          iconPosition: "right",
+          onClick: onAddVehicleClick,
+          className: "min-w-[120px]",
+        },
+      ]}
+    />
   );
 }

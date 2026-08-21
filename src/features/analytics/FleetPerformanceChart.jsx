@@ -1,6 +1,8 @@
 import React, { useMemo } from "react";
-import { RefreshCw } from "lucide-react";
 import { useAnalyticsDistanceSeries } from "../../hooks/useAnalyticsDistanceSeries";
+import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
+import MainLayoutIcon from "../../components/Ui/MainLayoutUI/MainLayoutIcon";
+import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
 
 const RANGE_OPTIONS = [
   { key: "24h", label: "24H" },
@@ -78,26 +80,45 @@ export default function FleetPerformanceChart({
   const geometry = useMemo(() => buildChartGeometry(series), [series]);
   const hasData = series.length > 0 && geometry != null;
 
+  const primaryAccent = "#2563eb";
+
   return (
-    <div className="w-full h-full bg-[#121214] border border-[#1f1f23] rounded-2xl p-4 flex flex-col justify-between shadow-xl select-none">
-      
-     
+    <MainLayoutColor
+      as="div"
+      background="surface"
+      className="w-full h-full border border-[#1f1f23] rounded-2xl p-4 flex flex-col justify-between shadow-xl select-none"
+    >
       <div className="flex flex-wrap items-center justify-between gap-4 pb-2">
         <div className="flex items-center gap-3">
           <div>
-            <h3 className="text-[15px] font-bold tracking-tight text-white">Fleet Distance</h3>
-            <p className="text-[12px] text-zinc-500 mt-0.5">
+            <MainLayoutColor
+              as={MainLayoutTextSize}
+              color="title"
+              size="sectionTitle"
+              className="font-bold tracking-tight block"
+            >
+              Fleet Distance
+            </MainLayoutColor>
+            <MainLayoutColor
+              as={MainLayoutTextSize}
+              color="subtitle"
+              size="subInfoText"
+              className="mt-0.5 block"
+            >
               Last Updated: {formatLastUpdated(lastUpdated)}
-            </p>
+            </MainLayoutColor>
           </div>
-         
-          <span className="flex items-center gap-1 bg-[#052e16] border border-[#14532d] text-[#22c55e] text-[9px] font-bold px-2 py-0.5 rounded-full">
+          
+          <MainLayoutTextSize
+            as="span"
+            size="badgeText"
+            className="flex items-center gap-1 bg-[#052e16] border border-[#14532d] text-[#22c55e] font-bold px-2 py-0.5 rounded-full"
+          >
             <span className="w-1.5 h-1.5 rounded-full bg-[#22c55e] animate-pulse" />
             Live
-          </span>
+          </MainLayoutTextSize>
         </div>
 
-        
         <div className="flex items-center gap-3">
           <button
             type="button"
@@ -105,11 +126,13 @@ export default function FleetPerformanceChart({
             className="text-zinc-500 hover:text-white transition-colors cursor-pointer"
             aria-label="Refresh chart"
           >
-            <RefreshCw
-              size={13}
-              className={`stroke-[2.5] ${isFetching ? "animate-spin" : ""}`}
+            <MainLayoutIcon
+              name="refresh"
+              size="refresh"
+              loading={isFetching}
             />
           </button>
+
           <div className="flex items-center bg-[#18181b] border border-[#27272a] rounded-lg p-0.5">
             {RANGE_OPTIONS.map((option) => {
               const isActive = range === option.key;
@@ -118,13 +141,15 @@ export default function FleetPerformanceChart({
                   key={option.key}
                   type="button"
                   onClick={() => onRangeChange?.(option.key)}
-                  className={
+                  className={`px-2.5 py-0.5 rounded-md transition-colors ${
                     isActive
-                      ? "px-2.5 py-0.5 bg-[#27272a] text-white text-[10px] font-bold rounded-md shadow"
-                      : "px-2.5 py-0.5 text-zinc-400 hover:text-zinc-200 text-[10px] font-semibold transition-colors cursor-pointer"
-                  }
+                      ? "bg-[#27272a] text-white font-bold shadow"
+                      : "text-zinc-400 hover:text-zinc-200 font-semibold cursor-pointer"
+                  }`}
                 >
-                  {option.label}
+                  <MainLayoutTextSize size="metricText">
+                    {option.label}
+                  </MainLayoutTextSize>
                 </button>
               );
             })}
@@ -132,89 +157,107 @@ export default function FleetPerformanceChart({
         </div>
       </div>
 
-      
       <div className="relative flex-1 min-h-[200px] mt-2 flex">
         {!hasData ? (
-          <div className="flex-1 flex items-center justify-center text-[12px] text-zinc-500 font-medium">
-            {isLoading ? "Loading..." : isError ? "No data available" : "No data available"}
-          </div>
+          <MainLayoutColor
+            as={MainLayoutTextSize}
+            color="subtitle"
+            size="subInfoText"
+            className="flex-1 flex items-center justify-center font-medium"
+          >
+            {isLoading ? "Loading..." : "No data available"}
+          </MainLayoutColor>
         ) : (
           <>
-            
-            <div className="flex flex-col justify-between text-[9px] text-zinc-600 font-bold pr-2.5 select-none pb-5 pt-1">
+            <div className="flex flex-col justify-between font-bold pr-2.5 select-none pb-5 pt-1">
               {geometry.yTicks.map((tick, index) => (
-                <span key={`${tick}-${index}`}>{tick}</span>
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="captionText"
+                  key={`${tick}-${index}`}
+                >
+                  {tick}
+                </MainLayoutColor>
               ))}
             </div>
 
-           
             <div className="flex-1 relative">
-              
-            
               <div className="absolute inset-0 flex flex-col justify-between pb-5 pt-1 pointer-events-none opacity-20">
                 <div className="border-b border-dashed border-zinc-700 w-full" />
                 <div className="border-b border-dashed border-zinc-700 w-full" />
                 <div className="border-b border-dashed border-zinc-700 w-full" />
                 <div className="border-b border-dashed border-zinc-700 w-full" />
                 <div className="border-b border-dashed border-zinc-700 w-full" />
-                <div className="border-b border-zinc-700 w-full" />
+                <div className="border-b border-dashed border-zinc-700 w-full" />
               </div>
 
-             
-              <svg className="w-full h-full pb-5 pt-1 overflow-visible" viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`} preserveAspectRatio="none">
+              <svg
+                className="w-full h-full pb-5 pt-1 overflow-visible"
+                viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}
+                preserveAspectRatio="none"
+              >
                 <defs>
-                  <linearGradient id="blueGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#2563eb" stopOpacity="0.4" />
-                    <stop offset="100%" stopColor="#2563eb" stopOpacity="0.0" />
+                  <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor={primaryAccent} stopOpacity="0.4" />
+                    <stop offset="100%" stopColor={primaryAccent} stopOpacity="0.0" />
                   </linearGradient>
                 </defs>
 
                 <path
                   d={geometry.areaPath}
-                  fill="url(#blueGradient)"
+                  fill="url(#chartGradient)"
                 />
 
-                
                 <path
                   d={geometry.linePath}
                   fill="none"
-                  stroke="#2563eb"
+                  stroke={primaryAccent}
                   strokeWidth="2.5"
                   strokeLinecap="round"
                 />
 
-               
                 <circle
                   cx={geometry.last.x}
                   cy={geometry.last.y}
                   r="4.5"
                   fill="#ffffff"
-                  stroke="#2563eb"
+                  stroke={primaryAccent}
                   strokeWidth="2"
                 />
               </svg>
 
-              
               <div className="absolute right-0 top-0 -translate-y-[80%] pointer-events-none z-10">
-                <div className="bg-[#1c1c1f] border border-zinc-800 text-[9.5px] font-bold text-white px-2 py-0.5 rounded shadow-lg">
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  background="surface"
+                  color="title"
+                  size="captionText"
+                  className="border border-zinc-800 font-bold px-2 py-0.5 rounded shadow-lg"
+                >
                   {Number(geometry.last.value).toLocaleString("en-US", {
                     maximumFractionDigits: 1,
                   })}{" "}
                   km
-                </div>
+                </MainLayoutColor>
               </div>
 
-              
-              <div className="absolute bottom-0 left-0 right-0 flex justify-between text-[9.5px] text-zinc-500 font-bold px-1 select-none">
+              <div className="absolute bottom-0 left-0 right-0 flex justify-between font-bold px-1 select-none">
                 {geometry.xLabels.map((label, index) => (
-                  <span key={`${label}-${index}`}>{label}</span>
+                  <MainLayoutColor
+                    as={MainLayoutTextSize}
+                    color="subtitle"
+                    size="captionText"
+                    key={`${label}-${index}`}
+                  >
+                    {label}
+                  </MainLayoutColor>
                 ))}
               </div>
             </div>
           </>
         )}
       </div>
-
-    </div>
+    </MainLayoutColor>
   );
 }

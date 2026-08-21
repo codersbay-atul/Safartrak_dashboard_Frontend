@@ -15,7 +15,6 @@ import { toast } from "../components/Ui/toast";
 export default function Dashboard() {
   const navigate = useNavigate();
 
-  // Refresh par initial state humesha null & false rahegi
   const [selectedVehicle, setSelectedVehicle] = useState(null);
   const [vehicleSearch, setVehicleSearch] = useState("");
   const [isRouteView, setIsRouteView] = useState(false);
@@ -78,7 +77,6 @@ export default function Dashboard() {
       onExitRouteView={exitRouteView}
     >
       <div className="relative flex-1 min-h-0 overflow-hidden flex flex-col">
-        {/* A. NORMAL DASHBOARD VIEW */}
         <div
           className={`absolute inset-0 flex flex-col gap-2.5 xl:gap-3 overflow-hidden min-h-0 ${
             isRouteView || isFullMapView
@@ -98,23 +96,20 @@ export default function Dashboard() {
           </div>
 
           <div className="flex flex-col min-[1152px]:flex-row gap-2.5 min-[1152px]:gap-3 xl:gap-3.5 items-stretch w-full flex-1 min-h-0 overflow-y-auto min-[1152px]:overflow-hidden">
-            {/* 1. Vehicles List Panel */}
-            <div className="w-full min-[1152px]:w-[clamp(380px,38%,440px)] xl:w-[450px] 2xl:w-[480px] h-[340px] min-[1152px]:h-full min-h-0 overflow-hidden transition-all duration-300 shrink-0">
+            <div className="w-full min-[1152px]:w-[clamp(380px,38%,440px)] xl:w-[410px] 2xl:w-[480px] h-[340px] min-[1152px]:h-full min-h-0 overflow-hidden transition-all duration-300 shrink-0">
               <VehiclesList
                 search={vehicleSearch}
                 selectedVehicle={selectedVehicle}
                 onSelectVehicle={(v) => {
                   setSelectedVehicle(v);
-                  // Row click par details card open nahi hoga
                 }}
                 onViewDetails={(v) => {
                   setSelectedVehicle(v);
-                  setShowDetailsPanel(true); // Sirf "View Details" tap par card open hoga
+                  setShowDetailsPanel(true); 
                 }}
               />
             </div>
 
-            {/* 2. Live Position Map Panel */}
             <div className="w-full shrink-0 h-[360px] min-[1152px]:flex-1 min-[1152px]:h-full min-w-0 min-[1152px]:min-w-[240px] min-h-0 overflow-hidden">
               <LivePositions
                 selectedVehicle={selectedVehicle}
@@ -124,7 +119,6 @@ export default function Dashboard() {
               />
             </div>
 
-            {/* 3. Vehicle Details Panel (Only opens when View Details button is clicked) */}
             {selectedVehicle && showDetailsPanel && (
               <div className="w-full min-[1152px]:w-[clamp(240px,22%,290px)] xl:w-[310px] 2xl:w-[330px] shrink-0 h-[480px] min-[1152px]:h-full min-h-0 overflow-hidden animate-in slide-in-from-right-5 duration-300">
                 <VehiclesDetail
@@ -140,7 +134,6 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* B. ROUTE DETAILS VIEW */}
         {isRouteView && !isFullMapView ? (
           <div className="absolute inset-0 flex flex-col gap-2.5 overflow-hidden min-h-0 z-20 bg-[#070708]">
             <div className="shrink-0 flex items-center gap-3">
@@ -182,7 +175,7 @@ export default function Dashboard() {
           </div>
         ) : null}
 
-        {/* C. FULL SCREEN MAP VIEW */}
+    
         {isFullMapView && (
           <div className="fixed inset-0 z-[9999] bg-[#0c0c0e] w-screen h-screen flex flex-col overflow-hidden">
             <div className="absolute top-4 left-4 z-[10000]">

@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import SearchInput from "../../components/Ui/SearchInput";
+
 import Dropdown from "../../components/Ui/DropDown";
+import MainSearchInput from "../../components/Ui/MainLayoutUI/MainSearchInput";
 
 function MapController({ center, zoom }) {
   const map = useMap();
@@ -246,7 +247,7 @@ export default function CreateAOI({ isOpen = true, initialData = null, mode = "c
               <label className="text-xs font-medium text-zinc-400 tracking-wide">
                 Search Location
               </label>
-              <SearchInput
+              <MainSearchInput
                 value={searchLocation}
                 onChange={(e) => setSearchLocation(e.target.value)}
                 placeholder="Search address or location..."

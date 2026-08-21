@@ -1,6 +1,8 @@
 import React from "react";
 import { ArrowUpRight, ArrowDownRight } from "lucide-react";
 import { useAnalyticsPerformance } from "../../hooks/useAnalyticsPerformance";
+import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
+import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
 
 function buildSparklinePath(values) {
   if (!Array.isArray(values) || values.length === 0) return null;
@@ -38,22 +40,35 @@ function PerformanceRow({ item, variant }) {
   return (
     <div className="flex items-center justify-between gap-4">
       <div className="flex flex-col gap-0.75">
-        <div className="flex items-center gap-1.5 text-[10.5px] font-bold">
-          <span className="text-white">{item.plate}</span>
-          <span className="text-zinc-500 font-medium text-[9.5px]">
+        <div className="flex items-center gap-1.5 font-bold">
+          <MainLayoutColor
+            as={MainLayoutTextSize}
+            color="title"
+            size="filterText"
+          >
+            {item.plate}
+          </MainLayoutColor>
+          <MainLayoutColor
+            as={MainLayoutTextSize}
+            color="subtitle"
+            size="captionText"
+            className="font-medium"
+          >
             {item.vehicleType}
-          </span>
+          </MainLayoutColor>
         </div>
         <p className="text-[16px] font-extrabold" style={{ color }}>
           {item.distance}
         </p>
 
-        <div
-          className={`inline-flex items-center gap-1 ${badgeBg} text-[7.5px] font-extrabold px-1.5 py-0.5 rounded-md w-max`}
+        <MainLayoutTextSize
+          as="div"
+          size="captionText"
+          className={`inline-flex items-center gap-1 ${badgeBg} font-extrabold px-1.5 py-0.5 rounded-md w-max`}
         >
           <span className={`w-1.5 h-1.5 rounded-full ${badgeDot}`} />
           {badgeLabel}
-        </div>
+        </MainLayoutTextSize>
       </div>
 
       <div className="w-[90px] h-[40px] shrink-0">
@@ -108,24 +123,48 @@ export default function PerformanceSummary({ range = "24h" }) {
       : "text-[#22c55e]";
 
   return (
-    <div className="w-full h-full bg-[#121214] border border-[#1f1f23] rounded-2xl p-4 flex flex-col justify-between shadow-xl select-none">
+    <MainLayoutColor
+      as="div"
+      background="surface"
+      className="w-full h-full border border-[#1f1f23] rounded-2xl p-4 flex flex-col justify-between shadow-xl select-none"
+    >
       <div className="flex items-start justify-between border-b border-zinc-800/50 pb-3">
         <div>
-          <h3 className="text-[15px] font-bold text-white tracking-tight">
+          <MainLayoutColor
+            as={MainLayoutTextSize}
+            color="title"
+            size="sectionTitle"
+            className="font-bold tracking-tight block"
+          >
             Performance Summary
-          </h3>
-          <p className="text-[12px] text-zinc-500 mt-0.5">
+          </MainLayoutColor>
+          <MainLayoutColor
+            as={MainLayoutTextSize}
+            color="subtitle"
+            size="subInfoText"
+            className="mt-0.5 block"
+          >
             {periodLabel ?? "-"}
-          </p>
+          </MainLayoutColor>
         </div>
         <div className="text-right">
-          <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">
+          <MainLayoutColor
+            as={MainLayoutTextSize}
+            color="subtitle"
+            size="metricText"
+            className="font-bold uppercase tracking-wider block"
+          >
             Total Distance
-          </p>
+          </MainLayoutColor>
           <div className="flex items-center gap-1 mt-0.5 justify-end">
-            <span className="text-[15px] font-extrabold text-white">
+            <MainLayoutColor
+              as={MainLayoutTextSize}
+              color="title"
+              size="plateText"
+              className="font-extrabold"
+            >
               {isLoading && totalDistance === "-" ? "-" : totalDistance}
-            </span>
+            </MainLayoutColor>
             {totalChange ? (
               <span
                 className={`flex items-center text-[9.5px] font-bold ${changeColor}`}
@@ -138,12 +177,16 @@ export default function PerformanceSummary({ range = "24h" }) {
         </div>
       </div>
 
-      {/* Row Containers */}
       <div className="flex flex-col gap-4 pt-3 flex-1 justify-center">
         {results.length === 0 ? (
-          <div className="flex-1 flex items-center justify-center text-[12px] text-zinc-500 font-medium min-h-[120px]">
+          <MainLayoutColor
+            as={MainLayoutTextSize}
+            color="subtitle"
+            size="subInfoText"
+            className="flex-1 flex items-center justify-center font-medium min-h-[120px]"
+          >
             {isLoading ? "Loading..." : "No data available"}
-          </div>
+          </MainLayoutColor>
         ) : (
           <>
             {top ? <PerformanceRow item={top} variant="top" /> : null}
@@ -156,6 +199,6 @@ export default function PerformanceSummary({ range = "24h" }) {
           </>
         )}
       </div>
-    </div>
+    </MainLayoutColor>
   );
 }

@@ -2,11 +2,11 @@ import React from "react";
 
 export const MAIN_LAYOUT_TEXT_SIZES = {
   title: "text-[18px] leading-[20px]",
-  subtitle: "text-[14px] leading-[20px]",
+  subtitle: "text-[13px] leading-[20px]",
   sectionTitle: "text-[14px] leading-[21px] font-medium",
   livePositionTitle: "text-[14px] leading-[21px] font-bold",
   badgeText: "text-[11px] leading-tight font-medium",
-  metricText: "text-[12px] leading-tight",
+  metricText: "text-[12px] leading-tight font-medium",
   captionText: "text-[9px] leading-tight",
   filterText: "text-[11px] leading-tight font-medium",
   plateText: "text-[14px] leading-tight font-medium",
@@ -18,6 +18,8 @@ export const MAIN_LAYOUT_TEXT_SIZES = {
   dropdownText: "text-[11px] sm:text-[12px] leading-tight font-medium",
   dropdownOptionText: "text-[10.5px] sm:text-[11.5px] leading-tight font-medium",
   kpiTitle: "text-[13px] xl:text-[13px] leading-tight font-medium tracking-wide",
+  headerButtonText: "text-[14px] leading-[20px] font-medium",
+  searchText: "text-[12px] leading-tight font-normal",
 };
 
 export function formatDisplayValue(value, fallback = "Not Available") {

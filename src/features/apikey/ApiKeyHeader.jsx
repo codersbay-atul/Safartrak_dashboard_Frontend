@@ -1,9 +1,8 @@
+import React from "react";
+import { Key } from "lucide-react";
 import MainLayoutHeader from "../../components/Ui/MainLayoutUI/MainLayoutHeader";
-import CreateApiKeyButton from "../../components/common/CreateApiKeyButton";
 
-export default function ApiKeyHeader({
-  onCreateClick,
-}) {
+export default function ApiKeyHeader({ onCreateClick }) {
   const handleCreateClick = () => {
     if (onCreateClick) {
       onCreateClick();
@@ -13,12 +12,16 @@ export default function ApiKeyHeader({
   };
 
   return (
-    <div className="flex items-center justify-between gap-3 w-full shrink-0">
-      <MainLayoutHeader
-        title="API Keys"
-        subtitle="Manage your API keys used to access the SafarTrak Platform."
-      />
-      <CreateApiKeyButton onClick={handleCreateClick} />
-    </div>
+    <MainLayoutHeader
+      title="API Keys"
+      subtitle="Manage your API keys used to access the SafarTrak Platform."
+      showSearch={false}
+      showExport={false}
+      showFilters={false}
+      actionButtonIcon={Key}
+      actionButtonLabel="Request New Key"
+      onActionClick={handleCreateClick}
+      actionButtonClassName="min-w-[150px]"
+    />
   );
 }

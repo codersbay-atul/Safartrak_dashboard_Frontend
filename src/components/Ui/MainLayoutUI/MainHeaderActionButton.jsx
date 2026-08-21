@@ -1,4 +1,5 @@
 import React from "react";
+import { MAIN_LAYOUT_TEXT_SIZES } from "./MainLayoutTextSize"; 
 
 export default function MainHeaderActionButton({
   children,
@@ -9,8 +10,10 @@ export default function MainHeaderActionButton({
   type = "button",
   ...props
 }) {
-  const baseStyles =
-    "inline-flex items-center justify-center gap-1.5 h-8 px-3 rounded-lg text-[12px] font-['Segoe_UI',-apple-system,BlinkMacSystemFont,Roboto,'Helvetica_Neue',Arial,sans-serif] font-semibold leading-[20px] not-italic transition-colors cursor-pointer select-none shrink-0";
+  const fontBase =
+    "font-['Segoe_UI',-apple-system,BlinkMacSystemFont,Roboto,'Helvetica_Neue',Arial,sans-serif] not-italic";
+
+  const baseStyles = `inline-flex items-center justify-center gap-1.5 h-8 px-3 rounded-lg ${fontBase} ${MAIN_LAYOUT_TEXT_SIZES.headerButtonText} transition-colors cursor-pointer select-none shrink-0`;
 
   const variantStyles =
     variant === "primary"
@@ -23,9 +26,13 @@ export default function MainHeaderActionButton({
       className={`${baseStyles} ${variantStyles} ${className}`.trim()}
       {...props}
     >
-      {Icon && iconPosition === "left" && <Icon size={14} className="shrink-0" />}
+      {Icon && iconPosition === "left" && (
+        <Icon size={14} className="shrink-0" />
+      )}
       {children && <span>{children}</span>}
-      {Icon && iconPosition === "right" && <Icon size={14} className="shrink-0" />}
+      {Icon && iconPosition === "right" && (
+        <Icon size={14} className="shrink-0" />
+      )}
     </button>
   );
 }

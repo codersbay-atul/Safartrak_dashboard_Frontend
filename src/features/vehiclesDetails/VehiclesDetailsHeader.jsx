@@ -1,9 +1,8 @@
+import React from "react";
 import { Upload, Plus } from "lucide-react";
 import MainLayoutHeader from "../../components/Ui/MainLayoutUI/MainLayoutHeader";
-
 import { getVehiclesExport } from "../../services/vehicleService";
 import { toast } from "../../components/Ui/toast";
-import MainHeaderActionButton from "../../components/Ui/MainLayoutUI/MainHeaderActionButton";
 
 export default function VehicleDetailsHeader({
   title = "Vehicles Details",
@@ -19,7 +18,9 @@ export default function VehicleDetailsHeader({
       }
 
       const response = await getVehiclesExport({ tab: "all" });
-      const disposition = response.headers?.["content-disposition"] || response.headers?.["Content-Disposition"];
+      const disposition =
+        response.headers?.["content-disposition"] ||
+        response.headers?.["Content-Disposition"];
       let filename = "vehicles_export";
       if (disposition) {
         const match = /filename\*?=([^;]+)/i.exec(disposition);
@@ -48,17 +49,28 @@ export default function VehicleDetailsHeader({
   };
 
   return (
-    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-2.5 w-full shrink-0">
-      <MainLayoutHeader title={title} subtitle={subtitle} />
-    
-
-      <MainHeaderActionButton icon={Upload} onClick={handleExport} className="min-w-[110px]">
-        Export Data
-      </MainHeaderActionButton>
-
-      <MainHeaderActionButton icon={Plus} iconPosition="right" onClick={onAddVehicleClick} className="min-w-[120px]">
-        Add Vehicle
-      </MainHeaderActionButton>
-    </div>
+    <MainLayoutHeader
+      title={title}
+      subtitle={subtitle}
+      showSearch={false}
+      showExport={false}
+      showFilters={false}
+      actionButtons={[
+        {
+          label: "Export Data",
+          icon: Upload,
+          iconPosition: "left",
+          onClick: handleExport,
+          className: "min-w-[110px]",
+        },
+        {
+          label: "Add Vehicle",
+          icon: Plus,
+          iconPosition: "right",
+          onClick: onAddVehicleClick,
+          className: "min-w-[120px]",
+        },
+      ]}
+    />
   );
 }

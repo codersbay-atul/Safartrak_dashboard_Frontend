@@ -86,8 +86,6 @@ const apiClient = axios.create({
   },
 });
 
-const pendingRequests = new Map();
-
 let isRefreshing = false;
 let failedQueue = [];
 
@@ -119,24 +117,9 @@ apiClient.interceptors.request.use(
   (config) => {
     config.metadata = { startTime: performance.now() };
 
-    const isGetRequest = (config.method || "").toLowerCase() === "get";
-    const requestKey = `${config.method}:${config.url}:${JSON.stringify(
-      config.params || {}
-    )}`;
-
-    if (isGetRequest) {
-      if (pendingRequests.has(requestKey)) {
-        const cancelController = pendingRequests.get(requestKey);
-        cancelController.abort();
-        pendingRequests.delete(requestKey);
-      }
-
-      const controller = new AbortController();
-      config.signal = config.signal || controller.signal;
-      pendingRequests.set(requestKey, controller);
-    }
-
-    // LocalStorage ko pehle check karenge taaki refresh ke baad latest token hi jaye
+    // Do not abort duplicate GET requests automatically.
+    // Some React Query refetches and UI re-renders legitimately call the same endpoint
+    // multiple times, and aborting them here causes false "Request canceled" errors.
     const token =
       localStorage.getItem("access_token") ||
       localStorage.getItem("accessToken") ||
@@ -155,22 +138,9 @@ apiClient.interceptors.request.use(
 );
 
 apiClient.interceptors.response.use(
-  (response) => {
-    const requestKey = `${response.config.method}:${response.config.url}:${JSON.stringify(
-      response.config.params || {}
-    )}`;
-    pendingRequests.delete(requestKey);
-    return response;
-  },
+  (response) => response,
   async (error) => {
     const originalRequest = error.config;
-
-    if (originalRequest) {
-      const requestKey = `${originalRequest.method}:${originalRequest.url}:${JSON.stringify(
-        originalRequest.params || {}
-      )}`;
-      pendingRequests.delete(requestKey);
-    }
 
     // 401 Unauthorized Handling
     if (error.response && error.response.status === 401 && originalRequest) {

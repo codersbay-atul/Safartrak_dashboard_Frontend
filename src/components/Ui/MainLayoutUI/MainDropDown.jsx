@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
 import MainLayoutTextSize from "./MainLayoutTextSize";
 
-export default function Dropdown({
+export default function MainDropDown({
   label,
   options = [],
   selectedValue,

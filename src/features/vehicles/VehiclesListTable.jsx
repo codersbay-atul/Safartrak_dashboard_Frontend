@@ -4,9 +4,9 @@ import {
   AlertCircle,
   RefreshCw,
 } from "lucide-react";
-import SearchInput from "../../components/Ui/SearchInput";
 import Dropdown from "../../components/Ui/DropDown";
 import useVehiclesList from "../../hooks/useVehiclesList";
+import MainSearchInput from "../../components/Ui/MainLayoutUI/MainSearchInput";
 
 const FLEET_OPTIONS = [
   { label: "Fleet Group", value: "" },
@@ -116,7 +116,7 @@ export default function VehicleListTable() {
             />
 
             <div className="w-[150px] sm:w-[170px]">
-              <SearchInput
+              <MainSearchInput
                 value={searchQuery}
                 onChange={(e) => {
                   setSearchQuery(e.target.value);
