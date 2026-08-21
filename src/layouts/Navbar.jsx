@@ -30,6 +30,7 @@ import NavBreadcrumb from '../components/Ui/NavbarUI/NavBreadCrumb';
 import NavDateDisplay from '../components/Ui/NavbarUI/NavDateDisplay';
 import { NavNotificationIcon, default as NavUserAvatar } from '../components/Ui/NavbarUI/NavUserAvatar';
 import NavMenuItem from '../components/Ui/NavbarUI/NavMenuItem';
+import NavDataProtectionIcon from '../components/Ui/NavbarUI/NavDataProtectionIcon';
 import { clearAuth } from '../store/slices/authSlice';
 import useAccountProfile from '../hooks/useAccountProfile';
 import NavNotificationItem from '../components/Ui/NavbarUI/NavNotificationItem';
@@ -144,6 +145,8 @@ export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }
       </div>
 
       <div className="flex items-center gap-2 xl:gap-2.5 shrink-0">
+        <NavDataProtectionIcon />
+
         <NavPopoverWrapper isOpen={activePopover === 'notif'} onClose={closePopover}>
           <NavNotificationIcon
             count={unreadCount}
