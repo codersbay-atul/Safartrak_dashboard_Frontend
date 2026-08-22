@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { Check, Upload } from "lucide-react";
+import MainLayoutButton from "../../components/Ui/MainLayoutUI/MainLayoutButton";
+import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
+import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
 
-export default function UploadDocumentsModal({ isOpen, onClose, onNext }) {
+export default function UploadDocumentsModal({ isOpen, onClose, onNext, onBack }) {
   const [files, setFiles] = useState({
     rc: null,
     insurance: null,
@@ -61,66 +64,98 @@ export default function UploadDocumentsModal({ isOpen, onClose, onNext }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/70 backdrop-blur-xs select-none animate-fadeIn">
-      <div className="relative w-full max-w-[480px] bg-[#121214] border border-[#27272a] rounded-2xl p-4 shadow-2xl flex flex-col overflow-hidden">
-        
-        <div className="flex items-center justify-between pb-3 mb-2 border-b border-[#1d1d20]/60">
-          <h2 className="text-[14px] font-bold text-white tracking-tight">
+      <MainLayoutColor
+        as="div"
+        background="surface"
+        className="relative w-full max-w-[480px] max-h-[90vh] border border-[#27272a] rounded-2xl p-4 shadow-2xl flex flex-col font-sans overflow-hidden"
+      >
+        {/* 14px Header & Badge */}
+        <div className="flex items-center justify-between pb-2.5 mb-2 border-b border-[#1d1d20]/60 shrink-0">
+          <MainLayoutColor
+            as={MainLayoutTextSize}
+            color="title"
+            size="sectionTitle"
+            className="font-medium tracking-tight block"
+          >
             Upload Documents
-          </h2>
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#052e16] border border-[#14532d] text-[#4ade80] text-[10px] font-medium">
+          </MainLayoutColor>
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#052e16] border border-[#14532d] text-[#4ade80]">
             <Check size={11} />
-            Device Connected
+            <MainLayoutTextSize size="badgeText" className="font-medium">
+              Device Connected
+            </MainLayoutTextSize>
           </span>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-2.5 text-[10.5px]">
-          {uploadFields.map((field) => (
-            <div key={field.key}>
-              <label className="block text-[#a1a1aa] mb-1 font-medium">{field.label}</label>
-              <div
-                className={`flex items-center bg-[#18181b]/60 border rounded-xl overflow-hidden focus-within:border-[#ffd60a] transition-all ${
-                  errors[field.key] ? "border-red-500 focus-within:border-red-500" : "border-[#27272a]"
-                }`}
-              >
-                <label className="flex items-center gap-1.5 px-3 py-2 bg-[#27272a]/60 text-white font-medium cursor-pointer hover:bg-[#27272a] transition-colors border-r border-[#27272a] shrink-0">
-                  <Upload size={13} />
-                  <span>Upload</span>
-                  <input
-                    type="file"
-                    className="hidden"
-                    onChange={(e) => handleFileChange(e, field.key)}
-                  />
-                </label>
-                <span className="px-3 py-2 text-[#52525b] text-[10.5px] truncate">
-                  {files[field.key] ? (
-                    <span className="text-white">{files[field.key]}</span>
-                  ) : (
-                    field.placeholder
-                  )}
-                </span>
+        {/* Scrollable Form Body */}
+        <form onSubmit={handleSubmit} className="flex-1 flex flex-col min-h-0">
+          <div className="flex-1 overflow-y-auto custom-scrollbar pr-1 flex flex-col gap-2.5">
+            {uploadFields.map((field) => (
+              <div key={field.key}>
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="subInfoText"
+                  className="block mb-1 font-medium"
+                >
+                  {field.label}
+                </MainLayoutColor>
+                <div
+                  className={`flex items-center bg-[#18181b]/60 border rounded-xl overflow-hidden focus-within:border-[#ffd60a] transition-all ${
+                    errors[field.key]
+                      ? "border-red-500 focus-within:border-red-500"
+                      : "border-[#27272a]"
+                  }`}
+                >
+                  <label className="flex items-center gap-1.5 px-3 py-2 bg-[#27272a]/60 text-white font-medium cursor-pointer hover:bg-[#27272a] transition-colors border-r border-[#27272a] shrink-0">
+                    <Upload size={13} />
+                    <MainLayoutTextSize size="subInfoText">Upload</MainLayoutTextSize>
+                    <input
+                      type="file"
+                      className="hidden"
+                      onChange={(e) => handleFileChange(e, field.key)}
+                    />
+                  </label>
+                  <span className="px-3 py-2 text-[#52525b] text-[12px] truncate flex-1">
+                    {files[field.key] ? (
+                      <span className="text-white">{files[field.key]}</span>
+                    ) : (
+                      field.placeholder
+                    )}
+                  </span>
+                </div>
+                {errors[field.key] && (
+                  <p className="text-red-500 text-[10px] mt-0.5">{errors[field.key]}</p>
+                )}
               </div>
-              {errors[field.key] && <p className="text-red-500 text-[9px] mt-0.5">{errors[field.key]}</p>}
-            </div>
-          ))}
+            ))}
+          </div>
 
-          <div className="grid grid-cols-2 gap-2.5 pt-2 mt-2 border-t border-[#1d1d20]">
-            <button
+          {/* Action Buttons using headerButtonText */}
+          <div className="grid grid-cols-2 gap-2 pt-3 mt-2 border-t border-[#1d1d20] shrink-0">
+            <MainLayoutButton
               type="button"
-              onClick={onClose}
-              className="w-full py-2 px-4 rounded-xl text-[11px] font-semibold bg-[#27272a]/60 hover:bg-[#27272a] text-[#d4d4d8] transition-colors cursor-pointer"
+              variant="secondary"
+              onClick={onBack || onClose}
+              className="w-full justify-center py-2"
             >
-              Cancel
-            </button>
-            <button
+              <MainLayoutTextSize size="headerButtonText">
+                {onBack ? "Back" : "Cancel"}
+              </MainLayoutTextSize>
+            </MainLayoutButton>
+
+            <MainLayoutButton
               type="submit"
-              className="w-full py-2 rounded-xl text-[11px] font-bold text-black bg-[#ffd60a] hover:bg-[#e6c200] transition-colors cursor-pointer"
+              variant="primary"
+              className="w-full justify-center py-2"
             >
-              Add New Vehicle
-            </button>
+              <MainLayoutTextSize size="headerButtonText">
+                Add New Vehicle
+              </MainLayoutTextSize>
+            </MainLayoutButton>
           </div>
         </form>
-
-      </div>
+      </MainLayoutColor>
     </div>
   );
 }

@@ -1,12 +1,18 @@
 import React, { useState } from "react";
-import { MoreVertical, Pencil, Search, ArrowRight } from "lucide-react";
+import { Pencil, Search, ArrowRight } from "lucide-react";
+import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
+import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
 
 const TABS = ["Overview", "Vehicle", "Alerts", "Activity"];
 
-export default function AoiDetailsPanel({ aoi, onEdit, onDelete, onViewVehicle }) {
+export default function AoiDetailsPanel({
+  aoi,
+  onEdit,
+  onDelete,
+  onViewVehicle,
+}) {
   const [activeTab, setActiveTab] = useState("Overview");
 
-  
   const [vehicleSearch, setVehicleSearch] = useState("");
   const [vehicleFilter, setVehicleFilter] = useState("all");
 
@@ -15,51 +21,69 @@ export default function AoiDetailsPanel({ aoi, onEdit, onDelete, onViewVehicle }
 
   if (!aoi) {
     return (
-      <div className="w-full h-full bg-[#121214] border border-[#1f1f23] rounded-2xl p-4 flex items-center justify-center select-none text-white">
-        <p className="text-xs text-[#71717a]">Select an Saved Place to view details</p>
-      </div>
+      <MainLayoutColor
+        as="div"
+        background="surface"
+        className="w-full h-full border border-[#1f1f23] rounded-2xl p-4 flex items-center justify-center select-none"
+      >
+        <MainLayoutColor
+          as={MainLayoutTextSize}
+          color="subtitle"
+          size="subInfoText"
+        >
+          Select a Saved Place to view details
+        </MainLayoutColor>
+      </MainLayoutColor>
     );
   }
 
   const isActive = aoi.status === "active";
   const displayType = aoi.type || aoi.raw?.geometry?.shape || "";
   const displayRadius = aoi.radius ?? aoi.size ?? "";
-  const displayLocation = aoi.location || (aoi.center
-    ? `${aoi.center[0]?.toFixed?.(4) ?? aoi.center[0]}°, ${aoi.center[1]?.toFixed?.(4) ?? aoi.center[1]}°`
-    : "");
-  const displayCreatedBy = aoi.createdBy || aoi.raw?.created_by || aoi.raw?.createdBy || "";
+  const displayLocation =
+    aoi.location ||
+    (aoi.center
+      ? `${aoi.center[0]?.toFixed?.(4) ?? aoi.center[0]}°, ${
+          aoi.center[1]?.toFixed?.(4) ?? aoi.center[1]
+        }°`
+      : "");
+  const displayCreatedBy =
+    aoi.createdBy || aoi.raw?.created_by || aoi.raw?.createdBy || "";
   const insideCount = aoi.inside ?? aoi.raw?.inside_count ?? 0;
   const enteredTodayCount = aoi.enteredToday ?? aoi.raw?.entered_today ?? 0;
   const exitedTodayCount = aoi.exitedToday ?? aoi.raw?.exited_today ?? 0;
-  const entryAlertStatus = aoi.entryAlertStatus || aoi.raw?.entry_alert_status || "";
-  const exitAlertStatus = aoi.exitAlertStatus || aoi.raw?.exit_alert_status || "";
-  const assignedVehicles = Array.isArray(aoi.assignedVehicles) && aoi.assignedVehicles.length > 0
-    ? aoi.assignedVehicles
-    : Array.isArray(aoi.raw?.assigned_vehicles)
+  const entryAlertStatus =
+    aoi.entryAlertStatus || aoi.raw?.entry_alert_status || "";
+  const exitAlertStatus =
+    aoi.exitAlertStatus || aoi.raw?.exit_alert_status || "";
+  const assignedVehicles =
+    Array.isArray(aoi.assignedVehicles) && aoi.assignedVehicles.length > 0
+      ? aoi.assignedVehicles
+      : Array.isArray(aoi.raw?.assigned_vehicles)
       ? aoi.raw.assigned_vehicles
       : [];
 
   const vehiclesList = Array.isArray(aoi.vehiclesList)
     ? aoi.vehiclesList
     : Array.isArray(aoi.raw?.vehicles)
-      ? aoi.raw.vehicles
-      : Array.isArray(aoi.raw?.assigned_vehicles)
-        ? aoi.raw.assigned_vehicles
-        : [];
+    ? aoi.raw.vehicles
+    : Array.isArray(aoi.raw?.assigned_vehicles)
+    ? aoi.raw.assigned_vehicles
+    : [];
 
   const alertsList = Array.isArray(aoi.alertsList)
     ? aoi.alertsList
     : Array.isArray(aoi.raw?.alerts)
-      ? aoi.raw.alerts
-      : [];
+    ? aoi.raw.alerts
+    : [];
 
   const activitiesList = Array.isArray(aoi.activitiesList)
     ? aoi.activitiesList
     : Array.isArray(aoi.raw?.activities)
-      ? aoi.raw.activities
-      : Array.isArray(aoi.raw?.activity_log)
-        ? aoi.raw.activity_log
-        : [];
+    ? aoi.raw.activities
+    : Array.isArray(aoi.raw?.activity_log)
+    ? aoi.raw.activity_log
+    : [];
 
   const totalInsideVehicles = vehiclesList.filter((item) => item.isInside).length;
   const totalOutsideVehicles = vehiclesList.filter((item) => !item.isInside).length;
@@ -74,7 +98,6 @@ export default function AoiDetailsPanel({ aoi, onEdit, onDelete, onViewVehicle }
     return matchesSearch;
   });
 
-
   const filteredAlerts = alertsList.filter((item) => {
     const matchesSearch =
       (item.title || "").toLowerCase().includes(alertSearch.toLowerCase()) ||
@@ -86,34 +109,41 @@ export default function AoiDetailsPanel({ aoi, onEdit, onDelete, onViewVehicle }
   });
 
   return (
-    <div className="w-full h-full bg-[#121214] border border-[#1f1f23] rounded-2xl p-4 flex flex-col select-none overflow-hidden text-white font-sans">
+    <MainLayoutColor
+      as="div"
+      background="surface"
+      className="w-full h-full border border-[#1f1f23] rounded-2xl p-4 flex flex-col select-none overflow-hidden font-sans"
+    >
+      {/* Top Header */}
       <div className="shrink-0 mb-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-base font-bold text-white tracking-tight truncate">
-            {aoi.name}
-          </h3>
-          <button
-            type="button"
-            className="text-[#71717a] hover:text-white transition-colors p-1"
+          <MainLayoutColor
+            as={MainLayoutTextSize}
+            color="title"
+            size="sectionTitle"
+            className="font-bold tracking-tight truncate block text-[14px]"
           >
-          </button>
+            {aoi.name}
+          </MainLayoutColor>
         </div>
 
-        {/* Active Badge */}
+        {/* Badge */}
         <div className="mt-2">
           <span
-            className={`px-3 py-1 rounded-full text-xs font-medium inline-block ${
+            className={`px-3 py-1 rounded-full inline-block ${
               isActive
                 ? "bg-[#042814] text-[#10b981]"
                 : "bg-[#2e1d05] text-[#d97706]"
             }`}
           >
-            {isActive ? "Active" : "Inactive"}
+            <MainLayoutTextSize size="badgeText" className="font-medium">
+              {isActive ? "Active" : "Inactive"}
+            </MainLayoutTextSize>
           </span>
         </div>
       </div>
 
-      {/* Tabs Navigation (Underline Style) */}
+      {/* Tabs */}
       <div className="flex items-center border-b border-[#1f1f23] mb-4 shrink-0 w-full">
         {TABS.map((tab) => {
           const isSelected = activeTab === tab;
@@ -122,11 +152,18 @@ export default function AoiDetailsPanel({ aoi, onEdit, onDelete, onViewVehicle }
               key={tab}
               type="button"
               onClick={() => setActiveTab(tab)}
-              className={`flex-1 py-2 text-xs font-medium transition-all text-center relative cursor-pointer ${
-                isSelected ? "text-[#f59e0b]" : "text-[#71717a] hover:text-white"
+              className={`flex-1 py-2 transition-all text-center relative cursor-pointer ${
+                isSelected
+                  ? "text-[#f59e0b]"
+                  : "text-[#71717a] hover:text-white"
               }`}
             >
-              {tab}
+              <MainLayoutTextSize
+                size="dropdownText"
+                className="font-medium block"
+              >
+                {tab}
+              </MainLayoutTextSize>
               {isSelected && (
                 <span className="absolute bottom-0 left-0 w-full h-[2px] bg-[#f59e0b] rounded-full" />
               )}
@@ -136,101 +173,136 @@ export default function AoiDetailsPanel({ aoi, onEdit, onDelete, onViewVehicle }
       </div>
 
       <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar pr-1">
+        {/* ==================== OVERVIEW TAB ==================== */}
         {activeTab === "Overview" && (
           <div className="space-y-6">
-           
             <div>
-              <h4 className="text-xs font-semibold text-white mb-3">
+              <MainLayoutColor
+                as={MainLayoutTextSize}
+                color="title"
+                size="sectionTitle"
+                className="font-semibold mb-3 block"
+              >
                 Place Information
-              </h4>
-              <div className="space-y-2.5 text-xs">
+              </MainLayoutColor>
+              <div className="space-y-2.5">
                 <div className="flex justify-between items-center">
-                  <span className="text-[#71717a]">Type</span>
-                  <span className="text-[#a1a1aa] font-medium">
+                  <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText">
+                    Type
+                  </MainLayoutColor>
+                  <MainLayoutColor as={MainLayoutTextSize} color="title" size="subInfoText" className="font-medium">
                     {displayType}
-                  </span>
+                  </MainLayoutColor>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-[#71717a]">Radius</span>
-                  <span className="text-[#a1a1aa] font-medium">
+                  <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText">
+                    Radius
+                  </MainLayoutColor>
+                  <MainLayoutColor as={MainLayoutTextSize} color="title" size="subInfoText" className="font-medium">
                     {displayRadius}
-                  </span>
+                  </MainLayoutColor>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-[#71717a]">Center Location</span>
-                  <span className="text-[#a1a1aa] font-medium">
+                  <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText">
+                    Center Location
+                  </MainLayoutColor>
+                  <MainLayoutColor as={MainLayoutTextSize} color="title" size="subInfoText" className="font-medium">
                     {displayLocation}
-                  </span>
+                  </MainLayoutColor>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-[#71717a]">Created By</span>
-                  <span className="text-[#a1a1aa] font-medium">
+                  <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText">
+                    Created By
+                  </MainLayoutColor>
+                  <MainLayoutColor as={MainLayoutTextSize} color="title" size="subInfoText" className="font-medium">
                     {displayCreatedBy}
-                  </span>
+                  </MainLayoutColor>
                 </div>
               </div>
             </div>
 
             <div className="w-full h-[1px] bg-[#1f1f23]/60" />
 
-            {/* Vehicle Status Section */}
             <div>
-              <h4 className="text-xs font-semibold text-white mb-3">
+              <MainLayoutColor
+                as={MainLayoutTextSize}
+                color="title"
+                size="sectionTitle"
+                className="font-semibold mb-3 block"
+              >
                 Vehicle Status
-              </h4>
-              <div className="space-y-2 text-xs">
+              </MainLayoutColor>
+              <div className="space-y-2">
                 <div className="flex items-center gap-2">
-                  <span className="font-semibold text-white">
+                  <MainLayoutColor as={MainLayoutTextSize} color="title" size="sectionTitle" className="font-semibold">
                     {insideCount}
-                  </span>
-                  <span className="text-[#71717a]">Inside Place</span>
+                  </MainLayoutColor>
+                  <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText">
+                    Inside Place
+                  </MainLayoutColor>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="font-semibold text-white">
+                  <MainLayoutColor as={MainLayoutTextSize} color="title" size="sectionTitle" className="font-semibold">
                     {enteredTodayCount}
-                  </span>
-                  <span className="text-[#71717a]">Entered Today</span>
+                  </MainLayoutColor>
+                  <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText">
+                    Entered Today
+                  </MainLayoutColor>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="font-semibold text-white">
+                  <MainLayoutColor as={MainLayoutTextSize} color="title" size="sectionTitle" className="font-semibold">
                     {exitedTodayCount}
-                  </span>
-                  <span className="text-[#71717a]">Exited Today</span>
+                  </MainLayoutColor>
+                  <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText">
+                    Exited Today
+                  </MainLayoutColor>
                 </div>
               </div>
             </div>
 
             <div className="w-full h-[1px] bg-[#1f1f23]/60" />
 
-            
             <div>
-              <h4 className="text-xs font-semibold text-white mb-3">
+              <MainLayoutColor
+                as={MainLayoutTextSize}
+                color="title"
+                size="sectionTitle"
+                className="font-semibold mb-3 block"
+              >
                 Vehicle Alert Status
-              </h4>
-              <div className="space-y-2.5 text-xs">
+              </MainLayoutColor>
+              <div className="space-y-2.5">
                 <div className="flex justify-between items-center">
-                  <span className="text-[#71717a]">Vehicle Entry Alert</span>
-                  <span className="text-[#10b981] font-medium">
+                  <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText">
+                    Vehicle Entry Alert
+                  </MainLayoutColor>
+                  <MainLayoutTextSize size="subInfoText" className="text-[#10b981] font-medium">
                     {entryAlertStatus}
-                  </span>
+                  </MainLayoutTextSize>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-[#71717a]">Vehicle Exit Alert</span>
-                  <span className="text-[#10b981] font-medium">
+                  <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText">
+                    Vehicle Exit Alert
+                  </MainLayoutColor>
+                  <MainLayoutTextSize size="subInfoText" className="text-[#10b981] font-medium">
                     {exitAlertStatus}
-                  </span>
+                  </MainLayoutTextSize>
                 </div>
               </div>
             </div>
 
             <div className="w-full h-[1px] bg-[#1f1f23]/60" />
 
-           
             <div>
-              <h4 className="text-xs font-semibold text-white mb-3">
+              <MainLayoutColor
+                as={MainLayoutTextSize}
+                color="title"
+                size="sectionTitle"
+                className="font-semibold mb-3 block"
+              >
                 Assigned Vehicle
-              </h4>
-              <div className="space-y-2.5 text-xs">
+              </MainLayoutColor>
+              <div className="space-y-2.5">
                 {assignedVehicles.length > 0 ? (
                   assignedVehicles.map((vehicle, idx) => (
                     <div
@@ -238,14 +310,27 @@ export default function AoiDetailsPanel({ aoi, onEdit, onDelete, onViewVehicle }
                       className="flex justify-between items-center"
                     >
                       <div className="flex items-center gap-2">
-                        <span className="font-semibold text-white">
-                          {vehicle.plate || vehicle.name || vehicle.vehicle_number || ""}
-                        </span>
-                        <span className="text-[#71717a] text-[11px]">
+                        <MainLayoutColor
+                          as={MainLayoutTextSize}
+                          color="title"
+                          size="plateText"
+                          className="font-semibold"
+                        >
+                          {vehicle.plate ||
+                            vehicle.name ||
+                            vehicle.vehicle_number ||
+                            ""}
+                        </MainLayoutColor>
+                        <MainLayoutColor
+                          as={MainLayoutTextSize}
+                          color="subtitle"
+                          size="subInfoText"
+                        >
                           {vehicle.type || vehicle.vehicle_type || ""}
-                        </span>
+                        </MainLayoutColor>
                       </div>
-                      <span
+                      <MainLayoutTextSize
+                        size="subInfoText"
                         className={`font-medium ${
                           vehicle.status === "Inside"
                             ? "text-[#10b981]"
@@ -253,27 +338,29 @@ export default function AoiDetailsPanel({ aoi, onEdit, onDelete, onViewVehicle }
                         }`}
                       >
                         {vehicle.status || ""}
-                      </span>
+                      </MainLayoutTextSize>
                     </div>
                   ))
                 ) : (
-                  <p className="text-[11px] text-[#71717a]">No assigned vehicle data available</p>
+                  <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText">
+                    No assigned vehicle data available
+                  </MainLayoutColor>
                 )}
               </div>
             </div>
           </div>
         )}
 
+        {/* ==================== VEHICLE TAB ==================== */}
         {activeTab === "Vehicle" && (
           <div className="space-y-4">
-            {/* Search Input */}
             <div className="relative w-full">
               <input
                 type="text"
                 placeholder="Search Vehicle..."
                 value={vehicleSearch}
                 onChange={(e) => setVehicleSearch(e.target.value)}
-                className="w-full rounded-full bg-[#09090b] border border-[#27272a] focus:border-[#3f3f46] text-xs py-2 pl-4 pr-10 text-white placeholder-[#52525b] outline-none"
+                className="w-full rounded-full bg-[#09090b] border border-[#27272a] focus:border-[#3f3f46] text-[12px] py-2 pl-4 pr-10 text-white placeholder-[#52525b] outline-none"
               />
               <Search
                 size={15}
@@ -281,47 +368,51 @@ export default function AoiDetailsPanel({ aoi, onEdit, onDelete, onViewVehicle }
               />
             </div>
 
-          
             <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar shrink-0">
               <button
                 type="button"
                 onClick={() => setVehicleFilter("all")}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-medium cursor-pointer transition-all ${
+                className={`flex items-center gap-1.5 px-3 py-1 rounded-full cursor-pointer transition-all ${
                   vehicleFilter === "all"
                     ? "bg-[#27272a] text-white"
                     : "bg-[#18181b] text-[#8e8e93] hover:text-white"
                 }`}
               >
                 <span className="w-2 h-2 rounded-[2px] bg-[#71717a]" />
-                All
+                <MainLayoutTextSize size="badgeText" className="font-medium">
+                  All
+                </MainLayoutTextSize>
               </button>
               <button
                 type="button"
                 onClick={() => setVehicleFilter("inside")}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-medium cursor-pointer transition-all ${
+                className={`flex items-center gap-1.5 px-3 py-1 rounded-full cursor-pointer transition-all ${
                   vehicleFilter === "inside"
                     ? "bg-[#27272a] text-white"
                     : "bg-[#18181b] text-[#8e8e93] hover:text-white"
                 }`}
               >
                 <span className="w-2 h-2 rounded-[2px] bg-[#10b981]" />
-                {insideCount || totalInsideVehicles || 0} Inside
+                <MainLayoutTextSize size="badgeText" className="font-medium">
+                  {insideCount || totalInsideVehicles || 0} Inside
+                </MainLayoutTextSize>
               </button>
               <button
                 type="button"
                 onClick={() => setVehicleFilter("outside")}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-medium cursor-pointer transition-all ${
+                className={`flex items-center gap-1.5 px-3 py-1 rounded-full cursor-pointer transition-all ${
                   vehicleFilter === "outside"
                     ? "bg-[#27272a] text-white"
                     : "bg-[#18181b] text-[#8e8e93] hover:text-white"
                 }`}
               >
                 <span className="w-2 h-2 rounded-[2px] bg-[#f59e0b]" />
-                {totalOutsideVehicles || 0} Outside
+                <MainLayoutTextSize size="badgeText" className="font-medium">
+                  {totalOutsideVehicles || 0} Outside
+                </MainLayoutTextSize>
               </button>
             </div>
 
-            {/* Vehicle Cards List */}
             <div className="space-y-4 pt-1">
               {filteredVehicles.length > 0 ? (
                 filteredVehicles.map((v) => (
@@ -330,38 +421,61 @@ export default function AoiDetailsPanel({ aoi, onEdit, onDelete, onViewVehicle }
                     className="border-b border-[#1f1f23]/60 pb-3.5 last:border-0"
                   >
                     <div className="flex items-center justify-between mb-1">
-                      <span className="text-xs font-bold text-white">
+                      <MainLayoutColor
+                        as={MainLayoutTextSize}
+                        color="title"
+                        size="plateText"
+                        className="font-bold"
+                      >
                         {v.plate}
-                      </span>
+                      </MainLayoutColor>
                       <span
-                        className={`px-3 py-0.5 rounded-full text-[10px] font-medium ${
+                        className={`px-3 py-0.5 rounded-full ${
                           v.isInside
                             ? "bg-[#042814] text-[#10b981]"
                             : "bg-[#2e1d05] text-[#d97706]"
                         }`}
                       >
-                        • {v.status}
+                        <MainLayoutTextSize size="badgeText" className="font-medium">
+                          • {v.status}
+                        </MainLayoutTextSize>
                       </span>
                     </div>
 
-                    <p className="text-[11px] text-[#71717a]">
+                    <MainLayoutColor
+                      as={MainLayoutTextSize}
+                      color="subtitle"
+                      size="subInfoText"
+                      className="block"
+                    >
                       {v.type} <span className="mx-1">•</span> {v.driver}
-                    </p>
-                    <p className="text-[11px] text-[#71717a] mt-0.5">{v.time}</p>
+                    </MainLayoutColor>
+                    <MainLayoutColor
+                      as={MainLayoutTextSize}
+                      color="subtitle"
+                      size="subInfoText"
+                      className="mt-0.5 block"
+                    >
+                      {v.time}
+                    </MainLayoutColor>
 
                     <button
                       type="button"
                       onClick={() => onViewVehicle && onViewVehicle(v)}
-                      className="mt-3 flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-[#2b2106] border border-[#523e0c] text-[#f59e0b] hover:bg-[#3d2e08] text-xs font-medium transition-colors cursor-pointer"
+                      className="mt-3 flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-[#2b2106] border border-[#523e0c] text-[#f59e0b] hover:bg-[#3d2e08] transition-colors cursor-pointer"
                     >
-                      View Vehicle
+                      <MainLayoutTextSize size="subInfoText" className="font-medium">
+                        View Vehicle
+                      </MainLayoutTextSize>
                       <ArrowRight size={13} />
                     </button>
                   </div>
                 ))
               ) : (
-                <div className="py-8 text-center text-xs text-[#71717a]">
-                  No vehicles found
+                <div className="py-8 text-center">
+                  <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText">
+                    No vehicles found
+                  </MainLayoutColor>
                 </div>
               )}
             </div>
@@ -371,14 +485,13 @@ export default function AoiDetailsPanel({ aoi, onEdit, onDelete, onViewVehicle }
         {/* ==================== ALERTS TAB ==================== */}
         {activeTab === "Alerts" && (
           <div className="space-y-4">
-            {/* Search Input */}
             <div className="relative w-full">
               <input
                 type="text"
                 placeholder="Search Vehicle..."
                 value={alertSearch}
                 onChange={(e) => setAlertSearch(e.target.value)}
-                className="w-full rounded-full bg-[#09090b] border border-[#27272a] focus:border-[#3f3f46] text-xs py-2 pl-4 pr-10 text-white placeholder-[#52525b] outline-none"
+                className="w-full rounded-full bg-[#09090b] border border-[#27272a] focus:border-[#3f3f46] text-[12px] py-2 pl-4 pr-10 text-white placeholder-[#52525b] outline-none"
               />
               <Search
                 size={15}
@@ -386,47 +499,51 @@ export default function AoiDetailsPanel({ aoi, onEdit, onDelete, onViewVehicle }
               />
             </div>
 
-            {/* Filter Pills */}
             <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar shrink-0">
               <button
                 type="button"
                 onClick={() => setAlertFilter("all")}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-medium cursor-pointer transition-all ${
+                className={`flex items-center gap-1.5 px-3 py-1 rounded-full cursor-pointer transition-all ${
                   alertFilter === "all"
                     ? "bg-[#27272a] text-white"
                     : "bg-[#18181b] text-[#8e8e93] hover:text-white"
                 }`}
               >
                 <span className="w-2 h-2 rounded-[2px] bg-[#71717a]" />
-                All
+                <MainLayoutTextSize size="badgeText" className="font-medium">
+                  All
+                </MainLayoutTextSize>
               </button>
               <button
                 type="button"
                 onClick={() => setAlertFilter("entry")}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-medium cursor-pointer transition-all ${
+                className={`flex items-center gap-1.5 px-3 py-1 rounded-full cursor-pointer transition-all ${
                   alertFilter === "entry"
                     ? "bg-[#27272a] text-white"
                     : "bg-[#18181b] text-[#8e8e93] hover:text-white"
                 }`}
               >
                 <span className="w-2 h-2 rounded-[2px] bg-[#10b981]" />
-                Entry
+                <MainLayoutTextSize size="badgeText" className="font-medium">
+                  Entry
+                </MainLayoutTextSize>
               </button>
               <button
                 type="button"
                 onClick={() => setAlertFilter("exit")}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-medium cursor-pointer transition-all ${
+                className={`flex items-center gap-1.5 px-3 py-1 rounded-full cursor-pointer transition-all ${
                   alertFilter === "exit"
                     ? "bg-[#27272a] text-white"
                     : "bg-[#18181b] text-[#8e8e93] hover:text-white"
                 }`}
               >
                 <span className="w-2 h-2 rounded-[2px] bg-[#f59e0b]" />
-                Exit
+                <MainLayoutTextSize size="badgeText" className="font-medium">
+                  Exit
+                </MainLayoutTextSize>
               </button>
             </div>
 
-            {/* Alert Cards List */}
             <div className="space-y-3 pt-1">
               {filteredAlerts.length > 0 ? (
                 filteredAlerts.map((alt, idx) => (
@@ -435,35 +552,57 @@ export default function AoiDetailsPanel({ aoi, onEdit, onDelete, onViewVehicle }
                     className="border-b border-[#1f1f23]/60 pb-3 last:border-0"
                   >
                     <div className="flex items-center justify-between mb-1">
-                      <span className="text-xs font-bold text-white">
+                      <MainLayoutColor
+                        as={MainLayoutTextSize}
+                        color="title"
+                        size="sectionTitle"
+                        className="font-bold"
+                      >
                         {alt.title}
-                      </span>
+                      </MainLayoutColor>
                       <span
-                        className={`px-3 py-0.5 rounded-full text-[10px] font-medium ${
+                        className={`px-3 py-0.5 rounded-full ${
                           alt.isEntry
                             ? "bg-[#042814] text-[#10b981]"
                             : "bg-[#2e1d05] text-[#d97706]"
                         }`}
                       >
-                        • {alt.badgeText}
+                        <MainLayoutTextSize size="badgeText" className="font-medium">
+                          • {alt.badgeText}
+                        </MainLayoutTextSize>
                       </span>
                     </div>
 
-                    <p className="text-[11px] text-[#71717a]">
+                    <MainLayoutColor
+                      as={MainLayoutTextSize}
+                      color="subtitle"
+                      size="subInfoText"
+                      className="block"
+                    >
                       {alt.plate} <span className="mx-1">•</span> {alt.driver}
-                    </p>
-                    <p className="text-[11px] text-[#71717a] mt-0.5">{alt.time}</p>
+                    </MainLayoutColor>
+                    <MainLayoutColor
+                      as={MainLayoutTextSize}
+                      color="subtitle"
+                      size="subInfoText"
+                      className="mt-0.5 block"
+                    >
+                      {alt.time}
+                    </MainLayoutColor>
                   </div>
                 ))
               ) : (
-                <div className="py-8 text-center text-xs text-[#71717a]">
-                  No alerts found
+                <div className="py-8 text-center">
+                  <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText">
+                    No alerts found
+                  </MainLayoutColor>
                 </div>
               )}
             </div>
           </div>
         )}
 
+        {/* ==================== ACTIVITY TAB ==================== */}
         {activeTab === "Activity" && (
           <div className="space-y-4 pt-1">
             {activitiesList.length > 0 ? (
@@ -472,36 +611,57 @@ export default function AoiDetailsPanel({ aoi, onEdit, onDelete, onViewVehicle }
                   key={act.id || idx}
                   className="border-b border-[#1f1f23]/60 pb-3 last:border-0"
                 >
-                  <p className="text-xs font-bold text-white">{act.time}</p>
-                  <p className="text-[11px] text-[#71717a] mt-0.5">{act.text}</p>
+                  <MainLayoutColor
+                    as={MainLayoutTextSize}
+                    color="title"
+                    size="sectionTitle"
+                    className="font-bold block"
+                  >
+                    {act.time}
+                  </MainLayoutColor>
+                  <MainLayoutColor
+                    as={MainLayoutTextSize}
+                    color="subtitle"
+                    size="subInfoText"
+                    className="mt-0.5 block"
+                  >
+                    {act.text}
+                  </MainLayoutColor>
                 </div>
               ))
             ) : (
-              <div className="py-8 text-center text-xs text-[#71717a]">
-                No recent activity
+              <div className="py-8 text-center">
+                <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText">
+                  No recent activity
+                </MainLayoutColor>
               </div>
             )}
           </div>
         )}
       </div>
 
+      {/* Footer Buttons */}
       <div className="shrink-0 pt-4 mt-2 border-t border-[#1f1f23] flex items-center gap-3">
         <button
           type="button"
           onClick={onEdit}
-          className="flex-1 py-2.5 px-4 rounded-xl bg-[#27272a] hover:bg-[#3f3f46] text-white text-xs font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer"
+          className="flex-1 py-2.5 px-4 rounded-xl bg-[#27272a] hover:bg-[#3f3f46] text-white flex items-center justify-center gap-2 transition-colors cursor-pointer"
         >
           <Pencil size={14} />
-          Edit Places
+          <MainLayoutTextSize size="headerButtonText">
+            Edit Places
+          </MainLayoutTextSize>
         </button>
         <button
           type="button"
           onClick={onDelete}
-          className="flex-1 py-2.5 px-4 rounded-xl bg-[#dc2626] hover:bg-[#b91c1c] text-white text-xs font-semibold transition-colors cursor-pointer"
+          className="flex-1 py-2.5 px-4 rounded-xl bg-[#dc2626] hover:bg-[#b91c1c] text-white transition-colors cursor-pointer"
         >
-          Delete
+          <MainLayoutTextSize size="headerButtonText">
+            Delete
+          </MainLayoutTextSize>
         </button>
       </div>
-    </div>
+    </MainLayoutColor>
   );
 }

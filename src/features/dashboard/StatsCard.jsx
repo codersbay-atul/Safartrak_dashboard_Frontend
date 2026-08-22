@@ -52,7 +52,7 @@ function buildStatsData(summary, { isLoading = false } = {}) {
       title: "Idle",
       bgIcon: "bg-[#3B2A00]",
       colorIcon: "text-[#ffd60a]",
-      showArrow: true,
+      
     },
     {
       id: "offline_vehicles",
@@ -62,7 +62,7 @@ function buildStatsData(summary, { isLoading = false } = {}) {
       title: "Offline",
       bgIcon: "bg-[#450A0A]",
       colorIcon: "text-[#B91C1C]",
-      showArrow: true,
+      
     },
     {
       id: "no-gps",
@@ -72,7 +72,7 @@ function buildStatsData(summary, { isLoading = false } = {}) {
       title: "No GPS",
       bgIcon: "bg-[#172554]",
       colorIcon: "text-[#3b82f6]",
-      showArrow: true,
+      
     },
   ];
 }

@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 import { Upload } from "lucide-react";
+import { toast } from "../../components/Ui/toast";
+import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
+import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
+import MainHeaderActionButton from "../../components/Ui/MainLayoutUI/MainHeaderActionButton";
 
 export default function VehiclesInfo({ onNext, onCancel }) {
   const [formData, setFormData] = useState({
@@ -10,51 +14,64 @@ export default function VehiclesInfo({ onNext, onCancel }) {
     permitFile: null,
     vehicleImage: null,
   });
-
-  /* -------------------------------------------------------------
-     1. VALIDATION ERRORS STATE (Commented out for now)
-  ---------------------------------------------------------------- */
-  // const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleFileChange = (e) => {
     const { name, files } = e.target;
     if (files && files[0]) {
       setFormData((prev) => ({ ...prev, [name]: files[0] }));
 
-      /* -------------------------------------------------------------
-         2. CLEAR ERROR ON FILE UPLOAD (Commented out for now)
-      ---------------------------------------------------------------- */
-      // if (errors[name]) {
-      //   setErrors((prev) => ({ ...prev, [name]: "" }));
-      // }
+      if (errors[name]) {
+        setErrors((prev) => ({ ...prev, [name]: "" }));
+      }
     }
   };
 
-  /* -------------------------------------------------------------
-     3. VALIDATION LOGIC FUNCTION (Commented out for now)
-  ---------------------------------------------------------------- */
-  /*
   const validateForm = () => {
-    let newErrors = {};
+    const newErrors = {};
 
-    if (!formData.rcFile) newErrors.rcFile = "RC Certificate is required";
-    if (!formData.insuranceFile) newErrors.insuranceFile = "Insurance document is required";
+    if (!formData.rcFile) {
+      newErrors.rcFile = "Registration certificate is required";
+    }
+    if (!formData.insuranceFile) {
+      newErrors.insuranceFile = "Insurance document is required";
+    }
+    if (!formData.fitnessFile) {
+      newErrors.fitnessFile = "Fitness certificate is required";
+    }
+    if (!formData.pollutionFile) {
+      newErrors.pollutionFile = "Pollution certificate is required";
+    }
+    if (!formData.permitFile) {
+      newErrors.permitFile = "Permit document is required";
+    }
+    if (!formData.vehicleImage) {
+      newErrors.vehicleImage = "Vehicle image is required";
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-  */
 
-  const handleNext = (e) => {
+  const handleNext = async (e) => {
     e.preventDefault();
 
-    /* -------------------------------------------------------------
-       4. FORM VALIDATION CHECK BEFORE NEXT (Commented out for now)
-    ---------------------------------------------------------------- */
-    // const isValid = validateForm();
-    // if (!isValid) return;
+    if (!validateForm()) {
+      toast.error("Please upload all required documents");
+      return;
+    }
 
-    if (onNext) onNext(formData);
+    try {
+      setIsSubmitting(true);
+      toast.success("Documents uploaded successfully");
+      if (onNext) onNext(formData);
+    } catch (error) {
+      console.error("Failed to upload vehicle documents", error);
+      toast.error(error?.message || "Failed to upload documents");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const uploadFields = [
@@ -67,26 +84,44 @@ export default function VehiclesInfo({ onNext, onCancel }) {
   ];
 
   return (
-    <div className="w-full max-w-[480px] bg-[#121214] border border-[#27272a] rounded-2xl p-4 shadow-2xl flex flex-col select-none">
-      
-      {/* Header (Without Cross Button) */}
-      <div className="pb-3 mb-2 border-b border-[#1d1d20]/60">
-        <h2 className="text-[14px] font-bold text-white tracking-tight">
+    <MainLayoutColor
+      as="div"
+      background="surface"
+      className="w-full max-w-[480px] border border-[#27272a] rounded-2xl p-4 shadow-2xl flex flex-col overflow-visible select-none font-sans"
+    >
+      {/* Header (14px Section Title) */}
+      <div className="pb-3 mb-2 border-b border-[#27272a]">
+        <MainLayoutColor
+          as={MainLayoutTextSize}
+          color="title"
+          size="sectionTitle"
+          className="font-medium tracking-tight block"
+        >
           Vehicle Settings (Document Uploads)
-        </h2>
+        </MainLayoutColor>
       </div>
 
       {/* Form Body */}
-      <form onSubmit={handleNext} className="flex flex-col gap-2.5 text-[10.5px]">
-        
+      <form onSubmit={handleNext} className="flex flex-col gap-3">
         {/* Row 1: RC & Insurance */}
         <div className="grid grid-cols-2 gap-2.5">
           {uploadFields.slice(0, 2).map((field) => (
             <div key={field.name}>
-              <label className="block text-[#a1a1aa] mb-1 font-medium">{field.label}</label>
-              <div className="flex items-center bg-[#18181b]/60 border border-[#27272a] rounded-xl overflow-hidden focus-within:border-[#ffd60a] transition-all">
-                <label className="flex items-center gap-1.5 px-2.5 py-1.5 bg-[#27272a]/60 text-white font-medium cursor-pointer hover:bg-[#27272a] transition-colors border-r border-[#27272a] shrink-0">
-                  <Upload size={12} />
+              <MainLayoutColor
+                as={MainLayoutTextSize}
+                color="subtitle"
+                size="subInfoText"
+                className="block mb-1 font-medium"
+              >
+                {field.label} <span className="text-rose-500">*</span>
+              </MainLayoutColor>
+              <div
+                className={`flex items-center bg-[#18181b]/60 border ${
+                  errors[field.name] ? "border-rose-500" : "border-[#27272a]"
+                } rounded-xl overflow-hidden focus-within:border-[var(--color-yellow,#ffd60a)] transition-all`}
+              >
+                <label className="flex items-center gap-1.5 px-3 py-1.5 bg-[#27272a]/60 text-white font-medium cursor-pointer hover:bg-[#27272a] transition-colors border-r border-[#27272a] shrink-0 text-[11px]">
+                  <Upload size={13} className="text-[#ffd60a]" />
                   <span>Upload</span>
                   <input
                     type="file"
@@ -95,7 +130,7 @@ export default function VehiclesInfo({ onNext, onCancel }) {
                     className="hidden"
                   />
                 </label>
-                <span className="px-2.5 py-1.5 text-[#52525b] text-[10px] truncate">
+                <span className="px-2.5 py-1.5 text-[#52525b] text-[11px] truncate flex-1 font-medium">
                   {formData[field.name] ? (
                     <span className="text-white">{formData[field.name].name}</span>
                   ) : (
@@ -103,6 +138,11 @@ export default function VehiclesInfo({ onNext, onCancel }) {
                   )}
                 </span>
               </div>
+              {errors[field.name] && (
+                <p className="text-rose-500 text-[10px] mt-0.5 leading-tight">
+                  {errors[field.name]}
+                </p>
+              )}
             </div>
           ))}
         </div>
@@ -111,10 +151,21 @@ export default function VehiclesInfo({ onNext, onCancel }) {
         <div className="grid grid-cols-2 gap-2.5">
           {uploadFields.slice(2, 4).map((field) => (
             <div key={field.name}>
-              <label className="block text-[#a1a1aa] mb-1 font-medium">{field.label}</label>
-              <div className="flex items-center bg-[#18181b]/60 border border-[#27272a] rounded-xl overflow-hidden focus-within:border-[#ffd60a] transition-all">
-                <label className="flex items-center gap-1.5 px-2.5 py-1.5 bg-[#27272a]/60 text-white font-medium cursor-pointer hover:bg-[#27272a] transition-colors border-r border-[#27272a] shrink-0">
-                  <Upload size={12} />
+              <MainLayoutColor
+                as={MainLayoutTextSize}
+                color="subtitle"
+                size="subInfoText"
+                className="block mb-1 font-medium"
+              >
+                {field.label} <span className="text-rose-500">*</span>
+              </MainLayoutColor>
+              <div
+                className={`flex items-center bg-[#18181b]/60 border ${
+                  errors[field.name] ? "border-rose-500" : "border-[#27272a]"
+                } rounded-xl overflow-hidden focus-within:border-[var(--color-yellow,#ffd60a)] transition-all`}
+              >
+                <label className="flex items-center gap-1.5 px-3 py-1.5 bg-[#27272a]/60 text-white font-medium cursor-pointer hover:bg-[#27272a] transition-colors border-r border-[#27272a] shrink-0 text-[11px]">
+                  <Upload size={13} className="text-[#ffd60a]" />
                   <span>Upload</span>
                   <input
                     type="file"
@@ -123,7 +174,7 @@ export default function VehiclesInfo({ onNext, onCancel }) {
                     className="hidden"
                   />
                 </label>
-                <span className="px-2.5 py-1.5 text-[#52525b] text-[10px] truncate">
+                <span className="px-2.5 py-1.5 text-[#52525b] text-[11px] truncate flex-1 font-medium">
                   {formData[field.name] ? (
                     <span className="text-white">{formData[field.name].name}</span>
                   ) : (
@@ -131,16 +182,32 @@ export default function VehiclesInfo({ onNext, onCancel }) {
                   )}
                 </span>
               </div>
+              {errors[field.name] && (
+                <p className="text-rose-500 text-[10px] mt-0.5 leading-tight">
+                  {errors[field.name]}
+                </p>
+              )}
             </div>
           ))}
         </div>
 
         {/* Row 3: Permit */}
         <div>
-          <label className="block text-[#a1a1aa] mb-1 font-medium">Permit</label>
-          <div className="flex items-center bg-[#18181b]/60 border border-[#27272a] rounded-xl overflow-hidden focus-within:border-[#ffd60a] transition-all">
-            <label className="flex items-center gap-1.5 px-3 py-1.5 bg-[#27272a]/60 text-white font-medium cursor-pointer hover:bg-[#27272a] transition-colors border-r border-[#27272a] shrink-0">
-              <Upload size={12} />
+          <MainLayoutColor
+            as={MainLayoutTextSize}
+            color="subtitle"
+            size="subInfoText"
+            className="block mb-1 font-medium"
+          >
+            Permit <span className="text-rose-500">*</span>
+          </MainLayoutColor>
+          <div
+            className={`flex items-center bg-[#18181b]/60 border ${
+              errors.permitFile ? "border-rose-500" : "border-[#27272a]"
+            } rounded-xl overflow-hidden focus-within:border-[var(--color-yellow,#ffd60a)] transition-all`}
+          >
+            <label className="flex items-center gap-1.5 px-3 py-1.5 bg-[#27272a]/60 text-white font-medium cursor-pointer hover:bg-[#27272a] transition-colors border-r border-[#27272a] shrink-0 text-[11px]">
+              <Upload size={13} className="text-[#ffd60a]" />
               <span>Upload</span>
               <input
                 type="file"
@@ -149,7 +216,7 @@ export default function VehiclesInfo({ onNext, onCancel }) {
                 className="hidden"
               />
             </label>
-            <span className="px-3 py-1.5 text-[#52525b] text-[10.5px] truncate">
+            <span className="px-3 py-1.5 text-[#52525b] text-[11px] truncate flex-1 font-medium">
               {formData.permitFile ? (
                 <span className="text-white">{formData.permitFile.name}</span>
               ) : (
@@ -157,14 +224,30 @@ export default function VehiclesInfo({ onNext, onCancel }) {
               )}
             </span>
           </div>
+          {errors.permitFile && (
+            <p className="text-rose-500 text-[10px] mt-0.5 leading-tight">
+              {errors.permitFile}
+            </p>
+          )}
         </div>
 
         {/* Row 4: Vehicle Image */}
         <div>
-          <label className="block text-[#a1a1aa] mb-1 font-medium">Vehicle Image</label>
-          <div className="flex items-center bg-[#18181b]/60 border border-[#27272a] rounded-xl overflow-hidden focus-within:border-[#ffd60a] transition-all">
-            <label className="flex items-center gap-1.5 px-3 py-1.5 bg-[#27272a]/60 text-white font-medium cursor-pointer hover:bg-[#27272a] transition-colors border-r border-[#27272a] shrink-0">
-              <Upload size={12} />
+          <MainLayoutColor
+            as={MainLayoutTextSize}
+            color="subtitle"
+            size="subInfoText"
+            className="block mb-1 font-medium"
+          >
+            Vehicle Image <span className="text-rose-500">*</span>
+          </MainLayoutColor>
+          <div
+            className={`flex items-center bg-[#18181b]/60 border ${
+              errors.vehicleImage ? "border-rose-500" : "border-[#27272a]"
+            } rounded-xl overflow-hidden focus-within:border-[var(--color-yellow,#ffd60a)] transition-all`}
+          >
+            <label className="flex items-center gap-1.5 px-3 py-1.5 bg-[#27272a]/60 text-white font-medium cursor-pointer hover:bg-[#27272a] transition-colors border-r border-[#27272a] shrink-0 text-[11px]">
+              <Upload size={13} className="text-[#ffd60a]" />
               <span>Upload</span>
               <input
                 type="file"
@@ -173,7 +256,7 @@ export default function VehiclesInfo({ onNext, onCancel }) {
                 className="hidden"
               />
             </label>
-            <span className="px-3 py-1.5 text-[#52525b] text-[10.5px] truncate">
+            <span className="px-3 py-1.5 text-[#52525b] text-[11px] truncate flex-1 font-medium">
               {formData.vehicleImage ? (
                 <span className="text-white">{formData.vehicleImage.name}</span>
               ) : (
@@ -181,26 +264,52 @@ export default function VehiclesInfo({ onNext, onCancel }) {
               )}
             </span>
           </div>
+          {errors.vehicleImage && (
+            <p className="text-rose-500 text-[10px] mt-0.5 leading-tight">
+              {errors.vehicleImage}
+            </p>
+          )}
         </div>
 
         {/* Action Buttons */}
-        <div className="grid grid-cols-2 gap-2.5 pt-2 mt-2 border-t border-[#1d1d20]">
-          <button
+        <div className="grid grid-cols-2 gap-2.5 pt-2.5 mt-2 border-t border-[#27272a]">
+          {/* Cancel Button */}
+          <MainHeaderActionButton
             type="button"
+            variant="secondary"
             onClick={onCancel}
-            className="w-full py-2 px-4 rounded-xl text-[11px] font-semibold bg-[#27272a]/60 hover:bg-[#27272a] text-[#d4d4d8] transition-colors cursor-pointer"
+            disabled={isSubmitting}
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            className="w-full py-2 px-4 rounded-xl bg-[#18181b] hover:bg-[#27272a] text-[#a1a1aa] hover:text-white border border-[#27272a] cursor-pointer disabled:opacity-50"
           >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            className="w-full py-2 rounded-xl text-[11px] font-bold text-black bg-[#ffd60a] hover:bg-[#e6c200] transition-colors cursor-pointer"
-          >
-            Next
-          </button>
-        </div>
+            <span className="text-[14px] font-medium whitespace-nowrap leading-none">
+              Cancel
+            </span>
+          </MainHeaderActionButton>
 
+          {/* Submit / Next Button */}
+          <MainHeaderActionButton
+            type="submit"
+            disabled={isSubmitting}
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            className="w-full py-2 rounded-xl text-black bg-[var(--color-yellow,#ffd60a)] hover:bg-[var(--color-yellow-hover,#e6c200)] border border-[var(--color-yellow,#ffd60a)] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-[var(--color-yellow,#ffd60a)]/10"
+          >
+            <span className="text-[14px] font-medium text-black whitespace-nowrap leading-none">
+              {isSubmitting ? "Uploading..." : "Next"}
+            </span>
+          </MainHeaderActionButton>
+        </div>
       </form>
-    </div>
+    </MainLayoutColor>
   );
 }

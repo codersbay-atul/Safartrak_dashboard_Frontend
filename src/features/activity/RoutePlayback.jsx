@@ -14,6 +14,8 @@ import {
   Pause,
 } from "lucide-react";
 import { ROUTE_COORDINATES } from "./activityData";
+import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
+import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
 
 const truckIcon = L.divIcon({
   className: "custom-leaflet-marker",
@@ -81,7 +83,7 @@ function MapControls() {
           className="p-1.5 rounded-md bg-[#121214]/90 border border-[#27272a] text-[#a1a1aa] hover:text-white cursor-pointer"
           aria-label="Fullscreen"
         >
-          <Maximize2 size={12} />
+          <Maximize2 size={13} />
         </button>
         <button
           type="button"
@@ -89,7 +91,7 @@ function MapControls() {
           className="p-1.5 rounded-md bg-[#121214]/90 border border-[#27272a] text-[#a1a1aa] hover:text-white cursor-pointer"
           aria-label="Locate"
         >
-          <LocateFixed size={12} />
+          <LocateFixed size={13} />
         </button>
         <button
           type="button"
@@ -97,7 +99,7 @@ function MapControls() {
           className="p-1.5 rounded-md bg-[#121214]/90 border border-[#27272a] text-[#a1a1aa] hover:text-white cursor-pointer"
           aria-label="Zoom in"
         >
-          <Plus size={12} />
+          <Plus size={13} />
         </button>
         <button
           type="button"
@@ -105,7 +107,7 @@ function MapControls() {
           className="p-1.5 rounded-md bg-[#121214]/90 border border-[#27272a] text-[#a1a1aa] hover:text-white cursor-pointer"
           aria-label="Zoom out"
         >
-          <Minus size={12} />
+          <Minus size={13} />
         </button>
       </div>
     </>
@@ -130,11 +132,21 @@ export default function RoutePlayback() {
   const center = ROUTE_COORDINATES[Math.floor(ROUTE_COORDINATES.length / 2)];
 
   return (
-    <div className="w-full h-full bg-[#121214] border border-[#1f1f23] rounded-xl flex flex-col overflow-hidden select-none">
+    <MainLayoutColor
+      as="div"
+      background="surface"
+      className="w-full h-full border border-[#1f1f23] rounded-xl flex flex-col overflow-hidden select-none font-sans"
+    >
+      {/* 14px Header Title */}
       <div className="shrink-0 px-3 py-2.5 border-b border-[#1f1f23]">
-        <h3 className="text-[12.5px] font-bold text-white tracking-tight">
+        <MainLayoutColor
+          as={MainLayoutTextSize}
+          color="title"
+          size="sectionTitle"
+          className="font-bold tracking-tight block"
+        >
           Route Playback
-        </h3>
+        </MainLayoutColor>
       </div>
 
       <div className="relative flex-1 min-h-0 bg-[#0c0c0e]">
@@ -171,7 +183,7 @@ export default function RoutePlayback() {
           <MapControls />
         </MapContainer>
 
-        {/* Playback bar */}
+        {/* Playback Control Bar */}
         <div className="absolute left-2 right-2 bottom-2 z-[500] rounded-xl bg-[#0f0f12]/92 border border-[#27272a] backdrop-blur-sm px-2.5 py-2 shadow-xl">
           <div className="flex flex-wrap items-center gap-2">
             <div className="flex items-center gap-1 shrink-0">
@@ -181,7 +193,7 @@ export default function RoutePlayback() {
                 className="p-1 rounded-md text-[#a1a1aa] hover:text-white hover:bg-[#18181b] cursor-pointer"
                 aria-label="Previous"
               >
-                <SkipBack size={13} />
+                <SkipBack size={14} />
               </button>
               <button
                 type="button"
@@ -189,7 +201,7 @@ export default function RoutePlayback() {
                 className="p-1.5 rounded-md bg-[#18181b] border border-[#27272a] text-white hover:border-[#FDBB24]/40 cursor-pointer"
                 aria-label={isPlaying ? "Pause" : "Play"}
               >
-                {isPlaying ? <Pause size={13} /> : <Play size={13} />}
+                {isPlaying ? <Pause size={14} /> : <Play size={14} />}
               </button>
               <button
                 type="button"
@@ -197,7 +209,7 @@ export default function RoutePlayback() {
                 className="p-1 rounded-md text-[#a1a1aa] hover:text-white hover:bg-[#18181b] cursor-pointer"
                 aria-label="Next"
               >
-                <SkipForward size={13} />
+                <SkipForward size={14} />
               </button>
             </div>
 
@@ -207,13 +219,15 @@ export default function RoutePlayback() {
                   key={opt}
                   type="button"
                   onClick={() => setSpeed(opt)}
-                  className={`px-1.5 py-0.5 rounded text-[9px] font-bold cursor-pointer transition-colors ${
+                  className={`px-1.5 py-0.5 rounded cursor-pointer transition-colors ${
                     speed === opt
                       ? "bg-[#FDBB24] text-black"
                       : "bg-[#18181b] text-[#a1a1aa] border border-[#27272a] hover:text-white"
                   }`}
                 >
-                  {opt}x
+                  <MainLayoutTextSize size="captionText" className="font-bold">
+                    {opt}x
+                  </MainLayoutTextSize>
                 </button>
               ))}
             </div>
@@ -227,13 +241,18 @@ export default function RoutePlayback() {
                 onChange={(e) => setProgress(Number(e.target.value))}
                 className="flex-1 h-1.5 accent-[#22c55e] cursor-pointer"
               />
-              <span className="text-[8.5px] text-[#a1a1aa] whitespace-nowrap tabular-nums shrink-0">
+              <MainLayoutColor
+                as={MainLayoutTextSize}
+                color="subtitle"
+                size="subInfoText"
+                className="whitespace-nowrap tabular-nums shrink-0"
+              >
                 10:42:36 AM / 06:28:54 PM
-              </span>
+              </MainLayoutColor>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </MainLayoutColor>
   );
 }

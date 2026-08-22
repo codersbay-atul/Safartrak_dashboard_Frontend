@@ -1,6 +1,7 @@
-
 import React from "react";
 import { ChevronRight } from "lucide-react";
+import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
+import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
 
 const STATUS_FILTERS = [
   { label: "All", value: "all", color: "bg-[#71717a]" },
@@ -33,24 +34,36 @@ export default function MobilizeVehicleList({
   selectedVehicle,
 }) {
   return (
-    <div className="w-full h-full min-h-0 bg-[#141416] border border-[#222226] rounded-2xl p-3 flex flex-col select-none overflow-hidden shadow-2xl">
-      <h3 className="text-xs font-semibold text-white mb-2 shrink-0">
+    <MainLayoutColor
+      as="div"
+      background="surface"
+      className="w-full h-full min-h-0 border border-[#27272a] rounded-2xl p-3 flex flex-col select-none overflow-hidden shadow-2xl font-sans"
+    >
+      {/* 14px Title */}
+      <MainLayoutColor
+        as={MainLayoutTextSize}
+        color="title"
+        size="sectionTitle"
+        className="font-semibold mb-2 shrink-0 block"
+      >
         Vehicle List
-      </h3>
+      </MainLayoutColor>
 
       <div className="flex items-center gap-1.5 pb-1.5 mb-2 shrink-0 overflow-x-auto no-scrollbar">
         {STATUS_FILTERS.map((filter) => (
           <button
             key={filter.value}
             onClick={() => onFilterChange(filter.value)}
-            className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-medium transition-all duration-150 cursor-pointer shrink-0 ${
+            className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full transition-all duration-150 cursor-pointer shrink-0 ${
               activeFilter === filter.value
                 ? "bg-[#27272a] text-white border border-[#3f3f46]"
-                : "bg-[#1c1c20] text-[#a1a1aa] border border-[#2a2a2e] hover:border-[#3f3f46]"
+                : "bg-[#18181b]/60 text-[#a1a1aa] border border-[#27272a] hover:border-[#3f3f46] hover:text-white"
             }`}
           >
             <span className={`w-1.5 h-1.5 rounded-[2px] ${filter.color}`} />
-            {filter.label}
+            <MainLayoutTextSize size="badgeText" className="font-medium">
+              {filter.label}
+            </MainLayoutTextSize>
           </button>
         ))}
       </div>
@@ -63,27 +76,50 @@ export default function MobilizeVehicleList({
             const isSelected = selectedVehicle?.id === vehicle.id;
 
             return (
-              <div
+              <MainLayoutColor
                 key={vehicle.id}
+                as="div"
+                background="surface"
                 onClick={() => onSelectVehicle?.(vehicle)}
                 className={`flex items-center justify-between py-2 px-3 rounded-xl border transition-all duration-150 w-full gap-2 shrink-0 cursor-pointer ${
                   isSelected
-                    ? "bg-[#1c1c20] border-[#3f3f46] shadow-md"
-                    : "bg-[#18181b]/60 border-[#222226] hover:border-[#2a2a2e] hover:bg-[#18181b]"
+                    ? "border-[var(--color-yellow,#ffd60a)] shadow-md bg-[#18181b]"
+                    : "border-[#27272a] hover:border-[#3f3f46] hover:bg-[#18181b]/80"
                 }`}
               >
                 <div className="min-w-0 flex-1 grid grid-cols-1 sm:grid-cols-2 gap-2 items-center">
                   <div className="leading-tight min-w-0">
-                    <p className="text-xs font-bold text-white tracking-wide truncate">
-                      {vehicle.plate}{" "}
-                      <span className="text-[10px] font-normal text-[#71717a] ml-1">
+                    {/* 14px Plate Number */}
+                    <div className="flex items-center gap-1.5 truncate">
+                      <MainLayoutColor
+                        as={MainLayoutTextSize}
+                        color="title"
+                        size="sectionTitle"
+                        className="font-bold tracking-wide truncate inline text-[13px]"
+                      >
+                        {vehicle.plate}
+                      </MainLayoutColor>
+
+                      <MainLayoutColor
+                        as={MainLayoutTextSize}
+                        color="subtitle"
+                        size="subtitle"
+                        className="font-normal truncate inline text-[12px]"
+                      >
                         {vehicle.city}
-                      </span>
-                    </p>
-                    <p className="text-[10px] text-[#71717a] mt-0.5 truncate">
-                      {vehicle.driver}{" "}
-                      {vehicle.info && `• ${vehicle.info}`}
-                    </p>
+                      </MainLayoutColor>
+                    </div>
+
+                    {/* 12px Subtitle & Unknown/Info */}
+                    <MainLayoutColor
+                      as={MainLayoutTextSize}
+                      color="subtitle"
+                      size="subInfoText"
+                      className="mt-0.5 truncate block text-[11px] font-medium"
+                    >
+                      {vehicle.driver || "Unknown"}
+                      {vehicle.info ? ` • ${vehicle.info}` : ""}
+                    </MainLayoutColor>
                   </div>
                 </div>
 
@@ -95,11 +131,13 @@ export default function MobilizeVehicleList({
                       e.stopPropagation();
                       if (!isOffline) onAction?.(vehicle);
                     }}
-                    className={`h-7 px-3 rounded-full text-[10px] font-medium transition-all flex items-center justify-center cursor-pointer ${
+                    className={`h-7 px-3 rounded-full transition-all flex items-center justify-center cursor-pointer ${
                       action.className
                     }`}
                   >
-                    {action.label}
+                    <MainLayoutTextSize size="badgeText" className="font-medium text-[11px]">
+                      {action.label}
+                    </MainLayoutTextSize>
                   </button>
 
                   <ChevronRight
@@ -107,15 +145,26 @@ export default function MobilizeVehicleList({
                     className="text-[#71717a] group-hover:text-white transition-colors"
                   />
                 </div>
-              </div>
+              </MainLayoutColor>
             );
           })
         ) : (
-          <div className="flex flex-1 items-center justify-center rounded-xl border border-dashed border-[#27272a] bg-[#141416] p-6 text-center">
-            <p className="text-[10px] text-[#71717a]">No vehicles found</p>
-          </div>
+          <MainLayoutColor
+            as="div"
+            background="surface"
+            className="flex flex-1 items-center justify-center rounded-xl border border-dashed border-[#27272a] p-6 text-center"
+          >
+            <MainLayoutColor
+              as={MainLayoutTextSize}
+              color="subtitle"
+              size="subtitle"
+              className="font-medium"
+            >
+              No vehicles found
+            </MainLayoutColor>
+          </MainLayoutColor>
         )}
       </div>
-    </div>
+    </MainLayoutColor>
   );
 }

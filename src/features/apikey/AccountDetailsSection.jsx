@@ -1,8 +1,8 @@
 import React from "react";
 import { User } from "lucide-react";
 import earthIcon from "../../assets/images/earth.png";
-
-
+import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
+import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
 
 export default function AccountDetailsSection() {
   const accountFields = [
@@ -12,35 +12,61 @@ export default function AccountDetailsSection() {
   ];
 
   return (
-    <div className="flex flex-col gap-2.5">
+    <div className="flex flex-col gap-2.5 font-sans select-none">
+      {/* Section Header (14px sectionTitle) */}
       <div className="flex items-center gap-2">
-        <User size={18} className="text-[#ffd60a]" />
-        <h3 className="text-sm font-semibold text-white">Account Details</h3>
+        <User size={18} className="text-[var(--color-yellow,#ffd60a)]" />
+        <MainLayoutColor
+          as={MainLayoutTextSize}
+          color="title"
+          size="sectionTitle"
+          className="font-bold tracking-tight block text-[14px]"
+        >
+          Account Details
+        </MainLayoutColor>
       </div>
 
-      <div className="w-full bg-[#0d0e12] border border-[#20242d] rounded-2xl p-6">
+      {/* Surface Card Container */}
+      <MainLayoutColor
+        as="div"
+        background="surface"
+        className="w-full border border-[#27272a] rounded-2xl p-6 shadow-2xl"
+      >
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {accountFields.map((item, index) => (
             <div key={index} className="flex flex-col gap-2">
-              <span className="text-xs font-semibold text-[#71717A] tracking-wider uppercase">
+              {/* Field Label (12px subInfoText) */}
+              <MainLayoutColor
+                as={MainLayoutTextSize}
+                color="subtitle"
+                size="subInfoText"
+                className="font-semibold tracking-wider uppercase block text-[12px]"
+              >
                 {item.label}
-              </span>
+              </MainLayoutColor>
+
+              {/* Field Value (14px sectionTitle) */}
               <div className="flex items-center gap-2">
                 {item.isRegion && (
-                  <img 
+                  <img
                     src={earthIcon}
-                    alt="earth" 
+                    alt="earth"
                     className="w-4 h-4 object-contain brightness-0 invert"
                   />
                 )}
-                <span className="text-white font-medium text-sm">
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="title"
+                  size="sectionTitle"
+                  className="font-medium text-[14px]"
+                >
                   {item.value}
-                </span>
+                </MainLayoutColor>
               </div>
             </div>
           ))}
         </div>
-      </div>
+      </MainLayoutColor>
     </div>
   );
 }

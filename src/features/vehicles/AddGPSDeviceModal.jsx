@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { Check } from "lucide-react";
 import MainDropDown from "../../components/Ui/MainLayoutUI/MainDropDown";
+import MainLayoutButton from "../../components/Ui/MainLayoutUI/MainLayoutButton";
+import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
+import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
 
 const NETWORK_PROVIDER_OPTIONS = [
   { label: "Airtel", value: "airtel" },
@@ -8,7 +11,7 @@ const NETWORK_PROVIDER_OPTIONS = [
   { label: "Vodafone Idea", value: "vi" },
 ];
 
-export default function AddGPSDeviceModal({ isOpen, onClose, onNext }) {
+export default function AddGPSDeviceModal({ isOpen, onClose, onNext, onBack }) {
   const [formData, setFormData] = useState({
     gpsDeviceId: "",
     imeiNumber: "",
@@ -79,113 +82,187 @@ export default function AddGPSDeviceModal({ isOpen, onClose, onNext }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/70 backdrop-blur-xs select-none animate-fadeIn">
-      <div className="relative w-full max-w-[480px] bg-[#121214] border border-[#27272a] rounded-2xl p-4 shadow-2xl flex flex-col overflow-visible">
-        
-        <div className="flex items-center justify-between pb-3 mb-2 border-b border-[#1d1d20]/60">
-          <h2 className="text-[14px] font-bold text-white tracking-tight">
+      <MainLayoutColor
+        as="div"
+        background="surface"
+        className="relative w-full max-w-[480px] max-h-[90vh] border border-[#27272a] rounded-2xl p-4 shadow-2xl flex flex-col font-sans overflow-hidden"
+      >
+        {/* 14px Header & Badge */}
+        <div className="flex items-center justify-between pb-2.5 mb-2 border-b border-[#1d1d20]/60 shrink-0">
+          <MainLayoutColor
+            as={MainLayoutTextSize}
+            color="title"
+            size="sectionTitle"
+            className="font-medium tracking-tight block"
+          >
             Add GPS Device
-          </h2>
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#052e16] border border-[#14532d] text-[#4ade80] text-[10px] font-medium">
+          </MainLayoutColor>
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#052e16] border border-[#14532d] text-[#4ade80]">
             <Check size={11} />
-            Device Connected
+            <MainLayoutTextSize size="badgeText" className="font-medium">
+              Device Connected
+            </MainLayoutTextSize>
           </span>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-2.5 text-[10.5px]">
-          <div>
-            <label className="block text-[#a1a1aa] mb-1 font-medium">GPS Device ID</label>
-            <input
-              type="text"
-              name="gpsDeviceId"
-              placeholder="Enter GPS Device ID"
-              value={formData.gpsDeviceId}
-              onChange={handleChange}
-              className={`w-full bg-[#18181b]/60 border rounded-xl px-3 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all ${
-                errors.gpsDeviceId ? "border-red-500 focus:border-red-500" : "border-[#27272a] focus:border-[#ffd60a]"
-              }`}
-            />
-            {errors.gpsDeviceId && <p className="text-red-500 text-[9px] mt-0.5">{errors.gpsDeviceId}</p>}
-          </div>
-
-          <div>
-            <label className="block text-[#a1a1aa] mb-1 font-medium">IMEI Number</label>
-            <input
-              type="text"
-              name="imeiNumber"
-              placeholder="Enter IMEI Number"
-              value={formData.imeiNumber}
-              onChange={handleChange}
-              className={`w-full bg-[#18181b]/60 border rounded-xl px-3 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all ${
-                errors.imeiNumber ? "border-red-500 focus:border-red-500" : "border-[#27272a] focus:border-[#ffd60a]"
-              }`}
-            />
-            {errors.imeiNumber && <p className="text-red-500 text-[9px] mt-0.5">{errors.imeiNumber}</p>}
-          </div>
-
-          <div>
-            <label className="block text-[#a1a1aa] mb-1 font-medium">SIM Number</label>
-            <input
-              type="text"
-              name="simNumber"
-              placeholder="Enter SIM Number"
-              value={formData.simNumber}
-              onChange={handleChange}
-              className={`w-full bg-[#18181b]/60 border rounded-xl px-3 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all ${
-                errors.simNumber ? "border-red-500 focus:border-red-500" : "border-[#27272a] focus:border-[#ffd60a]"
-              }`}
-            />
-            {errors.simNumber && <p className="text-red-500 text-[9px] mt-0.5">{errors.simNumber}</p>}
-          </div>
-
-          <div className="grid grid-cols-2 gap-2.5">
+        {/* Scrollable Form Body */}
+        <form onSubmit={handleSubmit} className="flex-1 flex flex-col min-h-0">
+          <div className="flex-1 overflow-y-auto custom-scrollbar pr-1 flex flex-col gap-2.5">
             <div>
-              <label className="block text-[#a1a1aa] mb-1 font-medium">Network Provider</label>
-              <MainDropDown
-                label="Select Network Provider"
-                options={NETWORK_PROVIDER_OPTIONS}
-                selectedValue={formData.networkProvider}
-                onSelect={(val) => handleDropdownSelect("networkProvider", val)}
-                className={`w-full justify-between rounded-xl bg-[#18181b]/60 border py-1.5 px-3 text-white ${
-                  errors.networkProvider ? "border-red-500" : "border-[#27272a]"
-                }`}
-              />
-              {errors.networkProvider && <p className="text-red-500 text-[9px] mt-0.5">{errors.networkProvider}</p>}
-            </div>
-
-            <div>
-              <label className="block text-[#a1a1aa] mb-1 font-medium">Device Model</label>
+              <MainLayoutColor
+                as={MainLayoutTextSize}
+                color="subtitle"
+                size="subInfoText"
+                className="block mb-1 font-medium"
+              >
+                GPS Device ID
+              </MainLayoutColor>
               <input
                 type="text"
-                name="deviceModel"
-                placeholder="Enter Device Model"
-                value={formData.deviceModel}
+                name="gpsDeviceId"
+                placeholder="Enter GPS Device ID"
+                value={formData.gpsDeviceId}
                 onChange={handleChange}
-                className={`w-full bg-[#18181b]/60 border rounded-xl px-3 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all ${
-                  errors.deviceModel ? "border-red-500 focus:border-red-500" : "border-[#27272a] focus:border-[#ffd60a]"
+                className={`w-full bg-[#18181b]/60 border rounded-lg px-2.5 py-1.5 text-[12px] text-white placeholder-[#52525b] focus:outline-none transition-all ${
+                  errors.gpsDeviceId
+                    ? "border-red-500 focus:border-red-500"
+                    : "border-[#27272a] focus:border-[#ffd60a]"
                 }`}
               />
-              {errors.deviceModel && <p className="text-red-500 text-[9px] mt-0.5">{errors.deviceModel}</p>}
+              {errors.gpsDeviceId && (
+                <p className="text-red-500 text-[10px] mt-0.5">{errors.gpsDeviceId}</p>
+              )}
+            </div>
+
+            <div>
+              <MainLayoutColor
+                as={MainLayoutTextSize}
+                color="subtitle"
+                size="subInfoText"
+                className="block mb-1 font-medium"
+              >
+                IMEI Number
+              </MainLayoutColor>
+              <input
+                type="text"
+                name="imeiNumber"
+                placeholder="Enter IMEI Number"
+                value={formData.imeiNumber}
+                onChange={handleChange}
+                className={`w-full bg-[#18181b]/60 border rounded-lg px-2.5 py-1.5 text-[12px] text-white placeholder-[#52525b] focus:outline-none transition-all ${
+                  errors.imeiNumber
+                    ? "border-red-500 focus:border-red-500"
+                    : "border-[#27272a] focus:border-[#ffd60a]"
+                }`}
+              />
+              {errors.imeiNumber && (
+                <p className="text-red-500 text-[10px] mt-0.5">{errors.imeiNumber}</p>
+              )}
+            </div>
+
+            <div>
+              <MainLayoutColor
+                as={MainLayoutTextSize}
+                color="subtitle"
+                size="subInfoText"
+                className="block mb-1 font-medium"
+              >
+                SIM Number
+              </MainLayoutColor>
+              <input
+                type="text"
+                name="simNumber"
+                placeholder="Enter SIM Number"
+                value={formData.simNumber}
+                onChange={handleChange}
+                className={`w-full bg-[#18181b]/60 border rounded-lg px-2.5 py-1.5 text-[12px] text-white placeholder-[#52525b] focus:outline-none transition-all ${
+                  errors.simNumber
+                    ? "border-red-500 focus:border-red-500"
+                    : "border-[#27272a] focus:border-[#ffd60a]"
+                }`}
+              />
+              {errors.simNumber && (
+                <p className="text-red-500 text-[10px] mt-0.5">{errors.simNumber}</p>
+              )}
+            </div>
+
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="subInfoText"
+                  className="block mb-1 font-medium"
+                >
+                  Network Provider
+                </MainLayoutColor>
+                <MainDropDown
+                  label="Select Network Provider"
+                  options={NETWORK_PROVIDER_OPTIONS}
+                  selectedValue={formData.networkProvider}
+                  onSelect={(val) => handleDropdownSelect("networkProvider", val)}
+                  className={`w-full justify-between rounded-lg bg-[#18181b]/60 border py-1.5 px-2.5 text-white ${
+                    errors.networkProvider ? "border-red-500" : "border-[#27272a]"
+                  }`}
+                />
+                {errors.networkProvider && (
+                  <p className="text-red-500 text-[10px] mt-0.5">{errors.networkProvider}</p>
+                )}
+              </div>
+
+              <div>
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="subInfoText"
+                  className="block mb-1 font-medium"
+                >
+                  Device Model
+                </MainLayoutColor>
+                <input
+                  type="text"
+                  name="deviceModel"
+                  placeholder="Enter Device Model"
+                  value={formData.deviceModel}
+                  onChange={handleChange}
+                  className={`w-full bg-[#18181b]/60 border rounded-lg px-2.5 py-1.5 text-[12px] text-white placeholder-[#52525b] focus:outline-none transition-all ${
+                    errors.deviceModel
+                      ? "border-red-500 focus:border-red-500"
+                      : "border-[#27272a] focus:border-[#ffd60a]"
+                  }`}
+                />
+                {errors.deviceModel && (
+                  <p className="text-red-500 text-[10px] mt-0.5">{errors.deviceModel}</p>
+                )}
+              </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-2.5 pt-2 mt-2 border-t border-[#1d1d20]">
-            <button
+          {/* Action Buttons using headerButtonText */}
+          <div className="grid grid-cols-2 gap-2 pt-3 mt-2 border-t border-[#1d1d20] shrink-0">
+            <MainLayoutButton
               type="button"
-              onClick={onClose}
-              className="w-full py-2 px-4 rounded-xl text-[11px] font-semibold bg-[#27272a]/60 hover:bg-[#27272a] text-[#d4d4d8] transition-colors cursor-pointer"
+              variant="secondary"
+              onClick={onBack || onClose}
+              className="w-full justify-center py-2"
             >
-              Cancel
-            </button>
-            <button
+              <MainLayoutTextSize size="headerButtonText">
+                {onBack ? "Back" : "Cancel"}
+              </MainLayoutTextSize>
+            </MainLayoutButton>
+
+            <MainLayoutButton
               type="submit"
-              className="w-full py-2 rounded-xl text-[11px] font-bold text-black bg-[#ffd60a] hover:bg-[#e6c200] transition-colors cursor-pointer"
+              variant="primary"
+              className="w-full justify-center py-2"
             >
-              Next
-            </button>
+              <MainLayoutTextSize size="headerButtonText">
+                Next
+              </MainLayoutTextSize>
+            </MainLayoutButton>
           </div>
         </form>
-
-      </div>
+      </MainLayoutColor>
     </div>
   );
 }

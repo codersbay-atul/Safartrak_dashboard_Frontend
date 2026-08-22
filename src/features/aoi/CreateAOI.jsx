@@ -5,6 +5,8 @@ import "leaflet/dist/leaflet.css";
 
 import MainSearchInput from "../../components/Ui/MainLayoutUI/MainSearchInput";
 import MainDropDown from "../../components/Ui/MainLayoutUI/MainDropDown";
+import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
+import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
 
 function MapController({ center, zoom }) {
   const map = useMap();
@@ -16,7 +18,13 @@ function MapController({ center, zoom }) {
   return null;
 }
 
-export default function CreateAOI({ isOpen = true, initialData = null, mode = "create", onClose, onSubmit }) {
+export default function CreateAOI({
+  isOpen = true,
+  initialData = null,
+  mode = "create",
+  onClose,
+  onSubmit,
+}) {
   const [name, setName] = useState("");
   const [alerts, setAlerts] = useState({ entry: false, exit: false });
   const [selectedVehicles, setSelectedVehicles] = useState([]);
@@ -50,29 +58,53 @@ export default function CreateAOI({ isOpen = true, initialData = null, mode = "c
 
     setName(raw.name || initialData.name || "");
     setAlerts({
-      entry: Boolean(raw.entry_alert ?? raw.entryAlert ?? raw.alerts?.entry ?? initialData.alerts?.entry),
-      exit: Boolean(raw.exit_alert ?? raw.exitAlert ?? raw.alerts?.exit ?? initialData.alerts?.exit),
+      entry: Boolean(
+        raw.entry_alert ??
+          raw.entryAlert ??
+          raw.alerts?.entry ??
+          initialData.alerts?.entry
+      ),
+      exit: Boolean(
+        raw.exit_alert ??
+          raw.exitAlert ??
+          raw.alerts?.exit ??
+          initialData.alerts?.exit
+      ),
     });
 
     const assignedVehicles = Array.isArray(raw.assigned_vehicles)
       ? raw.assigned_vehicles
       : Array.isArray(raw.assignedVehicles)
-        ? raw.assignedVehicles
-        : Array.isArray(raw.vehicles)
-          ? raw.vehicles
-          : [];
+      ? raw.assignedVehicles
+      : Array.isArray(raw.vehicles)
+      ? raw.vehicles
+      : [];
 
     setSelectedVehicles(
       assignedVehicles.length > 0
-        ? [typeof assignedVehicles[0] === "string" ? assignedVehicles[0] : assignedVehicles[0]?.plate || assignedVehicles[0]?.vehicle_number || assignedVehicles[0]?.id || ""]
+        ? [
+            typeof assignedVehicles[0] === "string"
+              ? assignedVehicles[0]
+              : assignedVehicles[0]?.plate ||
+                assignedVehicles[0]?.vehicle_number ||
+                assignedVehicles[0]?.id ||
+                "",
+          ]
         : []
     );
 
     const shape = raw.geometry?.shape || raw.shape || "polygon";
     setAoiType(shape === "circle" ? "circle" : "polygon");
 
-    const parsedGeo = typeof raw.geo_position === "string" ? raw.geo_position.split(",").map(Number) : null;
-    if (parsedGeo?.length === 2 && !Number.isNaN(parsedGeo[0]) && !Number.isNaN(parsedGeo[1])) {
+    const parsedGeo =
+      typeof raw.geo_position === "string"
+        ? raw.geo_position.split(",").map(Number)
+        : null;
+    if (
+      parsedGeo?.length === 2 &&
+      !Number.isNaN(parsedGeo[0]) &&
+      !Number.isNaN(parsedGeo[1])
+    ) {
       setMapCenter([parsedGeo[0], parsedGeo[1]]);
       setMapZoom(13);
       setSearchLocation(raw.geo_position || "");
@@ -95,7 +127,9 @@ export default function CreateAOI({ isOpen = true, initialData = null, mode = "c
     const timer = setTimeout(async () => {
       try {
         const response = await fetch(
-          `https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q=${encodeURIComponent(trimmedLocation)}`
+          `https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q=${encodeURIComponent(
+            trimmedLocation
+          )}`
         );
         const data = await response.json();
 
@@ -150,103 +184,158 @@ export default function CreateAOI({ isOpen = true, initialData = null, mode = "c
   ];
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-      <div className="w-full max-w-2xl bg-[#141416] border border-[#232328] rounded-2xl shadow-2xl overflow-hidden flex flex-col text-zinc-100 font-sans">
-        <div className="px-4 py-3 border-b border-[#232328] flex items-center justify-between">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-sm p-3 sm:p-4">
+      <MainLayoutColor
+        as="div"
+        background="surface"
+        className="w-full max-w-2xl border border-[#232328] rounded-2xl shadow-2xl overflow-hidden flex flex-col font-sans"
+      >
+        {/* Header */}
+        <div className="px-4 py-3 border-b border-[#232328] flex items-center justify-between shrink-0">
           <div>
-            <h2 className="text-lg font-semibold text-white tracking-wide">
+            {/* 14px Section Title */}
+            <MainLayoutColor
+              as={MainLayoutTextSize}
+              color="title"
+              size="sectionTitle"
+              className="font-semibold block"
+            >
               {mode === "edit" ? "Edit Place" : "Create New Places"}
-            </h2>
-            <p className="text-xs text-zinc-400 mt-1">
+            </MainLayoutColor>
+            {/* 12px Sub Info */}
+            <MainLayoutColor
+              as={MainLayoutTextSize}
+              color="subtitle"
+              size="subInfoText"
+              className="mt-0.5 block"
+            >
               {mode === "edit"
                 ? "Update the selected place details and save your changes."
                 : "Fill in the details below and create the place."}
-            </p>
+            </MainLayoutColor>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="text-zinc-400 hover:text-white transition-colors cursor-pointer"
+            className="text-zinc-400 hover:text-white transition-colors cursor-pointer p-1 rounded-md"
           >
             <X size={18} />
           </button>
         </div>
 
+        {/* Content Body */}
         <div className="grid grid-cols-1 md:grid-cols-12 min-h-[360px]">
-          <div className="md:col-span-5 p-4 flex flex-col gap-3 border-r border-[#232328] bg-[#141416]">
+          <div className="md:col-span-5 p-4 flex flex-col gap-3.5 border-b md:border-b-0 md:border-r border-[#232328]">
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-medium text-zinc-400 tracking-wide">
+              <MainLayoutColor
+                as={MainLayoutTextSize}
+                color="subtitle"
+                size="subInfoText"
+                className="font-medium tracking-wide block"
+              >
                 Place Name
-              </label>
+              </MainLayoutColor>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Enter Place Name"
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[#1c1c20] border border-[#2a2a30] text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-emerald-500/60 transition-colors"
+                className="w-full px-3.5 py-2 rounded-xl bg-[#1c1c20] border border-[#2a2a30] text-[12px] text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-emerald-500/60 transition-colors"
               />
             </div>
 
-            <div className="flex flex-col gap-2">
-              <label className="text-xs font-medium text-zinc-400 tracking-wide">
+            <div className="flex flex-col gap-1.5">
+              <MainLayoutColor
+                as={MainLayoutTextSize}
+                color="subtitle"
+                size="subInfoText"
+                className="font-medium tracking-wide block"
+              >
                 Alerts
-              </label>
-              <div className="flex items-center gap-6">
-                <label className="flex items-center gap-2 cursor-pointer text-sm text-zinc-300 hover:text-white">
+              </MainLayoutColor>
+              <div className="flex items-center gap-5">
+                <label className="flex items-center gap-2 cursor-pointer text-zinc-300 hover:text-white">
                   <input
                     type="checkbox"
                     checked={alerts.entry}
                     onChange={(e) =>
-                      setAlerts((prev) => ({ ...prev, entry: e.target.checked }))
+                      setAlerts((prev) => ({
+                        ...prev,
+                        entry: e.target.checked,
+                      }))
                     }
-                    className="w-4 h-4 rounded bg-[#1c1c20] border-[#2a2a30] accent-emerald-500 focus:ring-0 cursor-pointer"
+                    className="w-3.5 h-3.5 rounded bg-[#1c1c20] border-[#2a2a30] accent-emerald-500 focus:ring-0 cursor-pointer"
                   />
-                  <span>Vehicle Entry</span>
+                  <MainLayoutTextSize size="subInfoText">
+                    Vehicle Entry
+                  </MainLayoutTextSize>
                 </label>
-                <label className="flex items-center gap-2 cursor-pointer text-sm text-zinc-300 hover:text-white">
+                <label className="flex items-center gap-2 cursor-pointer text-zinc-300 hover:text-white">
                   <input
                     type="checkbox"
                     checked={alerts.exit}
                     onChange={(e) =>
-                      setAlerts((prev) => ({ ...prev, exit: e.target.checked }))
+                      setAlerts((prev) => ({
+                        ...prev,
+                        exit: e.target.checked,
+                      }))
                     }
-                    className="w-4 h-4 rounded bg-[#1c1c20] border-[#2a2a30] accent-emerald-500 focus:ring-0 cursor-pointer"
+                    className="w-3.5 h-3.5 rounded bg-[#1c1c20] border-[#2a2a30] accent-emerald-500 focus:ring-0 cursor-pointer"
                   />
-                  <span>Vehicle Exit</span>
+                  <MainLayoutTextSize size="subInfoText">
+                    Vehicle Exit
+                  </MainLayoutTextSize>
                 </label>
               </div>
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-medium text-zinc-400 tracking-wide">
+              <MainLayoutColor
+                as={MainLayoutTextSize}
+                color="subtitle"
+                size="subInfoText"
+                className="font-medium tracking-wide block"
+              >
                 Assign Vehicles
-              </label>
+              </MainLayoutColor>
               <MainDropDown
                 label="Select vehicles..."
                 options={vehicleOptions}
                 selectedValue={selectedVehicles[0] || ""}
-                onSelect={(value) => setSelectedVehicles(value ? [value] : [])}
-                className="w-full justify-between rounded-full bg-[#05070B] border-[#22252B] text-[11px] sm:text-[12px]"
+                onSelect={(value) =>
+                  setSelectedVehicles(value ? [value] : [])
+                }
+                className="w-full justify-between rounded-full bg-[#05070B] border-[#22252B]"
               />
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-medium text-zinc-400 tracking-wide">
+              <MainLayoutColor
+                as={MainLayoutTextSize}
+                color="subtitle"
+                size="subInfoText"
+                className="font-medium tracking-wide block"
+              >
                 Type of Place
-              </label>
+              </MainLayoutColor>
               <MainDropDown
                 label="Select type"
                 options={aoiTypeOptions}
                 selectedValue={aoiType}
                 onSelect={setAoiType}
-                className="w-full justify-between rounded-full bg-[#05070B] border-[#22252B] text-[11px] sm:text-[12px]"
+                className="w-full justify-between rounded-full bg-[#05070B] border-[#22252B]"
               />
             </div>
 
             <div className="flex flex-col gap-1.5 mt-auto">
-              <label className="text-xs font-medium text-zinc-400 tracking-wide">
+              <MainLayoutColor
+                as={MainLayoutTextSize}
+                color="subtitle"
+                size="subInfoText"
+                className="font-medium tracking-wide block"
+              >
                 Search Location
-              </label>
+              </MainLayoutColor>
               <MainSearchInput
                 value={searchLocation}
                 onChange={(e) => setSearchLocation(e.target.value)}
@@ -257,12 +346,12 @@ export default function CreateAOI({ isOpen = true, initialData = null, mode = "c
             </div>
           </div>
 
-          <div className="md:col-span-7 relative bg-[#0b0f19] min-h-[220px]">
+          <div className="md:col-span-7 relative bg-[#0b0f19] min-h-[240px] md:min-h-[300px]">
             <MapContainer
               center={mapCenter}
               zoom={mapZoom}
               zoomControl={false}
-              className="h-full w-full z-0 min-h-[300px]"
+              className="h-full w-full z-0 min-h-[240px] md:min-h-[300px]"
             >
               <MapController center={mapCenter} zoom={mapZoom} />
               <TileLayer
@@ -276,23 +365,28 @@ export default function CreateAOI({ isOpen = true, initialData = null, mode = "c
           </div>
         </div>
 
-        <div className="px-4 py-3 border-t border-[#232328] bg-[#141416] flex items-center justify-between gap-3">
+        {/* Footer Actions */}
+        <div className="px-4 py-3 border-t border-[#232328] flex items-center justify-between gap-3 shrink-0">
           <button
             type="button"
             onClick={onClose}
-            className="w-1/2 py-2 rounded-xl bg-[#222226] hover:bg-[#2a2a30] text-zinc-300 hover:text-white font-medium text-sm transition-colors cursor-pointer"
+            className="w-1/2 py-2 rounded-xl bg-[#222226] hover:bg-[#2a2a30] text-zinc-300 hover:text-white transition-colors cursor-pointer"
           >
-            Cancel
+            <MainLayoutTextSize size="headerButtonText">
+              Cancel
+            </MainLayoutTextSize>
           </button>
           <button
             type="button"
             onClick={handleSubmit}
-            className="w-1/2 py-2 rounded-xl bg-[#10b981] hover:bg-[#059669] text-black font-semibold text-sm transition-colors cursor-pointer shadow-lg shadow-emerald-500/10"
+            className="w-1/2 py-2 rounded-xl bg-[#10b981] hover:bg-[#059669] text-black transition-colors cursor-pointer shadow-lg shadow-emerald-500/10"
           >
-            {mode === "edit" ? "Save Changes" : "Create Place"}
+            <MainLayoutTextSize size="headerButtonText">
+              {mode === "edit" ? "Save Changes" : "Create Place"}
+            </MainLayoutTextSize>
           </button>
         </div>
-      </div>
+      </MainLayoutColor>
     </div>
   );
 }

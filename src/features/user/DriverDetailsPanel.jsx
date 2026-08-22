@@ -1,9 +1,11 @@
-
 import React, { useState } from "react";
 import { Phone, Mail, UserX, KeyRound } from "lucide-react";
 import DeactivateUserModal from "./DeactivateUser";
 import { activateUser, deactivateUser } from "../../api/userApi";
 import { toast } from "../../components/Ui/toast";
+import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
+import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
+import MainHeaderActionButton from "../../components/Ui/MainLayoutUI/MainHeaderActionButton";
 
 export default function DriverDetailsPanel({ user, onUserUpdated, onResetPassword }) {
   const [isDeactivateModalOpen, setIsDeactivateModalOpen] = useState(false);
@@ -12,9 +14,20 @@ export default function DriverDetailsPanel({ user, onUserUpdated, onResetPasswor
 
   if (!user) {
     return (
-      <div className="w-full h-full bg-[#121214] border border-[#27272a] rounded-2xl p-4 flex items-center justify-center text-[#71717a] text-xs">
-        Select a user to view profile
-      </div>
+      <MainLayoutColor
+        as="div"
+        background="surface"
+        className="w-full h-full border border-[#27272a] rounded-2xl p-4 flex items-center justify-center select-none shadow-2xl font-sans"
+      >
+        <MainLayoutColor
+          as={MainLayoutTextSize}
+          color="subtitle"
+          size="subInfoText"
+          className="font-medium"
+        >
+          Select a user to view profile
+        </MainLayoutColor>
+      </MainLayoutColor>
     );
   }
 
@@ -75,24 +88,39 @@ export default function DriverDetailsPanel({ user, onUserUpdated, onResetPasswor
 
   return (
     <>
-      <div className="w-full h-full bg-[#121214] border border-[#27272a] rounded-2xl p-3 flex flex-col overflow-hidden select-none shadow-2xl">
+      <MainLayoutColor
+        as="div"
+        background="surface"
+        className="w-full h-full border border-[#27272a] rounded-2xl p-3 flex flex-col overflow-hidden select-none shadow-2xl font-sans"
+      >
+        {/* Header with 14px Name & 12px Sub Info */}
         <div className="flex items-center justify-between pb-2.5 border-b border-[#27272a] shrink-0">
-          <div className="flex items-center gap-2 min-w-0">
-            <div className="w-8 h-8 rounded-full bg-[#27272a] border border-[#3f3f46] flex items-center justify-center shrink-0 text-[#ffd60a] font-bold text-xs">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="w-8 h-8 rounded-full bg-[#27272a] border border-[#3f3f46] flex items-center justify-center shrink-0 text-[#ffd60a] font-bold text-[12px]">
               {user.name ? user.name.charAt(0) : "U"}
             </div>
             <div className="truncate">
-              <h3 className="text-xs font-bold text-white truncate leading-tight">
+              <MainLayoutColor
+                as={MainLayoutTextSize}
+                color="title"
+                size="sectionTitle"
+                className="font-bold truncate leading-tight block text-[14px]"
+              >
                 {user.name}
-              </h3>
-              <p className="text-[9.5px] text-[#a1a1aa] truncate font-medium">
+              </MainLayoutColor>
+              <MainLayoutColor
+                as={MainLayoutTextSize}
+                color="subtitle"
+                size="subInfoText"
+                className="truncate font-medium block mt-0.5 text-[12px]"
+              >
                 {user.empId} • {user.role}
-              </p>
+              </MainLayoutColor>
             </div>
           </div>
 
           <span
-            className={`text-[9px] font-semibold flex items-center gap-1 shrink-0 px-2 py-0.5 rounded-full ${
+            className={`flex items-center gap-1 shrink-0 px-2.5 py-0.5 rounded-full ${
               isActive
                 ? "text-emerald-400 bg-emerald-500/10 border border-emerald-500/20"
                 : "text-amber-400 bg-amber-500/10 border border-amber-500/20"
@@ -103,92 +131,232 @@ export default function DriverDetailsPanel({ user, onUserUpdated, onResetPasswor
                 isActive ? "bg-emerald-400" : "bg-amber-400"
               }`}
             />
-            {user.status}
+            <MainLayoutTextSize size="badgeText" className="font-semibold whitespace-nowrap text-[11px]">
+              {user.status}
+            </MainLayoutTextSize>
           </span>
         </div>
 
-        <div className="flex-1 overflow-y-auto custom-scrollbar py-2.5 space-y-3 min-h-0">
-          <div className="space-y-1.5 text-[10.5px] text-[#d4d4d8] pb-2.5 border-b border-[#27272a]">
+        {/* Details Content */}
+        <div className="flex-1 overflow-y-auto custom-scrollbar py-2.5 space-y-3.5 min-h-0">
+          {/* Quick Contact Box */}
+          <div className="space-y-2 pb-2.5 border-b border-[#27272a]">
             <div className="flex items-center gap-2 truncate">
-              <Phone className="w-3 h-3 text-[#a1a1aa] shrink-0" />
-              <span className="truncate">{user.phone || "N/A"}</span>
+              <Phone className="w-3.5 h-3.5 text-[#a1a1aa] shrink-0" />
+              <MainLayoutColor
+                as={MainLayoutTextSize}
+                color="subtitle"
+                size="subInfoText"
+                className="truncate font-medium text-[12px]"
+              >
+                {user.phone || "N/A"}
+              </MainLayoutColor>
             </div>
             <div className="flex items-center gap-2 truncate">
-              <Mail className="w-3 h-3 text-[#a1a1aa] shrink-0" />
-              <span className="truncate">{user.email || "N/A"}</span>
+              <Mail className="w-3.5 h-3.5 text-[#a1a1aa] shrink-0" />
+              <MainLayoutColor
+                as={MainLayoutTextSize}
+                color="subtitle"
+                size="subInfoText"
+                className="truncate font-medium text-[12px]"
+              >
+                {user.email || "N/A"}
+              </MainLayoutColor>
             </div>
           </div>
 
-          <div className="space-y-2">
-            <h4 className="text-[10.5px] font-semibold text-white tracking-wide">
+          {/* Personal Information Section */}
+          <div className="space-y-2.5">
+            <MainLayoutColor
+              as={MainLayoutTextSize}
+              color="title"
+              size="sectionTitle"
+              className="font-bold tracking-wide block text-[14px]"
+            >
               Personal Information
-            </h4>
+            </MainLayoutColor>
 
-            <div className="space-y-1.5 text-[10px]">
+            <div className="space-y-2">
               <div className="flex justify-between items-center gap-2">
-                <span className="text-[#a1a1aa] shrink-0">Full Name</span>
-                <span className="text-white font-medium truncate">{user.name}</span>
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="subInfoText"
+                  className="shrink-0 font-medium text-[12px]"
+                >
+                  Full Name
+                </MainLayoutColor>
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="subInfoText"
+                  className="font-medium truncate text-right text-[12px]"
+                >
+                  {user.name}
+                </MainLayoutColor>
               </div>
+
               <div className="flex justify-between items-center gap-2">
-                <span className="text-[#a1a1aa] shrink-0">Phone Number</span>
-                <span className="text-white font-medium truncate">{user.phone}</span>
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="subInfoText"
+                  className="shrink-0 font-medium text-[12px]"
+                >
+                  Phone Number
+                </MainLayoutColor>
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="subInfoText"
+                  className="font-medium truncate text-right text-[12px]"
+                >
+                  {user.phone}
+                </MainLayoutColor>
               </div>
+
               <div className="flex justify-between items-center gap-2">
-                <span className="text-[#a1a1aa] shrink-0">Email</span>
-                <span className="text-white font-medium truncate">{user.email}</span>
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="subInfoText"
+                  className="shrink-0 font-medium text-[12px]"
+                >
+                  Email
+                </MainLayoutColor>
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="subInfoText"
+                  className="font-medium truncate text-right text-[12px]"
+                >
+                  {user.email}
+                </MainLayoutColor>
               </div>
+
               <div className="flex justify-between items-center gap-2">
-                <span className="text-[#a1a1aa] shrink-0">Employee ID</span>
-                <span className="text-white font-medium font-mono truncate">{user.empId}</span>
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="subInfoText"
+                  className="shrink-0 font-medium text-[12px]"
+                >
+                  Employee ID
+                </MainLayoutColor>
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="subInfoText"
+                  className="font-medium font-mono truncate text-right text-[12px]"
+                >
+                  {user.empId}
+                </MainLayoutColor>
               </div>
+
               <div className="flex justify-between items-center gap-2">
-                <span className="text-[#a1a1aa] shrink-0">Department</span>
-                <span className="text-white font-medium truncate">
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="subInfoText"
+                  className="shrink-0 font-medium text-[12px]"
+                >
+                  Department
+                </MainLayoutColor>
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="subInfoText"
+                  className="font-medium truncate text-right text-[12px]"
+                >
                   {user.department || "Operations"}
-                </span>
+                </MainLayoutColor>
               </div>
+
               <div className="flex justify-between items-center gap-2">
-                <span className="text-[#a1a1aa] shrink-0">Joined</span>
-                <span className="text-white font-medium truncate">
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="subInfoText"
+                  className="shrink-0 font-medium text-[12px]"
+                >
+                  Joined
+                </MainLayoutColor>
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="subInfoText"
+                  className="font-medium truncate text-right text-[12px]"
+                >
                   {user.joined || "15 Jan 2024"}
-                </span>
+                </MainLayoutColor>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="pt-2 border-t border-[#27272a] grid grid-cols-2 gap-2 shrink-0">
+        {/* Action Buttons: Centered inline row alignment */}
+        <div className="pt-2.5 border-t border-[#27272a] grid grid-cols-2 gap-2 shrink-0">
           {isActive ? (
-            <button
+            <MainHeaderActionButton
               type="button"
               onClick={() => setIsDeactivateModalOpen(true)}
-              className="flex items-center justify-center gap-1 py-1.5 px-2 rounded-xl border border-red-500/20 bg-red-500/10 text-red-400 hover:bg-red-500/20 text-[9.5px] font-semibold transition cursor-pointer"
+              style={{
+                display: "inline-flex",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              className="w-full py-2.5 px-3 rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 active:scale-[0.98] transition-all cursor-pointer flex-row items-center justify-center"
             >
-              <UserX className="w-3 h-3" />
-              <span className="truncate">Deactivate</span>
-            </button>
+              <span className="flex items-center justify-center gap-1.5">
+                <UserX className="w-4 h-4 shrink-0 text-rose-400" />
+                <span className="text-[14px] font-medium text-rose-400 whitespace-nowrap leading-none">
+                  Deactivate
+                </span>
+              </span>
+            </MainHeaderActionButton>
           ) : (
-            <button
+            <MainHeaderActionButton
               type="button"
               onClick={handleConfirmActivate}
               disabled={isActivating}
-              className="flex items-center justify-center gap-1 py-1.5 px-2 rounded-xl border border-emerald-500/20 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 disabled:opacity-60 text-[9.5px] font-semibold transition cursor-pointer"
+              style={{
+                display: "inline-flex",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              className="w-full py-2.5 px-3 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 disabled:opacity-60 active:scale-[0.98] transition-all cursor-pointer flex-row items-center justify-center"
             >
-              <UserX className="w-3 h-3" />
-              <span className="truncate">{isActivating ? "Activating..." : "Activate"}</span>
-            </button>
+              <span className="flex items-center justify-center gap-1.5">
+                <UserX className="w-4 h-4 shrink-0 text-emerald-400" />
+                <span className="text-[14px] font-medium text-emerald-400 whitespace-nowrap leading-none">
+                  {isActivating ? "Activating..." : "Activate"}
+                </span>
+              </span>
+            </MainHeaderActionButton>
           )}
 
-          <button
+          <MainHeaderActionButton
             type="button"
             onClick={onResetPassword}
-            className="flex items-center justify-center gap-1 py-1.5 px-2 rounded-xl border border-amber-500/20 bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 text-[9.5px] font-semibold transition cursor-pointer"
+            style={{
+              display: "inline-flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            className="w-full py-2.5 px-3 rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 active:scale-[0.98] transition-all cursor-pointer flex-row items-center justify-center"
           >
-            <KeyRound className="w-3 h-3" />
-            <span className="truncate">Reset Password</span>
-          </button>
+            <span className="flex items-center justify-center gap-1.5">
+              <KeyRound className="w-4 h-4 shrink-0 text-amber-400" />
+              <span className="text-[14px] font-medium text-amber-400 whitespace-nowrap leading-none">
+                Reset Password
+              </span>
+            </span>
+          </MainHeaderActionButton>
         </div>
-      </div>
+      </MainLayoutColor>
 
       <DeactivateUserModal
         isOpen={isDeactivateModalOpen}

@@ -1,8 +1,8 @@
 import React from "react";
 
 const MAIN_LAYOUT_COLORS = {
-  // Surfaces & Backgrounds
-  surface: "bg-[#121212]",
+  
+  surface: "bg-[#141414]",
   background: "bg-[#09090b]",
   filterActiveBg: "bg-[#292a30]",
   filterInactiveBg: "bg-[#0d0e10]",

@@ -81,7 +81,7 @@ export default function ActivityStats() {
           subtitle={stat.subtitle}
           bottomLabel={stat.bottomLabel}
           icon={ICON_MAP[stat.id]}
-          showArrow
+          // showArrow
         />
       ))}
     </div>

@@ -1,18 +1,35 @@
 import React from "react";
 import { ShieldCheck, Zap, Gauge, Clock, HelpCircle, Loader2 } from "lucide-react";
+import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
+import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
+import MainHeaderActionButton from "../../components/Ui/MainLayoutUI/MainHeaderActionButton";
 
-export default function VehiclesControlMobilized({ vehicle, onCancel, onSendCommand, isSending, error }) {
+export default function VehiclesControlMobilized({
+  vehicle,
+  onCancel,
+  onSendCommand,
+  isSending,
+  error,
+}) {
   const plate =
     vehicle?.plate || vehicle?.reg_no || vehicle?.vehicle_number || "—";
   const driver = vehicle?.driver || vehicle?.driver_name || "—";
   const type = vehicle?.type || vehicle?.vehicle_type || "—";
   const status =
-    vehicle?.status || vehicle?.current_status || vehicle?.state || vehicle?.command_state || "—";
+    vehicle?.status ||
+    vehicle?.current_status ||
+    vehicle?.state ||
+    vehicle?.command_state ||
+    "—";
   const isOnline =
-    vehicle?.online ?? vehicle?.is_online ??
-    (vehicle?.connection_status ? vehicle.connection_status !== "offline" : undefined);
+    vehicle?.online ??
+    vehicle?.is_online ??
+    (vehicle?.connection_status
+      ? vehicle.connection_status !== "offline"
+      : undefined);
   const ignition =
-    vehicle?.ignition ?? vehicle?.ignition_status ??
+    vehicle?.ignition ??
+    vehicle?.ignition_status ??
     (vehicle?.is_ignition_on !== undefined
       ? vehicle.is_ignition_on
       : undefined);
@@ -24,111 +41,240 @@ export default function VehiclesControlMobilized({ vehicle, onCancel, onSendComm
     vehicle?.last_updated_sec != null
       ? `${vehicle.last_updated_sec} sec ago`
       : vehicle?.last_updated || "—";
-  const location = vehicle?.location || vehicle?.city || "—";
 
   return (
-    <div className="w-full max-w-110 bg-[#141416] text-white rounded-2xl p-5 md:p-6 border border-[#222226] shadow-2xl flex flex-col gap-4">
+    <MainLayoutColor
+      as="div"
+      background="surface"
+      className="w-full max-w-[440px] border border-[#27272a] rounded-2xl p-5 md:p-6 shadow-2xl flex flex-col gap-4 select-none font-sans"
+    >
+      {/* Header */}
       <div className="flex items-center justify-between gap-2">
-        <h2 className="text-sm font-bold text-white tracking-wide">
+        <MainLayoutColor
+          as={MainLayoutTextSize}
+          color="title"
+          size="sectionTitle"
+          className="font-medium tracking-tight block text-[14px]"
+        >
           Vehicle Control
-        </h2>
+        </MainLayoutColor>
+
         <div
           className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full ${
-            isOnline ? "bg-[#0d2818] border border-[#164e27]" : "bg-[#2a1a1a] border border-[#3a3636]"
+            isOnline
+              ? "bg-emerald-500/10 border border-emerald-500/20 text-emerald-400"
+              : "bg-rose-500/10 border border-rose-500/20 text-rose-400"
           }`}
         >
           <span
             className={`w-1.5 h-1.5 rounded-full ${
-              isOnline ? "bg-[#10b981] animate-pulse" : "bg-[#ef4444]"
+              isOnline ? "bg-emerald-400 animate-pulse" : "bg-rose-400"
             }`}
           />
-          <span className={`text-[11px] font-medium ${isOnline ? "text-[#10b981]" : "text-[#ef4444]"}`}>
-            {isOnline === undefined ? "Unknown" : isOnline ? "Online" : "Offline"}
-          </span>
+          <MainLayoutTextSize size="badgeText" className="font-medium text-[11px]">
+            {isOnline === undefined
+              ? "Unknown"
+              : isOnline
+              ? "Online"
+              : "Offline"}
+          </MainLayoutTextSize>
         </div>
       </div>
 
-      <div className="flex items-center gap-3 bg-[#1c1c20]/60 p-3 rounded-xl border border-[#26262b]">
+      {/* Vehicle Info Card */}
+      <MainLayoutColor
+        as="div"
+        background="surface"
+        className="flex items-center gap-3 p-3 rounded-xl border border-[#27272a] bg-[#18181b]/80"
+      >
         <div className="w-10 h-10 bg-white rounded-xl shrink-0 flex items-center justify-center text-xs font-bold text-black">
           {String(plate).slice(0, 2)}
         </div>
         <div className="flex flex-col min-w-0 leading-tight">
-          <span className="text-sm font-bold text-white tracking-wide truncate">
+          <MainLayoutColor
+            as={MainLayoutTextSize}
+            color="title"
+            size="sectionTitle"
+            className="font-bold tracking-wide truncate text-[13px]"
+          >
             {plate}
-          </span>
-          <div className="flex items-center gap-1.5 text-xs text-[#8e8e93] mt-1 truncate">
-            <span className="truncate">{driver}</span>
-            <span>•</span>
-            <span className="truncate">{type}</span>
+          </MainLayoutColor>
+          <div className="flex items-center gap-1.5 mt-1 truncate">
+            <MainLayoutColor
+              as={MainLayoutTextSize}
+              color="subtitle"
+              size="subInfoText"
+              className="truncate font-medium text-[11px]"
+            >
+              {driver}
+            </MainLayoutColor>
+            <span className="text-[#71717a]">•</span>
+            <MainLayoutColor
+              as={MainLayoutTextSize}
+              color="subtitle"
+              size="subInfoText"
+              className="truncate font-medium text-[11px]"
+            >
+              {type}
+            </MainLayoutColor>
           </div>
         </div>
-      </div>
+      </MainLayoutColor>
 
+      {/* Current Status */}
       <div className="flex flex-col gap-1 my-1">
-        <span className="text-xs text-[#71717a] font-medium">Current Status</span>
-        <div className={`flex items-center gap-2 ${isOnline ? 'text-[#10b981]' : 'text-[#ef4444]'}`}>
+        <MainLayoutColor
+          as={MainLayoutTextSize}
+          color="subtitle"
+          size="subInfoText"
+          className="font-medium text-[11px]"
+        >
+          Current Status
+        </MainLayoutColor>
+        <div
+          className={`flex items-center gap-2 ${
+            isOnline ? "text-emerald-400" : "text-rose-400"
+          }`}
+        >
           <ShieldCheck className="w-5 h-5 stroke-2" />
-          <span className="text-lg font-bold">{String(status).toUpperCase()}</span>
+          <span className="text-lg font-bold">
+            {String(status).toUpperCase()}
+          </span>
         </div>
       </div>
 
-      <hr className="border-[#222226]" />
+      <hr className="border-[#27272a]" />
 
-      <div className="flex flex-col gap-3 text-xs my-1">
+      {/* Details Grid */}
+      <div className="flex flex-col gap-3 my-1">
+        {/* Ignition */}
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-[#8e8e93]">
-            <Zap className="w-4 h-4 text-[#8e8e93]" />
-            <span>Ignition</span>
+          <div className="flex items-center gap-2">
+            <Zap className="w-4 h-4 text-[#a1a1aa]" />
+            <MainLayoutColor
+              as={MainLayoutTextSize}
+              color="subtitle"
+              size="subInfoText"
+              className="font-medium text-[12px]"
+            >
+              Ignition
+            </MainLayoutColor>
           </div>
-          <span className={`font-bold ${ignition === true ? 'text-[#10b981]' : ignition === false ? 'text-[#ef4444]' : 'text-white'}`}>{ignitionLabel}</span>
+          <span
+            className={`font-bold text-[12px] ${
+              ignition === true
+                ? "text-emerald-400"
+                : ignition === false
+                ? "text-rose-400"
+                : "text-white"
+            }`}
+          >
+            {ignitionLabel}
+          </span>
         </div>
 
+        {/* Speed */}
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-[#8e8e93]">
-            <Gauge className="w-4 h-4 text-[#8e8e93]" />
-            <span>Speed</span>
+          <div className="flex items-center gap-2">
+            <Gauge className="w-4 h-4 text-[#a1a1aa]" />
+            <MainLayoutColor
+              as={MainLayoutTextSize}
+              color="subtitle"
+              size="subInfoText"
+              className="font-medium text-[12px]"
+            >
+              Speed
+            </MainLayoutColor>
           </div>
-          <span className="font-semibold text-white">{speed}</span>
+          <span className="font-semibold text-white text-[12px]">{speed}</span>
         </div>
 
+        {/* Last Updated */}
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-[#8e8e93]">
-            <Clock className="w-4 h-4 text-[#8e8e93]" />
-            <span>Last Updated</span>
+          <div className="flex items-center gap-2">
+            <Clock className="w-4 h-4 text-[#a1a1aa]" />
+            <MainLayoutColor
+              as={MainLayoutTextSize}
+              color="subtitle"
+              size="subInfoText"
+              className="font-medium text-[12px]"
+            >
+              Last Updated
+            </MainLayoutColor>
           </div>
-          <span className="font-semibold text-white">{lastUpdated}</span>
+          <span className="font-semibold text-white text-[12px]">
+            {lastUpdated}
+          </span>
         </div>
       </div>
 
-      <hr className="border-[#222226]" />
+      <hr className="border-[#27272a]" />
 
-      <div className="flex items-center gap-2 bg-[#202024] border border-[#2a2a2e] rounded-xl p-3.5">
-        <HelpCircle className="w-5 h-5 text-[#a1a1aa] shrink-0 mt-0.5" />
-        <span className="text-xs text-[#d4d4d8] leading-relaxed">
+      {/* Warning / Note Box */}
+      <MainLayoutColor
+        as="div"
+        background="surface"
+        className="flex items-center gap-2 border border-[#27272a] bg-[#18181b]/80 rounded-xl p-3"
+      >
+        <HelpCircle className="w-4 h-4 text-[#a1a1aa] shrink-0 mt-0.5" />
+        <MainLayoutColor
+          as={MainLayoutTextSize}
+          color="subtitle"
+          size="subInfoText"
+          className="text-[11px] leading-relaxed font-medium"
+        >
           The vehicle may not be able to restart until a mobilization command is successfully executed.
-        </span>
-      </div>
+        </MainLayoutColor>
+      </MainLayoutColor>
 
-      {error ? (
-        <div className="text-xs text-[#f87171] bg-[#3f1f1f] border border-[#7f1d1d] rounded-xl p-3 mt-2">
+      {/* Error Alert */}
+      {error && (
+        <div className="text-[11px] text-rose-400 bg-rose-500/10 border border-rose-500/20 rounded-xl p-3">
           {error}
         </div>
-      ) : null}
-      <button
-        type="button"
-        onClick={onSendCommand}
-        disabled={isSending}
-        className={`w-full flex items-center justify-center gap-2 ${
-          isSending
-            ? "bg-[#b91c1c] cursor-wait"
-            : "bg-[#dc2626] hover:bg-[#b91c1c] cursor-pointer"
-        } text-white font-medium text-xs py-3 rounded-xl transition-all duration-150 ${
-          isSending ? "opacity-90" : ""
-        } mt-1`}
-      >
-        {isSending ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
-        <span>{isSending ? "Sending Command..." : "Send Immobilization Command"}</span>
-      </button>
-    </div>
+      )}
+
+      {/* Action Buttons: Cancel & Send Command */}
+      <div className="grid grid-cols-2 gap-2.5 pt-2 mt-1 border-t border-[#27272a]">
+        {/* Cancel Button */}
+        <MainHeaderActionButton
+          type="button"
+          variant="secondary"
+          onClick={onCancel}
+          disabled={isSending}
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+          className="w-full py-2.5 px-4 rounded-xl bg-[#18181b] hover:bg-[#27272a] text-[#a1a1aa] hover:text-white border border-[#27272a] cursor-pointer disabled:opacity-50"
+        >
+          <span className="text-[14px] font-medium whitespace-nowrap leading-none">
+            Cancel
+          </span>
+        </MainHeaderActionButton>
+
+        {/* Send Command Button */}
+        <MainHeaderActionButton
+          type="button"
+          variant="danger"
+          onClick={onSendCommand}
+          disabled={isSending}
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+          className="w-full py-2.5 px-4 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-medium border border-rose-600 cursor-pointer disabled:opacity-60 transition-all shadow-md shadow-rose-950/40"
+        >
+          {isSending && <Loader2 className="w-4 h-4 animate-spin mr-1.5" />}
+          <span className="text-[14px] font-medium whitespace-nowrap leading-none text-white">
+            {isSending ? "Sending..." : "Immobilize"}
+          </span>
+        </MainHeaderActionButton>
+      </div>
+    </MainLayoutColor>
   );
 }

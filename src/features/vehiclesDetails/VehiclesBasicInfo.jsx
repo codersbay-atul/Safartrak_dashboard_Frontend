@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "../../components/Ui/toast";
 import MainDropDown from "../../components/Ui/MainLayoutUI/MainDropDown";
+import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
+import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
+import MainHeaderActionButton from "../../components/Ui/MainLayoutUI/MainHeaderActionButton";
 
 // Dropdown Options
 const VEHICLE_TYPE_OPTIONS = [
@@ -23,7 +26,13 @@ const FUEL_TYPE_OPTIONS = [
   { label: "Electric", value: "Electric" },
 ];
 
-export default function VehiclesBasicInfo({ onNext, onCancel, uniqueId, onSaved, selectedVehicle }) {
+export default function VehiclesBasicInfo({
+  onNext,
+  onCancel,
+  uniqueId,
+  onSaved,
+  selectedVehicle,
+}) {
   const [formData, setFormData] = useState({
     vehicleNumber: "",
     vehicleType: "",
@@ -39,24 +48,21 @@ export default function VehiclesBasicInfo({ onNext, onCancel, uniqueId, onSaved,
 
   useEffect(() => {
     if (selectedVehicle) {
-      const vehicleNumber =
-        selectedVehicle?.plate ||
-        selectedVehicle?.vehicleNumber ||
-        selectedVehicle?.raw?.vehicle_number ||
-        selectedVehicle?.raw?.vehicleNumber ||
-        "";
-
-      setFormData((prev) => ({
-        ...prev,
-        vehicleNumber,
-        vehicleType: "Heavy Truck",
-        manufacturer: "Tata Motors",
-        model: "Model X",
-        color: "White",
-        capacity: "12 Tons",
-        fuelType: "Diesel",
-        fleet: "Main Fleet",
-      }));
+      setFormData({
+        vehicleNumber:
+          selectedVehicle?.plate ||
+          selectedVehicle?.vehicleNumber ||
+          selectedVehicle?.raw?.vehicle_number ||
+          selectedVehicle?.raw?.vehicleNumber ||
+          "",
+        vehicleType: selectedVehicle?.type || selectedVehicle?.vehicleType || "",
+        manufacturer: selectedVehicle?.manufacturer || "",
+        model: selectedVehicle?.model || "",
+        color: selectedVehicle?.color || "",
+        capacity: selectedVehicle?.capacity || "",
+        fuelType: selectedVehicle?.fuelType || "",
+        fleet: selectedVehicle?.fleet || "",
+      });
     }
   }, [selectedVehicle]);
 
@@ -69,7 +75,6 @@ export default function VehiclesBasicInfo({ onNext, onCancel, uniqueId, onSaved,
     }
   };
 
-  // Helper function for Custom Dropdowns
   const handleDropdownSelect = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
     if (errors[field]) {
@@ -78,28 +83,45 @@ export default function VehiclesBasicInfo({ onNext, onCancel, uniqueId, onSaved,
   };
 
   const validateForm = () => {
-    // const newErrors = {};
-    // if (!formData.vehicleNumber.trim()) {
-    //   newErrors.vehicleNumber = "Vehicle Number is required";
-    // }
-    // if (!formData.vehicleType) {
-    //   newErrors.vehicleType = "Select Vehicle Type";
-    // }
-    // if (!formData.manufacturer) {
-    //   newErrors.manufacturer = "Select Manufacturer";
-    // }
-    // if (!formData.model.trim()) {
-    //   newErrors.model = "Model is required";
-    // }
-    // setErrors(newErrors);
-    // return Object.keys(newErrors).length === 0;
-    return true; // Skip validation
+    const newErrors = {};
+
+    if (!formData.vehicleNumber?.trim()) {
+      newErrors.vehicleNumber = "Vehicle number is required";
+    }
+    if (!formData.vehicleType?.trim()) {
+      newErrors.vehicleType = "Vehicle type is required";
+    }
+    if (!formData.manufacturer?.trim()) {
+      newErrors.manufacturer = "Manufacturer is required";
+    }
+    if (!formData.model?.trim()) {
+      newErrors.model = "Model name is required";
+    }
+    if (!formData.color?.trim()) {
+      newErrors.color = "Color is required";
+    }
+    if (!formData.capacity?.trim()) {
+      newErrors.capacity = "Capacity is required";
+    }
+    if (!formData.fuelType?.trim()) {
+      newErrors.fuelType = "Fuel type is required";
+    }
+    if (!formData.fleet?.trim()) {
+      newErrors.fleet = "Fleet group is required";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
-  const handleNext = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e) => {
+    if (e) e.preventDefault();
 
-    if (!validateForm()) return;
+    const isValid = validateForm();
+    if (!isValid) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
 
     if (!uniqueId) {
       toast.error("No vehicle selected");
@@ -120,144 +142,279 @@ export default function VehiclesBasicInfo({ onNext, onCancel, uniqueId, onSaved,
   };
 
   return (
-    <div className="w-full max-w-[480px] bg-[#121214] border border-[#27272a] rounded-2xl p-4 shadow-2xl flex flex-col overflow-visible select-none">
-      
-      {/* Header (Without Cross Button) */}
-      <div className="pb-3 mb-2 border-b border-[#1d1d20]/60">
-        <h2 className="text-[14px] font-bold text-white tracking-tight">
+    <MainLayoutColor
+      as="div"
+      background="surface"
+      className="w-full max-w-[480px] border border-[#27272a] rounded-2xl p-4 shadow-2xl flex flex-col overflow-visible select-none font-sans"
+    >
+      {/* Header */}
+      <div className="pb-3 mb-2 border-b border-[#27272a]">
+        <MainLayoutColor
+          as={MainLayoutTextSize}
+          color="title"
+          size="sectionTitle"
+          className="font-medium tracking-tight block"
+        >
           Basic Information
-        </h2>
+        </MainLayoutColor>
       </div>
 
       {/* Form Body */}
-      <form onSubmit={handleNext} className="flex flex-col gap-2.5 text-[10.5px]">
-        
+      <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         {/* Row 1: Vehicle Number & Vehicle Type */}
         <div className="grid grid-cols-2 gap-2.5">
           <div>
-            <label className="block text-[#a1a1aa] mb-1 font-medium">Vehicle Number</label>
+            <MainLayoutColor
+              as={MainLayoutTextSize}
+              color="subtitle"
+              size="subInfoText"
+              className="block mb-1 font-medium"
+            >
+              Vehicle Number <span className="text-rose-500">*</span>
+            </MainLayoutColor>
             <input
               type="text"
               name="vehicleNumber"
-              placeholder="Enter Vehicle Number"
+              placeholder="e.g. MH14AB1234"
               value={formData.vehicleNumber}
               onChange={handleChange}
-              className={`w-full bg-[#18181b]/60 border ${errors.vehicleNumber ? "border-rose-500" : "border-[#27272a]"} focus:border-[#ffd60a] rounded-xl px-3 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all`}
+              className={`w-full bg-[#18181b]/60 border ${
+                errors.vehicleNumber ? "!border-rose-500 ring-1 ring-rose-500/50" : "border-[#27272a]"
+              } focus:border-[var(--color-yellow,#ffd60a)] rounded-xl px-3 py-1.5 text-white text-[12px] font-medium placeholder-[#52525b] focus:outline-none transition-all`}
             />
-            {errors.vehicleNumber && <p className="text-red-500 text-[9px] mt-0.5">{errors.vehicleNumber}</p>}
+            {errors.vehicleNumber && (
+              <p className="text-rose-500 text-[10px] mt-0.5 leading-tight">
+                {errors.vehicleNumber}
+              </p>
+            )}
           </div>
 
           <div>
-            <label className="block text-[#a1a1aa] mb-1 font-medium">Vehicle Type</label>
-            <MainDropdown
+            <MainLayoutColor
+              as={MainLayoutTextSize}
+              color="subtitle"
+              size="subInfoText"
+              className="block mb-1 font-medium"
+            >
+              Vehicle Type <span className="text-rose-500">*</span>
+            </MainLayoutColor>
+            <MainDropDown
               label="Select Vehicle Type"
               options={VEHICLE_TYPE_OPTIONS}
               selectedValue={formData.vehicleType}
               onSelect={(val) => handleDropdownSelect("vehicleType", val)}
-              className={`w-full justify-between rounded-xl bg-[#18181b]/60 ${errors.vehicleType ? "border-rose-500" : "border-[#27272a]"} py-1.5 px-3 text-white`}
+              className={`w-full justify-between rounded-xl bg-[#18181b]/60 ${
+                errors.vehicleType ? "!border-rose-500 ring-1 ring-rose-500/50" : "border-[#27272a]"
+              } py-1.5 px-3 text-white text-[12px] font-medium focus:border-[var(--color-yellow,#ffd60a)]`}
             />
-            {errors.vehicleType && <p className="text-red-500 text-[9px] mt-0.5">{errors.vehicleType}</p>}
+            {errors.vehicleType && (
+              <p className="text-rose-500 text-[10px] mt-0.5 leading-tight">
+                {errors.vehicleType}
+              </p>
+            )}
           </div>
         </div>
 
         {/* Row 2: Manufacturer & Model */}
         <div className="grid grid-cols-2 gap-2.5">
           <div>
-            <label className="block text-[#a1a1aa] mb-1 font-medium">Manufacturer</label>
+            <MainLayoutColor
+              as={MainLayoutTextSize}
+              color="subtitle"
+              size="subInfoText"
+              className="block mb-1 font-medium"
+            >
+              Manufacturer <span className="text-rose-500">*</span>
+            </MainLayoutColor>
             <MainDropDown
-              label="Select Manufacturer Name"
+              label="Select Manufacturer"
               options={MANUFACTURER_OPTIONS}
               selectedValue={formData.manufacturer}
               onSelect={(val) => handleDropdownSelect("manufacturer", val)}
-              className={`w-full justify-between rounded-xl bg-[#18181b]/60 ${errors.manufacturer ? "border-rose-500" : "border-[#27272a]"} py-1.5 px-3 text-white`}
+              className={`w-full justify-between rounded-xl bg-[#18181b]/60 ${
+                errors.manufacturer ? "!border-rose-500 ring-1 ring-rose-500/50" : "border-[#27272a]"
+              } py-1.5 px-3 text-white text-[12px] font-medium focus:border-[var(--color-yellow,#ffd60a)]`}
             />
-            {errors.manufacturer && <p className="text-red-500 text-[9px] mt-0.5">{errors.manufacturer}</p>}
+            {errors.manufacturer && (
+              <p className="text-rose-500 text-[10px] mt-0.5 leading-tight">
+                {errors.manufacturer}
+              </p>
+            )}
           </div>
 
           <div>
-            <label className="block text-[#a1a1aa] mb-1 font-medium">Model</label>
+            <MainLayoutColor
+              as={MainLayoutTextSize}
+              color="subtitle"
+              size="subInfoText"
+              className="block mb-1 font-medium"
+            >
+              Model <span className="text-rose-500">*</span>
+            </MainLayoutColor>
             <input
               type="text"
               name="model"
-              placeholder="Enter Model"
+              placeholder="e.g. Prima 5530"
               value={formData.model}
               onChange={handleChange}
-              className={`w-full bg-[#18181b]/60 border ${errors.model ? "border-rose-500" : "border-[#27272a]"} focus:border-[#ffd60a] rounded-xl px-3 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all`}
+              className={`w-full bg-[#18181b]/60 border ${
+                errors.model ? "!border-rose-500 ring-1 ring-rose-500/50" : "border-[#27272a]"
+              } focus:border-[var(--color-yellow,#ffd60a)] rounded-xl px-3 py-1.5 text-white text-[12px] font-medium placeholder-[#52525b] focus:outline-none transition-all`}
             />
-            {errors.model && <p className="text-red-500 text-[9px] mt-0.5">{errors.model}</p>}
+            {errors.model && (
+              <p className="text-rose-500 text-[10px] mt-0.5 leading-tight">
+                {errors.model}
+              </p>
+            )}
           </div>
         </div>
 
         {/* Color */}
         <div>
-          <label className="block text-[#a1a1aa] mb-1 font-medium">Color</label>
+          <MainLayoutColor
+            as={MainLayoutTextSize}
+            color="subtitle"
+            size="subInfoText"
+            className="block mb-1 font-medium"
+          >
+            Color <span className="text-rose-500">*</span>
+          </MainLayoutColor>
           <input
             type="text"
             name="color"
-            placeholder="Enter Color"
+            placeholder="e.g. White / Yellow"
             value={formData.color}
             onChange={handleChange}
-            className="w-full bg-[#18181b]/60 border border-[#27272a] focus:border-[#ffd60a] rounded-xl px-3 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all"
+            className={`w-full bg-[#18181b]/60 border ${
+              errors.color ? "!border-rose-500 ring-1 ring-rose-500/50" : "border-[#27272a]"
+            } focus:border-[var(--color-yellow,#ffd60a)] rounded-xl px-3 py-1.5 text-white text-[12px] font-medium placeholder-[#52525b] focus:outline-none transition-all`}
           />
+          {errors.color && (
+            <p className="text-rose-500 text-[10px] mt-0.5 leading-tight">
+              {errors.color}
+            </p>
+          )}
         </div>
 
         {/* Row 3: Capacity & Fuel Type */}
         <div className="grid grid-cols-2 gap-2.5">
           <div>
-            <label className="block text-[#a1a1aa] mb-1 font-medium">Capacity (Ton)</label>
+            <MainLayoutColor
+              as={MainLayoutTextSize}
+              color="subtitle"
+              size="subInfoText"
+              className="block mb-1 font-medium"
+            >
+              Capacity (Ton) <span className="text-rose-500">*</span>
+            </MainLayoutColor>
             <MainDropDown
-              label="Enter Capacity (Ton)"
+              label="Select Capacity"
               options={CAPACITY_OPTIONS}
               selectedValue={formData.capacity}
               onSelect={(val) => handleDropdownSelect("capacity", val)}
-              className="w-full justify-between rounded-xl bg-[#18181b]/60 border-[#27272a] py-1.5 px-3 text-white"
+              className={`w-full justify-between rounded-xl bg-[#18181b]/60 ${
+                errors.capacity ? "!border-rose-500 ring-1 ring-rose-500/50" : "border-[#27272a]"
+              } py-1.5 px-3 text-white text-[12px] font-medium focus:border-[var(--color-yellow,#ffd60a)]`}
             />
+            {errors.capacity && (
+              <p className="text-rose-500 text-[10px] mt-0.5 leading-tight">
+                {errors.capacity}
+              </p>
+            )}
           </div>
 
           <div>
-            <label className="block text-[#a1a1aa] mb-1 font-medium">Fuel Type</label>
-            <MainDropdown
-              label="Enter Fuel Type"
+            <MainLayoutColor
+              as={MainLayoutTextSize}
+              color="subtitle"
+              size="subInfoText"
+              className="block mb-1 font-medium"
+            >
+              Fuel Type <span className="text-rose-500">*</span>
+            </MainLayoutColor>
+            <MainDropDown
+              label="Select Fuel Type"
               options={FUEL_TYPE_OPTIONS}
               selectedValue={formData.fuelType}
               onSelect={(val) => handleDropdownSelect("fuelType", val)}
-              className="w-full justify-between rounded-xl bg-[#18181b]/60 border-[#27272a] py-1.5 px-3 text-white"
+              className={`w-full justify-between rounded-xl bg-[#18181b]/60 ${
+                errors.fuelType ? "!border-rose-500 ring-1 ring-rose-500/50" : "border-[#27272a]"
+              } py-1.5 px-3 text-white text-[12px] font-medium focus:border-[var(--color-yellow,#ffd60a)]`}
             />
+            {errors.fuelType && (
+              <p className="text-rose-500 text-[10px] mt-0.5 leading-tight">
+                {errors.fuelType}
+              </p>
+            )}
           </div>
         </div>
 
         {/* Fleet */}
         <div>
-          <label className="block text-[#a1a1aa] mb-1 font-medium">Fleet</label>
+          <MainLayoutColor
+            as={MainLayoutTextSize}
+            color="subtitle"
+            size="subInfoText"
+            className="block mb-1 font-medium"
+          >
+            Fleet Group <span className="text-rose-500">*</span>
+          </MainLayoutColor>
           <input
             type="text"
             name="fleet"
-            placeholder="Enter West Fleet"
+            placeholder="e.g. West Fleet"
             value={formData.fleet}
             onChange={handleChange}
-            className="w-full bg-[#18181b]/60 border border-[#27272a] focus:border-[#ffd60a] rounded-xl px-3 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all"
+            className={`w-full bg-[#18181b]/60 border ${
+              errors.fleet ? "!border-rose-500 ring-1 ring-rose-500/50" : "border-[#27272a]"
+            } focus:border-[var(--color-yellow,#ffd60a)] rounded-xl px-3 py-1.5 text-white text-[12px] font-medium placeholder-[#52525b] focus:outline-none transition-all`}
           />
+          {errors.fleet && (
+            <p className="text-rose-500 text-[10px] mt-0.5 leading-tight">
+              {errors.fleet}
+            </p>
+          )}
         </div>
 
         {/* Action Buttons */}
-        <div className="grid grid-cols-2 gap-2.5 pt-2 mt-2 border-t border-[#1d1d20]">
-          <button
+        <div className="grid grid-cols-2 gap-2.5 pt-2.5 mt-2 border-t border-[#27272a]">
+          {/* Cancel Button */}
+          <MainHeaderActionButton
             type="button"
+            variant="secondary"
             onClick={onCancel}
-            className="w-full py-2 px-4 rounded-xl text-[11px] font-semibold bg-[#27272a]/60 hover:bg-[#27272a] text-[#d4d4d8] transition-colors cursor-pointer"
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            className="w-full py-2 px-4 rounded-xl bg-[#18181b] hover:bg-[#27272a] text-[#a1a1aa] hover:text-white border border-[#27272a] cursor-pointer"
           >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full py-2 rounded-xl text-[11px] font-bold text-black bg-[#ffd60a] hover:bg-[#e6c200] transition-colors cursor-pointer disabled:opacity-70"
-          >
-            {isSubmitting ? "Saving..." : "Next"}
-          </button>
-        </div>
+            <span className="text-[14px] font-medium whitespace-nowrap leading-none">
+              Cancel
+            </span>
+          </MainHeaderActionButton>
 
+          {/* Submit / Next Button */}
+          <MainHeaderActionButton
+            type="button"
+            onClick={handleSubmit}
+            disabled={isSubmitting}
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            className="w-full py-2 rounded-xl text-black bg-[var(--color-yellow,#ffd60a)] hover:bg-[var(--color-yellow-hover,#e6c200)] border border-[var(--color-yellow,#ffd60a)] cursor-pointer disabled:opacity-60 shadow-md shadow-[var(--color-yellow,#ffd60a)]/10"
+          >
+            <span className="text-[14px] font-medium text-black whitespace-nowrap leading-none">
+              {isSubmitting ? "Saving..." : "Next"}
+            </span>
+          </MainHeaderActionButton>
+        </div>
       </form>
-    </div>
+    </MainLayoutColor>
   );
 }

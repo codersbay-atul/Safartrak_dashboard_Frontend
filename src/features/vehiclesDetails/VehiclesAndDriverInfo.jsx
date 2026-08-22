@@ -11,9 +11,9 @@ import {
   Navigation,
   AlertCircle,
   Truck,
-  User,
 } from "lucide-react";
 import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
+import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
 
 export default function VehiclesAndDriverInfo() {
   const vehicleDetails = [
@@ -31,154 +31,343 @@ export default function VehiclesAndDriverInfo() {
   ];
 
   return (
-    <MainLayoutColor as="div" background="surface" className="w-full h-full border border-[#27272a] p-3 rounded-xl flex flex-col justify-between min-h-0 overflow-hidden select-none">
-      
-      {/* Header */}
-      <div className="flex items-center justify-between pb-2 border-b border-[#27272a] shrink-0">
+    <MainLayoutColor
+      as="div"
+      background="surface"
+      className="w-full h-full border border-[#27272a] p-3.5 rounded-xl flex flex-col min-h-0 overflow-hidden select-none font-sans"
+    >
+      {/* Fixed Header */}
+      <div className="flex items-center justify-between pb-2.5 border-b border-[#27272a] shrink-0 mb-2">
         <div className="flex items-center gap-2">
-          <Truck className="w-4 h-4 text-[#ffd60a]" />
-          <h3 className="font-bold text-[12px] text-white tracking-tight">
+          <MainLayoutColor color="yellow" as={Truck} className="w-4 h-4 shrink-0" />
+          <MainLayoutColor
+            as={MainLayoutTextSize}
+            color="title"
+            size="sectionTitle"
+            className="font-medium tracking-tight block"
+          >
             Driver & Vehicle Information
-          </h3>
+          </MainLayoutColor>
         </div>
-        
+
         {/* Live Status Badge */}
-        <span className="text-[9.5px] text-emerald-400 font-semibold bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full flex items-center gap-1.5">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-          Live Tracking
+        <span className="text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full flex items-center gap-1.5 shrink-0">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+          <MainLayoutTextSize size="badgeText" className="font-medium">
+            Live Tracking
+          </MainLayoutTextSize>
         </span>
       </div>
 
-      {/* Main Content Grid */}
-      <div className="grid grid-cols-2 gap-x-5 text-[10px] my-auto py-1 flex-1 items-center">
-        
-        {/* Left Side: Vehicle Details */}
-        <div className="space-y-1">
-          <div className="text-[9px] font-bold text-[#ffd60a] uppercase tracking-wider mb-1 flex items-center gap-1">
-            <span>Vehicle Specifications</span>
-          </div>
-
-          {vehicleDetails.map((item, index) => (
-            <div
-              key={index}
-              className="flex justify-between items-center py-0.5 border-b border-[#27272a]/50 last:border-0"
+      {/* Explicit Yellow Scrollbar Container */}
+      <div 
+        className="flex-1 min-h-0 overflow-y-auto pr-2.5 [scrollbar-width:thin] [scrollbar-color:#ffd60a_#18181b] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-[#18181b] [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:bg-[#ffd60a] [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[#e6c200]"
+        style={{
+          scrollbarColor: "#ffd60a #18181b",
+        }}
+      >
+        <div className="grid grid-cols-2 gap-x-6 items-start py-1">
+          {/* Left Side: Vehicle Details */}
+          <div className="flex flex-col gap-1.5">
+            <MainLayoutColor
+              as={MainLayoutTextSize}
+              color="yellow"
+              size="subInfoText"
+              className="font-medium uppercase tracking-wider mb-1 block shrink-0"
             >
-              <span className="text-[#a1a1aa] font-medium">{item.label}</span>
-              <span
-                className={`text-[10px] font-medium ${
-                  item.isAccent
-                    ? "text-[#ffd60a] font-bold"
-                    : item.isMono
-                    ? "font-mono text-[#d4d4d8] text-[9.5px]"
-                    : "text-white"
-                }`}
+              Vehicle Specifications
+            </MainLayoutColor>
+
+            {vehicleDetails.map((item, index) => (
+              <div
+                key={index}
+                className="flex justify-between items-center py-1 border-b border-[#27272a]/50 last:border-0"
               >
-                {item.value}
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="subInfoText"
+                  className="font-medium shrink-0"
+                >
+                  {item.label}
+                </MainLayoutColor>
+
+                {item.isAccent ? (
+                  <MainLayoutColor
+                    as={MainLayoutTextSize}
+                    color="yellow"
+                    size="subInfoText"
+                    className="font-medium text-right truncate"
+                  >
+                    {item.value}
+                  </MainLayoutColor>
+                ) : (
+                  <MainLayoutColor
+                    as={MainLayoutTextSize}
+                    color="title"
+                    size="subInfoText"
+                    className={`font-medium text-right truncate ${
+                      item.isMono ? "font-mono text-[#d4d4d8]" : ""
+                    }`}
+                  >
+                    {item.value}
+                  </MainLayoutColor>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Right Side: Live Telematics */}
+          <div className="flex flex-col gap-1.5 border-l border-[#27272a] pl-5">
+            <MainLayoutColor
+              as={MainLayoutTextSize}
+              color="yellow"
+              size="subInfoText"
+              className="font-medium uppercase tracking-wider mb-1 block shrink-0"
+            >
+              Live Telematics
+            </MainLayoutColor>
+
+            {/* Speed */}
+            <div className="flex items-center justify-between py-1 border-b border-[#27272a]/50">
+              <span className="flex items-center gap-2">
+                <MainLayoutColor color="yellow" as={Gauge} className="w-3.5 h-3.5 shrink-0" />
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="subInfoText"
+                  className="font-medium"
+                >
+                  Speed
+                </MainLayoutColor>
               </span>
+              <MainLayoutColor
+                as={MainLayoutTextSize}
+                color="title"
+                size="subInfoText"
+                className="font-medium"
+              >
+                52 km/h
+              </MainLayoutColor>
             </div>
-          ))}
-        </div>
 
-        {/* Right Side: Live Telematics */}
-        <div className="space-y-1 border-l border-[#27272a] pl-4">
-          <div className="text-[9px] font-bold text-[#ffd60a] uppercase tracking-wider mb-1 flex items-center gap-1">
-            <span>Live Telematics</span>
-          </div>
-
-          {/* Speed */}
-          <div className="flex items-center justify-between py-0.5 border-b border-[#27272a]/50">
-            <span className="text-[#a1a1aa] flex items-center gap-1.5">
-              <Gauge className="w-3 h-3 text-[#ffd60a]" /> Speed
-            </span>
-            <span className="font-bold text-white">52 km/h</span>
-          </div>
-
-          {/* Fuel Level */}
-          <div className="flex items-center justify-between py-0.5 border-b border-[#27272a]/50">
-            <span className="text-[#a1a1aa] flex items-center gap-1.5">
-              <Fuel className="w-3 h-3 text-emerald-400" /> Fuel Level
-            </span>
-            <div className="flex items-center gap-1.5">
-              <span className="font-bold text-white">82%</span>
-              <div className="w-10 bg-[#27272a] h-1.5 rounded-full overflow-hidden">
-                <div className="bg-emerald-400 h-full w-[82%] rounded-full"></div>
+            {/* Fuel Level */}
+            <div className="flex items-center justify-between py-1 border-b border-[#27272a]/50">
+              <span className="flex items-center gap-2">
+                <Fuel className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="subInfoText"
+                  className="font-medium"
+                >
+                  Fuel Level
+                </MainLayoutColor>
+              </span>
+              <div className="flex items-center gap-2">
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="title"
+                  size="subInfoText"
+                  className="font-medium"
+                >
+                  82%
+                </MainLayoutColor>
+                <div className="w-12 bg-[#27272a] h-1.5 rounded-full overflow-hidden shrink-0">
+                  <div className="bg-emerald-400 h-full w-[82%] rounded-full" />
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Battery */}
-          <div className="flex items-center justify-between py-0.5 border-b border-[#27272a]/50">
-            <span className="text-[#a1a1aa] flex items-center gap-1.5">
-              <Battery className="w-3 h-3 text-sky-400" /> Battery
-            </span>
-            <span className="font-bold text-white">12.8V</span>
-          </div>
+            {/* Battery */}
+            <div className="flex items-center justify-between py-1 border-b border-[#27272a]/50">
+              <span className="flex items-center gap-2">
+                <Battery className="w-3.5 h-3.5 text-sky-400 shrink-0" />
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="subInfoText"
+                  className="font-medium"
+                >
+                  Battery
+                </MainLayoutColor>
+              </span>
+              <MainLayoutColor
+                as={MainLayoutTextSize}
+                color="title"
+                size="subInfoText"
+                className="font-medium"
+              >
+                12.8V
+              </MainLayoutColor>
+            </div>
 
-          {/* Engine Health */}
-          <div className="flex items-center justify-between py-0.5 border-b border-[#27272a]/50">
-            <span className="text-[#a1a1aa] flex items-center gap-1.5">
-              <Activity className="w-3 h-3 text-emerald-400" /> Engine Health
-            </span>
-            <span className="font-bold text-emerald-400">Excellent</span>
-          </div>
+            {/* Engine Health */}
+            <div className="flex items-center justify-between py-1 border-b border-[#27272a]/50">
+              <span className="flex items-center gap-2">
+                <Activity className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="subInfoText"
+                  className="font-medium"
+                >
+                  Engine Health
+                </MainLayoutColor>
+              </span>
+              <MainLayoutTextSize
+                size="subInfoText"
+                className="font-medium text-emerald-400"
+              >
+                Excellent
+              </MainLayoutTextSize>
+            </div>
 
-          {/* Trip Process */}
-          <div className="flex items-center justify-between py-0.5 border-b border-[#27272a]/50">
-            <span className="text-[#a1a1aa] flex items-center gap-1.5">
-              <Clock className="w-3 h-3 text-[#ffd60a]" /> Trip Progress
-            </span>
-            <div className="flex items-center gap-1.5">
-              <span className="font-bold text-white">72%</span>
-              <div className="w-10 bg-[#27272a] h-1.5 rounded-full overflow-hidden">
-                <div className="bg-[#ffd60a] h-full w-[72%] rounded-full"></div>
+            {/* Trip Progress */}
+            <div className="flex items-center justify-between py-1 border-b border-[#27272a]/50">
+              <span className="flex items-center gap-2">
+                <MainLayoutColor color="yellow" as={Clock} className="w-3.5 h-3.5 shrink-0" />
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="subInfoText"
+                  className="font-medium"
+                >
+                  Trip Progress
+                </MainLayoutColor>
+              </span>
+              <div className="flex items-center gap-2">
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="title"
+                  size="subInfoText"
+                  className="font-medium"
+                >
+                  72%
+                </MainLayoutColor>
+                <div className="w-12 bg-[#27272a] h-1.5 rounded-full overflow-hidden shrink-0">
+                  <MainLayoutColor
+                    as="div"
+                    background="yellow"
+                    className="h-full w-[72%] rounded-full"
+                  />
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* ETA */}
-          <div className="flex items-center justify-between py-0.5 border-b border-[#27272a]/50">
-            <span className="text-[#a1a1aa] flex items-center gap-1.5">
-              <Navigation className="w-3 h-3 text-cyan-400" /> ETA
-            </span>
-            <span className="font-bold text-white">1 hr 24 min</span>
-          </div>
+            {/* ETA */}
+            <div className="flex items-center justify-between py-1 border-b border-[#27272a]/50">
+              <span className="flex items-center gap-2">
+                <Navigation className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="subInfoText"
+                  className="font-medium"
+                >
+                  ETA
+                </MainLayoutColor>
+              </span>
+              <MainLayoutColor
+                as={MainLayoutTextSize}
+                color="title"
+                size="subInfoText"
+                className="font-medium"
+              >
+                1 hr 24 min
+              </MainLayoutColor>
+            </div>
 
-          {/* Current Address */}
-          <div className="flex items-center justify-between py-0.5 border-b border-[#27272a]/50">
-            <span className="text-[#a1a1aa] flex items-center gap-1.5">
-              <MapPin className="w-3 h-3 text-rose-400" /> Current Address
-            </span>
-            <span className="font-semibold text-white truncate max-w-[100px]" title="Andheri East, Mumbai">
-              Andheri East, Mumbai
-            </span>
-          </div>
+            {/* Current Address */}
+            <div className="flex items-center justify-between py-1 border-b border-[#27272a]/50">
+              <span className="flex items-center gap-2">
+                <MapPin className="w-3.5 h-3.5 text-rose-400 shrink-0" />
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="subInfoText"
+                  className="font-medium"
+                >
+                  Current Address
+                </MainLayoutColor>
+              </span>
+              <MainLayoutColor
+                as={MainLayoutTextSize}
+                color="title"
+                size="subInfoText"
+                className="font-medium truncate max-w-[130px] text-right"
+                title="Andheri East, Mumbai"
+              >
+                Andheri East, Mumbai
+              </MainLayoutColor>
+            </div>
 
-          {/* GPS Signal */}
-          <div className="flex items-center justify-between py-0.5 border-b border-[#27272a]/50">
-            <span className="text-[#a1a1aa] flex items-center gap-1.5">
-              <Radio className="w-3 h-3 text-indigo-400" /> GPS Signal
-            </span>
-            <span className="font-bold text-emerald-400">Strong</span>
-          </div>
+            {/* GPS Signal */}
+            <div className="flex items-center justify-between py-1 border-b border-[#27272a]/50">
+              <span className="flex items-center gap-2">
+                <Radio className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="subInfoText"
+                  className="font-medium"
+                >
+                  GPS Signal
+                </MainLayoutColor>
+              </span>
+              <MainLayoutTextSize
+                size="subInfoText"
+                className="font-medium text-emerald-400"
+              >
+                Strong
+              </MainLayoutTextSize>
+            </div>
 
-          {/* Ignition */}
-          <div className="flex items-center justify-between py-0.5 border-b border-[#27272a]/50">
-            <span className="text-[#a1a1aa] flex items-center gap-1.5">
-              <Zap className="w-3 h-3 text-emerald-400" /> Ignition
-            </span>
-            <span className="font-bold text-emerald-400">ON</span>
-          </div>
+            {/* Ignition */}
+            <div className="flex items-center justify-between py-1 border-b border-[#27272a]/50">
+              <span className="flex items-center gap-2">
+                <Zap className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="subInfoText"
+                  className="font-medium"
+                >
+                  Ignition
+                </MainLayoutColor>
+              </span>
+              <MainLayoutTextSize
+                size="subInfoText"
+                className="font-medium text-emerald-400"
+              >
+                ON
+              </MainLayoutTextSize>
+            </div>
 
-          {/* Last Updated */}
-          <div className="flex items-center justify-between py-0.5">
-            <span className="text-[#a1a1aa] flex items-center gap-1.5">
-              <AlertCircle className="w-3 h-3 text-[#71717a]" /> Last Updated
-            </span>
-            <span className="font-medium text-[#a1a1aa]">12 sec ago</span>
+            {/* Last Updated */}
+            <div className="flex items-center justify-between py-1">
+              <span className="flex items-center gap-2">
+                <AlertCircle className="w-3.5 h-3.5 text-[#71717a] shrink-0" />
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="subInfoText"
+                  className="font-medium"
+                >
+                  Last Updated
+                </MainLayoutColor>
+              </span>
+              <MainLayoutColor
+                as={MainLayoutTextSize}
+                color="subtitle"
+                size="subInfoText"
+                className="font-medium"
+              >
+                12 sec ago
+              </MainLayoutColor>
+            </div>
           </div>
-
         </div>
-
       </div>
     </MainLayoutColor>
   );

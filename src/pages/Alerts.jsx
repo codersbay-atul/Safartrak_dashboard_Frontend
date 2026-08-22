@@ -21,7 +21,6 @@ export default function Alerts() {
   const [activeType, setActiveType] = useState("all");
 
   const { count, isLoading: isCountLoading } = useAlertCount();
-
   const { summary, isLoading: isSummaryLoading } = useAlertSummary();
 
   const {
@@ -109,36 +108,40 @@ export default function Alerts() {
 
   return (
     <MainLayout activeTab="Alerts">
-      <div className="flex-1 flex flex-col gap-2.5 min-h-0 overflow-y-auto pr-0.5 custom-scrollbar">
+      <div className="flex-1 flex flex-col gap-2.5 min-h-0 min-w-0 overflow-x-hidden overflow-y-auto pr-0.5 custom-scrollbar">
         <div className="shrink-0">
           <AlertsHeader
-          searchQuery={searchQuery}
-          onSearchChange={(e) => setSearchQuery(e.target.value)}
-          fleetFilter={fleetFilter}
-          onFleetChange={setFleetFilter}
-          severityFilter={severityFilter}
-          onSeverityChange={setSeverityFilter}
-          onConfigClick={() => {}}
-        />
+            searchQuery={searchQuery}
+            onSearchChange={(e) => setSearchQuery(e.target.value)}
+            fleetFilter={fleetFilter}
+            onFleetChange={setFleetFilter}
+            severityFilter={severityFilter}
+            onSeverityChange={setSeverityFilter}
+            onConfigClick={() => {}}
+          />
         </div>
 
         <div className="shrink-0">
           <AlertsStats cards={statsCards} />
         </div>
 
-        <AlertTypeGrid
-          types={types}
-          activeType={activeType}
-          onTypeSelect={setActiveType}
-          isLoading={isTypesLoading}
-          isError={isTypesError}
-        />
+        <div className="shrink-0">
+          <AlertTypeGrid
+            types={types}
+            activeType={activeType}
+            onTypeSelect={setActiveType}
+            isLoading={isTypesLoading}
+            isError={isTypesError}
+          />
+        </div>
 
-        <RecentAlertsTable
-          alerts={filteredAlerts}
-          isLoading={isAlertsLoading}
-          isError={isAlertsError}
-        />
+        <div className="flex-none min-h-[280px] lg:flex-1 lg:min-h-0 flex flex-col">
+          <RecentAlertsTable
+            alerts={filteredAlerts}
+            isLoading={isAlertsLoading}
+            isError={isAlertsError}
+          />
+        </div>
       </div>
     </MainLayout>
   );
