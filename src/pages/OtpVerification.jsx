@@ -158,8 +158,9 @@ export default function VerifyIdentity() {
         <div className="flex flex-col gap-4 mt-2">
           <MainLayoutButton
             type="submit"
+            variant="primary"
             disabled={isLoading}
-            className="w-full h-[48px] rounded-lg bg-[#F5B700] hover:bg-[#d9a200] text-black text-[14px] font-semibold transition-colors flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full h-[48px] rounded-lg text-[14px] font-semibold transition-colors flex items-center justify-center gap-2 cursor-pointer"
           >
             {isLoading ? (
               <>

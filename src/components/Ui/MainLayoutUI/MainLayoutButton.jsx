@@ -20,6 +20,8 @@ export default function MainLayoutButton({
       "border border-[#FDB914]/70 text-[#FDB914] bg-transparent hover:bg-[#FDB914]/10 transition-colors duration-150 font-medium",
     solidYellow:
       "bg-[#FDB914] text-black hover:bg-[#FDB914]/90 transition-colors duration-150 font-semibold",
+    primary:
+      "bg-[#F5B700] text-black border border-[#F5B700] hover:bg-[#d9a200] hover:border-[#d9a200] transition-colors duration-150 font-semibold",
     outlineMuted:
       "border border-zinc-700 text-zinc-300 hover:bg-zinc-800 transition-colors duration-150",
   };

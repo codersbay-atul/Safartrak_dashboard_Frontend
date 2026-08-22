@@ -60,20 +60,21 @@ export default function ForgotPassword() {
         <div className="flex flex-col gap-4 mt-2">
           <MainLayoutButton
             type="submit"
+            variant="primary"
             disabled={isLoading}
-            className="w-full h-[48px] rounded-lg bg-[#F5B700] hover:bg-[#d9a200] text-black text-[14px] font-semibold transition-colors flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full h-[48px] rounded-lg text-[14px] font-semibold transition-colors flex items-center justify-center gap-2 cursor-pointer"
           >
             {isLoading ? (
-              <>
+              <div className="flex items-center justify-center gap-2">
                 <LoaderCircle className="animate-spin" size={18} />
                 <span>Sending Code...</span>
-              </>
+              </div>
             ) : (
-              "Send Verification Code"
+              "Send Code"
             )}
           </MainLayoutButton>
 
-          <Link to="/login" className="flex items-center justify-center gap-2 text-sm font-medium text-[#F5B700] hover:text-[#d9a200] transition-colors py-2">
+          <Link to="/login" className="flex items-center border-1 border-zinc-700 rounded-lg p-2 justify-center gap-2 text-sm font-medium text-[#F5B700] hover:text-[#d9a200] transition-colors py-2">
             <ArrowLeft size={16} />
             <span>Back to Sign In</span>
           </Link>

@@ -65,7 +65,7 @@ export default function Login() {
         loginUser({
           username: username.trim(),
           password,
-        })
+        }),
       );
 
       if (loginUser.fulfilled.match(resultAction)) {
@@ -91,7 +91,7 @@ export default function Login() {
       variant="split"
       title="Welcome Back"
       subtitle="Sign In to continue managing your fleet operations."
-      sectionLabel="Login"
+      // sectionLabel="Login"
     >
       <form onSubmit={handleSubmit} className="flex flex-col gap-5" noValidate>
         <AuthField
@@ -137,11 +137,13 @@ export default function Login() {
               disabled={isLoading}
               className="h-4 w-4 rounded border-[#2a2a32] bg-[#0a0a0f] accent-[#F5B700] cursor-pointer"
             />
-            <span className="text-[12px] text-[#a1a1aa]">Remember me</span>
+            <span className={`text-[12px] font-medium transition-colors ${rememberMe ? "text-[#F5B700]" : "text-[#a1a1aa]"}`}>
+              Remember me
+            </span>
           </label>
           <Link
             to="/forgot-password"
-            className="text-[12px] font-medium text-[#F5B700] hover:text-[#d9a200] transition-colors"
+            className="text-[12px] text-[#F5B700] hover:text-[#d9a200] transition-colors font-medium leading-[16px]"
           >
             Forgot Password?
           </Link>
@@ -152,7 +154,7 @@ export default function Login() {
           variant="primary"
           size="lg"
           disabled={isLoading}
-          className="w-full h-[50px] mt-1 rounded-[10px] bg-[#F5B700] hover:bg-[#d9a200] text-black text-[14px] font-semibold"
+          className="w-full h-[50px] mt-1 rounded-[10px]  font-semibold leading-[16px]"
         >
           {isLoading ? "Signing in..." : "Login"}
         </MainLayoutButton>

@@ -98,7 +98,7 @@ export default function ResetPassword() {
           error={errors.confirmPassword}
         />
 
-        <p className="text-xs text-gray-400 leading-relaxed -mt-1">
+        <p className="text-[12px] font-normal text-gray-400 leading-4 -mt-1">
           Use at least 8 characters, including uppercase, lowercase, a number, and a special character.
         </p>
 

@@ -14,10 +14,10 @@ export default function PasswordUpdated() {
         </div>
 
         <div>
-          <h2 className="text-2xl font-semibold text-white mb-2">
+          <h2 className="text-[18px] font-medium text-white mb-2 leading-7">
             Password Updated
           </h2>
-          <p className="text-sm text-gray-400 leading-relaxed">
+          <p className="text-[14px] text-gray-400 leading-[18px]">
             Your password has been changed successfully. You can now sign in using your new password.
           </p>
         </div>
