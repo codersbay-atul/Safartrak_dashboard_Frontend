@@ -3,7 +3,7 @@ import { ShieldCheck } from "lucide-react";
 import MainLayoutColor from "../MainLayoutUI/MainLayoutColor";
 import MainLayoutTextSize from "../MainLayoutUI/MainLayoutTextSize";
 
-const DATA_PROTECTION_URL = "https://www.safartrak.com/legal/data-protection";
+const DATA_PROTECTION_URL = "https://www.safartrak.com/data-protection";
 const CLOSE_DELAY_MS = 150;
 
 export default function NavDataProtectionIcon() {
