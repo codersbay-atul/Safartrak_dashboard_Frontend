@@ -37,7 +37,7 @@ export default function MobilizeVehicleList({
     <MainLayoutColor
       as="div"
       background="surface"
-      className="w-full h-full min-h-0 border border-[#27272a] rounded-2xl p-3 flex flex-col select-none overflow-hidden shadow-2xl font-sans"
+      className="w-full h-auto lg:h-full min-h-0 border border-[#27272a] rounded-2xl p-3 flex flex-col select-none overflow-hidden shadow-2xl font-sans"
     >
       {/* 14px Title */}
       <MainLayoutColor
@@ -68,7 +68,7 @@ export default function MobilizeVehicleList({
         ))}
       </div>
 
-      <div className="flex flex-col gap-2 overflow-y-auto pr-1 flex-1 custom-scrollbar min-h-0">
+      <div className="flex flex-col gap-2 overflow-y-visible lg:overflow-y-auto pr-1 flex-none lg:flex-1 custom-scrollbar min-h-0">
         {vehicles.length > 0 ? (
           vehicles.map((vehicle) => {
             const action = ACTION_STYLES[vehicle.status] || ACTION_STYLES.offline;

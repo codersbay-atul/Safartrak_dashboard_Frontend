@@ -108,7 +108,7 @@ export default function Alerts() {
 
   return (
     <MainLayout activeTab="Alerts">
-      <div className="flex-1 flex flex-col gap-2.5 min-h-0 min-w-0 overflow-x-hidden overflow-y-auto pr-0.5 custom-scrollbar">
+      <div className="flex-1 flex flex-col gap-2.5 min-h-0 min-w-0 overflow-y-auto min-[1152px]:overflow-hidden pr-0.5 text-white custom-scrollbar">
         <div className="shrink-0">
           <AlertsHeader
             searchQuery={searchQuery}
@@ -135,7 +135,7 @@ export default function Alerts() {
           />
         </div>
 
-        <div className="flex-none min-h-[280px] lg:flex-1 lg:min-h-0 flex flex-col">
+        <div className="shrink-0 min-h-[280px] flex flex-col">
           <RecentAlertsTable
             alerts={filteredAlerts}
             isLoading={isAlertsLoading}

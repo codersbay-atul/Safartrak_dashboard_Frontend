@@ -26,7 +26,7 @@ export default function RecentAlertsTable({
     <MainLayoutColor
       as="div"
       background="surface"
-      className="w-full min-w-0 flex-none lg:flex-1 min-h-[280px] lg:min-h-0 border border-[#1f1f23] rounded-xl p-2.5 sm:p-3 flex flex-col select-none overflow-hidden"
+      className="w-full min-w-0 flex-none min-h-[280px] border border-[#1f1f23] rounded-xl p-2.5 sm:p-3 flex flex-col select-none overflow-hidden"
     >
       <div className="flex items-center justify-between mb-2.5 shrink-0">
         {/* 14px Section Title */}
@@ -40,7 +40,7 @@ export default function RecentAlertsTable({
         </MainLayoutColor>
       </div>
 
-      <div className="flex-none min-w-0 overflow-x-auto lg:flex-1 lg:min-h-0 lg:overflow-y-auto custom-scrollbar">
+      <div className="flex-none min-w-0 overflow-x-auto custom-scrollbar">
         <table className="w-full min-w-[760px] border-collapse">
           <thead className="sticky top-0 z-10 bg-[#121214]">
             <tr className="border-b border-[#1f1f23]">

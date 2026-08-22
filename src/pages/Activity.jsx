@@ -87,7 +87,7 @@ export default function Activity() {
 
   return (
     <MainLayout activeTab="Activity">
-      <div className="flex-1 flex flex-col gap-2.5 min-h-0 overflow-y-auto min-[1152px]:overflow-hidden pr-0.5 custom-scrollbar">
+      <div className="flex-1 flex flex-col gap-2.5 min-h-0 min-w-0 overflow-y-auto pr-0.5 custom-scrollbar">
         <div className="shrink-0">
           <ActivityHeader
             vehicleFilter={vehicleFilter}
@@ -106,8 +106,8 @@ export default function Activity() {
           <ActivityStats />
         </div>
 
-        <div className="flex flex-col min-[1152px]:flex-row gap-3.5 items-stretch w-full flex-1 min-h-0 overflow-y-auto min-[1152px]:overflow-hidden">
-          <div className="w-full min-[1152px]:w-[300px] shrink-0 h-[320px] min-[1152px]:h-full min-h-0 overflow-hidden">
+        <div className="flex flex-col lg:flex-row gap-3.5 items-stretch w-full flex-none lg:flex-1 min-h-0 overflow-visible lg:overflow-hidden">
+          <div className="w-full lg:w-[300px] shrink-0 h-auto lg:h-full min-h-0 overflow-hidden">
             <ActivityList
               events={isLoading ? [] : events}
               selectedId={selectedEvent?.id}
@@ -118,11 +118,11 @@ export default function Activity() {
             />
           </div>
 
-          <div className="w-full shrink-0 h-[360px] min-[1152px]:flex-1 min-[1152px]:h-full min-w-0 min-h-0 overflow-hidden">
+          <div className="w-full lg:flex-1 shrink-0 h-[360px] lg:h-full min-w-0 min-h-0 overflow-hidden">
             <RoutePlayback />
           </div>
 
-          <div className="w-full min-[1152px]:w-[300px] shrink-0 h-[480px] min-[1152px]:h-full min-h-0 overflow-hidden">
+          <div className="w-full lg:w-[300px] shrink-0 h-auto lg:h-full min-h-0 overflow-hidden">
             <ActivityDetails
               event={selectedEvent}
               onShare={() => {}}

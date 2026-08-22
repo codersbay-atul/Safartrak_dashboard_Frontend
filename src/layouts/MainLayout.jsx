@@ -4,7 +4,14 @@ import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 import { selectAuthUser } from "../store/slices/authSlice";
 
-export default function MainLayout({ children, activeTab, setActiveTab, isRouteView, onExitRouteView }) {
+export default function MainLayout({
+  children,
+  activeTab,
+  setActiveTab,
+  isRouteView,
+  onExitRouteView,
+  allowPageScroll = false,
+}) {
   const authUser = useSelector(selectAuthUser);
 
   return (
@@ -19,7 +26,11 @@ export default function MainLayout({ children, activeTab, setActiveTab, isRouteV
           activeTab={activeTab}
           user={authUser}
         />
-        <main className="flex-1 p-2.5 min-[1152px]:p-3 xl:p-3 bg-[#000000] flex flex-col gap-2 min-[1152px]:gap-2.5 overflow-hidden min-h-0">
+        <main
+          className={`flex-1 p-2.5 min-[1152px]:p-3 xl:p-3 bg-[#000000] flex flex-col gap-2 min-[1152px]:gap-2.5 min-h-0 ${
+            allowPageScroll ? "overflow-y-auto overflow-x-hidden" : "overflow-hidden"
+          }`}
+        >
           {children}
         </main>
       </div>

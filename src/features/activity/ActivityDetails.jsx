@@ -142,7 +142,7 @@ export default function ActivityDetails({
       <MainLayoutColor
         as="div"
         background="surface"
-        className="w-full h-full border border-[#1f1f23] rounded-xl p-4 flex items-center justify-center select-none"
+        className="w-full h-auto lg:h-full border border-[#1f1f23] rounded-xl p-4 flex items-center justify-center select-none"
       >
         <MainLayoutColor
           as={MainLayoutTextSize}
@@ -159,7 +159,7 @@ export default function ActivityDetails({
     <MainLayoutColor
       as="div"
       background="surface"
-      className="w-full h-full border border-[#1f1f23] rounded-xl flex flex-col overflow-hidden select-none font-sans"
+      className="w-full h-auto lg:h-full border border-[#1f1f23] rounded-xl flex flex-col overflow-hidden select-none font-sans"
     >
       {/* 14px Header Title */}
       <div className="shrink-0 px-3 pt-3 pb-2.5 flex items-center justify-between gap-2 border-b border-[#1f1f23]">
@@ -174,7 +174,7 @@ export default function ActivityDetails({
         <MainStatusBadge label={detailsData.status} variant="active" pulse />
       </div>
 
-      <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar px-3 py-3 flex flex-col gap-3">
+      <div className="flex-none lg:flex-1 min-h-0 overflow-y-visible lg:overflow-y-auto custom-scrollbar px-3 py-3 flex flex-col gap-3">
         {detailsData.alert && (
           <div className="flex items-stretch gap-0 rounded-lg overflow-hidden border border-[#FDBB24]/25 bg-[#FDBB24]/08">
             <div className="w-1 shrink-0 bg-[#ef4444]" />

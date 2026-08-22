@@ -62,12 +62,7 @@ export default function Vehicles() {
 
   return (
     <MainLayout activeTab="Vehicles">
-      {/* 
-        Viewport-bound layout container:
-        h-[calc(100vh-80px)] locks height within screen.
-        overflow-hidden prevents outer scrolling.
-      */}
-      <div className="w-full h-[calc(100vh-80px)] flex flex-col gap-2.5 overflow-hidden">
+      <div className="flex-1 flex flex-col gap-2.5 min-h-0 min-w-0 overflow-y-auto min-[1152px]:overflow-hidden pr-0.5 custom-scrollbar">
         {/* Top Header */}
         <div className="shrink-0">
           <VehiclesHeader
@@ -83,7 +78,7 @@ export default function Vehicles() {
         </div>
 
         {/* Table Container (Occupies remaining flex space accurately) */}
-        <div className="flex-1 min-h-0 w-full overflow-hidden">
+        <div className="shrink-0 min-[1152px]:flex-1 min-h-[420px] min-[1152px]:min-h-0 w-full overflow-hidden">
           <VehicleListTable />
         </div>
 

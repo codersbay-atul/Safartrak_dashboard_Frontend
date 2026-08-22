@@ -24,7 +24,7 @@ export default function BillandPayment() {
   return (
     <>
       <MainLayout activeTab="Bills & Payments">
-        <div className="w-full h-[calc(100vh-80px)] flex flex-col gap-2.5 overflow-hidden">
+        <div className="flex-1 flex flex-col gap-2.5 min-h-0 min-w-0 overflow-y-auto min-[1152px]:overflow-hidden pr-0.5 custom-scrollbar">
           <div className="shrink-0">
             <BillPaymentHeader
               title="Bills & Payments"
@@ -39,7 +39,7 @@ export default function BillandPayment() {
             />
           </div>
 
-          <div className="flex-1 min-h-0 w-full overflow-hidden">
+          <div className="shrink-0 w-full overflow-hidden">
             <BillPaymentTable onPayNow={handlePayNow} />
           </div>
         </div>

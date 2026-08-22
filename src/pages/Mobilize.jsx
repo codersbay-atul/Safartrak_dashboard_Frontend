@@ -232,7 +232,7 @@ export default function Mobilize() {
           />
         </div>
       ) : (
-        <div className="flex-1 flex flex-col gap-2.5 min-h-0 overflow-y-auto min-[1152px]:overflow-hidden pr-0.5 text-white custom-scrollbar">
+        <div className="flex-1 flex flex-col gap-2.5 min-h-0 min-w-0 overflow-y-auto pr-0.5 text-white custom-scrollbar">
           <div className="shrink-0">
             <MobilizeHeader
               onSearch={(value) => setSearchQuery(value)}
@@ -246,8 +246,8 @@ export default function Mobilize() {
             <MobilizeStats />
           </div>
 
-          <div className="flex flex-col min-[1152px]:flex-row gap-3.5 items-stretch w-full flex-1 min-h-0 overflow-y-auto min-[1152px]:overflow-hidden">
-            <div className="w-full min-[1152px]:flex-1 shrink-0 h-[420px] min-[1152px]:h-full min-h-0 overflow-hidden">
+          <div className="flex flex-col lg:flex-row gap-3.5 items-stretch w-full flex-none lg:flex-1 min-h-0 overflow-visible lg:overflow-hidden">
+            <div className="w-full lg:flex-1 shrink-0 h-auto lg:h-full min-h-[420px] lg:min-h-0 overflow-hidden">
               <MobilizeVehicleList
                 vehicles={filteredVehicles}
                 activeFilter={statusFilter}
@@ -258,7 +258,7 @@ export default function Mobilize() {
               />
             </div>
 
-            <div className="w-full min-[1152px]:w-[320px] xl:w-[340px] shrink-0 h-[380px] min-[1152px]:h-full min-h-0 overflow-hidden">
+            <div className="w-full lg:w-[320px] xl:w-[340px] shrink-0 h-auto lg:h-full min-h-[380px] lg:min-h-0 overflow-hidden">
               <VehicleControlCard
                 vehicle={selectedVehicle}
                 onRequestImmobilize={handleRequestImmobilize}

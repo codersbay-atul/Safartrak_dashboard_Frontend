@@ -90,7 +90,7 @@ export default function DriverList({ selectedUser, onSelectUser, refreshTrigger 
     <MainLayoutColor
       as="div"
       background="surface"
-      className="w-full h-full min-h-0 border border-[#27272a] rounded-2xl flex flex-col overflow-hidden select-none shadow-2xl font-sans"
+      className="w-full h-auto lg:h-full min-h-0 border border-[#27272a] rounded-2xl flex flex-col overflow-hidden select-none shadow-2xl font-sans"
     >
       {/* Top Header & Tight Pill-shaped Filters */}
       <MainLayoutColor
@@ -140,7 +140,7 @@ export default function DriverList({ selectedUser, onSelectUser, refreshTrigger 
       </MainLayoutColor>
 
       {/* Users Table */}
-      <div className="flex-1 overflow-y-auto custom-scrollbar">
+      <div className="flex-none lg:flex-1 overflow-y-visible lg:overflow-y-auto custom-scrollbar">
         <table className="w-full text-left border-collapse table-fixed">
           <thead>
             <tr className="border-b border-[#27272a] bg-[#18181b]/40">

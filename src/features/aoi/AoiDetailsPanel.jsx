@@ -112,7 +112,7 @@ export default function AoiDetailsPanel({
     <MainLayoutColor
       as="div"
       background="surface"
-      className="w-full h-full border border-[#1f1f23] rounded-2xl p-4 flex flex-col select-none overflow-hidden font-sans"
+      className="w-full h-auto lg:h-full border border-[#1f1f23] rounded-2xl p-4 flex flex-col select-none overflow-hidden font-sans"
     >
       {/* Top Header */}
       <div className="shrink-0 mb-4">
@@ -172,7 +172,7 @@ export default function AoiDetailsPanel({
         })}
       </div>
 
-      <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar pr-1">
+      <div className="flex-none lg:flex-1 min-h-0 overflow-y-visible lg:overflow-y-auto custom-scrollbar pr-1">
         {/* ==================== OVERVIEW TAB ==================== */}
         {activeTab === "Overview" && (
           <div className="space-y-6">

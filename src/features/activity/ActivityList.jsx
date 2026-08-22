@@ -59,7 +59,7 @@ export default function ActivityList({
     <MainLayoutColor
       as="div"
       background="surface"
-      className="w-full h-full border border-[#1f1f23] rounded-xl flex flex-col overflow-hidden select-none font-sans"
+      className="w-full h-auto lg:h-full border border-[#1f1f23] rounded-xl flex flex-col overflow-hidden select-none font-sans"
     >
       <div className="shrink-0 px-3 pt-3 pb-2.5 border-b border-[#1f1f23]">
         <div className="flex items-center justify-between gap-2 mb-2.5">
@@ -99,7 +99,7 @@ export default function ActivityList({
         </div>
       </div>
 
-      <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar px-3 py-3">
+      <div className="flex-none lg:flex-1 min-h-0 overflow-y-visible lg:overflow-y-auto custom-scrollbar px-3 py-3">
         {events.length === 0 ? (
           <div className="h-full flex items-center justify-center">
             <MainLayoutColor

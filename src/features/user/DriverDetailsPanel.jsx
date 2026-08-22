@@ -91,7 +91,7 @@ export default function DriverDetailsPanel({ user, onUserUpdated, onResetPasswor
       <MainLayoutColor
         as="div"
         background="surface"
-        className="w-full h-full border border-[#27272a] rounded-2xl p-3 flex flex-col overflow-hidden select-none shadow-2xl font-sans"
+        className="w-full h-auto lg:h-full border border-[#27272a] rounded-2xl p-3 flex flex-col overflow-hidden select-none shadow-2xl font-sans"
       >
         {/* Header with 14px Name & 12px Sub Info */}
         <div className="flex items-center justify-between pb-2.5 border-b border-[#27272a] shrink-0">
@@ -138,7 +138,7 @@ export default function DriverDetailsPanel({ user, onUserUpdated, onResetPasswor
         </div>
 
         {/* Details Content */}
-        <div className="flex-1 overflow-y-auto custom-scrollbar py-2.5 space-y-3.5 min-h-0">
+        <div className="flex-none lg:flex-1 overflow-y-visible lg:overflow-y-auto custom-scrollbar py-2.5 space-y-3.5 min-h-0">
           {/* Quick Contact Box */}
           <div className="space-y-2 pb-2.5 border-b border-[#27272a]">
             <div className="flex items-center gap-2 truncate">

@@ -75,7 +75,7 @@ export default function VehiclesDetailsInfo({
     <MainLayoutColor
       as="aside"
       background="surface"
-      className="w-full h-full border border-[#27272a] flex flex-col p-2.5 rounded-xl min-h-0 overflow-hidden select-none font-sans"
+      className="w-full h-auto lg:h-full border border-[#27272a] flex flex-col p-2.5 rounded-xl min-h-0 overflow-hidden select-none font-sans"
     >
       {/* 14px Header Title */}
       <div className="flex items-center justify-between mb-2 shrink-0">
@@ -140,7 +140,7 @@ export default function VehiclesDetailsInfo({
       </div>
 
       {/* Vehicle List */}
-      <div className="flex-1 overflow-y-auto space-y-1.5 pr-0.5 custom-scrollbar min-h-0">
+      <div className="flex-none lg:flex-1 overflow-y-visible lg:overflow-y-auto space-y-1.5 pr-0.5 custom-scrollbar min-h-0">
         {isLoading ? (
           <div className="py-16 flex flex-col items-center justify-center text-[#71717a] gap-2.5">
             <MainLayoutColor as={Loader2} color="yellow" size={24} className="animate-spin" />

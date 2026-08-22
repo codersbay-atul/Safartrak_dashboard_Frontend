@@ -23,7 +23,7 @@ export default function AoiListPanel({
     <MainLayoutColor
       as="div"
       background="surface"
-      className="w-full h-full border border-[#1f1f23] rounded-2xl p-4 flex flex-col select-none overflow-hidden font-sans"
+      className="w-full h-auto lg:h-full border border-[#1f1f23] rounded-2xl p-4 flex flex-col select-none overflow-hidden font-sans"
     >
       {/* 14px Header Title */}
       <MainLayoutColor
@@ -73,7 +73,7 @@ export default function AoiListPanel({
         })}
       </div>
 
-      <div className="flex flex-col overflow-y-auto flex-1 custom-scrollbar min-h-0 divide-y divide-[#1f1f23]/70">
+      <div className="flex flex-col overflow-y-visible lg:overflow-y-auto flex-none lg:flex-1 custom-scrollbar min-h-0 divide-y divide-[#1f1f23]/70">
         {aois.length > 0 ? (
           aois.map((aoi) => {
             const isSelected = selectedId === aoi.id;

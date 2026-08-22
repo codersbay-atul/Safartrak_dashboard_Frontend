@@ -67,7 +67,7 @@ export default function VehicleListTable() {
     <MainLayoutColor
       as="div"
       background="surface"
-      className="w-full h-full flex flex-col min-h-0 border border-[#1d1d20] rounded-xl overflow-hidden select-none font-sans"
+      className="w-full h-auto min-[1152px]:h-full flex flex-col min-h-0 border border-[#1d1d20] rounded-xl overflow-hidden select-none font-sans"
     >
       {/* Header & Controls Area */}
       <div className="px-4 py-3 flex flex-col gap-3 border-b border-[#1d1d20] shrink-0 z-20">
@@ -171,7 +171,7 @@ export default function VehicleListTable() {
       </div>
 
       {/* Internal Scrollable Table Content */}
-      <div className="flex-1 min-h-0 min-w-0 w-full overflow-x-auto overflow-y-auto custom-scrollbar relative">
+      <div className="flex-none min-[1152px]:flex-1 min-h-0 min-w-0 w-full overflow-x-auto min-[1152px]:overflow-y-auto custom-scrollbar relative">
         {isLoading ? (
           <div className="h-full min-h-[250px] flex flex-col items-center justify-center text-[#71717a] gap-2.5">
             <Loader2 size={24} className="animate-spin text-[#ffd60a]" />

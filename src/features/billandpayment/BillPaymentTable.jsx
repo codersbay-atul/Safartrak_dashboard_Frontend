@@ -109,7 +109,7 @@ export default function BillPaymentTable({ onPayNow }) {
       <MainLayoutColor
         as="div"
         background="surface"
-        className="w-full h-full flex flex-col min-h-0 border border-[#27272a] rounded-2xl overflow-hidden shadow-2xl"
+        className="w-full h-fit flex flex-col border border-[#27272a] rounded-2xl overflow-hidden shadow-2xl"
       >
         {/* Table Toolbar */}
         <div className="px-4 py-3 flex flex-wrap items-center justify-between gap-3 border-b border-[#27272a] shrink-0 z-20">
@@ -193,7 +193,7 @@ export default function BillPaymentTable({ onPayNow }) {
         </div>
 
         {/* Table Content */}
-        <div className="flex-1 min-h-0 w-full overflow-x-auto overflow-y-auto [scrollbar-width:thin] custom-scrollbar">
+        <div className="w-full overflow-x-auto [scrollbar-width:thin] custom-scrollbar">
           <table className="w-full text-left border-collapse min-w-[950px]">
             <thead className="sticky top-0 bg-[#18181b]/60 border-b border-[#27272a] z-10 uppercase">
               <tr>

@@ -55,7 +55,7 @@ export default function AoiStats() {
       id: "vehicles",
       icon: Truck,
       value: data.vehicles_covered,
-      subtitle: "Across all AOIs",
+      subtitle: "Across all Saved Places",
       title: "Vehicles Covered",
       accent: "yellow",
     },

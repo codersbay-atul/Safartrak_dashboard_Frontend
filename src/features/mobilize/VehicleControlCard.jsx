@@ -61,7 +61,7 @@ export default function VehicleControlCard({
       <MainLayoutColor
         as="div"
         background="surface"
-        className="w-full h-full min-h-0 text-white rounded-2xl p-3 border border-[#27272a] shadow-2xl flex flex-col justify-between select-none font-sans"
+        className="w-full h-auto lg:h-full min-h-0 text-white rounded-2xl p-3 border border-[#27272a] shadow-2xl flex flex-col justify-between select-none font-sans"
       >
         {/* Top Header */}
         <div className="flex items-center justify-between pb-2 border-b border-[#27272a] shrink-0">
@@ -122,7 +122,7 @@ export default function VehicleControlCard({
     <MainLayoutColor
       as="div"
       background="surface"
-      className="w-full h-full min-h-0 text-white rounded-2xl p-3 border border-[#27272a] shadow-2xl flex flex-col gap-2 overflow-hidden select-none font-sans"
+      className="w-full h-auto lg:h-full min-h-0 text-white rounded-2xl p-3 border border-[#27272a] shadow-2xl flex flex-col gap-2 overflow-hidden select-none font-sans"
     >
       {/* Header */}
       <div className="flex items-center justify-between gap-2 shrink-0 pb-1 border-b border-[#27272a]">
@@ -198,7 +198,7 @@ export default function VehicleControlCard({
       </MainLayoutColor>
 
       {/* Scrollable Body */}
-      <div className="flex-1 overflow-y-auto custom-scrollbar space-y-2 min-h-0 pr-0.5">
+      <div className="flex-none lg:flex-1 overflow-y-visible lg:overflow-y-auto custom-scrollbar space-y-2 min-h-0 pr-0.5">
         {loading && !detail ? (
           <div className="p-2 text-[10px] text-[#ffd60a] bg-[#18181b] border border-[#27272a] rounded-xl animate-pulse">
             Fetching telemetry details...
