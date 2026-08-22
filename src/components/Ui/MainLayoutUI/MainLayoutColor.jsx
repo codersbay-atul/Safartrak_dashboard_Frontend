@@ -2,7 +2,7 @@ import React from "react";
 
 const MAIN_LAYOUT_COLORS = {
   // Surfaces & Backgrounds
-  surface: "bg-[#121212]",
+  surface: "bg-[#141414]",
   background: "bg-[#09090b]",
   filterActiveBg: "bg-[#292a30]",
   filterInactiveBg: "bg-[#0d0e10]",
@@ -88,12 +88,12 @@ export default function MainLayoutColor({
 }) {
   const colorClass = color ? MAIN_LAYOUT_COLORS[color] || "" : "";
   const backgroundClass = background ? MAIN_LAYOUT_COLORS[background] || "" : "";
-  const backgroundStyle = background === "surface" ? { backgroundColor: "#141414" } : {};
+  // const backgroundStyle = background === "surface" ? { backgroundColor: "#141414" } : {};
 
   return (
     <Component
       className={`${colorClass} ${backgroundClass} ${className}`.trim()}
-      style={{ ...backgroundStyle, ...style }}
+      style={{ ...style }}
       {...props}
     >
       {children}

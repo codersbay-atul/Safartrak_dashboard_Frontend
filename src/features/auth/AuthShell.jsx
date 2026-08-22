@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Eye, EyeOff, X, ChevronDown } from "lucide-react";
 // import { Cloud, Eye, EyeOff, Lock, ShieldCheck, X, ChevronDown } from "lucide-react";
-import loginHero from "../../assets/images/Login.png";
+// import loginHero from "../../assets/images/Login.png";
+import loginHero from "../../assets/images/hero.webp";
 import logo from "../../assets/images/Logo.svg";
 
 /*
@@ -54,10 +55,10 @@ function AuthHero() {
 
 function AuthCard({ title, subtitle, children, footer, sectionLabel, onClose, showWordmark = true }) {
   return (
-    <div className="w-full bg-[#121218] rounded-[20px] p-6 lg:p-8 shadow-2xl border border-white/[0.06]">
+    <div className="w-full bg-[#141414] rounded-[20px] p-6 lg:p-8 shadow-2xl border border-white/[0.06]">
       {showWordmark || onClose ? (
         <div className="flex items-center justify-between mb-6">
-          {showWordmark ? <SafarTrakWordmark className="h-5" /> : <span />}
+           {showWordmark ? <SafarTrakWordmark className="h-5" /> : <span />} 
           {onClose ? (
             <button
               type="button"
@@ -143,13 +144,17 @@ export default function AuthShell({ title, subtitle, children, footer, variant =
 
     return (
       <div className="relative min-h-screen w-full bg-[#08080A] text-white flex flex-col px-4 pt-3 pb-6 sm:px-6 lg:px-12 lg:pt-4 lg:pb-8 select-none">
-        <div className="pointer-events-none absolute inset-0 hidden md:block" aria-hidden="true">
-          {/* <img src={loginHero} alt="" className="h-full w-full object-cover" /> */}
+        <div className="pointer-events-none absolute inset-0 hidden overflow-hidden md:block" aria-hidden="true">
+          <img
+            src={loginHero}
+            alt=""
+            className="h-full w-full object-cover object-left-bottom max-lg:scale-[1.28] max-lg:origin-bottom-left lg:object-fit"
+          />
           <div className="absolute inset-0 bg-black/55" />
         </div>
 
-        <div className="relative z-10 w-full flex items-center justify-between mb-2 lg:mb-3">
-          <SafarTrakWordmark className="h-5" />
+        <div className="relative z-10 w-full flex items-end justify-end mb-2 lg:mb-3">
+          {/* <SafarTrakWordmark className="h-5" /> */}
           <div className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-white cursor-pointer transition-colors">
             <span>English</span>
             <ChevronDown size={14} />
@@ -214,7 +219,7 @@ export function AuthField({ id, label, type = "text", value, onChange, placehold
 
   return (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={id} className="text-[14px] font-[400] text-[#a1a1aa] leading-[20px]">{label}</label>
+      <label htmlFor={id} className="text-[14px] font-[400] text-[#a8a8a8] leading-[20px]">{label}</label>
       <div className="relative">
         <input
           id={id}
@@ -225,7 +230,7 @@ export function AuthField({ id, label, type = "text", value, onChange, placehold
           placeholder={placeholder}
           autoComplete={autoComplete}
           disabled={disabled}
-          className={`auth-field-input w-full h-11 rounded-[10px] bg-[#0A0A0F] border px-3.5 text-[14px] text-white placeholder:text-[#52525b] outline-none transition-colors disabled:opacity-50 focus:bg-[#0A0A0F] ${isPassword ? "pr-11" : ""} ${error ? "border-rose-500/50 focus:border-rose-400" : "border-[#2A2A32] focus:border-[#F5B700]"}`}
+          className={`auth-field-input w-full h-11 text-white rounded-[10px] bg-[#0A0A0F] border px-3.5 text-[14px]  placeholder:text-[#A8A8A8]/50 outline-none transition-colors disabled:opacity-50 focus:bg-[#0A0A0F] ${isPassword ? "pr-11" : ""} ${error ? "border-rose-500/50 focus:border-rose-400" : "border-[#2A2A32] focus:border-[#F5B700]"}`}
         />
         {isPassword ? (
           <button type="button" tabIndex={-1} aria-label={showPassword ? "Hide password" : "Show password"} onClick={() => setShowPassword((prev) => !prev)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#71717a] hover:text-[#a1a1aa] transition-colors cursor-pointer">
