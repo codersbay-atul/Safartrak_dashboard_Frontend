@@ -20,7 +20,8 @@ import {
   LogOut,
   Key,
   ShoppingCart,
-  CreditCard
+  CreditCard,
+  Megaphone
 } from 'lucide-react';
 import { useNotifications, useMarkNotificationsRead } from '../hooks/useNotifications';
 import { useOutsideClick } from '../hooks/UseOutsideClick';
@@ -31,6 +32,7 @@ import NavDateDisplay from '../components/Ui/NavbarUI/NavDateDisplay';
 import { NavNotificationIcon, default as NavUserAvatar } from '../components/Ui/NavbarUI/NavUserAvatar';
 import NavMenuItem from '../components/Ui/NavbarUI/NavMenuItem';
 import NavDataProtectionIcon from '../components/Ui/NavbarUI/NavDataProtectionIcon';
+import AnnouncementSlider from '../components/Ui/NavbarUI/AnnouncementSlider';
 import { clearAuth } from '../store/slices/authSlice';
 import useAccountProfile from '../hooks/useAccountProfile';
 import NavNotificationItem from '../components/Ui/NavbarUI/NavNotificationItem';
@@ -75,6 +77,7 @@ export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }
 
   const [beforeCursor, setBeforeCursor] = useState(null);
   const [activePopover, setActivePopover] = useState(null);
+  const [isAnnouncementOpen, setIsAnnouncementOpen] = useState(false);
   
   const { notifications, isLoading: isNotificationsLoading, isFetching: isNotificationsFetching } = useNotifications({ limit: 20, before: beforeCursor });
   const markReadMutation = useMarkNotificationsRead();
@@ -203,6 +206,11 @@ export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }
             ) : null}
           </Popover>
         </NavPopoverWrapper>
+        <Megaphone size={20} className="text-[#71717a] shrink-0 hover:text-white transition-colors cursor-pointer" onClick={() => setIsAnnouncementOpen(true)} />
+        <AnnouncementSlider
+          isOpen={isAnnouncementOpen}
+          onClose={() => setIsAnnouncementOpen(false)}
+        />
 
         <NavDateDisplay />
 
