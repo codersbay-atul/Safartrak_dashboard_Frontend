@@ -10,54 +10,28 @@ const SLIDE_MS = 360;
 
 const ANNOUNCEMENTS = [
   {
-    id: "idle-alerts",
+    time: "Aug 22, 2026",
+    title: "UI improvements and bug fixes",
+  },
+  {
+    time: "Aug 21, 2026",
+    title: "Enterprise data protection is now enabled for the portal",
+  },
+  {
     time: "Aug 20, 2026",
-    title: "Smarter alerts for idle and offline vehicles",
+    title: "Manage your SafarTrak products and subscriptions",
   },
   {
-    id: "live-map",
+    time: "Aug 19, 2026",
+    title: "Bills & Payments now includes invoice history",
+  },
+  {
     time: "Aug 18, 2026",
-    title: "Faster live map refresh for large fleets",
+    title: "API credentials management is now available",
   },
   {
-    id: "geofence",
-    time: "Aug 15, 2026",
-    title: "Improved geofence tools for saved places",
-  },
-  {
-    id: "maintenance",
-    time: "Aug 12, 2026",
-    title: "New maintenance reminders on vehicle details",
-  },
-  {
-    id: "route-playback",
-    time: "Aug 9, 2026",
-    title: "Route playback now includes stop duration",
-  },
-  {
-    id: "driver-assign",
-    time: "Aug 5, 2026",
-    title: "Driver assignment is now available from Users",
-  },
-  {
-    id: "report-export",
-    time: "Jul 29, 2026",
-    title: "Export reports in Excel and PDF",
-  },
-  {
-    id: "immobilize",
-    time: "Jul 22, 2026",
-    title: "Immobilize commands now show confirmation status",
-  },
-  {
-    id: "billing",
-    time: "Jul 14, 2026",
-    title: "Bills & Payments invoice history is live",
-  },
-  {
-    id: "security",
-    time: "Jul 6, 2026",
-    title: "Stronger session security for portal access",
+    time: "Aug 17, 2026",
+    title: "Saved Places are now available for fleet monitoring",
   },
 ];
 
@@ -150,8 +124,8 @@ export default function AnnouncementSlider({ isOpen, onClose }) {
             <div className="absolute left-[5px] top-1.5 bottom-1.5 w-px bg-[#2e2e36]" />
 
             <ul className="flex flex-col gap-8">
-              {ANNOUNCEMENTS.map((item, index) => (
-                <li key={item.id} className="relative">
+              {ANNOUNCEMENTS.map((item) => (
+                <li key={item.time} className="relative">
                   <span
                     className={`absolute -left-4 top-1 h-2.5 w-2.5 rounded-full border-2 bg-[#FDB914] border-[#FDB914]`}
                   />
