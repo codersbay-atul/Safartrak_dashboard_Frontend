@@ -1,42 +1,49 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { 
-  LayoutDashboard, 
-  BarChart3, 
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import {
+  LayoutDashboard,
+  BarChart3,
   Clock3,
   Power,
-  TriangleAlert, 
-  ScanSearch, 
-  Route, 
-  GitBranch, 
-  Send, 
-  Truck, 
-  IdCard, 
-  FileSearch, 
-  Users, 
+  TriangleAlert,
+  ScanSearch,
+  Route,
+  GitBranch,
+  Send,
+  Truck,
+  IdCard,
+  FileSearch,
+  Users,
   User,
   Settings,
   LogOut,
   Key,
   ShoppingCart,
   CreditCard,
-  Megaphone
-} from 'lucide-react';
-import { useNotifications, useMarkNotificationsRead } from '../hooks/useNotifications';
-import { useOutsideClick } from '../hooks/UseOutsideClick';
-import NavTextSize from '../components/Ui/NavbarUI/NavTextSize';
-import NavTextColor from '../components/Ui/NavbarUI/NavTextColor';
-import NavBreadcrumb from '../components/Ui/NavbarUI/NavBreadCrumb';
-import NavDateDisplay from '../components/Ui/NavbarUI/NavDateDisplay';
-import { NavNotificationIcon, default as NavUserAvatar } from '../components/Ui/NavbarUI/NavUserAvatar';
-import NavMenuItem from '../components/Ui/NavbarUI/NavMenuItem';
-import NavDataProtectionIcon from '../components/Ui/NavbarUI/NavDataProtectionIcon';
-import AnnouncementSlider from '../components/Ui/NavbarUI/AnnouncementSlider';
-import { clearAuth } from '../store/slices/authSlice';
-import useAccountProfile from '../hooks/useAccountProfile';
-import NavNotificationItem from '../components/Ui/NavbarUI/NavNotificationItem';
-import Popover from '../components/Ui/Popover';
+  Megaphone,
+} from "lucide-react";
+import {
+  useNotifications,
+  useMarkNotificationsRead,
+} from "../hooks/useNotifications";
+import { useOutsideClick } from "../hooks/UseOutsideClick";
+import NavTextSize from "../components/Ui/NavbarUI/NavTextSize";
+import NavTextColor from "../components/Ui/NavbarUI/NavTextColor";
+import NavBreadcrumb from "../components/Ui/NavbarUI/NavBreadCrumb";
+import NavDateDisplay from "../components/Ui/NavbarUI/NavDateDisplay";
+import {
+  NavNotificationIcon,
+  default as NavUserAvatar,
+} from "../components/Ui/NavbarUI/NavUserAvatar";
+import NavMenuItem from "../components/Ui/NavbarUI/NavMenuItem";
+import NavDataProtectionIcon from "../components/Ui/NavbarUI/NavDataProtectionIcon";
+import NavTooltip from "../components/Ui/NavbarUI/NavTooltip";
+import AnnouncementSlider from "../components/Ui/NavbarUI/AnnouncementSlider";
+import { clearAuth } from "../store/slices/authSlice";
+import useAccountProfile from "../hooks/useAccountProfile";
+import NavNotificationItem from "../components/Ui/NavbarUI/NavNotificationItem";
+import Popover from "../components/Ui/Popover";
 
 function NavPopoverWrapper({ children, isOpen, onClose }) {
   const wrapperRef = useOutsideClick(() => {
@@ -51,25 +58,30 @@ function NavPopoverWrapper({ children, isOpen, onClose }) {
 }
 
 const iconMap = {
-  "Dashboard": LayoutDashboard,
-  "Analytics": BarChart3,
-  "Reports": Clock3,
+  Dashboard: LayoutDashboard,
+  Analytics: BarChart3,
+  Reports: Clock3,
   "Mobilize / Immobilize": Power,
-  "Alerts": TriangleAlert,
+  Alerts: TriangleAlert,
   "Saved Places": ScanSearch,
-  "Routes": Route,
-  "Trips": GitBranch,
-  "Activity": Send,
-  "Vehicles": Truck,
-  "Drivers": IdCard,
+  Routes: Route,
+  Trips: GitBranch,
+  Activity: Send,
+  Vehicles: Truck,
+  Drivers: IdCard,
   "Vehicle Details": FileSearch,
-  "Users": Users,
+  Users: Users,
   "API Credentials": Key,
   "Your Products": ShoppingCart,
-  "Bills & Payments": CreditCard
+  "Bills & Payments": CreditCard,
 };
 
-export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }) {
+export default function Navbar({
+  activeTab,
+  isRouteView,
+  onExitRouteView,
+  user,
+}) {
   const ActiveIcon = iconMap[activeTab] || LayoutDashboard;
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -78,17 +90,21 @@ export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }
   const [beforeCursor, setBeforeCursor] = useState(null);
   const [activePopover, setActivePopover] = useState(null);
   const [isAnnouncementOpen, setIsAnnouncementOpen] = useState(false);
-  
-  const { notifications, isLoading: isNotificationsLoading, isFetching: isNotificationsFetching } = useNotifications({ limit: 20, before: beforeCursor });
+
+  const {
+    notifications,
+    isLoading: isNotificationsLoading,
+    isFetching: isNotificationsFetching,
+  } = useNotifications({ limit: 20, before: beforeCursor });
   const markReadMutation = useMarkNotificationsRead();
   const { profile: accountProfile } = useAccountProfile();
-  const displayName = user?.name ?? accountProfile?.name ?? '';
-  const displayRole = user?.role ?? '';
+  const displayName = user?.name ?? accountProfile?.name ?? "";
+  const displayRole = user?.role ?? "";
   const initials = displayName
     ? displayName
-        .split(' ')
+        .split(" ")
         .map((part) => part.charAt(0))
-        .join('')
+        .join("")
         .slice(0, 2)
         .toUpperCase()
     : undefined;
@@ -96,7 +112,7 @@ export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }
   const unreadCount = notifications?.unread_count ?? 0;
 
   const togglePopover = (key) => {
-    setActivePopover(prev => (prev === key ? null : key));
+    setActivePopover((prev) => (prev === key ? null : key));
   };
 
   const handleMarkAllRead = async () => {
@@ -118,7 +134,7 @@ export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }
   const handleLogout = () => {
     dispatch(clearAuth());
     closePopover();
-    navigate('/login', { replace: true });
+    navigate("/login", { replace: true });
   };
 
   return (
@@ -141,110 +157,168 @@ export default function Navbar({ activeTab, isRouteView, onExitRouteView, user }
             />
           </div>
         ) : (
-          <NavTextColor color="navbarText" as={NavTextSize} size="moduleName" className="truncate">
+          <NavTextColor
+            color="navbarText"
+            as={NavTextSize}
+            size="moduleName"
+            className="truncate"
+          >
             {activeTab || "Dashboard"}
           </NavTextColor>
         )}
       </div>
 
       <div className="flex items-center gap-2 xl:gap-2.5 shrink-0">
-        <NavDataProtectionIcon />
+        <div className="flex items-center gap-4">
+          <NavDataProtectionIcon />
+          <NavPopoverWrapper
+            isOpen={activePopover === "notif"}
+            onClose={closePopover}
+          >
+            <NavTooltip
+              label="Notifications"
+              disabled={activePopover === "notif"}
+            >
+              <NavNotificationIcon
+                count={unreadCount}
+                onClick={() => togglePopover("notif")}
+              />
+            </NavTooltip>
 
-        <NavPopoverWrapper isOpen={activePopover === 'notif'} onClose={closePopover}>
-          <NavNotificationIcon
-            count={unreadCount}
-            onClick={() => togglePopover('notif')}
-          />
+            <Popover
+              isOpen={activePopover === "notif"}
+              className="w-80 right-0 p-3"
+            >
+              <div className="flex items-center justify-between border-b border-[#27272a] pb-2 mb-2">
+                <NavTextColor color="navbarText">
+                  <h4 className="text-xs font-bold">Notifications</h4>
+                </NavTextColor>
+                {unreadCount > 0 && (
+                  <button
+                    type="button"
+                    onClick={handleMarkAllRead}
+                    disabled={markReadMutation.isLoading}
+                    className="text-[10px] text-[#3b82f6] hover:underline disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer font-medium"
+                  >
+                    {markReadMutation.isLoading
+                      ? "Marking..."
+                      : "Mark all as read"}
+                  </button>
+                )}
+              </div>
 
-          <Popover isOpen={activePopover === 'notif'} className="w-80 right-0 p-3">
-            <div className="flex items-center justify-between border-b border-[#27272a] pb-2 mb-2">
-              <NavTextColor color="navbarText">
-                <h4 className="text-xs font-bold">Notifications</h4>
-              </NavTextColor>
-              {unreadCount > 0 && (
-                <button 
+              <div className="flex flex-col gap-2 max-h-[320px] overflow-y-auto custom-scrollbar pb-2">
+                {isNotificationsLoading || isNotificationsFetching ? (
+                  <NavTextColor
+                    color="monthText"
+                    className="py-5 text-center text-[11px] block"
+                  >
+                    Loading notifications...
+                  </NavTextColor>
+                ) : notifications?.items?.length > 0 ? (
+                  notifications.items.map((item) => (
+                    <NavNotificationItem
+                      key={item.id}
+                      title={item.title}
+                      description={item.body}
+                      time={
+                        item.created_at
+                          ? new Date(item.created_at).toLocaleString()
+                          : ""
+                      }
+                      isUnread={!item.read}
+                    />
+                  ))
+                ) : (
+                  <NavTextColor
+                    color="monthText"
+                    className="py-5 text-center text-[11px] block"
+                  >
+                    No notifications available.
+                  </NavTextColor>
+                )}
+              </div>
+
+              {notifications?.next_before ? (
+                <button
                   type="button"
-                  onClick={handleMarkAllRead} 
-                  disabled={markReadMutation.isLoading}
-                  className="text-[10px] text-[#3b82f6] hover:underline disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer font-medium"
+                  onClick={handleLoadMore}
+                  className="w-full py-2 rounded-xl bg-[#18181b] border border-[#27272a] text-[11px] text-white hover:bg-[#1f2023] transition-colors mt-2 cursor-pointer"
                 >
-                  {markReadMutation.isLoading ? "Marking..." : "Mark all as read"}
+                  Load more
                 </button>
-              )}
-            </div>
-
-            <div className="flex flex-col gap-2 max-h-[320px] overflow-y-auto custom-scrollbar pb-2">
-              {isNotificationsLoading || isNotificationsFetching ? (
-                <NavTextColor color="monthText" className="py-5 text-center text-[11px] block">
-                  Loading notifications...
-                </NavTextColor>
-              ) : notifications?.items?.length > 0 ? (
-                notifications.items.map((item) => (
-                  <NavNotificationItem
-                    key={item.id}
-                    title={item.title}
-                    description={item.body}
-                    time={item.created_at ? new Date(item.created_at).toLocaleString() : ""}
-                    isUnread={!item.read}
-                  />
-                ))
-              ) : (
-                <NavTextColor color="monthText" className="py-5 text-center text-[11px] block">
-                  No notifications available.
-                </NavTextColor>
-              )}
-            </div>
-
-            {notifications?.next_before ? (
-              <button
-                type="button"
-                onClick={handleLoadMore}
-                className="w-full py-2 rounded-xl bg-[#18181b] border border-[#27272a] text-[11px] text-white hover:bg-[#1f2023] transition-colors mt-2 cursor-pointer"
-              >
-                Load more
-              </button>
-            ) : null}
-          </Popover>
-        </NavPopoverWrapper>
-        <Megaphone size={20} className="text-[#71717a] shrink-0 hover:text-white transition-colors cursor-pointer" onClick={() => setIsAnnouncementOpen(true)} />
-        <AnnouncementSlider
-          isOpen={isAnnouncementOpen}
-          onClose={() => setIsAnnouncementOpen(false)}
-        />
+              ) : null}
+            </Popover>
+          </NavPopoverWrapper>
+          <NavTooltip label="What's new?" disabled={isAnnouncementOpen}>
+            <button
+              type="button"
+              aria-label="What's new?"
+              onClick={() => setIsAnnouncementOpen(true)}
+              className="p-1.5 text-[#71717a] hover:text-white transition-colors cursor-pointer shrink-0"
+            >
+              <Megaphone size={20} />
+            </button>
+          </NavTooltip>
+        </div>
 
         <NavDateDisplay />
 
         <div className="hidden xl:flex flex-col text-right leading-none shrink-0 pr-3">
-          <NavTextColor as={NavTextSize} color="monthText" size="monthText" className="mt-0.5">
+          <NavTextColor
+            as={NavTextSize}
+            color="monthText"
+            size="monthText"
+            className="mt-0.5"
+          >
             {displayRole}
           </NavTextColor>
         </div>
 
-        <NavPopoverWrapper isOpen={activePopover === 'profile'} onClose={closePopover}>
+        <NavPopoverWrapper
+          isOpen={activePopover === "profile"}
+          onClose={closePopover}
+        >
           <div className="pl-1.5 sm:pl-3 border-l border-[#27272a]">
-            <NavUserAvatar 
-              initials={initials} 
-              name={displayName} 
-              role={displayRole} 
-              onClick={() => togglePopover('profile')} 
+            <NavUserAvatar
+              initials={initials}
+              name={displayName}
+              role={displayRole}
+              onClick={() => togglePopover("profile")}
             />
           </div>
 
-          <Popover isOpen={activePopover === 'profile'} className="w-40 right-0 p-1.5 text-xs">
+          <Popover
+            isOpen={activePopover === "profile"}
+            className="w-40 right-0 p-1.5 text-xs"
+          >
             <NavMenuItem
               icon={User}
               label="Profile"
               onClick={() => {
                 closePopover();
-                navigate('/profile');
+                navigate("/profile");
               }}
             />
-            <NavMenuItem icon={Settings} label="Settings" onClick={closePopover} />
+            <NavMenuItem
+              icon={Settings}
+              label="Settings"
+              onClick={closePopover}
+            />
             <div className="h-[1px] bg-[#27272a] my-1" />
-            <NavMenuItem icon={LogOut} label="Logout" onClick={handleLogout} danger />
+            <NavMenuItem
+              icon={LogOut}
+              label="Logout"
+              onClick={handleLogout}
+              danger
+            />
           </Popover>
         </NavPopoverWrapper>
       </div>
+      <AnnouncementSlider
+        isOpen={isAnnouncementOpen}
+        onClose={() => setIsAnnouncementOpen(false)}
+      />
     </NavTextColor>
   );
 }

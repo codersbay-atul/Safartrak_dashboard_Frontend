@@ -11,52 +11,52 @@ const SLIDE_MS = 360;
 const ANNOUNCEMENTS = [
   {
     id: "idle-alerts",
-    time: "15 hours ago",
+    time: "Aug 20, 2026",
     title: "Smarter alerts for idle and offline vehicles",
   },
   {
     id: "live-map",
-    time: "Yesterday",
+    time: "Aug 18, 2026",
     title: "Faster live map refresh for large fleets",
   },
   {
     id: "geofence",
-    time: "2 days ago",
+    time: "Aug 15, 2026",
     title: "Improved geofence tools for saved places",
   },
   {
     id: "maintenance",
-    time: "4 days ago",
+    time: "Aug 12, 2026",
     title: "New maintenance reminders on vehicle details",
   },
   {
     id: "route-playback",
-    time: "4 days ago",
+    time: "Aug 9, 2026",
     title: "Route playback now includes stop duration",
   },
   {
     id: "driver-assign",
-    time: "5 days ago",
+    time: "Aug 5, 2026",
     title: "Driver assignment is now available from Users",
   },
   {
     id: "report-export",
-    time: "6 days ago",
+    time: "Jul 29, 2026",
     title: "Export reports in Excel and PDF",
   },
   {
     id: "immobilize",
-    time: "Last week",
+    time: "Jul 22, 2026",
     title: "Immobilize commands now show confirmation status",
   },
   {
     id: "billing",
-    time: "Last week",
+    time: "Jul 14, 2026",
     title: "Bills & Payments invoice history is live",
   },
   {
     id: "security",
-    time: "Last week",
+    time: "Jul 6, 2026",
     title: "Stronger session security for portal access",
   },
 ];
@@ -117,13 +117,13 @@ export default function AnnouncementSlider({ isOpen, onClose }) {
       >
         <div className="flex items-center justify-between gap-3 px-4 py-3.5 border-b border-[#27272a] shrink-0">
           <div className="flex items-center gap-2.5 min-w-0">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#FDB914]/10 border border-[#FDB914]/20 shrink-0">
+            {/* <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#FDB914]/10 border border-[#FDB914]/20 shrink-0">
               <MainLayoutIcon
                 icon={Megaphone}
                 size="md"
                 className="text-[#FDB914]"
               />
-            </span>
+            </span> */}
             <MainLayoutColor
               as={MainLayoutTextSize}
               id="announcement-slider-title"
@@ -131,7 +131,7 @@ export default function AnnouncementSlider({ isOpen, onClose }) {
               size="sectionTitle"
               className="truncate"
             >
-              Latest from our changelog
+              What's new?
             </MainLayoutColor>
           </div>
 
@@ -149,32 +149,20 @@ export default function AnnouncementSlider({ isOpen, onClose }) {
           <div className="relative pl-4">
             <div className="absolute left-[5px] top-1.5 bottom-1.5 w-px bg-[#2e2e36]" />
 
-            <ul className="flex flex-col gap-4">
+            <ul className="flex flex-col gap-8">
               {ANNOUNCEMENTS.map((item, index) => (
                 <li key={item.id} className="relative">
                   <span
-                    className={`absolute -left-4 top-1.5 h-2.5 w-2.5 rounded-full border-2 ${
-                      index === 0
-                        ? "bg-[#FDB914] border-[#FDB914]"
-                        : "bg-[#141414] border-[#52525b]"
-                    }`}
+                    className={`absolute -left-4 top-1 h-2.5 w-2.5 rounded-full border-2 bg-[#FDB914] border-[#FDB914]`}
                   />
-                  <MainLayoutColor
-                    as={MainLayoutTextSize}
-                    color="muted"
-                    size="captionText"
-                    className="block"
-                  >
-                    {item.time}
-                  </MainLayoutColor>
-                  <MainLayoutColor
-                    as={MainLayoutTextSize}
-                    color="title"
-                    size="metricText"
-                    className="mt-0.5 block leading-snug"
-                  >
-                    {item.title}
-                  </MainLayoutColor>
+                  <div className="flex flex-col gap-1 ml-5">
+                    <div className="block font-normal leading-4.5 text-[12px] text-[#A1A1AA] font-['Segoe_UI',-apple-system,BlinkMacSystemFont,Roboto,'Helvetica_Neue',Arial,sans-serif] not-italic">
+                      {item.time}
+                    </div>
+                    <div className="block font-normal leading-5.25 text-[14px] text-[rgb(255,255,255)] font-['Segoe_UI',-apple-system,BlinkMacSystemFont,Roboto,'Helvetica_Neue',Arial,sans-serif] not-italic">
+                      {item.title}
+                    </div>
+                  </div>
                 </li>
               ))}
             </ul>
