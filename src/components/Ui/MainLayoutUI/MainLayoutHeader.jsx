@@ -88,7 +88,7 @@ export default function MainLayoutHeader({
 
         {/* 1. Dropdown Filters */}
         {showFilters && (
-          <div className="flex items-center gap-2 overflow-visible relative z-30">
+          <div className="flex w-full sm:w-auto flex-wrap items-center gap-2 overflow-visible relative z-30">
             {customFilters ? (
               customFilters
             ) : (

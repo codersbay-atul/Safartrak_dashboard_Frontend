@@ -36,7 +36,7 @@ function buildCards(summary, { isLoading = false } = {}) {
       value: valueOrSkeleton(values.runningTime),
       subtitle: isLoading ? "-" : subtitleOrDash(values.runningTimeChange),
       title: "Running Time",
-      showArrow: true,
+      // showArrow: true,
     },
     {
       id: "idle-time",
@@ -44,7 +44,7 @@ function buildCards(summary, { isLoading = false } = {}) {
       value: valueOrSkeleton(values.idleTime),
       subtitle: isLoading ? "-" : subtitleOrDash(values.idleTimeChange),
       title: "Idle Time",
-      showArrow: true,
+      // showArrow: true,
     },
     {
       id: "halt-time",
@@ -52,7 +52,7 @@ function buildCards(summary, { isLoading = false } = {}) {
       value: valueOrSkeleton(values.haltTime),
       subtitle: isLoading ? "-" : subtitleOrDash(values.haltTimeChange),
       title: "Halt Time",
-      showArrow: true,
+      // showArrow: true,
     },
     {
       id: "fleet-score",
@@ -60,7 +60,7 @@ function buildCards(summary, { isLoading = false } = {}) {
       value: valueOrSkeleton(values.fleetScore),
       subtitle: isLoading ? "-" : subtitleOrDash(values.fleetScoreChange),
       title: "Fleet Score",
-      showArrow: true,
+      // showArrow: true,
     },
   ];
 }

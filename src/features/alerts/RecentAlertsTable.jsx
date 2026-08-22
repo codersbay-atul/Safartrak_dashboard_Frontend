@@ -1,5 +1,7 @@
 import React from "react";
 import { MoreVertical } from "lucide-react";
+import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
+import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
 
 const STATUS_STYLES = {
   Critical: "bg-[#ef4444]/15 text-[#ef4444] border-[#ef4444]/30",
@@ -21,15 +23,25 @@ export default function RecentAlertsTable({
   isError = false,
 }) {
   return (
-    <div className="w-full flex-1 min-h-[280px] lg:min-h-0 bg-[#121214] border border-[#1f1f23] rounded-xl p-3 flex flex-col select-none overflow-hidden">
+    <MainLayoutColor
+      as="div"
+      background="surface"
+      className="w-full min-w-0 flex-none lg:flex-1 min-h-[280px] lg:min-h-0 border border-[#1f1f23] rounded-xl p-2.5 sm:p-3 flex flex-col select-none overflow-hidden"
+    >
       <div className="flex items-center justify-between mb-2.5 shrink-0">
-        <h3 className="text-[12px] font-bold text-white tracking-tight">
-          Recent VIEW
-        </h3>
+        {/* 14px Section Title */}
+        <MainLayoutColor
+          as={MainLayoutTextSize}
+          color="title"
+          size="sectionTitle"
+          className="font-bold tracking-tight block"
+        >
+          Recent Alerts
+        </MainLayoutColor>
       </div>
 
-      <div className="flex-1 min-h-0 min-w-0 overflow-x-auto overflow-y-auto custom-scrollbar !overflow-x-auto">
-        <table className="w-full min-w-[900px] border-collapse">
+      <div className="flex-none min-w-0 overflow-x-auto lg:flex-1 lg:min-h-0 lg:overflow-y-auto custom-scrollbar">
+        <table className="w-full min-w-[760px] border-collapse">
           <thead className="sticky top-0 z-10 bg-[#121214]">
             <tr className="border-b border-[#1f1f23]">
               {[
@@ -44,9 +56,17 @@ export default function RecentAlertsTable({
               ].map((heading) => (
                 <th
                   key={heading}
-                  className="text-left text-[9px] font-semibold uppercase tracking-wide text-[#71717a] px-2.5 py-2 whitespace-nowrap"
+                  className="text-left px-2.5 py-2 whitespace-nowrap"
                 >
-                  {heading}
+                  {/* 14px Column Header */}
+                  <MainLayoutColor
+                    as={MainLayoutTextSize}
+                    color="subtitle"
+                    size="sectionTitle"
+                    className="font-semibold uppercase tracking-wide block"
+                  >
+                    {heading}
+                  </MainLayoutColor>
                 </th>
               ))}
             </tr>
@@ -55,20 +75,22 @@ export default function RecentAlertsTable({
           <tbody>
             {isLoading ? (
               <tr>
-                <td
-                  colSpan={8}
-                  className="px-2.5 py-10 text-center text-[11px] text-[#71717a]"
-                >
-                  Loading...
+                <td colSpan={8} className="px-2.5 py-10 text-center">
+                  <MainLayoutColor
+                    as={MainLayoutTextSize}
+                    color="subtitle"
+                    size="sectionTitle"
+                  >
+                    Loading...
+                  </MainLayoutColor>
                 </td>
               </tr>
             ) : isError ? (
               <tr>
-                <td
-                  colSpan={8}
-                  className="px-2.5 py-10 text-center text-[11px] text-[#71717a]"
-                >
-                  Failed to load alerts
+                <td colSpan={8} className="px-2.5 py-10 text-center text-[#ef4444]">
+                  <MainLayoutTextSize size="sectionTitle">
+                    Failed to load alerts
+                  </MainLayoutTextSize>
                 </td>
               </tr>
             ) : alerts.length > 0 ? (
@@ -87,37 +109,91 @@ export default function RecentAlertsTable({
                     key={alert.id}
                     className="border-b border-[#1f1f23]/70 hover:bg-[#16161a]/80 transition-colors"
                   >
-                    <td className="px-2.5 py-2.5 text-[10px] text-[#d4d4d8] whitespace-nowrap">
-                      {alert.dateTime}
+                    {/* 14px Date & Time */}
+                    <td className="px-2.5 py-2.5 whitespace-nowrap">
+                      <MainLayoutColor
+                        as={MainLayoutTextSize}
+                        color="subtitle"
+                        size="sectionTitle"
+                      >
+                        {alert.dateTime}
+                      </MainLayoutColor>
                     </td>
-                    <td className="px-2.5 py-2.5 text-[10px] font-semibold text-white whitespace-nowrap">
-                      {alert.vehicle}
+
+                    {/* 14px Vehicle Plate */}
+                    <td className="px-2.5 py-2.5 whitespace-nowrap">
+                      <MainLayoutColor
+                        as={MainLayoutTextSize}
+                        color="title"
+                        size="plateText"
+                        className="font-semibold"
+                      >
+                        {alert.vehicle}
+                      </MainLayoutColor>
                     </td>
-                    <td className="px-2.5 py-2.5 text-[10px] text-[#d4d4d8] whitespace-nowrap">
-                      {alert.driver}
+
+                    {/* 14px Driver */}
+                    <td className="px-2.5 py-2.5 whitespace-nowrap">
+                      <MainLayoutColor
+                        as={MainLayoutTextSize}
+                        color="subtitle"
+                        size="sectionTitle"
+                      >
+                        {alert.driver}
+                      </MainLayoutColor>
                     </td>
-                    <td className="px-2.5 py-2.5 text-[10px] text-[#a1a1aa] max-w-[180px] truncate">
-                      {alert.location}
+
+                    {/* 14px Location */}
+                    <td className="px-2.5 py-2.5 max-w-[180px] truncate">
+                      <MainLayoutColor
+                        as={MainLayoutTextSize}
+                        color="subtitle"
+                        size="sectionTitle"
+                        className="truncate block"
+                      >
+                        {alert.location}
+                      </MainLayoutColor>
                     </td>
-                    <td
-                      className={`px-2.5 py-2.5 text-[10px] font-semibold whitespace-nowrap ${
-                        overLimit ? "text-[#ef4444]" : "text-[#d4d4d8]"
-                      }`}
-                    >
-                      {formatSpeed(recorded)}
+
+                    {/* 14px Recorded Speed */}
+                    <td className="px-2.5 py-2.5 whitespace-nowrap">
+                      <MainLayoutTextSize
+                        size="sectionTitle"
+                        className={`font-semibold ${
+                          overLimit ? "text-[#ef4444]" : "text-[#d4d4d8]"
+                        }`}
+                      >
+                        {formatSpeed(recorded)}
+                      </MainLayoutTextSize>
                     </td>
-                    <td className="px-2.5 py-2.5 text-[10px] text-[#a1a1aa] whitespace-nowrap">
-                      {formatSpeed(limit)}
+
+                    {/* 14px Speed Limit */}
+                    <td className="px-2.5 py-2.5 whitespace-nowrap">
+                      <MainLayoutColor
+                        as={MainLayoutTextSize}
+                        color="subtitle"
+                        size="sectionTitle"
+                      >
+                        {formatSpeed(limit)}
+                      </MainLayoutColor>
                     </td>
+
+                    {/* Badge Text */}
                     <td className="px-2.5 py-2.5 whitespace-nowrap">
                       <span
-                        className={`inline-flex items-center px-2 py-0.5 rounded-full border text-[9px] font-bold ${
+                        className={`inline-flex items-center px-2 py-0.5 rounded-full border ${
                           STATUS_STYLES[alert.status] || STATUS_STYLES.Low
                         }`}
                       >
-                        {alert.status}
+                        <MainLayoutTextSize
+                          size="badgeText"
+                          className="font-bold"
+                        >
+                          {alert.status}
+                        </MainLayoutTextSize>
                       </span>
                     </td>
+
                     <td className="px-2.5 py-2.5 whitespace-nowrap">
                       <button
                         type="button"
@@ -131,17 +207,20 @@ export default function RecentAlertsTable({
               })
             ) : (
               <tr>
-                <td
-                  colSpan={8}
-                  className="px-2.5 py-10 text-center text-[11px] text-[#71717a]"
-                >
-                  No alerts found
+                <td colSpan={8} className="px-2.5 py-10 text-center">
+                  <MainLayoutColor
+                    as={MainLayoutTextSize}
+                    color="subtitle"
+                    size="sectionTitle"
+                  >
+                    No alerts found
+                  </MainLayoutColor>
                 </td>
               </tr>
             )}
           </tbody>
         </table>
       </div>
-    </div>
+    </MainLayoutColor>
   );
 }

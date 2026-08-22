@@ -1,8 +1,9 @@
-
 import React, { useState, useEffect } from "react";
-import { Search } from "lucide-react";
 import { getPendingUsers, getUsers } from "../../api/userApi";
 import MainDropDown from "../../components/Ui/MainLayoutUI/MainDropDown";
+import MainSearchInput from "../../components/Ui/MainLayoutUI/MainSearchInput";
+import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
+import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
 
 const ROLE_OPTIONS = [
   { label: "Role", value: "All" },
@@ -41,20 +42,21 @@ export default function DriverList({ selectedUser, onSelectUser, refreshTrigger 
     async function loadUsers() {
       try {
         setIsLoading(true);
-        const response = statusFilter === "pending"
-          ? await getPendingUsers({
-              search: searchQuery,
-              role: roleFilter === "All" ? "" : roleFilter,
-              page: 1,
-              page_size: 25,
-            })
-          : await getUsers({
-              search: searchQuery,
-              role: roleFilter === "All" ? "" : roleFilter,
-              status: statusFilter === "All" ? "" : statusFilter,
-              page: 1,
-              page_size: 25,
-            });
+        const response =
+          statusFilter === "pending"
+            ? await getPendingUsers({
+                search: searchQuery,
+                role: roleFilter === "All" ? "" : roleFilter,
+                page: 1,
+                page_size: 25,
+              })
+            : await getUsers({
+                search: searchQuery,
+                role: roleFilter === "All" ? "" : roleFilter,
+                status: statusFilter === "All" ? "" : statusFilter,
+                page: 1,
+                page_size: 25,
+              });
 
         if (isMounted) {
           setUsers(response.results || []);
@@ -84,64 +86,103 @@ export default function DriverList({ selectedUser, onSelectUser, refreshTrigger 
     }
   }, [selectedUser, mappedUsers, onSelectUser]);
 
-
-
   return (
-    <div className="w-full h-full min-h-0 bg-[#121214] border border-[#27272a] rounded-2xl flex flex-col overflow-hidden select-none shadow-2xl">
-      <div className="sticky top-0 z-10 px-3 py-2 border-b border-[#27272a] flex items-center justify-between shrink-0 bg-[#121214]">
-        <h2 className="text-[12px] font-semibold text-white tracking-wide">
+    <MainLayoutColor
+      as="div"
+      background="surface"
+      className="w-full h-full min-h-0 border border-[#27272a] rounded-2xl flex flex-col overflow-hidden select-none shadow-2xl font-sans"
+    >
+      {/* Top Header & Tight Pill-shaped Filters */}
+      <MainLayoutColor
+        as="div"
+        background="surface"
+        className="sticky top-0 z-10 px-3 py-2 border-b border-[#27272a] flex items-center justify-between shrink-0"
+      >
+        <MainLayoutColor
+          as={MainLayoutTextSize}
+          color="title"
+          size="sectionTitle"
+          className="font-medium tracking-tight block"
+        >
           Drivers List
-        </h2>
+        </MainLayoutColor>
 
+        {/* Filters Group */}
         <div className="flex items-center gap-1.5">
+          {/* Role Filter */}
           <MainDropDown
             label="Role"
             options={ROLE_OPTIONS}
             selectedValue={roleFilter}
             onSelect={(val) => setRoleFilter(val)}
-            className="rounded-full bg-[#18181b]/80 border-[#27272a] py-0.5 px-2 text-[10px] text-[#a1a1aa] hover:border-[#3f3f46] hover:text-white transition-colors"
+            className="rounded-full bg-[#18181b]/80 border-[#27272a] py-0.5 px-2.5 text-[11px] font-medium text-white hover:border-[#3f3f46] transition-all focus:border-[var(--color-yellow,#ffd60a)] shrink-0"
           />
 
+          {/* Status Filter */}
           <MainDropDown
             label="Status"
             options={STATUS_OPTIONS}
             selectedValue={statusFilter}
             onSelect={(val) => setStatusFilter(val)}
-            className="rounded-full bg-[#18181b]/80 border-[#27272a] py-0.5 px-2 text-[10px] text-[#a1a1aa] hover:border-[#3f3f46] hover:text-white transition-colors"
+            className="rounded-full bg-[#18181b]/80 border-[#27272a] py-0.5 px-2.5 text-[11px] font-medium text-white hover:border-[#3f3f46] transition-all focus:border-[var(--color-yellow,#ffd60a)] shrink-0"
           />
 
-          <div className="relative w-32 xl:w-40">
-            <input
-              type="text"
+          {/* Search Input */}
+          <div className="w-32 xl:w-40">
+            <MainSearchInput
               placeholder="Search..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[#18181b]/80 text-[#d4d4d8] text-[10px] rounded-full pl-2.5 pr-6 py-0.5 border border-[#27272a] focus:outline-none focus:border-[#ffd60a] placeholder-[#71717a] transition-all"
+              className="w-full rounded-full bg-[#18181b]/80 border-[#27272a] py-0.5 px-3 text-[11px] text-white focus:border-[var(--color-yellow,#ffd60a)]"
             />
-            <Search className="w-3 h-3 text-[#a1a1aa] absolute right-2 top-1.5 pointer-events-none" />
           </div>
         </div>
-      </div>
+      </MainLayoutColor>
 
       {/* Users Table */}
       <div className="flex-1 overflow-y-auto custom-scrollbar">
-        <table className="w-full text-left border-collapse">
+        <table className="w-full text-left border-collapse table-fixed">
           <thead>
-            <tr className="border-b border-[#27272a] bg-[#18181b]/40 text-[10px] text-[#a1a1aa] font-medium uppercase tracking-wider">
-              <th className="py-2.5 px-4">User Details</th>
-              <th className="py-2.5 px-4">Contact</th>
-              <th className="py-2.5 px-4">Fleet</th>
-              <th className="py-2.5 px-4">Role</th>
-              <th className="py-2.5 px-4">Status</th>
-              <th className="py-2.5 px-4">Last Active</th>
-              
+            <tr className="border-b border-[#27272a] bg-[#18181b]/40">
+              <th className="pt-1.5 pb-1 px-3.5 w-[22%] whitespace-nowrap">
+                <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText" className="uppercase font-medium">
+                  User Details
+                </MainLayoutColor>
+              </th>
+              <th className="pt-1.5 pb-1 px-3.5 w-[22%] whitespace-nowrap">
+                <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText" className="uppercase font-medium">
+                  Contact
+                </MainLayoutColor>
+              </th>
+              <th className="pt-1.5 pb-1 px-3.5 w-[13%] whitespace-nowrap">
+                <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText" className="uppercase font-medium">
+                  Fleet
+                </MainLayoutColor>
+              </th>
+              <th className="pt-1.5 pb-1 px-3.5 w-[13%] whitespace-nowrap">
+                <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText" className="uppercase font-medium">
+                  Role
+                </MainLayoutColor>
+              </th>
+              <th className="pt-1.5 pb-1 px-3.5 w-[16%] whitespace-nowrap">
+                <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText" className="uppercase font-medium">
+                  Status
+                </MainLayoutColor>
+              </th>
+              <th className="pt-1.5 pb-1 px-3.5 w-[14%] whitespace-nowrap">
+                <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText" className="uppercase font-medium">
+                  Last Active
+                </MainLayoutColor>
+              </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-[#27272a]/50 text-[10px]">
+          <tbody className="divide-y divide-[#27272a]/50">
             {isLoading ? (
               <tr>
-                <td colSpan="7" className="py-6 text-center text-[#71717a]">
-                  Loading users...
+                <td colSpan="6" className="py-6 text-center">
+                  <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText">
+                    Loading users...
+                  </MainLayoutColor>
                 </td>
               </tr>
             ) : mappedUsers.length > 0 ? (
@@ -151,46 +192,89 @@ export default function DriverList({ selectedUser, onSelectUser, refreshTrigger 
                   <tr
                     key={user.id}
                     onClick={() => onSelectUser(user)}
-                    className={`hover:bg-[#18181b] transition-all cursor-pointer ${
-                      isSelected ? "bg-[#18181b] border-l-2 border-l-[#ffd60a]" : ""
+                    className={`transition-all duration-150 cursor-pointer ${
+                      isSelected
+                        ? "bg-black border-l-2 border-l-[var(--color-yellow,#ffd60a)] shadow-inner"
+                        : "bg-transparent hover:bg-[#1f2025]"
                     }`}
                   >
-                    <td className="py-2 px-3">
-                      <div className="flex items-center gap-2">
-                        <div className="w-6 h-6 rounded-full bg-[#27272a] border border-[#3f3f46] flex items-center justify-center shrink-0 text-[#ffd60a] font-bold text-[9px]">
+                    {/* User Details */}
+                    <td className="py-2.5 px-3.5 truncate">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="w-8 h-8 rounded-full bg-[#27272a] border border-[#3f3f46] flex items-center justify-center shrink-0 text-[var(--color-yellow,#ffd60a)] font-bold text-[12px]">
                           {user.name.charAt(0)}
                         </div>
-                        <div className="truncate">
-                          <p className="font-bold text-white leading-tight truncate">
+                        <div className="truncate min-w-0">
+                          <MainLayoutColor
+                            as={MainLayoutTextSize}
+                            color="title"
+                            size="sectionTitle"
+                            className="font-medium leading-tight truncate block"
+                          >
                             {user.name}
-                          </p>
-                          <p className="text-[8.5px] font-mono text-[#a1a1aa] leading-tight">
+                          </MainLayoutColor>
+                          <MainLayoutColor
+                            as={MainLayoutTextSize}
+                            color="subtitle"
+                            size="subInfoText"
+                            className="font-mono leading-tight block mt-0.5 truncate"
+                          >
                             {user.empId}
-                          </p>
+                          </MainLayoutColor>
                         </div>
                       </div>
                     </td>
 
-                    <td className="py-2 px-3">
-                      <p className="text-[#d4d4d8] font-medium leading-tight truncate">
-                        {user.email}
-                      </p>
-                      <p className="text-[8.5px] text-[#71717a] leading-tight truncate">
-                        {user.phone}
-                      </p>
+                    {/* Contact */}
+                    <td className="py-2.5 px-3.5 truncate">
+                      <div className="min-w-0 truncate">
+                        <MainLayoutColor
+                          as={MainLayoutTextSize}
+                          color="title"
+                          size="sectionTitle"
+                          className="font-medium leading-tight truncate block"
+                        >
+                          {user.email}
+                        </MainLayoutColor>
+                        <MainLayoutColor
+                          as={MainLayoutTextSize}
+                          color="subtitle"
+                          size="subInfoText"
+                          className="leading-tight truncate block mt-0.5"
+                        >
+                          {user.phone}
+                        </MainLayoutColor>
+                      </div>
                     </td>
 
-                    <td className="py-2 px-3 text-[#d4d4d8] font-medium truncate">
-                      {user.fleet}
+                    {/* Fleet */}
+                    <td className="py-2.5 px-3.5 truncate">
+                      <MainLayoutColor
+                        as={MainLayoutTextSize}
+                        color="subtitle"
+                        size="sectionTitle"
+                        className="font-medium truncate block"
+                      >
+                        {user.fleet}
+                      </MainLayoutColor>
                     </td>
 
-                    <td className="py-2 px-3 text-[#d4d4d8] font-medium truncate">
-                      {user.role}
+                    {/* Role */}
+                    <td className="py-2.5 px-3.5 truncate">
+                      <MainLayoutColor
+                        as={MainLayoutTextSize}
+                        color="subtitle"
+                        size="sectionTitle"
+                        className="font-medium truncate block"
+                      >
+                        {user.role}
+                      </MainLayoutColor>
                     </td>
 
-                    <td className="py-2 px-3">
+                    {/* Status Badge without truncation */}
+                    <td className="py-2.5 px-3.5 overflow-visible">
                       <span
-                        className={`px-2 py-0.5 rounded-full text-[8px] font-semibold ${
+                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full whitespace-nowrap shrink-0 ${
                           user.status === "Active"
                             ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
                             : user.status === "Inactive"
@@ -198,27 +282,38 @@ export default function DriverList({ selectedUser, onSelectUser, refreshTrigger 
                             : "bg-amber-500/10 text-amber-400 border border-amber-500/20"
                         }`}
                       >
-                        {user.status}
+                        <MainLayoutTextSize size="badgeText" className="font-medium whitespace-nowrap">
+                          {user.status}
+                        </MainLayoutTextSize>
                       </span>
                     </td>
 
-                    <td className="py-2 px-3 text-[#a1a1aa] text-[9px] truncate">
-                      {user.lastActive}
+                    {/* Last Active */}
+                    <td className="py-2.5 px-3.5 truncate">
+                      <MainLayoutColor
+                        as={MainLayoutTextSize}
+                        color="subtitle"
+                        size="subInfoText"
+                        className="truncate block"
+                      >
+                        {user.lastActive}
+                      </MainLayoutColor>
                     </td>
-
                   </tr>
                 );
               })
             ) : (
               <tr>
-                <td colSpan="7" className="py-6 text-center text-[#71717a]">
-                  No matching users found.
+                <td colSpan="6" className="py-6 text-center">
+                  <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText">
+                    No matching users found.
+                  </MainLayoutColor>
                 </td>
               </tr>
             )}
           </tbody>
         </table>
       </div>
-    </div>
+    </MainLayoutColor>
   );
 }

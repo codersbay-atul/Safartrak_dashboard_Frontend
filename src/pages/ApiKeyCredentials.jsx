@@ -1,7 +1,8 @@
 import MainLayout from "../layouts/MainLayout";
 import ApiKeyHeader from "../features/apikey/ApiKeyHeader";
 import AccountDetailsSection from "../features/apikey/AccountDetailsSection";
-import ApiKeysSection from "../features/apikey/ApiKeysSection";
+import ApiKeysTable from "../features/apikey/ApiKeysTable";
+
 import Document from "../features/apikey/Document";
 
 export default function ApiKeyCredentialsPage() {
@@ -21,7 +22,7 @@ export default function ApiKeyCredentialsPage() {
         </div>
 
         <div className="shrink-0 w-full min-w-0">
-          <ApiKeysSection />
+          <ApiKeysTable />
         </div>
       </div>
     </MainLayout>

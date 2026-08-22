@@ -35,7 +35,8 @@ export default function AlertsHeader({
       onSearch={onSearchChange}
       actionButtonLabel="Configurations"
       onActionClick={onConfigClick}
-      actionButtonClassName="min-w-[130px]"
+      actionButtonClassName="w-full sm:w-auto min-w-0 sm:min-w-[130px]"
+      className="gap-2.5"
     />
   );
 }

@@ -1,5 +1,6 @@
 import React from "react";
 import { Eye, Edit, Wrench, Trash2 } from "lucide-react";
+import MainHeaderActionButton from "../../components/Ui/MainLayoutUI/MainHeaderActionButton";
 
 export default function VehiclesActionButtons({
   onTrackLive,
@@ -8,48 +9,62 @@ export default function VehiclesActionButtons({
   onRemoveVehicle,
 }) {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 w-full select-none">
-      
+    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 w-full select-none font-sans">
       {/* Track Live */}
-      <button
+      <MainHeaderActionButton
         type="button"
+        variant="secondary"
         onClick={onTrackLive}
-        className="bg-[#18181b]/80 hover:bg-[#27272a] text-[#d4d4d8] hover:text-white border border-[#27272a] hover:border-[#3f3f46] py-2 px-3 rounded-xl font-semibold text-[11px] flex items-center justify-center gap-2 transition-all cursor-pointer group shadow-sm"
+        style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center" }}
+        className="w-full py-2.5 px-3 gap-2 bg-[#18181b]/80 hover:bg-[#27272a] border border-[#27272a] hover:border-[#3f3f46] rounded-xl text-white font-medium cursor-pointer transition-all"
       >
-        <Eye className="w-3.5 h-3.5 text-[#ffd60a] group-hover:scale-110 transition-transform" />
-        <span>Track Live</span>
-      </button>
+        <div className="flex items-center justify-center gap-2 w-full">
+          <Eye className="w-4 h-4 text-[#ffd60a] shrink-0" />
+          <span className="text-[14px] text-white font-medium whitespace-nowrap leading-none">Track Live</span>
+        </div>
+      </MainHeaderActionButton>
 
       {/* Edit Vehicle */}
-      <button
+      <MainHeaderActionButton
         type="button"
+        variant="secondary"
         onClick={onEditVehicle}
-        className="bg-[#18181b]/80 hover:bg-[#27272a] text-[#d4d4d8] hover:text-white border border-[#27272a] hover:border-[#3f3f46] py-2 px-3 rounded-xl font-semibold text-[11px] flex items-center justify-center gap-2 transition-all cursor-pointer group shadow-sm"
+        style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center" }}
+        className="w-full py-2.5 px-3 gap-2 bg-[#18181b]/80 hover:bg-[#27272a] border border-[#27272a] hover:border-[#3f3f46] rounded-xl text-white font-medium cursor-pointer transition-all"
       >
-        <Edit className="w-3.5 h-3.5 text-[#a1a1aa] group-hover:text-white group-hover:scale-110 transition-transform" />
-        <span>Edit Vehicle</span>
-      </button>
+        <div className="flex items-center justify-center gap-2 w-full">
+          <Edit className="w-4 h-4 text-[#a1a1aa] shrink-0" />
+          <span className="text-[14px] text-white font-medium whitespace-nowrap leading-none">Edit Vehicle</span>
+        </div>
+      </MainHeaderActionButton>
 
       {/* Schedule Maintenance */}
-      <button
+      <MainHeaderActionButton
         type="button"
+        variant="secondary"
         onClick={onScheduleMaintenance}
-        className="bg-[#18181b]/80 hover:bg-[#27272a] text-[#d4d4d8] hover:text-white border border-[#27272a] hover:border-[#3f3f46] py-2 px-3 rounded-xl font-semibold text-[11px] flex items-center justify-center gap-2 transition-all cursor-pointer group shadow-sm"
+        style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center" }}
+        className="w-full py-2.5 px-3 gap-2 bg-[#18181b]/80 hover:bg-[#27272a] border border-[#27272a] hover:border-[#3f3f46] rounded-xl text-white font-medium cursor-pointer transition-all"
       >
-        <Wrench className="w-3.5 h-3.5 text-[#ffd60a] group-hover:scale-110 transition-transform" />
-        <span>Schedule Maintenance</span>
-      </button>
+        <div className="flex items-center justify-center gap-2 w-full">
+          <Wrench className="w-4 h-4 text-[#ffd60a] shrink-0" />
+          <span className="text-[14px] text-white font-medium whitespace-nowrap leading-none">Schedule Maintenance</span>
+        </div>
+      </MainHeaderActionButton>
 
       {/* Remove Vehicle */}
-      <button
+      <MainHeaderActionButton
         type="button"
+        variant="danger"
         onClick={onRemoveVehicle}
-        className="bg-rose-500/10 hover:bg-rose-500 text-rose-400 hover:text-white border border-rose-500/20 hover:border-rose-500 py-2 px-3 rounded-xl font-semibold text-[11px] flex items-center justify-center gap-2 transition-all cursor-pointer group shadow-sm"
+        style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center" }}
+        className="w-full py-2.5 px-3 gap-2 bg-rose-500/10 hover:bg-rose-500 text-rose-400 hover:text-white border border-rose-500/20 hover:border-rose-500 rounded-xl font-medium cursor-pointer transition-all"
       >
-        <Trash2 className="w-3.5 h-3.5 group-hover:scale-110 transition-transform" />
-        <span>Remove Vehicle</span>
-      </button>
-
+        <div className="flex items-center justify-center gap-2 w-full">
+          <Trash2 className="w-4 h-4 shrink-0" />
+          <span className="text-[14px] font-medium whitespace-nowrap leading-none">Remove Vehicle</span>
+        </div>
+      </MainHeaderActionButton>
     </div>
   );
 }

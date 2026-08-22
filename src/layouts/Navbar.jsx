@@ -43,7 +43,8 @@ import AnnouncementSlider from "../components/Ui/NavbarUI/AnnouncementSlider";
 import { clearAuth } from "../store/slices/authSlice";
 import useAccountProfile from "../hooks/useAccountProfile";
 import NavNotificationItem from "../components/Ui/NavbarUI/NavNotificationItem";
-import Popover from "../components/Ui/Popover";
+import MainPopOver from "../components/Ui/MainLayoutUI/MainPopOver";
+import MainLayoutTextSize from "../components/Ui/MainLayoutUI/MainLayoutTextSize";
 
 function NavPopoverWrapper({ children, isOpen, onClose }) {
   const wrapperRef = useOutsideClick(() => {
@@ -142,7 +143,7 @@ export default function Navbar({
       as="header"
       bg="navbarBg"
       color=""
-      className="flex items-center justify-between px-2.5 min-[1152px]:px-3 py-2.5 xl:py-3 border-b border-[#1f1f23] sticky top-0 z-30 select-none gap-2 min-w-0"
+      className="flex items-center justify-between px-2.5 min-[1152px]:px-3 py-2.5 xl:py-3 border-b border-[#1f1f23] sticky top-0 z-30 select-none gap-2 min-w-0 font-sans"
     >
       <div className="flex items-center gap-2 xl:gap-2.5 min-w-0 flex-1">
         <div className="w-10 h-1 shrink-0 lg:hidden" />
@@ -161,7 +162,7 @@ export default function Navbar({
             color="navbarText"
             as={NavTextSize}
             size="moduleName"
-            className="truncate"
+            className="truncate font-semibold"
           >
             {activeTab || "Dashboard"}
           </NavTextColor>
@@ -185,24 +186,36 @@ export default function Navbar({
               />
             </NavTooltip>
 
-            <Popover
+            {/* Notifications Popover */}
+            <MainPopOver
               isOpen={activePopover === "notif"}
               className="w-80 right-0 p-3"
             >
               <div className="flex items-center justify-between border-b border-[#27272a] pb-2 mb-2">
                 <NavTextColor color="navbarText">
-                  <h4 className="text-xs font-bold">Notifications</h4>
+                  <MainLayoutTextSize
+                    as="h4"
+                    size="subtitle"
+                    className="font-bold leading-none"
+                  >
+                    Notifications
+                  </MainLayoutTextSize>
                 </NavTextColor>
                 {unreadCount > 0 && (
                   <button
                     type="button"
                     onClick={handleMarkAllRead}
                     disabled={markReadMutation.isLoading}
-                    className="text-[10px] text-[#3b82f6] hover:underline disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer font-medium"
+                    className="cursor-pointer hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {markReadMutation.isLoading
-                      ? "Marking..."
-                      : "Mark all as read"}
+                    <MainLayoutTextSize
+                      size="badgeText"
+                      className="text-[#3b82f6] font-medium leading-none"
+                    >
+                      {markReadMutation.isLoading
+                        ? "Marking..."
+                        : "Mark all as read"}
+                    </MainLayoutTextSize>
                   </button>
                 )}
               </div>
@@ -211,9 +224,11 @@ export default function Navbar({
                 {isNotificationsLoading || isNotificationsFetching ? (
                   <NavTextColor
                     color="monthText"
-                    className="py-5 text-center text-[11px] block"
+                    className="py-5 text-center block"
                   >
-                    Loading notifications...
+                    <MainLayoutTextSize size="filterText">
+                      Loading notifications...
+                    </MainLayoutTextSize>
                   </NavTextColor>
                 ) : notifications?.items?.length > 0 ? (
                   notifications.items.map((item) => (
@@ -232,9 +247,11 @@ export default function Navbar({
                 ) : (
                   <NavTextColor
                     color="monthText"
-                    className="py-5 text-center text-[11px] block"
+                    className="py-5 text-center block"
                   >
-                    No notifications available.
+                    <MainLayoutTextSize size="filterText">
+                      No notifications available.
+                    </MainLayoutTextSize>
                   </NavTextColor>
                 )}
               </div>
@@ -243,13 +260,16 @@ export default function Navbar({
                 <button
                   type="button"
                   onClick={handleLoadMore}
-                  className="w-full py-2 rounded-xl bg-[#18181b] border border-[#27272a] text-[11px] text-white hover:bg-[#1f2023] transition-colors mt-2 cursor-pointer"
+                  className="w-full py-2 rounded-xl bg-[#18181b] border border-[#27272a] text-white hover:bg-[#1f2023] transition-colors mt-2 cursor-pointer"
                 >
-                  Load more
+                  <MainLayoutTextSize size="filterText" className="font-medium">
+                    Load more
+                  </MainLayoutTextSize>
                 </button>
               ) : null}
-            </Popover>
+            </MainPopOver>
           </NavPopoverWrapper>
+
           <NavTooltip label="What's new?" disabled={isAnnouncementOpen}>
             <button
               type="button"
@@ -275,6 +295,7 @@ export default function Navbar({
           </NavTextColor>
         </div>
 
+        {/* User Profile Popover */}
         <NavPopoverWrapper
           isOpen={activePopover === "profile"}
           onClose={closePopover}
@@ -288,9 +309,9 @@ export default function Navbar({
             />
           </div>
 
-          <Popover
+          <MainPopOver
             isOpen={activePopover === "profile"}
-            className="w-40 right-0 p-1.5 text-xs"
+            className="w-44 right-0 p-1.5"
           >
             <NavMenuItem
               icon={User}
@@ -312,9 +333,10 @@ export default function Navbar({
               onClick={handleLogout}
               danger
             />
-          </Popover>
+          </MainPopOver>
         </NavPopoverWrapper>
       </div>
+
       <AnnouncementSlider
         isOpen={isAnnouncementOpen}
         onClose={() => setIsAnnouncementOpen(false)}

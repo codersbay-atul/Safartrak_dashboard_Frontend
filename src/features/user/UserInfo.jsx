@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import MainDropDown from "../../components/Ui/MainLayoutUI/MainDropDown";
+import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
+import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
+import MainHeaderActionButton from "../../components/Ui/MainLayoutUI/MainHeaderActionButton";
 
 const DEFAULT_FORM = {
   fullName: "",
@@ -200,160 +203,245 @@ export default function UserInfo({
   ];
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md select-none">
-      <div className="relative w-full max-w-[440px] bg-[#121215] border border-[#27272a] rounded-2xl p-5 shadow-2xl flex flex-col text-white">
-        <div className="pb-3 mb-3 border-b border-[#27272a]/60">
-          <h2 className="text-[13px] font-bold tracking-wide">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md select-none font-sans">
+      <MainLayoutColor
+        as="div"
+        background="surface"
+        className="relative w-full max-w-[460px] border border-[#27272a] rounded-2xl p-5 shadow-2xl flex flex-col"
+      >
+        {/* Modal Header */}
+        <div className="pb-3 mb-3 border-b border-[#27272a]">
+          <MainLayoutColor
+            as={MainLayoutTextSize}
+            color="title"
+            size="sectionTitle"
+            className="font-bold tracking-wide block text-[14px]"
+          >
             Personal Information
-          </h2>
+          </MainLayoutColor>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-3 text-[10.5px]">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+          {/* Full Name */}
           <div className="w-full">
-            <label className="block text-[#71717a] mb-1 font-medium">Full Name</label>
+            <MainLayoutColor
+              as="label"
+              color="subtitle"
+              className="block mb-1 font-medium text-[12px]"
+            >
+              Full Name
+            </MainLayoutColor>
             <input
               type="text"
               name="fullName"
               placeholder="Enter Full Name"
               value={formData.fullName}
               onChange={handleChange}
-              className={`w-full bg-[#18181c] border rounded-xl px-3 py-2 text-white placeholder-[#52525b] focus:outline-none ${
-                errors.fullName ? "border-red-500 focus:border-red-500" : "border-[#27272a] focus:border-[#ffd60a]"
+              className={`w-full bg-[#18181b]/80 border rounded-xl px-3 py-2 text-[12px] text-white placeholder-[#A8A8A8] focus:outline-none transition-colors ${
+                errors.fullName ? "border-rose-500 focus:border-rose-500" : "border-[#27272a] focus:border-[var(--color-yellow,#ffd60a)]"
               }`}
             />
-            {errors.fullName && <span className="text-red-500 text-[9px] mt-0.5 block">{errors.fullName}</span>}
+            {errors.fullName && <span className="text-rose-400 text-[10px] mt-0.5 block">{errors.fullName}</span>}
           </div>
 
+          {/* Email & Phone Number */}
           <div className="grid grid-cols-2 gap-2.5 w-full">
             <div className="w-full">
-              <label className="block text-[#71717a] mb-1 font-medium">Email</label>
+              <MainLayoutColor
+                as="label"
+                color="subtitle"
+                className="block mb-1 font-medium text-[12px]"
+              >
+                Email
+              </MainLayoutColor>
               <input
                 type="email"
                 name="email"
                 placeholder="Enter Email"
                 value={formData.email}
                 onChange={handleChange}
-                className={`w-full bg-[#18181c] border rounded-xl px-3 py-2 text-white placeholder-[#52525b] focus:outline-none ${
-                  errors.email ? "border-red-500 focus:border-red-500" : "border-[#27272a] focus:border-[#ffd60a]"
+                className={`w-full bg-[#18181b]/80 border rounded-xl px-3 py-2 text-[12px] text-white placeholder-[#A8A8A8] focus:outline-none transition-colors ${
+                  errors.email ? "border-rose-500 focus:border-rose-500" : "border-[#27272a] focus:border-[var(--color-yellow,#ffd60a)]"
                 }`}
               />
-              {errors.email && <span className="text-red-500 text-[9px] mt-0.5 block">{errors.email}</span>}
+              {errors.email && <span className="text-rose-400 text-[10px] mt-0.5 block">{errors.email}</span>}
             </div>
+
             <div className="w-full">
-              <label className="block text-[#71717a] mb-1 font-medium">Phone Number</label>
+              <MainLayoutColor
+                as="label"
+                color="subtitle"
+                className="block mb-1 font-medium text-[12px]"
+              >
+                Phone Number
+              </MainLayoutColor>
               <input
                 type="text"
                 name="phoneNumber"
                 placeholder="Enter Phone Number"
                 value={formData.phoneNumber}
                 onChange={handleChange}
-                className={`w-full bg-[#18181c] border rounded-xl px-3 py-2 text-white placeholder-[#52525b] focus:outline-none ${
-                  errors.phoneNumber ? "border-red-500 focus:border-red-500" : "border-[#27272a] focus:border-[#ffd60a]"
+                className={`w-full bg-[#18181b]/80 border rounded-xl px-3 py-2 text-[12px] text-white placeholder-[#A8A8A8] focus:outline-none transition-colors ${
+                  errors.phoneNumber ? "border-rose-500 focus:border-rose-500" : "border-[#27272a] focus:border-[var(--color-yellow,#ffd60a)]"
                 }`}
               />
-              {errors.phoneNumber && <span className="text-red-500 text-[9px] mt-0.5 block">{errors.phoneNumber}</span>}
+              {errors.phoneNumber && <span className="text-rose-400 text-[10px] mt-0.5 block">{errors.phoneNumber}</span>}
             </div>
           </div>
 
+          {/* Employee ID & Department */}
           <div className="grid grid-cols-2 gap-2.5 w-full">
             <div className="w-full">
-              <label className="block text-[#71717a] mb-1 font-medium">Employee ID</label>
+              <MainLayoutColor
+                as="label"
+                color="subtitle"
+                className="block mb-1 font-medium text-[12px]"
+              >
+                Employee ID
+              </MainLayoutColor>
               <input
                 type="text"
                 name="employeeId"
                 placeholder="Enter Employee ID"
                 value={formData.employeeId}
                 onChange={handleChange}
-                className={`w-full bg-[#18181c] border rounded-xl px-3 py-2 text-white placeholder-[#52525b] focus:outline-none ${
-                  errors.employeeId ? "border-red-500 focus:border-red-500" : "border-[#27272a] focus:border-[#ffd60a]"
+                className={`w-full bg-[#18181b]/80 border rounded-xl px-3 py-2 text-[12px] text-white placeholder-[#A8A8A8] focus:outline-none transition-colors ${
+                  errors.employeeId ? "border-rose-500 focus:border-rose-500" : "border-[#27272a] focus:border-[var(--color-yellow,#ffd60a)]"
                 }`}
               />
-              {errors.employeeId && <span className="text-red-500 text-[9px] mt-0.5 block">{errors.employeeId}</span>}
+              {errors.employeeId && <span className="text-rose-400 text-[10px] mt-0.5 block">{errors.employeeId}</span>}
             </div>
+
             <div className="w-full flex flex-col min-w-0">
-              <label className="block text-[#71717a] mb-1 font-medium">Department</label>
+              <MainLayoutColor
+                as="label"
+                color="subtitle"
+                className="block mb-1 font-medium text-[12px]"
+              >
+                Department
+              </MainLayoutColor>
               <div className="w-full [&>div]:w-full [&_button]:w-full [&_button]:justify-between">
                 <MainDropDown
                   label="Select Department"
                   options={departmentOptions}
                   selectedValue={formData.department}
                   onSelect={(val) => handleDropdownSelect("department", val)}
-                  className={`rounded-xl bg-[#18181c] py-2 w-full border ${
-                    errors.department ? "border-red-500" : "border-[#27272a]"
+                  className={`rounded-xl bg-[#18181b]/80 py-2 px-3 text-[12px] w-full border ${
+                    errors.department ? "border-rose-500" : "border-[#27272a]"
                   }`}
                 />
               </div>
-              {errors.department && <span className="text-red-500 text-[9px] mt-0.5 block">{errors.department}</span>}
+              {errors.department && <span className="text-rose-400 text-[10px] mt-0.5 block">{errors.department}</span>}
             </div>
           </div>
 
+          {/* Role & Assigned Fleet */}
           <div className="grid grid-cols-2 gap-2.5 w-full">
             <div className="w-full flex flex-col min-w-0">
-              <label className="block text-[#71717a] mb-1 font-medium">Role</label>
+              <MainLayoutColor
+                as="label"
+                color="subtitle"
+                className="block mb-1 font-medium text-[12px]"
+              >
+                Role
+              </MainLayoutColor>
               <div className="w-full [&>div]:w-full [&_button]:w-full [&_button]:justify-between">
                 <MainDropDown
                   label="Select Role"
                   options={roleOptions}
                   selectedValue={formData.role}
                   onSelect={(val) => handleDropdownSelect("role", val)}
-                  className={`rounded-xl bg-[#18181c] py-2 w-full border ${
-                    errors.role ? "border-red-500" : "border-[#27272a]"
+                  className={`rounded-xl bg-[#18181b]/80 py-2 px-3 text-[12px] w-full border ${
+                    errors.role ? "border-rose-500" : "border-[#27272a]"
                   }`}
                 />
               </div>
-              {errors.role && <span className="text-red-500 text-[9px] mt-0.5 block">{errors.role}</span>}
+              {errors.role && <span className="text-rose-400 text-[10px] mt-0.5 block">{errors.role}</span>}
             </div>
+
             <div className="w-full flex flex-col min-w-0">
-              <label className="block text-[#71717a] mb-1 font-medium">Assigned Fleet</label>
+              <MainLayoutColor
+                as="label"
+                color="subtitle"
+                className="block mb-1 font-medium text-[12px]"
+              >
+                Assigned Fleet
+              </MainLayoutColor>
               <div className="w-full [&>div]:w-full [&_button]:w-full [&_button]:justify-between">
-                <MainDropdown
+                <MainDropDown
                   label="Select Assigned Fleet"
                   options={fleetOptions}
                   selectedValue={formData.assignedFleet}
                   onSelect={(val) => handleDropdownSelect("assignedFleet", val)}
-                  className={`rounded-xl bg-[#18181c] py-2 w-full border ${
-                    errors.assignedFleet ? "border-red-500" : "border-[#27272a]"
+                  className={`rounded-xl bg-[#18181b]/80 py-2 px-3 text-[12px] w-full border ${
+                    errors.assignedFleet ? "border-rose-500" : "border-[#27272a]"
                   }`}
                 />
               </div>
-              {errors.assignedFleet && <span className="text-red-500 text-[9px] mt-0.5 block">{errors.assignedFleet}</span>}
+              {errors.assignedFleet && <span className="text-rose-400 text-[10px] mt-0.5 block">{errors.assignedFleet}</span>}
             </div>
           </div>
 
+          {/* Reporting Manager */}
           <div className="w-full flex flex-col">
-            <label className="block text-[#71717a] mb-1 font-medium">Reporting Manager</label>
+            <MainLayoutColor
+              as="label"
+              color="subtitle"
+              className="block mb-1 font-medium text-[12px]"
+            >
+              Reporting Manager
+            </MainLayoutColor>
             <div className="w-full [&>div]:w-full [&_button]:w-full [&_button]:justify-between">
-              <MainDropdown
+              <MainDropDown
                 label="Select Reporting Manager"
                 options={managerOptions}
                 selectedValue={formData.reportingManager}
                 onSelect={(val) => handleDropdownSelect("reportingManager", val)}
-                className={`rounded-xl bg-[#18181c] py-2 w-full border ${
-                  errors.reportingManager ? "border-red-500" : "border-[#27272a]"
+                className={`rounded-xl bg-[#18181b]/80 py-2 px-3 text-[12px] w-full border ${
+                  errors.reportingManager ? "border-rose-500" : "border-[#27272a]"
                 }`}
               />
             </div>
-            {errors.reportingManager && <span className="text-red-500 text-[9px] mt-0.5 block">{errors.reportingManager}</span>}
+            {errors.reportingManager && <span className="text-rose-400 text-[10px] mt-0.5 block">{errors.reportingManager}</span>}
           </div>
 
-          <div className="grid grid-cols-2 gap-2.5 pt-2 mt-2 border-t border-[#27272a]/60">
-            <button
+          {/* Action Buttons */}
+          <div className="grid grid-cols-2 gap-2.5 pt-2 mt-2 border-t border-[#27272a]">
+            <MainHeaderActionButton
               type="button"
+              variant="secondary"
               onClick={onClose}
-              className="w-full py-2.5 rounded-xl text-[11px] font-semibold bg-[#27272a]/70 hover:bg-[#27272a] text-white transition-colors cursor-pointer"
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              className="w-full py-2.5 px-4 rounded-xl bg-[#18181b] hover:bg-[#27272a] text-[#a1a1aa] hover:text-white border border-[#27272a] cursor-pointer"
             >
-              Cancel
-            </button>
-            <button
+              <span className="text-[14px] font-medium whitespace-nowrap leading-none">
+                Cancel
+              </span>
+            </MainHeaderActionButton>
+
+            <MainHeaderActionButton
               type="submit"
               disabled={isSubmitting}
-              className="w-full py-2.5 rounded-xl text-[11px] font-bold text-black bg-[#ffd60a] hover:bg-[#e6c200] transition-colors cursor-pointer disabled:opacity-50"
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              className="w-full py-2.5 px-4 rounded-xl bg-[#ffd60a] hover:bg-[#e6c200] text-black font-bold border border-[#ffd60a] cursor-pointer disabled:opacity-50"
             >
-              {isSubmitting ? "Validating..." : "Next"}
-            </button>
+              <span className="text-[14px] font-bold text-black whitespace-nowrap leading-none">
+                {isSubmitting ? "Validating..." : "Next"}
+              </span>
+            </MainHeaderActionButton>
           </div>
         </form>
-      </div>
+      </MainLayoutColor>
     </div>
   );
 }

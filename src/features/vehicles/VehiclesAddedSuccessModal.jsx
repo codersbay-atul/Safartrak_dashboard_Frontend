@@ -1,5 +1,8 @@
 import React from "react";
 import { Check } from "lucide-react";
+import MainLayoutButton from "../../components/Ui/MainLayoutUI/MainLayoutButton";
+import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
+import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
 
 export default function VehicleAddedSuccessModal({
   isOpen,
@@ -12,8 +15,11 @@ export default function VehicleAddedSuccessModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/70 backdrop-blur-xs select-none animate-fadeIn">
-      <div className="relative w-full max-w-[480px] bg-[#121214] border border-[#27272a] rounded-2xl p-4 shadow-2xl flex flex-col overflow-hidden">
-        
+      <MainLayoutColor
+        as="div"
+        background="surface"
+        className="relative w-full max-w-[480px] border border-[#27272a] rounded-2xl p-4 shadow-2xl flex flex-col font-sans overflow-hidden"
+      >
         {/* Inner Card Container */}
         <div className="bg-[#18181b]/50 border border-[#27272a] rounded-2xl p-6 flex flex-col items-center text-center my-1">
           {/* Green Check Circle */}
@@ -21,35 +27,55 @@ export default function VehicleAddedSuccessModal({
             <Check size={20} strokeWidth={3} />
           </div>
 
-          <h3 className="text-[15px] font-bold text-white mb-2">
+          {/* 14px Title */}
+          <MainLayoutColor
+            as={MainLayoutTextSize}
+            color="title"
+            size="sectionTitle"
+            className="font-medium tracking-tight mb-2 block text-[15px]"
+          >
             Vehicle Added Successfully
-          </h3>
+          </MainLayoutColor>
 
-          <p className="text-[11px] text-[#a1a1aa] leading-relaxed max-w-[340px]">
-            <span className="text-white font-medium">{vehicleNumber}</span> has been added to the{" "}
-            <span className="text-white font-medium">{fleetName}</span>. GPS tracking is active and the vehicle is ready for assignment.
-          </p>
+          {/* 12px Description */}
+          <MainLayoutColor
+            as={MainLayoutTextSize}
+            color="subtitle"
+            size="subInfoText"
+            className="leading-relaxed max-w-[340px] block"
+          >
+            <span className="text-white font-medium">{vehicleNumber}</span> has
+            been added to the{" "}
+            <span className="text-white font-medium">{fleetName}</span>. GPS
+            tracking is active and the vehicle is ready for assignment.
+          </MainLayoutColor>
         </div>
 
-        {/* Action Buttons */}
-        <div className="grid grid-cols-2 gap-2.5 pt-3 border-t border-[#1d1d20] mt-1">
-          <button
+        {/* Action Buttons using headerButtonText */}
+        <div className="grid grid-cols-2 gap-2.5 pt-3 border-t border-[#1d1d20] mt-1 shrink-0">
+          <MainLayoutButton
             type="button"
+            variant="secondary"
             onClick={onClose}
-            className="w-full py-2 px-3 rounded-xl text-[11px] font-semibold bg-[#27272a]/60 hover:bg-[#27272a] text-[#d4d4d8] transition-colors cursor-pointer"
+            className="w-full justify-center py-2"
           >
-            Back to Vehicle List
-          </button>
-          <button
-            type="button"
-            onClick={onViewVehicle || onClose}
-            className="w-full py-2 rounded-xl text-[11px] font-bold text-black bg-[#ffd60a] hover:bg-[#e6c200] transition-colors cursor-pointer"
-          >
-            View Vehicle
-          </button>
-        </div>
+            <MainLayoutTextSize size="headerButtonText">
+              Back to Vehicle List
+            </MainLayoutTextSize>
+          </MainLayoutButton>
 
-      </div>
+          <MainLayoutButton
+            type="button"
+            variant="primary"
+            onClick={onViewVehicle || onClose}
+            className="w-full justify-center py-2"
+          >
+            <MainLayoutTextSize size="headerButtonText">
+              View Vehicle
+            </MainLayoutTextSize>
+          </MainLayoutButton>
+        </div>
+      </MainLayoutColor>
     </div>
   );
 }

@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Check } from "lucide-react";
+import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
+import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
+import MainHeaderActionButton from "../../components/Ui/MainLayoutUI/MainHeaderActionButton";
 
 const DEFAULT_OPTIONS = {
   welcomeEmail: false,
@@ -8,7 +11,13 @@ const DEFAULT_OPTIONS = {
   smsNotifications: false,
 };
 
-export default function ContactAndNotification({ isOpen, onClose, onSave, initialData, isSaving = false }) {
+export default function ContactAndNotification({
+  isOpen,
+  onClose,
+  onSave,
+  initialData,
+  isSaving = false,
+}) {
   const [options, setOptions] = useState(DEFAULT_OPTIONS);
 
   useEffect(() => {
@@ -22,8 +31,12 @@ export default function ContactAndNotification({ isOpen, onClose, onSave, initia
     const invite = initialData.invite ?? {};
 
     setOptions({
-      welcomeEmail: Boolean(invite.welcome_email || notifications.welcome_email_sent_at),
-      loginCredentials: Boolean(invite.login_credentials || notifications.credentials_sent_at),
+      welcomeEmail: Boolean(
+        invite.welcome_email || notifications.welcome_email_sent_at
+      ),
+      loginCredentials: Boolean(
+        invite.login_credentials || notifications.credentials_sent_at
+      ),
       emailNotifications: Boolean(notifications.email_notifications),
       smsNotifications: Boolean(notifications.sms_notifications),
     });
@@ -48,59 +61,95 @@ export default function ContactAndNotification({ isOpen, onClose, onSave, initia
   ];
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md select-none">
-      <div className="relative w-full max-w-[440px] bg-[#121215] border border-[#27272a] rounded-2xl p-5 shadow-2xl flex flex-col text-white">
-        
-        {/* Header - No Close/Cross Button */}
-        <div className="pb-3 mb-3 border-b border-[#27272a]/60">
-          <h2 className="text-[13px] font-bold tracking-wide">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md select-none font-sans">
+      <MainLayoutColor
+        as="div"
+        background="surface"
+        className="relative w-full max-w-[440px] border border-[#27272a] rounded-2xl p-5 shadow-2xl flex flex-col"
+      >
+        {/* Modal Header */}
+        <div className="pb-3 mb-3 border-b border-[#27272a]">
+          <MainLayoutColor
+            as={MainLayoutTextSize}
+            color="title"
+            size="sectionTitle"
+            className="font-bold tracking-wide block text-[14px]"
+          >
             Contact & Notification
-          </h2>
+          </MainLayoutColor>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4 text-[10.5px]">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           {/* Notification Options */}
           <div className="flex flex-col gap-3 py-1">
-            {notificationItems.map((item) => (
-              <div
-                key={item.id}
-                onClick={() => toggleOption(item.id)}
-                className="flex items-center gap-3 cursor-pointer text-[#d4d4d8] hover:text-white transition-colors py-0.5"
-              >
+            {notificationItems.map((item) => {
+              const isChecked = options[item.id];
+              return (
                 <div
-                  className={`w-4 h-4 rounded-md border flex items-center justify-center transition-all shrink-0 ${
-                    options[item.id]
-                      ? "border-[#ffd60a] bg-[#ffd60a] text-black"
-                      : "border-[#3f3f46] bg-[#18181c]"
-                  }`}
+                  key={item.id}
+                  onClick={() => toggleOption(item.id)}
+                  className="flex items-center gap-3 cursor-pointer py-1 transition-colors group"
                 >
-                  {options[item.id] && <Check size={11} strokeWidth={3} />}
+                  <div
+                    className={`w-4 h-4 rounded-md border flex items-center justify-center transition-all shrink-0 ${
+                      isChecked
+                        ? "border-[var(--color-yellow,#ffd60a)] bg-[var(--color-yellow,#ffd60a)] text-black"
+                        : "border-[#3f3f46] bg-[#18181b]/80 group-hover:border-[#52525b]"
+                    }`}
+                  >
+                    {isChecked && <Check size={11} strokeWidth={3} />}
+                  </div>
+                  <MainLayoutColor
+                    as={MainLayoutTextSize}
+                    color={isChecked ? "title" : "subtitle"}
+                    size="subInfoText"
+                    className="font-medium text-[12px] group-hover:text-white transition-colors"
+                  >
+                    {item.label}
+                  </MainLayoutColor>
                 </div>
-                <span className="font-medium text-[11px]">{item.label}</span>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {/* Action Buttons */}
-          <div className="grid grid-cols-2 gap-2.5 pt-2 mt-1 border-t border-[#27272a]/60">
-            <button
+          <div className="grid grid-cols-2 gap-2.5 pt-2 mt-1 border-t border-[#27272a]">
+            <MainHeaderActionButton
               type="button"
+              variant="secondary"
               onClick={onClose}
               disabled={isSaving}
-              className={`w-full py-2.5 rounded-xl text-[11px] font-semibold bg-[#27272a]/70 hover:bg-[#27272a] text-white transition-colors ${isSaving ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}`}
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              className="w-full py-2.5 px-4 rounded-xl bg-[#18181b] hover:bg-[#27272a] text-[#a1a1aa] hover:text-white border border-[#27272a] cursor-pointer disabled:opacity-50"
             >
-              Cancel
-            </button>
-            <button
+              <span className="text-[14px] font-medium whitespace-nowrap leading-none">
+                Cancel
+              </span>
+            </MainHeaderActionButton>
+
+            <MainHeaderActionButton
               type="submit"
               disabled={isSaving}
-              className={`w-full py-2.5 rounded-xl text-[11px] font-bold text-black bg-[#ffd60a] hover:bg-[#e6c200] transition-colors ${isSaving ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}`}
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              className="w-full py-2.5 px-4 rounded-xl bg-[#ffd60a] hover:bg-[#e6c200] text-black font-bold border border-[#ffd60a] cursor-pointer disabled:opacity-50"
             >
-              {isSaving ? "Saving..." : "Save"}
-            </button>
+              <span className="text-[14px] font-bold text-black whitespace-nowrap leading-none">
+                {isSaving ? "Saving..." : "Save"}
+              </span>
+            </MainHeaderActionButton>
           </div>
         </form>
-      </div>
+      </MainLayoutColor>
     </div>
   );
 }

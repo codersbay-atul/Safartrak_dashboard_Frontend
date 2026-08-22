@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Check, CheckCircle2 } from "lucide-react";
+import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
+import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
+import MainHeaderActionButton from "../../components/Ui/MainLayoutUI/MainHeaderActionButton";
 
 const DEFAULT_PERMISSIONS = {
   dashboard: false,
@@ -86,7 +89,6 @@ export default function PermissionAndAccountStatus({
     e.preventDefault();
     setIsSubmitted(true);
 
-
     setTimeout(() => {
       setIsSubmitted(false);
       if (onSave) onSave(formData);
@@ -112,120 +114,171 @@ export default function PermissionAndAccountStatus({
   ];
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md select-none">
-      <div className="relative w-full max-w-[440px] bg-[#121215] border border-[#27272a] rounded-2xl p-5 shadow-2xl flex flex-col text-white transition-all">
-        
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md select-none font-sans">
+      <MainLayoutColor
+        as="div"
+        background="surface"
+        className="relative w-full max-w-[460px] border border-[#27272a] rounded-2xl p-5 shadow-2xl flex flex-col transition-all"
+      >
         {isSubmitted ? (
           /* Success Screen */
           <div className="py-10 flex flex-col items-center justify-center text-center animate-fadeIn">
-            <div className="w-12 h-12 rounded-full bg-[#ffd60a]/10 border border-[#ffd60a]/40 flex items-center justify-center text-[#ffd60a] mb-3">
+            <div className="w-12 h-12 rounded-full bg-[#ffd60a]/10 border border-[#ffd60a]/40 flex items-center justify-center text-[var(--color-yellow,#ffd60a)] mb-3">
               <CheckCircle2 size={28} />
             </div>
-            <h3 className="text-[15px] font-bold text-white mb-1">
+            <MainLayoutColor
+              as={MainLayoutTextSize}
+              color="title"
+              size="sectionTitle"
+              className="font-bold mb-1 block text-[15px]"
+            >
               Saved Successfully!
-            </h3>
-            <p className="text-[11px] text-[#71717a]">
+            </MainLayoutColor>
+            <MainLayoutColor
+              as={MainLayoutTextSize}
+              color="subtitle"
+              size="subInfoText"
+              className="block text-[12px]"
+            >
               User permissions have been updated.
-            </p>
+            </MainLayoutColor>
           </div>
         ) : (
-          
           <>
-            
-            <div className="pb-3 mb-3 border-b border-[#27272a]/60">
-              <h2 className="text-[13px] font-bold tracking-wide">
+            {/* Header */}
+            <div className="pb-3 mb-3 border-b border-[#27272a]">
+              <MainLayoutColor
+                as={MainLayoutTextSize}
+                color="title"
+                size="sectionTitle"
+                className="font-bold tracking-wide block text-[14px]"
+              >
                 Permissions
-              </h2>
+              </MainLayoutColor>
             </div>
 
-            <form
-              onSubmit={handleSubmit}
-              className="flex flex-col gap-4 text-[10.5px]"
-            >
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               {/* Permissions Grid */}
               <div className="grid grid-cols-2 gap-x-4 gap-y-2.5">
                 <div className="flex flex-col gap-2.5">
-                  {permissionListLeft.map((item) => (
-                    <label
-                      key={item.id}
-                      onClick={() => handlePermissionChange(item.id)}
-                      className="flex items-center gap-2.5 cursor-pointer text-[#d4d4d8] hover:text-white transition-colors"
-                    >
-                      <div
-                        className={`w-4 h-4 rounded-md border flex items-center justify-center transition-all shrink-0 ${
-                          formData.permissions[item.id]
-                            ? "border-[#ffd60a] bg-[#ffd60a] text-black"
-                            : "border-[#3f3f46] bg-[#18181c]"
-                        }`}
+                  {permissionListLeft.map((item) => {
+                    const isChecked = formData.permissions[item.id];
+                    return (
+                      <label
+                        key={item.id}
+                        onClick={() => handlePermissionChange(item.id)}
+                        className="flex items-center gap-2.5 cursor-pointer transition-colors group py-0.5"
                       >
-                        {formData.permissions[item.id] && (
-                          <Check size={11} strokeWidth={3} />
-                        )}
-                      </div>
-                      <span className="font-medium text-[11px]">{item.label}</span>
-                    </label>
-                  ))}
+                        <div
+                          className={`w-4 h-4 rounded-md border flex items-center justify-center transition-all shrink-0 ${
+                            isChecked
+                              ? "border-[var(--color-yellow,#ffd60a)] bg-[var(--color-yellow,#ffd60a)] text-black"
+                              : "border-[#3f3f46] bg-[#18181b]/80 group-hover:border-[#52525b]"
+                          }`}
+                        >
+                          {isChecked && <Check size={11} strokeWidth={3} />}
+                        </div>
+                        <MainLayoutColor
+                          as={MainLayoutTextSize}
+                          color={isChecked ? "title" : "subtitle"}
+                          size="subInfoText"
+                          className="font-medium text-[12px] group-hover:text-white transition-colors"
+                        >
+                          {item.label}
+                        </MainLayoutColor>
+                      </label>
+                    );
+                  })}
                 </div>
 
                 <div className="flex flex-col gap-2.5">
-                  {permissionListRight.map((item) => (
-                    <label
-                      key={item.id}
-                      onClick={() => handlePermissionChange(item.id)}
-                      className="flex items-center gap-2.5 cursor-pointer text-[#d4d4d8] hover:text-white transition-colors"
-                    >
-                      <div
-                        className={`w-4 h-4 rounded-md border flex items-center justify-center transition-all shrink-0 ${
-                          formData.permissions[item.id]
-                            ? "border-[#ffd60a] bg-[#ffd60a] text-black"
-                            : "border-[#3f3f46] bg-[#18181c]"
-                        }`}
+                  {permissionListRight.map((item) => {
+                    const isChecked = formData.permissions[item.id];
+                    return (
+                      <label
+                        key={item.id}
+                        onClick={() => handlePermissionChange(item.id)}
+                        className="flex items-center gap-2.5 cursor-pointer transition-colors group py-0.5"
                       >
-                        {formData.permissions[item.id] && (
-                          <Check size={11} strokeWidth={3} />
-                        )}
-                      </div>
-                      <span className="font-medium text-[11px]">{item.label}</span>
-                    </label>
-                  ))}
+                        <div
+                          className={`w-4 h-4 rounded-md border flex items-center justify-center transition-all shrink-0 ${
+                            isChecked
+                              ? "border-[var(--color-yellow,#ffd60a)] bg-[var(--color-yellow,#ffd60a)] text-black"
+                              : "border-[#3f3f46] bg-[#18181b]/80 group-hover:border-[#52525b]"
+                          }`}
+                        >
+                          {isChecked && <Check size={11} strokeWidth={3} />}
+                        </div>
+                        <MainLayoutColor
+                          as={MainLayoutTextSize}
+                          color={isChecked ? "title" : "subtitle"}
+                          size="subInfoText"
+                          className="font-medium text-[12px] group-hover:text-white transition-colors"
+                        >
+                          {item.label}
+                        </MainLayoutColor>
+                      </label>
+                    );
+                  })}
                 </div>
               </div>
 
-            
               {/* Additional Notes */}
               <div>
-                <label className="block text-[#71717a] mb-1 font-medium">
+                <MainLayoutColor
+                  as="label"
+                  color="subtitle"
+                  className="block mb-1 font-medium text-[12px]"
+                >
                   Additional Notes
-                </label>
+                </MainLayoutColor>
                 <textarea
                   rows={3}
                   value={formData.additionalNotes}
                   onChange={handleNotesChange}
                   placeholder="Enter internal remarks or onboarding notes..."
-                  className="w-full bg-[#18181c] border border-[#27272a] rounded-xl p-2.5 text-white placeholder-[#52525b] focus:outline-none focus:border-[#ffd60a] transition-all resize-none text-[10.5px]"
+                  className="w-full bg-[#18181b]/80 border border-[#27272a] rounded-xl p-2.5 text-[12px] text-white placeholder-[#A8A8A8] focus:outline-none focus:border-[var(--color-yellow,#ffd60a)] transition-all resize-none"
                 />
               </div>
 
               {/* Action Buttons */}
-              <div className="grid grid-cols-2 gap-2.5 pt-2 border-t border-[#27272a]/60">
-                <button
+              <div className="grid grid-cols-2 gap-2.5 pt-2 border-t border-[#27272a]">
+                <MainHeaderActionButton
                   type="button"
+                  variant="secondary"
                   onClick={onClose}
-                  className="w-full py-2.5 rounded-xl text-[11px] font-semibold bg-[#27272a]/70 hover:bg-[#27272a] text-white transition-colors cursor-pointer"
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                  className="w-full py-2.5 px-4 rounded-xl bg-[#18181b] hover:bg-[#27272a] text-[#a1a1aa] hover:text-white border border-[#27272a] cursor-pointer"
                 >
-                  Cancel
-                </button>
-                <button
+                  <span className="text-[14px] font-medium whitespace-nowrap leading-none">
+                    Cancel
+                  </span>
+                </MainHeaderActionButton>
+
+                <MainHeaderActionButton
                   type="submit"
-                  className="w-full py-2.5 rounded-xl text-[11px] font-bold text-black bg-[#ffd60a] hover:bg-[#e6c200] transition-colors cursor-pointer"
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                  className="w-full py-2.5 px-4 rounded-xl bg-[#ffd60a] hover:bg-[#e6c200] text-black font-bold border border-[#ffd60a] cursor-pointer"
                 >
-                  Save
-                </button>
+                  <span className="text-[14px] font-bold text-black whitespace-nowrap leading-none">
+                    Save
+                  </span>
+                </MainHeaderActionButton>
               </div>
             </form>
           </>
         )}
-      </div>
+      </MainLayoutColor>
     </div>
   );
 }

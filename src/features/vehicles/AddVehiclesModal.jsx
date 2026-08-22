@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import MainLayoutButton from "../../components/Ui/MainLayoutUI/MainLayoutButton";
 import MainDropDown from "../../components/Ui/MainLayoutUI/MainDropDown";
-
+import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
+import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
 
 const VEHICLE_TYPE_OPTIONS = [
   { label: "Truck", value: "Truck" },
@@ -91,203 +92,334 @@ export default function AddVehicleModal({ isOpen, onClose, onNext }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/70 backdrop-blur-xs select-none animate-fadeIn">
-      <div className="relative w-full max-w-[480px] bg-[#121214] border border-[#27272a] rounded-2xl p-4 shadow-2xl flex flex-col overflow-visible">
-        
-        <div className="pb-2 mb-2 border-b border-[#1d1d20]/60">
-          <h2 className="text-[14px] font-bold text-white tracking-tight">
+      <MainLayoutColor
+        as="div"
+        background="surface"
+        className="relative w-full max-w-[480px] max-h-[90vh] border border-[#27272a] rounded-2xl p-4 shadow-2xl flex flex-col font-sans overflow-hidden"
+      >
+        {/* 14px Modal Header */}
+        <div className="pb-2.5 mb-2 border-b border-[#1d1d20]/60 shrink-0">
+          <MainLayoutColor
+            as={MainLayoutTextSize}
+            color="title"
+            size="sectionTitle"
+            className="font-medium tracking-tight block"
+          >
             Add Vehicle
-          </h2>
+          </MainLayoutColor>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-2 text-[10.5px]">
-          
-          <div className="grid grid-cols-2 gap-2">
+        {/* Scrollable Form Body */}
+        <form onSubmit={handleSubmit} className="flex-1 flex flex-col min-h-0">
+          <div className="flex-1 overflow-y-auto custom-scrollbar pr-1 flex flex-col gap-2.5">
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="subInfoText"
+                  className="block mb-1 font-medium"
+                >
+                  Vehicle Number
+                </MainLayoutColor>
+                <input
+                  type="text"
+                  name="vehicleNumber"
+                  placeholder="Enter Vehicle Number"
+                  value={formData.vehicleNumber}
+                  onChange={handleChange}
+                  className={`w-full bg-[#18181b]/60 border rounded-lg px-2.5 py-1.5 text-[12px] text-white placeholder-[#52525b] focus:outline-none transition-all ${
+                    errors.vehicleNumber
+                      ? "border-red-500 focus:border-red-500"
+                      : "border-[#27272a] focus:border-[#ffd60a]"
+                  }`}
+                />
+                {errors.vehicleNumber && (
+                  <p className="text-red-500 text-[10px] mt-0.5">{errors.vehicleNumber}</p>
+                )}
+              </div>
+
+              <div>
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="subInfoText"
+                  className="block mb-1 font-medium"
+                >
+                  Registration Number
+                </MainLayoutColor>
+                <input
+                  type="text"
+                  name="registrationNumber"
+                  placeholder="Enter Registration Number"
+                  value={formData.registrationNumber}
+                  onChange={handleChange}
+                  className={`w-full bg-[#18181b]/60 border rounded-lg px-2.5 py-1.5 text-[12px] text-white placeholder-[#52525b] focus:outline-none transition-all ${
+                    errors.registrationNumber
+                      ? "border-red-500 focus:border-red-500"
+                      : "border-[#27272a] focus:border-[#ffd60a]"
+                  }`}
+                />
+                {errors.registrationNumber && (
+                  <p className="text-red-500 text-[10px] mt-0.5">{errors.registrationNumber}</p>
+                )}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="subInfoText"
+                  className="block mb-1 font-medium"
+                >
+                  Vehicle Type
+                </MainLayoutColor>
+                <MainDropDown
+                  label="Enter Vehicle Type"
+                  options={VEHICLE_TYPE_OPTIONS}
+                  selectedValue={formData.vehicleType}
+                  onSelect={(val) => handleDropdownSelect("vehicleType", val)}
+                  className={`w-full justify-between rounded-lg bg-[#18181b]/60 border py-1.5 px-2.5 text-white ${
+                    errors.vehicleType ? "border-red-500" : "border-[#27272a]"
+                  }`}
+                />
+                {errors.vehicleType && (
+                  <p className="text-red-500 text-[10px] mt-0.5">{errors.vehicleType}</p>
+                )}
+              </div>
+
+              <div>
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="subInfoText"
+                  className="block mb-1 font-medium"
+                >
+                  Manufacturer
+                </MainLayoutColor>
+                <MainDropDown
+                  label="Enter Manufacturer Name"
+                  options={MANUFACTURER_OPTIONS}
+                  selectedValue={formData.manufacturer}
+                  onSelect={(val) => handleDropdownSelect("manufacturer", val)}
+                  className={`w-full justify-between rounded-lg bg-[#18181b]/60 border py-1.5 px-2.5 text-white ${
+                    errors.manufacturer ? "border-red-500" : "border-[#27272a]"
+                  }`}
+                />
+                {errors.manufacturer && (
+                  <p className="text-red-500 text-[10px] mt-0.5">{errors.manufacturer}</p>
+                )}
+              </div>
+            </div>
+
             <div>
-              <label className="block text-[#a1a1aa] mb-0.5 font-medium">Vehicle Number</label>
+              <MainLayoutColor
+                as={MainLayoutTextSize}
+                color="subtitle"
+                size="subInfoText"
+                className="block mb-1 font-medium"
+              >
+                Model
+              </MainLayoutColor>
               <input
                 type="text"
-                name="vehicleNumber"
-                placeholder="Enter Vehicle Number"
-                value={formData.vehicleNumber}
+                name="model"
+                placeholder="Enter Model Number"
+                value={formData.model}
                 onChange={handleChange}
-                className={`w-full bg-[#18181b]/60 border rounded-lg px-2.5 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all ${
-                  errors.vehicleNumber ? "border-red-500 focus:border-red-500" : "border-[#27272a] focus:border-[#ffd60a]"
+                className={`w-full bg-[#18181b]/60 border rounded-lg px-2.5 py-1.5 text-[12px] text-white placeholder-[#52525b] focus:outline-none transition-all ${
+                  errors.model
+                    ? "border-red-500 focus:border-red-500"
+                    : "border-[#27272a] focus:border-[#ffd60a]"
                 }`}
               />
-              {errors.vehicleNumber && <p className="text-red-500 text-[9px] mt-0.5">{errors.vehicleNumber}</p>}
+              {errors.model && (
+                <p className="text-red-500 text-[10px] mt-0.5">{errors.model}</p>
+              )}
             </div>
+
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="subInfoText"
+                  className="block mb-1 font-medium"
+                >
+                  Manufacturing Year
+                </MainLayoutColor>
+                <MainDropDown
+                  label="Enter Manufacturing Year"
+                  options={MANUFACTURING_YEAR_OPTIONS}
+                  selectedValue={formData.manufacturingYear}
+                  onSelect={(val) => handleDropdownSelect("manufacturingYear", val)}
+                  className={`w-full justify-between rounded-lg bg-[#18181b]/60 border py-1.5 px-2.5 text-white ${
+                    errors.manufacturingYear ? "border-red-500" : "border-[#27272a]"
+                  }`}
+                />
+                {errors.manufacturingYear && (
+                  <p className="text-red-500 text-[10px] mt-0.5">{errors.manufacturingYear}</p>
+                )}
+              </div>
+
+              <div>
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="subInfoText"
+                  className="block mb-1 font-medium"
+                >
+                  Fuel Type
+                </MainLayoutColor>
+                <MainDropDown
+                  label="Enter Fuel Type"
+                  options={FUEL_TYPE_OPTIONS}
+                  selectedValue={formData.fuelType}
+                  onSelect={(val) => handleDropdownSelect("fuelType", val)}
+                  className={`w-full justify-between rounded-lg bg-[#18181b]/60 border py-1.5 px-2.5 text-white ${
+                    errors.fuelType ? "border-red-500" : "border-[#27272a]"
+                  }`}
+                />
+                {errors.fuelType && (
+                  <p className="text-red-500 text-[10px] mt-0.5">{errors.fuelType}</p>
+                )}
+              </div>
+            </div>
+
             <div>
-              <label className="block text-[#a1a1aa] mb-0.5 font-medium">Registration Number</label>
+              <MainLayoutColor
+                as={MainLayoutTextSize}
+                color="subtitle"
+                size="subInfoText"
+                className="block mb-1 font-medium"
+              >
+                Vehicle Capacity
+              </MainLayoutColor>
               <input
                 type="text"
-                name="registrationNumber"
-                placeholder="Enter Registration Number"
-                value={formData.registrationNumber}
+                name="vehicleCapacity"
+                placeholder="Enter Vehicle Capacity"
+                value={formData.vehicleCapacity}
                 onChange={handleChange}
-                className={`w-full bg-[#18181b]/60 border rounded-lg px-2.5 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all ${
-                  errors.registrationNumber ? "border-red-500 focus:border-red-500" : "border-[#27272a] focus:border-[#ffd60a]"
+                className={`w-full bg-[#18181b]/60 border rounded-lg px-2.5 py-1.5 text-[12px] text-white placeholder-[#52525b] focus:outline-none transition-all ${
+                  errors.vehicleCapacity
+                    ? "border-red-500 focus:border-red-500"
+                    : "border-[#27272a] focus:border-[#ffd60a]"
                 }`}
               />
-              {errors.registrationNumber && <p className="text-red-500 text-[9px] mt-0.5">{errors.registrationNumber}</p>}
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-2">
-            <div>
-              <label className="block text-[#a1a1aa] mb-0.5 font-medium">Vehicle Type</label>
-              <MainDropDown
-                label="Enter Vehicle Type"
-                options={VEHICLE_TYPE_OPTIONS}
-                selectedValue={formData.vehicleType}
-                onSelect={(val) => handleDropdownSelect("vehicleType", val)}
-                className={`w-full justify-between rounded-lg bg-[#18181b]/60 border py-1.5 px-2.5 text-white ${
-                  errors.vehicleType ? "border-red-500" : "border-[#27272a]"
-                }`}
-              />
-              {errors.vehicleType && <p className="text-red-500 text-[9px] mt-0.5">{errors.vehicleType}</p>}
+              {errors.vehicleCapacity && (
+                <p className="text-red-500 text-[10px] mt-0.5">{errors.vehicleCapacity}</p>
+              )}
             </div>
 
             <div>
-              <label className="block text-[#a1a1aa] mb-0.5 font-medium">Manufacturer</label>
-              <Dropdown
-                label="Enter Manufacturer Name"
-                options={MANUFACTURER_OPTIONS}
-                selectedValue={formData.manufacturer}
-                onSelect={(val) => handleDropdownSelect("manufacturer", val)}
-                className={`w-full justify-between rounded-lg bg-[#18181b]/60 border py-1.5 px-2.5 text-white ${
-                  errors.manufacturer ? "border-red-500" : "border-[#27272a]"
-                }`}
-              />
-              {errors.manufacturer && <p className="text-red-500 text-[9px] mt-0.5">{errors.manufacturer}</p>}
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-[#a1a1aa] mb-0.5 font-medium">Model</label>
-            <input
-              type="text"
-              name="model"
-              placeholder="Enter Model Number"
-              value={formData.model}
-              onChange={handleChange}
-              className={`w-full bg-[#18181b]/60 border rounded-lg px-2.5 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all ${
-                errors.model ? "border-red-500 focus:border-red-500" : "border-[#27272a] focus:border-[#ffd60a]"
-              }`}
-            />
-            {errors.model && <p className="text-red-500 text-[9px] mt-0.5">{errors.model}</p>}
-          </div>
-
-          <div className="grid grid-cols-2 gap-2">
-            <div>
-              <label className="block text-[#a1a1aa] mb-0.5 font-medium">Manufacturing Year</label>
-              <Dropdown
-                label="Enter Manufacturing Year"
-                options={MANUFACTURING_YEAR_OPTIONS}
-                selectedValue={formData.manufacturingYear}
-                onSelect={(val) => handleDropdownSelect("manufacturingYear", val)}
-                className={`w-full justify-between rounded-lg bg-[#18181b]/60 border py-1.5 px-2.5 text-white ${
-                  errors.manufacturingYear ? "border-red-500" : "border-[#27272a]"
-                }`}
-              />
-              {errors.manufacturingYear && <p className="text-red-500 text-[9px] mt-0.5">{errors.manufacturingYear}</p>}
-            </div>
-
-            <div>
-              <label className="block text-[#a1a1aa] mb-0.5 font-medium">Fuel Type</label>
-              <Dropdown
-                label="Enter Fuel Type"
-                options={FUEL_TYPE_OPTIONS}
-                selectedValue={formData.fuelType}
-                onSelect={(val) => handleDropdownSelect("fuelType", val)}
-                className={`w-full justify-between rounded-lg bg-[#18181b]/60 border py-1.5 px-2.5 text-white ${
-                  errors.fuelType ? "border-red-500" : "border-[#27272a]"
-                }`}
-              />
-              {errors.fuelType && <p className="text-red-500 text-[9px] mt-0.5">{errors.fuelType}</p>}
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-[#a1a1aa] mb-0.5 font-medium">Vehicle Capacity</label>
-            <input
-              type="text"
-              name="vehicleCapacity"
-              placeholder="Enter Vehicle Capacity"
-              value={formData.vehicleCapacity}
-              onChange={handleChange}
-              className={`w-full bg-[#18181b]/60 border rounded-lg px-2.5 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all ${
-                errors.vehicleCapacity ? "border-red-500 focus:border-red-500" : "border-[#27272a] focus:border-[#ffd60a]"
-              }`}
-            />
-            {errors.vehicleCapacity && <p className="text-red-500 text-[9px] mt-0.5">{errors.vehicleCapacity}</p>}
-          </div>
-
-          <div>
-            <label className="block text-[#a1a1aa] mb-0.5 font-medium">Chassis Number</label>
-            <input
-              type="text"
-              name="chassisNumber"
-              placeholder="Enter Chassis Number"
-              value={formData.chassisNumber}
-              onChange={handleChange}
-              className={`w-full bg-[#18181b]/60 border rounded-lg px-2.5 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all ${
-                errors.chassisNumber ? "border-red-500 focus:border-red-500" : "border-[#27272a] focus:border-[#ffd60a]"
-              }`}
-            />
-            {errors.chassisNumber && <p className="text-red-500 text-[9px] mt-0.5">{errors.chassisNumber}</p>}
-          </div>
-
-          <div className="grid grid-cols-2 gap-2">
-            <div>
-              <label className="block text-[#a1a1aa] mb-0.5 font-medium">Engine Number</label>
+              <MainLayoutColor
+                as={MainLayoutTextSize}
+                color="subtitle"
+                size="subInfoText"
+                className="block mb-1 font-medium"
+              >
+                Chassis Number
+              </MainLayoutColor>
               <input
                 type="text"
-                name="engineNumber"
-                placeholder="Enter Engine Number"
-                value={formData.engineNumber}
+                name="chassisNumber"
+                placeholder="Enter Chassis Number"
+                value={formData.chassisNumber}
                 onChange={handleChange}
-                className={`w-full bg-[#18181b]/60 border rounded-lg px-2.5 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all ${
-                  errors.engineNumber ? "border-red-500 focus:border-red-500" : "border-[#27272a] focus:border-[#ffd60a]"
+                className={`w-full bg-[#18181b]/60 border rounded-lg px-2.5 py-1.5 text-[12px] text-white placeholder-[#52525b] focus:outline-none transition-all ${
+                  errors.chassisNumber
+                    ? "border-red-500 focus:border-red-500"
+                    : "border-[#27272a] focus:border-[#ffd60a]"
                 }`}
               />
-              {errors.engineNumber && <p className="text-red-500 text-[9px] mt-0.5">{errors.engineNumber}</p>}
+              {errors.chassisNumber && (
+                <p className="text-red-500 text-[10px] mt-0.5">{errors.chassisNumber}</p>
+              )}
             </div>
-            <div>
-              <label className="block text-[#a1a1aa] mb-0.5 font-medium">Vehicle Color</label>
-              <input
-                type="text"
-                name="vehicleColor"
-                placeholder="Enter Vehicle color"
-                value={formData.vehicleColor}
-                onChange={handleChange}
-                className={`w-full bg-[#18181b]/60 border rounded-lg px-2.5 py-1.5 text-white placeholder-[#52525b] focus:outline-none transition-all ${
-                  errors.vehicleColor ? "border-red-500 focus:border-red-500" : "border-[#27272a] focus:border-[#ffd60a]"
-                }`}
-              />
-              {errors.vehicleColor && <p className="text-red-500 text-[9px] mt-0.5">{errors.vehicleColor}</p>}
+
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="subInfoText"
+                  className="block mb-1 font-medium"
+                >
+                  Engine Number
+                </MainLayoutColor>
+                <input
+                  type="text"
+                  name="engineNumber"
+                  placeholder="Enter Engine Number"
+                  value={formData.engineNumber}
+                  onChange={handleChange}
+                  className={`w-full bg-[#18181b]/60 border rounded-lg px-2.5 py-1.5 text-[12px] text-white placeholder-[#52525b] focus:outline-none transition-all ${
+                    errors.engineNumber
+                      ? "border-red-500 focus:border-red-500"
+                      : "border-[#27272a] focus:border-[#ffd60a]"
+                  }`}
+                />
+                {errors.engineNumber && (
+                  <p className="text-red-500 text-[10px] mt-0.5">{errors.engineNumber}</p>
+                )}
+              </div>
+
+              <div>
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="subInfoText"
+                  className="block mb-1 font-medium"
+                >
+                  Vehicle Color
+                </MainLayoutColor>
+                <input
+                  type="text"
+                  name="vehicleColor"
+                  placeholder="Enter Vehicle color"
+                  value={formData.vehicleColor}
+                  onChange={handleChange}
+                  className={`w-full bg-[#18181b]/60 border rounded-lg px-2.5 py-1.5 text-[12px] text-white placeholder-[#52525b] focus:outline-none transition-all ${
+                    errors.vehicleColor
+                      ? "border-red-500 focus:border-red-500"
+                      : "border-[#27272a] focus:border-[#ffd60a]"
+                  }`}
+                />
+                {errors.vehicleColor && (
+                  <p className="text-red-500 text-[10px] mt-0.5">{errors.vehicleColor}</p>
+                )}
+              </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-2 pt-2 mt-2 border-t border-[#1d1d20]">
-            <button
+          {/* Action Buttons using headerButtonText */}
+          <div className="grid grid-cols-2 gap-2 pt-3 mt-2 border-t border-[#1d1d20] shrink-0">
+            <MainLayoutButton
               type="button"
+              variant="secondary"
               onClick={onClose}
-              className="w-full py-1.5 px-3 rounded-lg text-[11px] font-semibold bg-[#27272a]/60 hover:bg-[#27272a] text-[#d4d4d8] transition-colors cursor-pointer"
+              className="w-full justify-center py-2"
             >
-              Cancel
-            </button>
+              <MainLayoutTextSize size="headerButtonText">
+                Cancel
+              </MainLayoutTextSize>
+            </MainLayoutButton>
+            
             <MainLayoutButton
               type="submit"
               variant="primary"
-              className="w-full py-1.5 rounded-lg text-[11px] font-bold text-black bg-[#ffd60a] hover:bg-[#e6c200]"
+              className="w-full justify-center py-2"
             >
-              Next
+              <MainLayoutTextSize size="headerButtonText">
+                Next
+              </MainLayoutTextSize>
             </MainLayoutButton>
           </div>
-
         </form>
-
-      </div>
+      </MainLayoutColor>
     </div>
   );
 }
