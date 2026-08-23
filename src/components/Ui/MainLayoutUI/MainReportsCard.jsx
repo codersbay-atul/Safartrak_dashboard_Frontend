@@ -1,5 +1,5 @@
 import React from "react";
-import { ArrowUpRight, Truck } from "lucide-react";
+import { ArrowRight, Truck } from "lucide-react";
 import MainLayoutColor from "./MainLayoutColor";
 import MainLayoutTextSize from "./MainLayoutTextSize";
 
@@ -50,10 +50,10 @@ export default function MainReportCard({
   {actionLabel}
 </MainLayoutColor>
 
-        <ArrowUpRight
+        <ArrowRight
           size={14}
           strokeWidth={2.25}
-          className="text-[#FDBB24] shrink-0 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+          className="text-[#9D6F00] shrink-0 transition-transform duration-200 group-hover:translate-x-0.5"
         />
       </div>
     </MainLayoutColor>

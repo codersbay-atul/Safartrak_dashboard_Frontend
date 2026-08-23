@@ -1,6 +1,8 @@
 import React, { useMemo } from "react";
 import { ArrowLeft, Download, Loader2 } from "lucide-react";
-import MainLayoutButton from "../../components/Ui/MainLayoutUI/MainLayoutButton";
+import { MAIN_LAYOUT_TEXT_SIZES } from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
+import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
+import MainHeaderActionButton from "../../components/Ui/MainLayoutUI/MainHeaderActionButton";
 
 function isMissingValue(value) {
   if (value == null) return true;
@@ -76,7 +78,10 @@ export default function ReportResults({
             onClick={onBack}
             className="flex items-center gap-1.5 text-[11px] text-[#a1a1aa] hover:text-white transition-colors cursor-pointer"
           >
-            <ArrowLeft size={13} className="stroke-[2.5]" />
+            <ArrowLeft
+              size={13}
+              className="stroke-[2.5] text-[#9D6F00]"
+            />
             Back
           </button>
           <h2 className="text-[13px] font-bold text-white tracking-tight truncate">
@@ -90,17 +95,14 @@ export default function ReportResults({
         </div>
 
         {onExport ? (
-          <MainLayoutButton
-            variant="primary"
-            size="sm"
+          <MainHeaderActionButton
             icon={isExporting ? Loader2 : Download}
             iconPosition="right"
             onClick={onExport}
             disabled={isExporting || isLoading || Boolean(errorMessage)}
-            className="!w-[120px] min-w-[120px] !h-[35px] !rounded-[8px] !bg-[#FFC107] hover:!bg-[#e6ac00] active:scale-[0.98] !text-black !font-normal !text-[14px] !px-[14px] !py-0 gap-2 whitespace-nowrap flex-nowrap flex-shrink-0 [&_svg]:size-[14px]"
           >
             Export
-          </MainLayoutButton>
+          </MainHeaderActionButton>
         ) : null}
       </div>
 
@@ -111,8 +113,10 @@ export default function ReportResults({
               key={key}
               className="rounded-lg border border-[#232329] bg-[#16161a] px-3 py-2 min-w-[120px]"
             >
-              <p className="text-[9.5px] text-[#71717a] font-bold uppercase tracking-wider">
-                {humanizeKey(key)}
+              <p className={`uppercase tracking-wider ${MAIN_LAYOUT_TEXT_SIZES.metricText}`}>
+                <MainLayoutColor color="subtitle">
+                  {humanizeKey(key)}
+                </MainLayoutColor>
               </p>
               <p className="text-[13px] font-bold text-white mt-0.5">
                 {formatTotalValue(value)}
@@ -143,14 +147,16 @@ export default function ReportResults({
                   {columns.map((col) => (
                     <th
                       key={col}
-                      className="text-left text-[10px] font-bold text-[#71717a] uppercase tracking-wider px-3 py-2.5 whitespace-nowrap"
+                      className={`text-left tracking-wider px-3 py-2.5 whitespace-nowrap uppercase ${MAIN_LAYOUT_TEXT_SIZES.metricText}`}
                     >
-                      {humanizeKey(col)}
+                      <MainLayoutColor color="subtitle">
+                        {humanizeKey(col)}
+                      </MainLayoutColor>
                     </th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#1d1d20]/50 text-[10.5px]">
+              <tbody className="divide-y divide-[#1d1d20]/50">
                 {rows.map((row, index) => (
                   <tr
                     key={row?.id ?? row?.unique_id ?? index}
@@ -159,9 +165,11 @@ export default function ReportResults({
                     {columns.map((col) => (
                       <td
                         key={col}
-                        className="px-3 py-2.5 text-[#d4d4d8] whitespace-nowrap"
+                        className={`px-3 py-2.5 whitespace-nowrap ${MAIN_LAYOUT_TEXT_SIZES.plateText}`}
                       >
-                        {displayValue(row?.[col])}
+                        <MainLayoutColor color="white">
+                          {displayValue(row?.[col])}
+                        </MainLayoutColor>
                       </td>
                     ))}
                   </tr>

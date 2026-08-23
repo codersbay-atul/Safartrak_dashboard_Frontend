@@ -31,6 +31,7 @@ import ApiKeyCredentialsPage from "./pages/ApiKeyCredentials";
 import Document from "./features/apikey/Document";
 import Products from "./pages/Products";
 import BillandPayment from "./pages/BillandPayment";
+import UnderConstruction from "./pages/UnderConstruction";
 
 function AppContent() {
   const dispatch = useDispatch();
@@ -197,7 +198,7 @@ function AppContent() {
           }
         />
         <Route
-          path="/products"
+          path="/your-products/products"
           element={
             <ProtectedRoute>
               <Products />
@@ -210,6 +211,23 @@ function AppContent() {
           element={
             <ProtectedRoute>
               <BillandPayment />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/your-products/list"
+          element={
+            <ProtectedRoute>
+              <UnderConstruction />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/your-products/workflows"
+          element={
+            <ProtectedRoute>
+              <UnderConstruction />
             </ProtectedRoute>
           }
         />
