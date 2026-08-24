@@ -278,6 +278,7 @@ export default function Sidebar() {
           w-56
           xl:w-60
           h-screen
+          lg:h-full
           border-r
           border-[#2A2A2F]
           flex
@@ -290,15 +291,10 @@ export default function Sidebar() {
           duration-300
           ease-in-out
 
-          ${
-            isOpen
-              ? "translate-x-0"
-              : "-translate-x-full lg:translate-x-0"
-          }
+          ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
         `}
       >
         <div className="flex flex-col flex-1 min-h-0">
-
           {/* =================================================
               LOGO
           ================================================= */}
@@ -371,10 +367,7 @@ export default function Sidebar() {
             "
           >
             {sections.map((section) => (
-              <div
-                key={section.title}
-                className="flex flex-col gap-0.5"
-              >
+              <div key={section.title} className="flex flex-col gap-0.5">
                 {/* =========================================
                     SECTION TITLE
                 ========================================= */}
@@ -396,9 +389,7 @@ export default function Sidebar() {
                 </SideColor>
 
                 <div className="flex flex-col gap-2">
-
                   {section.items.map((item) => {
-
                     /* =====================================
                        YOUR PRODUCTS
                     ===================================== */
@@ -410,7 +401,6 @@ export default function Sidebar() {
 
                       return (
                         <div key={item.label}>
-
                           {/* =================================
                               YOUR PRODUCTS PARENT
                           ================================= */}
@@ -428,8 +418,7 @@ export default function Sidebar() {
                               cursor-pointer
 
                               ${
-                                isProductRoute ||
-                                isProductsOpen
+                                isProductRoute || isProductsOpen
                                   ? "bg-[#232328] text-white"
                                   : "text-[#D4D4D4] hover:bg-[#232328]"
                               }
@@ -441,37 +430,33 @@ export default function Sidebar() {
                               onClick={handleProductsToggle}
                               className="flex min-w-0 flex-1 items-center gap-2.5"
                             >
-                            {/* Product icon */}
+                              {/* Product icon */}
 
-                            <SideIcon
-                              icon={item.icon}
-                              strokeWidth={
-                                isProductRoute
-                                  ? 2.5
-                                  : 2
-                              }
-                            />
+                              <SideIcon
+                                icon={item.icon}
+                                strokeWidth={isProductRoute ? 2.5 : 2}
+                              />
 
-                            {/* Product text */}
+                              {/* Product text */}
 
-                            <SideColor
-                              as={SideTextSize}
-                              color="text"
-                              className="
+                              <SideColor
+                                as={SideTextSize}
+                                color="text"
+                                className="
                                 flex-1
                                 min-w-0
                                 truncate
                                 text-left
                               "
-                            >
-                              {item.label}
-                            </SideColor>
+                              >
+                                {item.label}
+                              </SideColor>
 
-                            {/* New */}
+                              {/* New */}
 
-                            {item.badge && (
-                              <span
-                                className="
+                              {item.badge && (
+                                <span
+                                  className="
                                   inline-flex
                                   items-center
                                   px-2
@@ -485,11 +470,10 @@ export default function Sidebar() {
                                   leading-none
                                   whitespace-nowrap
                                 "
-                              >
-                                {item.badge}
-                              </span>
-                            )}
-
+                                >
+                                  {item.badge}
+                                </span>
+                              )}
                             </NavLink>
 
                             <button
@@ -509,20 +493,14 @@ export default function Sidebar() {
                                   transition-transform
                                   duration-200
 
-                                  ${
-                                    isProductsOpen
-                                      ? "rotate-180"
-                                      : "rotate-0"
-                                  }
+                                  ${isProductsOpen ? "rotate-180" : "rotate-0"}
                                 `}
                               />
                             </button>
                           </div>
 
                           {isProductsOpen && (
-                            <SideNavDrawerItem
-                              onNavigate={handleNavigation}
-                            />
+                            <SideNavDrawerItem onNavigate={handleNavigation} />
                           )}
                         </div>
                       );
@@ -532,8 +510,7 @@ export default function Sidebar() {
                        NORMAL SIDEBAR ITEM
                     ===================================== */
 
-                    const targetPath =
-                      routeMap[item.label] || "/";
+                    const targetPath = routeMap[item.label] || "/";
 
                     return (
                       <NavLink
@@ -565,9 +542,7 @@ export default function Sidebar() {
                         <SideIcon
                           icon={item.icon}
                           strokeWidth={
-                            location.pathname === targetPath
-                              ? 2.5
-                              : 2
+                            location.pathname === targetPath ? 2.5 : 2
                           }
                         />
 
@@ -642,13 +617,9 @@ export default function Sidebar() {
             "
           >
             <div>
-              <p className="text-[14px] font-semibold text-white">
-                Need Help?
-              </p>
+              <p className="text-[14px] font-semibold text-white">Need Help?</p>
 
-              <p className="text-[13px] text-[#9CA3AF]">
-                Contact support
-              </p>
+              <p className="text-[13px] text-[#9CA3AF]">Contact support</p>
             </div>
 
             <SideColor color="icon">
