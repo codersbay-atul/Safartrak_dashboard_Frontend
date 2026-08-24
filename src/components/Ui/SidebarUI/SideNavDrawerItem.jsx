@@ -69,7 +69,7 @@ export default function SideNavDrawerItem({ onNavigate }) {
               to={item.path}
               preventScrollReset
               onClick={onNavigate}
-              className={({ isActive }) => `
+              className={`
                 absolute
                 inset-y-0
                 left-[-2px]
@@ -81,14 +81,7 @@ export default function SideNavDrawerItem({ onNavigate }) {
                 rounded-md
                 pl-[40px]
                 pr-2
-                transition-colors
-                duration-150
-
-                ${
-                  isActive
-                    ? "bg-[#2A2A2F]"
-                    : "bg-transparent hover:bg-[#232328]"
-                }
+                bg-transparent
               `}
             >
               {({ isActive }) => (

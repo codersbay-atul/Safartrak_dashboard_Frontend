@@ -160,7 +160,7 @@ export default function Sidebar() {
         {
           icon: Key,
           label: "API Credentials",
-          badge: "New",
+          // badge: "New",
         },
       ],
     },
@@ -171,13 +171,13 @@ export default function Sidebar() {
         {
           icon: ShoppingCart,
           label: "Your Products",
-          badge: "New",
+          // badge: "New",
           expandable: true,
         },
         {
           icon: CreditCard,
           label: "Bills & Payments",
-          badge: "New",
+          // badge: "New",
         },
       ],
     },
