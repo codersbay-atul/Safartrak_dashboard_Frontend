@@ -77,7 +77,7 @@ export default function NavDataProtectionIcon() {
             >
               Enterprise data protection
             </MainLayoutColor>
-            {" applies to this work space."}
+            {" applies to this workspace."}
           </MainLayoutColor>
         </div>
       )}
