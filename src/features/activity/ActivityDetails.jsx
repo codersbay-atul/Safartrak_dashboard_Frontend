@@ -161,7 +161,7 @@ export default function ActivityDetails({
         >
           Activity Details
         </MainLayoutColor>
-        <MainStatusBadge label={detailsData.status} variant="active" pulse />
+        <MainStatusBadge label={detailsData.status} variant="Inactive" pulse />
       </div>
 
       <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar px-3 py-3 flex flex-col gap-3">

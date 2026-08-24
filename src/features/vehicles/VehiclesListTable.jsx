@@ -25,8 +25,8 @@ const VEHICLE_OPTIONS = [
 
 const TRACKING_OPTIONS = [
   { label: "Tracking status", value: "" },
-  { label: "Active", value: "active" },
-  { label: "Inactive", value: "inactive" },
+  { label: "Inactive", value: "Inactive" },
+  { label: "InInactive", value: "inInactive" },
 ];
 
 const STATUS_TABS = [
@@ -42,7 +42,7 @@ export default function VehicleListTable() {
   const [selectedFleet, setSelectedFleet] = useState("");
   const [selectedVehicleType, setSelectedVehicleType] = useState("");
   const [selectedTrackingStatus, setSelectedTrackingStatus] = useState("");
-  const [activeTab, setActiveTab] = useState("all");
+  const [InactiveTab, setInactiveTab] = useState("all");
   const [page, setPage] = useState(1);
 
   const {
@@ -55,7 +55,7 @@ export default function VehicleListTable() {
     refetch,
   } = useVehiclesList({
     search: searchQuery,
-    tab: activeTab,
+    tab: InactiveTab,
     fleetGroup: selectedFleet,
     vehicleType: selectedVehicleType,
     trackingStatus: selectedTrackingStatus,
@@ -147,16 +147,16 @@ export default function VehicleListTable() {
         {/* Status Filter Tabs */}
         <div className="flex items-center gap-1.5 pt-1 overflow-x-auto no-scrollbar">
           {STATUS_TABS.map((tab) => {
-            const isActive = activeTab === tab.id;
+            const isInactive = InactiveTab === tab.id;
             return (
               <button
                 key={tab.id}
                 onClick={() => {
-                  setActiveTab(tab.id);
+                  setInactiveTab(tab.id);
                   setPage(1);
                 }}
                 className={`px-3 py-1 rounded-full transition-all duration-200 shrink-0 cursor-pointer ${
-                  isActive
+                  isInactive
                     ? "bg-[#27272a] text-white shadow-sm border border-[#3f3f46]"
                     : "bg-[#121215] text-[#71717a] hover:text-white hover:bg-[#1d1d20] border border-transparent"
                 }`}

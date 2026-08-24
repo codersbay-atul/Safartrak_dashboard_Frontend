@@ -263,7 +263,7 @@ export default function GPSDeviceInfo({ onNext, onCancel, uniqueId, onSaved, sel
             <input
               type="text"
               name="gpsStatus"
-              placeholder="e.g. Online / Active"
+              placeholder="e.g. Online / Inactive"
               value={formData.gpsStatus}
               onChange={handleChange}
               className={`w-full bg-[#18181b]/60 border ${

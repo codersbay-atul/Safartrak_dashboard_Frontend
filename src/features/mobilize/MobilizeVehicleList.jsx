@@ -27,7 +27,7 @@ const ACTION_STYLES = {
 
 export default function MobilizeVehicleList({
   vehicles = [],
-  activeFilter,
+  InactiveFilter,
   onFilterChange,
   onAction,
   onSelectVehicle,
@@ -56,7 +56,7 @@ export default function MobilizeVehicleList({
             key={filter.value}
             onClick={() => onFilterChange(filter.value)}
             className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full transition-all duration-150 cursor-pointer shrink-0 ${
-              activeFilter === filter.value
+              InactiveFilter === filter.value
                 ? "bg-[#27272a] text-white border border-[#3f3f46]"
                 : "bg-[#18181b]/60 text-[#a1a1aa] border border-[#27272a] hover:border-[#3f3f46] hover:text-white"
             }`}

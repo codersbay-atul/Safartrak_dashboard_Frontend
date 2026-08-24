@@ -77,7 +77,7 @@ function parsePctWidth(value) {
 }
 
 export default function VehicleRouteDetails({ vehicle, onViewRoute, onClose }) {
-  const noActiveTrip = shouldShowNoActiveTrip(vehicle);
+  const noInactiveTrip = shouldShowNoActiveTrip(vehicle);
   const statusLabel = resolveRouteStatusLabel(vehicle);
   const badge = STATUS_BADGE[statusLabel] || {
     text: "text-zinc-300",
@@ -85,7 +85,7 @@ export default function VehicleRouteDetails({ vehicle, onViewRoute, onClose }) {
     dot: "bg-zinc-400",
   };
 
-  const remaining = noActiveTrip
+  const remaining = noInactiveTrip
     ? null
     : getTripField(vehicle, [
         "remaining_distance_km",
@@ -93,7 +93,7 @@ export default function VehicleRouteDetails({ vehicle, onViewRoute, onClose }) {
         "remainingDistanceKm",
         "remainingDistance",
       ]);
-  const progress = noActiveTrip
+  const progress = noInactiveTrip
     ? null
     : getTripField(vehicle, [
         "trip_progress_pct",
@@ -101,38 +101,38 @@ export default function VehicleRouteDetails({ vehicle, onViewRoute, onClose }) {
         "tripProgress",
         "progress_pct",
       ]);
-  const eta = noActiveTrip
+  const eta = noInactiveTrip
     ? null
     : getTripField(vehicle, ["eta", "eta_text", "etaText"]);
-  const origin = noActiveTrip
+  const origin = noInactiveTrip
     ? null
     : getTripField(vehicle, ["origin", "route_origin", "start_location"]);
-  const destination = noActiveTrip
+  const destination = noInactiveTrip
     ? null
     : getTripField(vehicle, [
         "destination",
         "route_destination",
         "end_location",
       ]);
-  const fuel = noActiveTrip
+  const fuel = noInactiveTrip
     ? null
     : getTripField(vehicle, ["fuel", "fuel_pct", "fuel_level", "fuelLevel"]);
-  const battery = noActiveTrip
+  const battery = noInactiveTrip
     ? null
     : getTripField(vehicle, ["battery", "battery_v", "battery_voltage"]);
-  const engineHealth = noActiveTrip
+  const engineHealth = noInactiveTrip
     ? null
     : getTripField(vehicle, ["engine_health", "engineHealth"]);
-  const odometer = noActiveTrip
+  const odometer = noInactiveTrip
     ? null
     : getTripField(vehicle, ["odometer", "odometer_km"]);
-  const ignition = noActiveTrip
+  const ignition = noInactiveTrip
     ? null
     : getTripField(vehicle, ["ignition", "ignition_status"]);
-  const gpsSignal = noActiveTrip
+  const gpsSignal = noInactiveTrip
     ? null
     : getTripField(vehicle, ["gps_signal", "gpsSignal", "device_status"]);
-  const address = noActiveTrip
+  const address = noInactiveTrip
     ? null
     : getTripField(vehicle, [
         "current_address",
@@ -142,7 +142,7 @@ export default function VehicleRouteDetails({ vehicle, onViewRoute, onClose }) {
 
   const progressWidth = parsePctWidth(progress);
   const fuelWidth = parsePctWidth(fuel);
-  const showRunningIndicator = !noActiveTrip && statusLabel === "Running";
+  const showRunningIndicator = !noInactiveTrip && statusLabel === "Running";
 
   return (
     <MainLayoutColor
@@ -236,14 +236,14 @@ export default function VehicleRouteDetails({ vehicle, onViewRoute, onClose }) {
 
       {/* 3. Timeline Tracker with Labels */}
       <div className="mb-3 mt-1.5 px-1 shrink-0">
-        {noActiveTrip ? (
+        {noInactiveTrip ? (
           <MainLayoutColor
             as={MainLayoutTextSize}
             color="subtitle"
             size="subInfoText"
             className="font-medium text-center py-2 block"
           >
-            No active trip available
+            No Inactive trip available
           </MainLayoutColor>
         ) : (
           <>

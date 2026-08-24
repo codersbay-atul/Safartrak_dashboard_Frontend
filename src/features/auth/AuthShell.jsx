@@ -183,10 +183,7 @@ export default function AuthShell({
 
         <div className="relative z-10 w-full flex items-end justify-end mb-2 lg:mb-3">
           {/* <SafarTrakWordmark className="h-5" /> */}
-          <div className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-white cursor-pointer transition-colors">
-            <span>English</span>
-            <ChevronDown size={14} />
-          </div>
+          
         </div>
 
         <div className="relative z-10 flex-1 w-full flex items-center justify-center">

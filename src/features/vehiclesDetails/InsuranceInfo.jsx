@@ -13,7 +13,7 @@ const COVERAGE_TYPE_OPTIONS = [
 ];
 
 const CLAIM_STATUS_OPTIONS = [
-  { label: "No Active Claim", value: "No Active Claim" },
+  { label: "No Inactive Claim", value: "No Inactive Claim" },
   { label: "Claim Pending", value: "Claim Pending" },
   { label: "Claim Approved", value: "Claim Approved" },
 ];

@@ -225,14 +225,14 @@ export default function VehicleControlConfirmation({
         <button
           type="button"
           onClick={onCancel}
-          className="w-full bg-[#27272a] hover:bg-[#3f3f46] active:scale-[0.98] text-white font-medium text-xs py-2.5 rounded-xl transition-all duration-150 cursor-pointer"
+          className="w-full bg-[#27272a] hover:bg-[#3f3f46] Inactive:scale-[0.98] text-white font-medium text-xs py-2.5 rounded-xl transition-all duration-150 cursor-pointer"
         >
           Cancel
         </button>
         <button
           type="button"
           onClick={onConfirm}
-          className="w-full flex items-center justify-center gap-2 bg-[#dc2626] hover:bg-[#b91c1c] active:scale-[0.98] text-white font-medium text-xs py-2.5 rounded-xl transition-all duration-150 cursor-pointer shadow-md shadow-rose-950/40"
+          className="w-full flex items-center justify-center gap-2 bg-[#dc2626] hover:bg-[#b91c1c] Inactive:scale-[0.98] text-white font-medium text-xs py-2.5 rounded-xl transition-all duration-150 cursor-pointer shadow-md shadow-rose-950/40"
         >
           <Lock className="w-4 h-4 stroke-2" />
           <span>Confirm Immobilization</span>

@@ -10,7 +10,7 @@ export default function VehiclesDetailsInfo({
   isLoading,
   isError,
 }) {
-  const [activeFilter, setActiveFilter] = useState("All");
+  const [InactiveFilter, setInactiveFilter] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
 
   const vehicles =
@@ -34,8 +34,8 @@ export default function VehiclesDetailsInfo({
             "Unknown",
         }))
       : [
-          { id: "MH14ZZ8765", type: "Heavy Truck", driver: "Ashoke Sharma", fleet: "West Fleet", status: "Active" },
-          { id: "MH14ZZ8766", type: "Heavy Truck", driver: "Ashoke Sharma", fleet: "West Fleet", status: "Active" },
+          { id: "MH14ZZ8765", type: "Heavy Truck", driver: "Ashoke Sharma", fleet: "West Fleet", status: "Inactive" },
+          { id: "MH14ZZ8766", type: "Heavy Truck", driver: "Ashoke Sharma", fleet: "West Fleet", status: "Inactive" },
           { id: "MH14ZZ8767", type: "Heavy Truck", driver: "Ashoke Sharma", fleet: "West Fleet", status: "Maint." },
           { id: "MH14ZZ8768", type: "Heavy Truck", driver: "Ashoke Sharma", fleet: "West Fleet", status: "Idle" },
           { id: "MH14ZZ8769", type: "Heavy Truck", driver: "Ashoke Sharma", fleet: "West Fleet", status: "Offline" },
@@ -43,7 +43,7 @@ export default function VehiclesDetailsInfo({
 
   const filters = [
     { label: "All Vehicles", value: "All", isYellowDot: false },
-    { label: "Active", value: "Active", color: "bg-emerald-500", isYellowDot: false },
+    { label: "Inactive", value: "Inactive", color: "bg-emerald-500", isYellowDot: false },
     { label: "Maint.", value: "Maint.", color: "", isYellowDot: true },
     { label: "Idle", value: "Idle", color: "bg-amber-500", isYellowDot: false },
     { label: "Offline", value: "Offline", color: "bg-zinc-500", isYellowDot: false },
@@ -51,7 +51,7 @@ export default function VehiclesDetailsInfo({
 
   const getStatusBadge = (status) => {
     switch (status) {
-      case "Active":
+      case "Inactive":
         return "bg-emerald-500/10 text-emerald-400 border-emerald-500/20";
       case "Maint.":
         return "bg-[#ffd60a]/10 border-[#ffd60a]/20";
@@ -63,7 +63,7 @@ export default function VehiclesDetailsInfo({
   };
 
   const filteredVehicles = vehicles.filter((v) => {
-    const matchesFilter = activeFilter === "All" || v.status === activeFilter;
+    const matchesFilter = InactiveFilter === "All" || v.status === InactiveFilter;
     const matchesSearch =
       (v.id || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
       (v.driver || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -89,7 +89,7 @@ export default function VehiclesDetailsInfo({
         </MainLayoutColor>
         <MainLayoutColor
           as="span"
-          background="filterInactiveBg"
+          background="filterInInactiveBg"
           className="text-[#a1a1aa] border border-[#232329] px-2 py-0.5 rounded-md"
         >
           <MainLayoutTextSize size="captionText" className="font-medium">
@@ -114,14 +114,14 @@ export default function VehiclesDetailsInfo({
       {/* Filter Tabs */}
       <div className="flex items-center gap-1.5 mb-2 overflow-x-auto no-scrollbar shrink-0 pb-0.5">
         {filters.map((filter) => {
-          const isActive = activeFilter === filter.value;
+          const isInactive = InactiveFilter === filter.value;
           return (
             <button
               key={filter.value}
               type="button"
-              onClick={() => setActiveFilter(filter.value)}
+              onClick={() => setInactiveFilter(filter.value)}
               className={`px-2.5 py-1 rounded-full whitespace-nowrap transition-all flex items-center gap-1.5 shrink-0 cursor-pointer ${
-                isActive
+                isInactive
                   ? "bg-[#27272a] text-white"
                   : "bg-[#18181b]/60 text-[#a1a1aa] hover:text-white"
               }`}

@@ -366,7 +366,7 @@ export default function VehicleControlCard({
       <button
         type="button"
         onClick={() => onRequestImmobilize?.(detail ?? vehicle)}
-        className="w-full flex items-center justify-center gap-1.5 bg-[#f59e0b] hover:bg-[#d97706] text-black active:scale-[0.99] py-2 px-3 rounded-xl transition-all duration-150 shrink-0 cursor-pointer"
+        className="w-full flex items-center justify-center gap-1.5 bg-[#f59e0b] hover:bg-[#d97706] text-black Inactive:scale-[0.99] py-2 px-3 rounded-xl transition-all duration-150 shrink-0 cursor-pointer"
       >
         <Lock className="w-3.5 h-3.5 stroke-2" />
         <MainLayoutTextSize size="headerButtonText">

@@ -18,7 +18,7 @@ export default function Alerts() {
   const [searchQuery, setSearchQuery] = useState("");
   const [fleetFilter, setFleetFilter] = useState("all");
   const [severityFilter, setSeverityFilter] = useState("all");
-  const [activeType, setActiveType] = useState("all");
+  const [InactiveType, setInactiveType] = useState("all");
 
   const { count, isLoading: isCountLoading } = useAlertCount();
   const { summary, isLoading: isSummaryLoading } = useAlertSummary();
@@ -29,7 +29,7 @@ export default function Alerts() {
     isError: isTypesError,
   } = useAlertTypes();
 
-  const geofenceMode = isGeofenceAlertType(activeType);
+  const geofenceMode = isGeofenceAlertType(InactiveType);
   const geofenceRange = useMemo(
     () => (geofenceMode ? getDefaultGeofenceRange() : null),
     [geofenceMode]
@@ -91,9 +91,9 @@ export default function Alerts() {
           .toLowerCase() === severityFilter;
 
       const matchesType =
-        activeType === "all" ||
+        InactiveType === "all" ||
         geofenceMode ||
-        alert.type === activeType;
+        alert.type === InactiveType;
 
       return matchesSearch && matchesFleet && matchesSeverity && matchesType;
     });
@@ -102,12 +102,12 @@ export default function Alerts() {
     searchQuery,
     fleetFilter,
     severityFilter,
-    activeType,
+    InactiveType,
     geofenceMode,
   ]);
 
   return (
-    <MainLayout activeTab="Alerts">
+    <MainLayout InactiveTab="Alerts">
       <div className="flex-1 flex flex-col gap-2.5 min-h-0 min-w-0 overflow-y-auto min-[1152px]:overflow-hidden pr-0.5 text-white custom-scrollbar">
         <div className="shrink-0">
           <AlertsHeader
@@ -128,8 +128,8 @@ export default function Alerts() {
         <div className="shrink-0">
           <AlertTypeGrid
             types={types}
-            activeType={activeType}
-            onTypeSelect={setActiveType}
+            InactiveType={InactiveType}
+            onTypeSelect={setInactiveType}
             isLoading={isTypesLoading}
             isError={isTypesError}
           />

@@ -32,6 +32,7 @@ import Document from "./features/apikey/Document";
 import Products from "./pages/Products";
 import BillandPayment from "./pages/BillandPayment";
 import UnderConstruction from "./pages/UnderConstruction";
+import IotSim from "./pages/IotSim";
 
 function AppContent() {
   const dispatch = useDispatch();
@@ -198,7 +199,7 @@ function AppContent() {
           }
         />
         <Route
-          path="/your-products/products"
+          path="/your-products/Subscriptions"
           element={
             <ProtectedRoute>
               <Products />
@@ -216,21 +217,21 @@ function AppContent() {
         />
 
         <Route
-          path="/your-products/list"
+          path="/your-products/IOT SIM"
           element={
             <ProtectedRoute>
-              <UnderConstruction />
+              <IotSim />
             </ProtectedRoute>
           }
         />
-        <Route
+        {/* <Route
           path="/your-products/workflows"
           element={
             <ProtectedRoute>
               <UnderConstruction />
             </ProtectedRoute>
           }
-        />
+        /> */}
 
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route path="*" element={<Navigate to="/dashboard" replace />} />

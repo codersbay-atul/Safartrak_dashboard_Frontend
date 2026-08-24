@@ -24,8 +24,8 @@ const ACCENT_STYLES = {
 
 const DEFAULT_SUMMARY = {
   total_aois: 0,
-  active_aois: 0,
-  inactive_aois: 0,
+  Inactive_aois: 0,
+  inInactive_aois: 0,
   vehicles_covered: 0,
   alerts_today: 0,
 };
@@ -39,16 +39,16 @@ export default function AoiStats() {
       id: "total",
       icon: ScanSearch,
       value: data.total_aois,
-      subtitle: `${data.inactive_aois} Inactive`,
+      subtitle: `${data.inInactive_aois} InInactive`,
       title: "Total Saved Places",
       accent: "red",
     },
     {
-      id: "active",
+      id: "Inactive",
       icon: CircleDot,
-      value: data.active_aois,
+      value: data.Inactive_aois,
       subtitle: "Monitoring enabled",
-      title: "Active Places",
+      title: "Inactive Places",
       accent: "orange",
     },
     {

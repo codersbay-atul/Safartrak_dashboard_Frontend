@@ -4,7 +4,7 @@ import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextS
 
 export default function AlertTypeGrid({
   types = [],
-  activeType = "all",
+  InactiveType = "all",
   onTypeSelect,
   isLoading = false,
   isError = false,
@@ -54,7 +54,7 @@ export default function AlertTypeGrid({
         <div className="grid grid-cols-2 min-[420px]:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-1.5 sm:gap-2">
           {types.map((type) => {
             const Icon = type.icon;
-            const isActive = activeType === type.id;
+            const isInactive = InactiveType === type.id;
 
             return (
               <MainLayoutColor
@@ -65,10 +65,10 @@ export default function AlertTypeGrid({
                 borderHover="cardBorderHover"
                 type="button"
                 onClick={() =>
-                  onTypeSelect?.(isActive ? "all" : type.id)
+                  onTypeSelect?.(isInactive ? "all" : type.id)
                 }
                 className={`relative flex min-w-0 flex-col items-center justify-center gap-1 rounded-xl border px-1.5 py-2.5 sm:gap-1.5 sm:px-2 sm:py-3 min-h-[68px] sm:min-h-[72px] transition-all cursor-pointer ${
-                  isActive
+                  isInactive
                     ? "bg-[#FDBB24]/10 text-white"
                     : "text-[#d4d4d8]"
                 }`}
@@ -82,7 +82,7 @@ export default function AlertTypeGrid({
                 {Icon && (
                   <Icon
                     size={16}
-                    className={isActive ? "text-[#FDBB24]" : "text-[#a1a1aa]"}
+                    className={isInactive ? "text-[#FDBB24]" : "text-[#a1a1aa]"}
                   />
                 )}
                 <MainLayoutTextSize

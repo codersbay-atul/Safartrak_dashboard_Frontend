@@ -7,7 +7,7 @@ import Document from "../features/apikey/Document";
 
 export default function ApiKeyCredentialsPage() {
   return (
-    <MainLayout activeTab="API Credentials">
+    <MainLayout InactiveTab="API Credentials">
       <div className="flex-1 flex flex-col gap-2.5 h-full min-h-0 min-w-0 overflow-y-auto pr-0.5 custom-scrollbar">
         <div className="shrink-0">
           <ApiKeyHeader />

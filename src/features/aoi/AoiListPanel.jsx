@@ -50,14 +50,14 @@ export default function AoiListPanel({
 
       <div className="flex items-center gap-2 overflow-x-auto pb-2 mb-2 shrink-0 no-scrollbar flex-nowrap w-full">
         {AOI_FILTERS.map((filter) => {
-          const isActive = statusFilter === filter.value;
+          const isInactive = statusFilter === filter.value;
           return (
             <button
               key={filter.value}
               type="button"
               onClick={() => onFilterChange(filter.value)}
               className={`flex items-center gap-2 px-3.5 py-1.5 rounded-full transition-all duration-200 cursor-pointer shrink-0 ${
-                isActive
+                isInactive
                   ? "bg-[#27272a] text-white"
                   : "bg-[#18181b] text-[#8e8e93] hover:text-white"
               }`}
@@ -77,7 +77,7 @@ export default function AoiListPanel({
         {aois.length > 0 ? (
           aois.map((aoi) => {
             const isSelected = selectedId === aoi.id;
-            const isActive = aoi.status === "active";
+            const isInactive = aoi.status === "Inactive";
 
             return (
               <MainLayoutColor
@@ -134,13 +134,13 @@ export default function AoiListPanel({
                   {/* Badge */}
                   <span
                     className={`shrink-0 px-3 py-1 rounded-full transition-colors ${
-                      isActive
+                      isInactive
                         ? "bg-[#042814] text-[#10b981]"
                         : "bg-[#2e1d05] text-[#d97706]"
                     }`}
                   >
                     <MainLayoutTextSize size="badgeText" className="font-medium">
-                      {isActive ? "Active" : "Inactive"}
+                      {isInactive ? "Active" : "Inactive"}
                     </MainLayoutTextSize>
                   </span>
                 </div>

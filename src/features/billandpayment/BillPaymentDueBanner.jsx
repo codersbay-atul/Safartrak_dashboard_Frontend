@@ -29,7 +29,7 @@ export default function BillPaymentDueBanner({
           alignItems: "center",
           justifyContent: "center",
         }}
-        className="shrink-0 px-5 py-2.5 rounded-lg bg-[#F5B700] hover:bg-[#d9a200] active:scale-[0.98] text-black border border-[#F5B700] transition-all cursor-pointer shadow-sm"
+        className="shrink-0 px-5 py-2.5 rounded-lg bg-[#F5B700] hover:bg-[#d9a200] Inactive:scale-[0.98] text-black border border-[#F5B700] transition-all cursor-pointer shadow-sm"
       >
         <span className="text-[14px] font-semibold text-black whitespace-nowrap leading-none">
           Pay Now

@@ -61,7 +61,7 @@ export default function Vehicles() {
   };
 
   return (
-    <MainLayout activeTab="Vehicles">
+    <MainLayout InactiveTab="Vehicles">
       <div className="flex-1 flex flex-col gap-2.5 min-h-0 min-w-0 overflow-y-auto min-[1152px]:overflow-hidden pr-0.5 custom-scrollbar">
         {/* Top Header */}
         <div className="shrink-0">

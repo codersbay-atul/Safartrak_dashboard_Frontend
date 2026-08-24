@@ -11,7 +11,7 @@ export default function AoiDetailsPanel({
   onDelete,
   onViewVehicle,
 }) {
-  const [activeTab, setActiveTab] = useState("Overview");
+  const [InactiveTab, setInactiveTab] = useState("Overview");
 
   const [vehicleSearch, setVehicleSearch] = useState("");
   const [vehicleFilter, setVehicleFilter] = useState("all");
@@ -37,7 +37,7 @@ export default function AoiDetailsPanel({
     );
   }
 
-  const isActive = aoi.status === "active";
+  const isInactive = aoi.status === "Inactive";
   const displayType = aoi.type || aoi.raw?.geometry?.shape || "";
   const displayRadius = aoi.radius ?? aoi.size ?? "";
   const displayLocation =
@@ -131,13 +131,13 @@ export default function AoiDetailsPanel({
         <div className="mt-2">
           <span
             className={`px-3 py-1 rounded-full inline-block ${
-              isActive
+              isInactive
                 ? "bg-[#042814] text-[#10b981]"
                 : "bg-[#2e1d05] text-[#d97706]"
             }`}
           >
             <MainLayoutTextSize size="badgeText" className="font-medium">
-              {isActive ? "Active" : "Inactive"}
+              {isInactive ? "Inactive" : "InInactive"}
             </MainLayoutTextSize>
           </span>
         </div>
@@ -146,12 +146,12 @@ export default function AoiDetailsPanel({
       {/* Tabs */}
       <div className="flex items-center border-b border-[#1f1f23] mb-4 shrink-0 w-full">
         {TABS.map((tab) => {
-          const isSelected = activeTab === tab;
+          const isSelected = InactiveTab === tab;
           return (
             <button
               key={tab}
               type="button"
-              onClick={() => setActiveTab(tab)}
+              onClick={() => setInactiveTab(tab)}
               className={`flex-1 py-2 transition-all text-center relative cursor-pointer ${
                 isSelected
                   ? "text-[#f59e0b]"
@@ -174,7 +174,7 @@ export default function AoiDetailsPanel({
 
       <div className="flex-none lg:flex-1 min-h-0 overflow-y-visible lg:overflow-y-auto custom-scrollbar pr-1">
         {/* ==================== OVERVIEW TAB ==================== */}
-        {activeTab === "Overview" && (
+        {InactiveTab === "Overview" && (
           <div className="space-y-6">
             <div>
               <MainLayoutColor
@@ -352,7 +352,7 @@ export default function AoiDetailsPanel({
         )}
 
         {/* ==================== VEHICLE TAB ==================== */}
-        {activeTab === "Vehicle" && (
+        {InactiveTab === "Vehicle" && (
           <div className="space-y-4">
             <div className="relative w-full">
               <input
@@ -483,7 +483,7 @@ export default function AoiDetailsPanel({
         )}
 
         {/* ==================== ALERTS TAB ==================== */}
-        {activeTab === "Alerts" && (
+        {InactiveTab === "Alerts" && (
           <div className="space-y-4">
             <div className="relative w-full">
               <input
@@ -603,7 +603,7 @@ export default function AoiDetailsPanel({
         )}
 
         {/* ==================== ACTIVITY TAB ==================== */}
-        {activeTab === "Activity" && (
+        {InactiveTab === "Activity" && (
           <div className="space-y-4 pt-1">
             {activitiesList.length > 0 ? (
               activitiesList.map((act, idx) => (

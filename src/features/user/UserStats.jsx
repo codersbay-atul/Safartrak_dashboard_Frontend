@@ -5,9 +5,9 @@ import { MainStatsCard } from "../../components/Ui/MainLayoutUI/MainStatsCard";
 
 const DEFAULT_SUMMARY = {
   total_users: 0,
-  active: 0,
+  Inactive: 0,
   pending_invites: 0,
-  inactive: 0,
+  inInactive: 0,
 };
 
 function formatSummaryValue(value) {
@@ -66,11 +66,11 @@ export default function UserStats() {
       showArrow: false,
     },
     {
-      id: "active-users",
+      id: "Inactive-users",
       icon: UserCheck,
-      value: isLoading ? "..." : formatSummaryValue(summary.active),
-      subtitle: "Currently active",
-      bottomLabel: "Active User",
+      value: isLoading ? "..." : formatSummaryValue(summary.Inactive),
+      subtitle: "Currently Inactive",
+      bottomLabel: "Inactive User",
       bgIcon: "bg-[#2d2203] border border-[#4d3a05]",
       colorIcon: "text-[#ffd60a]",
       showArrow: false,
@@ -86,11 +86,11 @@ export default function UserStats() {
       showArrow: false,
     },
     {
-      id: "inactive-users",
+      id: "inInactive-users",
       icon: UserX,
-      value: isLoading ? "..." : formatSummaryValue(summary.inactive),
-      subtitle: "Not active",
-      bottomLabel: "Inactive User",
+      value: isLoading ? "..." : formatSummaryValue(summary.inInactive),
+      subtitle: "Not Inactive",
+      bottomLabel: "InInactive User",
       bgIcon: "bg-[#2d2203] border border-[#4d3a05]",
       colorIcon: "text-[#ffd60a]",
       showArrow: false,

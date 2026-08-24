@@ -8,43 +8,20 @@ import PaymentInvoiceModal from "../features/billandpayment/PaymentInvoiceModal"
 export default function Products() {
   const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState(false);
 
-  const invoice = {
-    id: "G177502127",
-    billingPeriod: "Aug 10, 2026 to Aug 10, 2026",
-    invoiceDate: "Aug 11, 2026",
-    billingProfile: "Zevon Systems LLP",
-    dueDate: "August 12, 2026",
-    amount: "3,091.31",
-  };
-
   const handlePayNow = () => {
     setIsInvoiceModalOpen(true);
   };
 
-  const handleNewProduct = () => {
-    console.log("New Product clicked");
-    // Add new product logic here
-  };
-
   return (
     <>
-      <MainLayout activeTab="Your Products">
+      <MainLayout InactiveTab="Your Products">
         <div className="flex-1 flex flex-col gap-2.5 min-h-0 min-w-0 overflow-y-auto min-[1152px]:overflow-hidden pr-0.5 custom-scrollbar">
           <div className="shrink-0">
-            <ProductsHeader
-              title="Your Products"
-              subtitle="Manage your active subscriptions, licenses, and billing profiles for all SafarTrak solutions."
-              onNewProductClick={handleNewProduct}
-            />
+            <ProductsHeader />
           </div>
 
           <div className="shrink-0">
-            <ProductDueBanner
-              daysLeft={2}
-              amount="2,950"
-              dueDate="Aug 20, 2026"
-              onPayNow={handlePayNow}
-            />
+            <ProductDueBanner onPayNow={handlePayNow} />
           </div>
 
           <div className="shrink-0 w-full overflow-hidden">
@@ -56,7 +33,6 @@ export default function Products() {
       <PaymentInvoiceModal
         isOpen={isInvoiceModalOpen}
         onClose={() => setIsInvoiceModalOpen(false)}
-        invoice={invoice}
       />
     </>
   );

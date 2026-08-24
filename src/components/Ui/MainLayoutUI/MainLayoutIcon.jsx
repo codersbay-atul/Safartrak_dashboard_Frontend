@@ -15,12 +15,15 @@ import {
   Radio,
   Truck,
   AlertTriangle,
+  Copy,
+  Check,
 } from "lucide-react";
 
 export const MAIN_LAYOUT_ICON_SIZES = {
   refresh: 14,
   cross: 13,
   close: 13,
+  copy: 12.5,
   kpi: 16,
   kpiLarge: 20,
   metric: 11.5,
@@ -37,6 +40,8 @@ const ICON_MAP = {
   refresh: RefreshCw,
   cross: X,
   close: X,
+  copy: Copy,
+  check: Check,
   trend: TrendingUp,
   activity: Activity,
   power: Zap,

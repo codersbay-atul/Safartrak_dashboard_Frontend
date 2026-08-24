@@ -51,7 +51,7 @@ function buildGenerateBody(report, { from, to, vehicles = [] }) {
 export default function Reports() {
   const [isCustomReportView, setIsCustomReportView] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeReport, setActiveReport] = useState(null);
+  const [InactiveReport, setInactiveReport] = useState(null);
   const [reportResult, setReportResult] = useState(null);
   const [resultError, setResultError] = useState(null);
   const [lastPayload, setLastPayload] = useState(null);
@@ -68,7 +68,7 @@ export default function Reports() {
   const generateMutation = useGenerateReport();
 
   const handleReportSelect = ({ report, result, error, lastPayload: payload, isLoading }) => {
-    setActiveReport(report);
+    setInactiveReport(report);
     setReportResult(result);
     setResultError(error);
     setLastPayload(payload);
@@ -169,7 +169,7 @@ export default function Reports() {
   };
 
   const handleBack = () => {
-    setActiveReport(null);
+    setInactiveReport(null);
     setReportResult(null);
     setResultError(null);
     setLastPayload(null);
@@ -193,10 +193,10 @@ export default function Reports() {
     setResultError(null);
   };
 
-  const showResultsView = activeReport != null;
+  const showResultsView = InactiveReport != null;
 
   return (
-    <MainLayout activeTab="Reports">
+    <MainLayout InactiveTab="Reports">
       <div className="flex-1 flex flex-col gap-2.5 min-h-0 overflow-y-auto pr-0.5 custom-scrollbar">
         {isCustomReportView ? (
           <div className="flex-1 flex flex-col gap-4 min-h-0">
@@ -238,7 +238,7 @@ export default function Reports() {
 
             {showResultsView ? (
               <ReportResults
-                title={activeReport.title}
+                title={InactiveReport.title}
                 result={reportResult}
                 isLoading={isGenerating || generateMutation.isPending}
                 isExporting={isExporting}

@@ -78,18 +78,18 @@ const iconMap = {
 };
 
 export default function Navbar({
-  activeTab,
+  InactiveTab,
   isRouteView,
   onExitRouteView,
   user,
 }) {
-  const ActiveIcon = iconMap[activeTab] || LayoutDashboard;
+  const InactiveIcon = iconMap[InactiveTab] || LayoutDashboard;
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const showRouteBreadcrumb = activeTab === "Dashboard" && isRouteView;
+  const showRouteBreadcrumb = InactiveTab === "Dashboard" && isRouteView;
 
   const [beforeCursor, setBeforeCursor] = useState(null);
-  const [activePopover, setActivePopover] = useState(null);
+  const [InactivePopover, setInactivePopover] = useState(null);
   const [isAnnouncementOpen, setIsAnnouncementOpen] = useState(false);
 
   const {
@@ -113,7 +113,7 @@ export default function Navbar({
   const unreadCount = notifications?.unread_count ?? 0;
 
   const togglePopover = (key) => {
-    setActivePopover((prev) => (prev === key ? null : key));
+    setInactivePopover((prev) => (prev === key ? null : key));
   };
 
   const handleMarkAllRead = async () => {
@@ -130,7 +130,7 @@ export default function Navbar({
     }
   };
 
-  const closePopover = () => setActivePopover(null);
+  const closePopover = () => setInactivePopover(null);
 
   const handleLogout = () => {
     dispatch(clearAuth());
@@ -147,7 +147,7 @@ export default function Navbar({
     >
       <div className="flex items-center gap-2 xl:gap-2.5 min-w-0 flex-1">
         <div className="w-10 h-1 shrink-0 lg:hidden" />
-        <ActiveIcon size={20} className="text-[#71717a] shrink-0" />
+        <InactiveIcon size={20} className="text-[#71717a] shrink-0" />
         {showRouteBreadcrumb ? (
           <div className="flex items-center gap-1.5 min-w-0">
             <NavBreadcrumb
@@ -164,7 +164,7 @@ export default function Navbar({
             size="moduleName"
             className="truncate font-semibold"
           >
-            {activeTab || "Dashboard"}
+            {InactiveTab || "Dashboard"}
           </NavTextColor>
         )}
       </div>
@@ -173,12 +173,12 @@ export default function Navbar({
         <div className="flex items-center gap-4">
           <NavDataProtectionIcon />
           <NavPopoverWrapper
-            isOpen={activePopover === "notif"}
+            isOpen={InactivePopover === "notif"}
             onClose={closePopover}
           >
             <NavTooltip
               label="Notifications"
-              disabled={activePopover === "notif"}
+              disabled={InactivePopover === "notif"}
             >
               <NavNotificationIcon
                 count={unreadCount}
@@ -188,7 +188,7 @@ export default function Navbar({
 
             {/* Notifications Popover */}
             <MainPopOver
-              isOpen={activePopover === "notif"}
+              isOpen={InactivePopover === "notif"}
               className="w-80 right-0 p-3"
             >
               <div className="flex items-center justify-between border-b border-[#27272a] pb-2 mb-2">
@@ -297,7 +297,7 @@ export default function Navbar({
 
         {/* User Profile Popover */}
         <NavPopoverWrapper
-          isOpen={activePopover === "profile"}
+          isOpen={InactivePopover === "profile"}
           onClose={closePopover}
         >
           <div className="pl-1.5 sm:pl-3 border-l border-[#27272a]">
@@ -310,7 +310,7 @@ export default function Navbar({
           </div>
 
           <MainPopOver
-            isOpen={activePopover === "profile"}
+            isOpen={InactivePopover === "profile"}
             className="w-44 right-0 p-1.5"
           >
             <NavMenuItem

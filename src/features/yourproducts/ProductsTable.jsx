@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { Filter, ArrowUpDown, Search } from "lucide-react";
-import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
-import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
 
 const PRODUCTS_DATA = [
   {
@@ -48,13 +46,13 @@ export default function ProductsTable() {
   const getStatusBadge = (status) => {
     switch (status.toLowerCase()) {
       case "active":
-        return "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
+        return "bg-[#0c2417] text-[#22c55e]";
       case "pending":
-        return "bg-amber-500/10 text-amber-400 border border-amber-500/20";
+        return "bg-[#291e0a] text-[#f59e0b]";
       case "expired":
-        return "bg-rose-500/10 text-rose-400 border border-rose-500/20";
+        return "bg-[#270e0f] text-[#ef4444]";
       default:
-        return "bg-[#18181b] text-[#a1a1aa] border border-[#27272a]";
+        return "bg-[#18181b] text-[#a1a1aa]";
     }
   };
 
@@ -63,42 +61,28 @@ export default function ProductsTable() {
   );
 
   return (
-    <MainLayoutColor
-      as="div"
-      background="surface"
-      className="w-full h-fit border border-[#27272a] rounded-2xl overflow-hidden select-none font-sans shadow-2xl"
-    >
-      {/* Table Toolbar / Header */}
-      <div className="px-4 py-3 flex flex-col gap-3 border-b border-[#27272a] shrink-0 z-20">
+    <div className="w-full h-fit bg-[#0d0e12] border border-[#1d1d20] rounded-xl overflow-hidden select-none">
+      <div className="px-4 py-3 flex flex-col gap-3 border-b border-[#1d1d20] shrink-0 bg-[#0d0e12] z-20 text-[12px]">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <MainLayoutColor
-            as={MainLayoutTextSize}
-            color="title"
-            size="sectionTitle"
-            className="font-bold tracking-wide block text-[14px]"
-          >
+          <h2 className="text-[12px] font-bold text-white tracking-wide">
             Active Products
-          </MainLayoutColor>
+          </h2>
 
           <div className="flex flex-wrap items-center justify-end gap-2.5">
             <button
               type="button"
-              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#18181b]/80 border border-[#27272a] text-[#a1a1aa] hover:text-white hover:border-[#3f3f46] text-[12px] transition cursor-pointer"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#121215] border border-[#27272a] text-[#a1a1aa] hover:text-white hover:border-[#3f3f46] text-[12px] transition cursor-pointer"
             >
-              <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText" className="text-[12px]">
-                Filter
-              </MainLayoutColor>
-              <Filter size={12} className="text-[#a1a1aa]" />
+              <span>Filter</span>
+              <Filter size={12} />
             </button>
 
             <button
               type="button"
-              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#18181b]/80 border border-[#27272a] text-[#a1a1aa] hover:text-white hover:border-[#3f3f46] text-[12px] transition cursor-pointer"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#121215] border border-[#27272a] text-[#a1a1aa] hover:text-white hover:border-[#3f3f46] text-[11px] transition cursor-pointer"
             >
-              <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText" className="text-[12px]">
-                Sort
-              </MainLayoutColor>
-              <ArrowUpDown size={12} className="text-[#a1a1aa]" />
+              <span>Sort</span>
+              <ArrowUpDown size={12} />
             </button>
 
             <div className="relative flex items-center w-[150px] sm:w-[170px]">
@@ -107,7 +91,7 @@ export default function ProductsTable() {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Search product..."
-                className="w-full h-8 pl-3 pr-7 bg-[#18181b]/80 border border-[#27272a] rounded-full text-[12px] text-white placeholder-[#A8A8A8] focus:outline-none focus:border-[var(--color-yellow,#ffd60a)] transition"
+                className="w-full h-8 pl-3 pr-7 bg-[#121215] border border-[#27272a] rounded-full text-[12px] text-white placeholder-[#71717a] focus:outline-none focus:border-[#3f3f46] transition"
               />
               <Search
                 size={12}
@@ -118,168 +102,73 @@ export default function ProductsTable() {
         </div>
       </div>
 
-      {/* Table Content */}
-      <div className="w-full overflow-x-auto [scrollbar-width:thin] custom-scrollbar">
-        <table className="w-full text-left border-collapse min-w-[900px]">
-          <thead>
-            <tr className="border-b border-[#27272a] bg-[#18181b]/40 uppercase">
-              <th className="py-2.5 px-3 pl-4">
-                <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText" className="font-semibold text-[12px] block">
-                  Product Name
-                </MainLayoutColor>
-              </th>
-              <th className="py-2.5 px-3">
-                <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText" className="font-semibold text-[12px] block">
-                  Assigned
-                </MainLayoutColor>
-              </th>
-              <th className="py-2.5 px-3">
-                <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText" className="font-semibold text-[12px] block">
-                  Available
-                </MainLayoutColor>
-              </th>
-              <th className="py-2.5 px-3">
-                <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText" className="font-semibold text-[12px] block">
-                  Status
-                </MainLayoutColor>
-              </th>
-              <th className="py-2.5 px-3">
-                <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText" className="font-semibold text-[12px] block">
-                  Renewal Date
-                </MainLayoutColor>
-              </th>
-              <th className="py-2.5 px-3">
-                <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText" className="font-semibold text-[12px] block">
-                  Billing Profile
-                </MainLayoutColor>
-              </th>
-              <th className="py-2.5 px-3">
-                <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText" className="font-semibold text-[12px] block">
-                  Purchase Channel
-                </MainLayoutColor>
-              </th>
-              <th className="py-2.5 px-3">
-                <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText" className="font-semibold text-[12px] block">
-                  Product Type
-                </MainLayoutColor>
-              </th>
-              <th className="py-2.5 px-3 pr-4">
-                <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText" className="font-semibold text-[12px] block">
-                  Pricing Model
-                </MainLayoutColor>
-              </th>
+      <div className="w-full overflow-x-auto [scrollbar-width:thin]">
+        <table className="w-full text-left border-collapse min-w-[900px] text-[12px]">
+          <thead className="bg-[#09090b] border-b border-[#1d1d20]">
+            <tr className="text-white text-[12px] font-medium uppercase tracking-wider">
+              <th className="py-2.5 px-3 pl-4 font-normal text-[12px] text-white">Product Name</th>
+              <th className="py-2.5 px-3 font-normal text-[12px] text-white">Assigned</th>
+              <th className="py-2.5 px-3 font-normal text-[12px] text-white">Available</th>
+              <th className="py-2.5 px-3 font-normal text-[12px] text-white">Status</th>
+              <th className="py-2.5 px-3 font-normal text-[12px] text-white">Renewal Date</th>
+              <th className="py-2.5 px-3 font-normal text-[12px] text-white">Billing Profile</th>
+              <th className="py-2.5 px-3 font-normal text-[12px] text-white">Purchase Channel</th>
+              <th className="py-2.5 px-3 font-normal text-[12px] text-white">Product Type</th>
+              <th className="py-2.5 px-3 pr-4 font-normal text-[12px] text-white">Pricing Model</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-[#27272a]/50">
+          <tbody className="divide-y divide-[#1d1d20]/50 text-[12px]">
             {filteredProducts.map((item) => (
               <tr
                 key={item.id}
-                className="hover:bg-[#18181b]/50 transition-colors align-middle cursor-pointer"
+                className="hover:bg-[#12121610] transition-colors text-[#d4d4d8] align-middle"
               >
-                <td className="py-3 px-3 pl-4">
-                  <MainLayoutColor
-                    as={MainLayoutTextSize}
-                    color="title"
-                    size="sectionTitle"
-                    className="font-medium text-[14px] block"
-                  >
-                    {item.productName}
-                  </MainLayoutColor>
+                <td className="py-3 px-3 pl-4 font-normal text-[14px]">
+                  {item.productName}
                 </td>
 
-                <td className="py-3 px-3">
-                  <MainLayoutColor
-                    as={MainLayoutTextSize}
-                    color="subtitle"
-                    size="sectionTitle"
-                    className="font-normal text-[14px] block"
-                  >
-                    {item.assignedLicense}
-                  </MainLayoutColor>
+                <td className="py-3 px-3 font-normal text-[#a1a1aa] text-[14px]">
+                  {item.assignedLicense}
                 </td>
 
-                <td className="py-3 px-3">
-                  <MainLayoutColor
-                    as={MainLayoutTextSize}
-                    color="subtitle"
-                    size="sectionTitle"
-                    className="font-normal text-[14px] block"
-                  >
-                    {item.availableLicense}
-                  </MainLayoutColor>
+                <td className="py-3 px-3 font-normal text-[#a1a1aa] text-[14px]">
+                  {item.availableLicense}
                 </td>
 
                 <td className="py-3 px-3">
                   <span
-                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full ${getStatusBadge(
+                    className={`inline-block px-2 py-1 rounded-full text-[12px] font-medium leading-none ${getStatusBadge(
                       item.status
                     )}`}
                   >
-                    <MainLayoutTextSize size="badgeText" className="font-medium text-[11px] whitespace-nowrap leading-none">
-                      {item.status}
-                    </MainLayoutTextSize>
+                    {item.status}
                   </span>
                 </td>
 
-                <td className="py-3 px-3">
-                  <MainLayoutColor
-                    as={MainLayoutTextSize}
-                    color="subtitle"
-                    size="sectionTitle"
-                    className="font-normal text-[14px] block"
-                  >
-                    {item.renewalDate}
-                  </MainLayoutColor>
+                <td className="py-3 px-3 font-normal text-[#a1a1aa] text-[14px]">
+                  {item.renewalDate}
                 </td>
 
-                <td className="py-3 px-3">
-                  <MainLayoutColor
-                    as={MainLayoutTextSize}
-                    color="subtitle"
-                    size="sectionTitle"
-                    className="font-normal text-[14px] block"
-                  >
-                    {item.billingProfile}
-                  </MainLayoutColor>
+                <td className="py-3 px-3 font-normal text-[#a1a1aa] text-[14px]">
+                  {item.billingProfile}
                 </td>
 
-                <td className="py-3 px-3">
-                  <MainLayoutColor
-                    as={MainLayoutTextSize}
-                    color="subtitle"
-                    size="sectionTitle"
-                    className="font-normal text-[14px] block"
-                  >
-                    {item.purchaseChannel}
-                  </MainLayoutColor>
+                <td className="py-3 px-3 font-normal text-[#a1a1aa] text-[14px]">
+                  {item.purchaseChannel}
                 </td>
 
-                <td className="py-3 px-3">
-                  <MainLayoutColor
-                    as={MainLayoutTextSize}
-                    color="subtitle"
-                    size="sectionTitle"
-                    className="font-normal text-[14px] block"
-                  >
-                    {item.productType}
-                  </MainLayoutColor>
+                <td className="py-3 px-3 font-normal text-[#a1a1aa] text-[14px]">
+                  {item.productType}
                 </td>
 
-                <td className="py-3 px-3 pr-4">
-                  <MainLayoutColor
-                    as={MainLayoutTextSize}
-                    color="subtitle"
-                    size="sectionTitle"
-                    className="font-normal text-[14px] block"
-                  >
-                    {item.pricingModel}
-                  </MainLayoutColor>
+                <td className="py-3 px-3 pr-4 font-normal text-[#a1a1aa] text-[14px]">
+                  {item.pricingModel}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-    </MainLayoutColor>
+    </div>
   );
 }

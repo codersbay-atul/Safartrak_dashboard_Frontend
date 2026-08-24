@@ -4,9 +4,43 @@ const MAIN_LAYOUT_COLORS = {
   // Surfaces & Backgrounds
   surface: "bg-[#141414]",
   background: "bg-[#09090b]",
-  filterActiveBg: "bg-[#292a30]",
-  filterInactiveBg: "bg-[#0d0e10]",
+  filterInactiveBg: "bg-[#292a30]",
+  filterInInactiveBg: "bg-[#0d0e10]",
   selectedRowBg: "bg-[#07080a]",
+
+  // Active Status Badges
+  greenStatusBadge: "text-[#34D399]",
+  greenStatusBadgeBg: "bg-[#052E1A]",
+  greenStatusBadgeBorder: "border-[#0E9F6E]",
+
+  // Inactive Status Badges
+  inactiveStatusBadge: "text-[#D1D5DB]",
+  inactiveStatusBadgeBg: "bg-[#1F2937]",
+  inactiveStatusBadgeBorder: "border-[#4B5563]",
+
+  // Expired Status Badges
+  expiredStatusBadge: "text-[#F87171]",
+  expiredStatusBadgeBg: "bg-[#3B0A12]",
+  expiredStatusBadgeBorder: "border-[#DC2626]",
+
+  // Pending Status Badges
+  pendingStatusBadge: "text-amber-400",
+  pendingStatusBadgeBg: "bg-amber-500/10",
+  pendingStatusBadgeBorder: "border-amber-500/20",
+
+  // KYC Specific Badges
+  kycYesStatusBadge: "text-[#34D399]",
+  kycYesStatusBadgeBg: "bg-[#052E1A]",
+  kycYesStatusBadgeBorder: "border-[#0E9F6E]",
+
+  kycNoStatusBadge: "text-[#FBBF24]",
+  kycNoStatusBadgeBg: "bg-[#3A1D00]",
+  kycNoStatusBadgeBorder: "border-[#D97706]",
+
+  // Standard Red Status Fallback
+  redStatusBadge: "text-[#F87171]",
+  redStatusBadgeBg: "bg-[#3B0A12]",
+  redStatusBadgeBorder: "border-[#DC2626]",
 
   // Global Borders
   cardBorder: "border-[#232329]",
@@ -26,8 +60,8 @@ const MAIN_LAYOUT_COLORS = {
   yellow: "text-[#FDB914]", 
 
   // Filter Buttons & Counts
-  filterTextActive: "text-[rgb(255,255,255)]",
-  filterTextInactive: "text-[#8e8e93]",
+  filterTextInactive: "text-[rgb(255,255,255)]",
+  filterTextInInactive: "text-[#8e8e93]",
   filterCount: "text-[#8e8e93]",
 
   // Filter Indicator Dots

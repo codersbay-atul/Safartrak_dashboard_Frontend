@@ -47,7 +47,7 @@ export default function VehicleAddedSuccessModal({
             <span className="text-white font-medium">{vehicleNumber}</span> has
             been added to the{" "}
             <span className="text-white font-medium">{fleetName}</span>. GPS
-            tracking is active and the vehicle is ready for assignment.
+            tracking is Inactive and the vehicle is ready for assignment.
           </MainLayoutColor>
         </div>
 

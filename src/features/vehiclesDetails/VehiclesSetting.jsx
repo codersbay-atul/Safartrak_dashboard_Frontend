@@ -30,8 +30,8 @@ export default function VehiclesSetting({
 
   const validateSettings = () => {
     // Validation Rule: At least one critical tracking/monitoring feature must remain enabled
-    const hasAnyActive = Object.values(settings).some((val) => val === true);
-    if (!hasAnyActive) {
+    const hasAnyInactive = Object.values(settings).some((val) => val === true);
+    if (!hasAnyInactive) {
       toast.error("At least one tracking or alert service must remain enabled.");
       return false;
     }

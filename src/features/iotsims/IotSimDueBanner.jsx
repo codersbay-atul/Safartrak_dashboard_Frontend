@@ -3,7 +3,7 @@ import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
 import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
 import MainHeaderActionButton from "../../components/Ui/MainLayoutUI/MainHeaderActionButton";
 
-export default function PaymentDueBanner({
+export default function IotSimDueBanner({
   daysLeft = 2,
   amount = "2,950",
   dueDate = "Aug 20, 2026",

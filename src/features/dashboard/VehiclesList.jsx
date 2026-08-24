@@ -60,7 +60,7 @@ export default function VehiclesList({
   selectedVehicle,
   search = "",
 }) {
-  const [activeFilter, setActiveFilter] = useState("All");
+  const [InactiveFilter, setInactiveFilter] = useState("All");
   const [selectedId, setSelectedId] = useState(
     () => selectedVehicle?.id ?? null
   );
@@ -74,10 +74,10 @@ export default function VehiclesList({
   const filteredVehicles = useMemo(
     () =>
       vehicles
-        .filter((vehicle) => matchesVehicleFilter(vehicle, activeFilter))
+        .filter((vehicle) => matchesVehicleFilter(vehicle, InactiveFilter))
         .slice()
         .sort((a, b) => getVehicleSortPriority(a) - getVehicleSortPriority(b)),
-    [vehicles, activeFilter]
+    [vehicles, InactiveFilter]
   );
 
   const filters = FILTER_DEFS.map((filter) => ({
@@ -123,14 +123,14 @@ export default function VehiclesList({
       {/* Filter Tabs */}
       <div className="flex items-center gap-2 overflow-x-auto pb-2 mb-1 px-4 shrink-0 no-scrollbar flex-nowrap">
         {filters.map((filter) => {
-          const isActive = activeFilter === filter.label;
+          const isInactive = InactiveFilter === filter.label;
           return (
             <MainLayoutColor
               key={filter.label}
               as="button"
-              background={isActive ? "filterActiveBg" : "filterInactiveBg"}
-              color={isActive ? "filterTextActive" : "filterTextInactive"}
-              onClick={() => setActiveFilter(filter.label)}
+              background={isInactive ? "filterInactiveBg" : "filterInInactiveBg"}
+              color={isInactive ? "filterTextInactive" : "filterTextInInactive"}
+              onClick={() => setInactiveFilter(filter.label)}
               className="flex items-center gap-2 px-3 py-1 rounded-full transition-colors shrink-0 cursor-pointer hover:text-white text-[11px]"
             >
               <MainLayoutColor

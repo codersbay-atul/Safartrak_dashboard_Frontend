@@ -31,7 +31,7 @@ export default function DriverDetailsPanel({ user, onUserUpdated, onResetPasswor
     );
   }
 
-  const isActive = String(user.status || "").toLowerCase() === "active";
+  const isInactive = String(user.status || "").toLowerCase() === "Inactive";
 
   const handleConfirmDeactivate = async () => {
     const userId = user?.id ?? user?.empId;
@@ -47,7 +47,7 @@ export default function DriverDetailsPanel({ user, onUserUpdated, onResetPasswor
 
       const updatedUser = {
         ...user,
-        status: "Inactive",
+        status: "InInactive",
       };
 
       onUserUpdated?.(updatedUser);
@@ -74,7 +74,7 @@ export default function DriverDetailsPanel({ user, onUserUpdated, onResetPasswor
 
       const updatedUser = {
         ...user,
-        status: "Active",
+        status: "Inactive",
       };
 
       onUserUpdated?.(updatedUser);
@@ -121,14 +121,14 @@ export default function DriverDetailsPanel({ user, onUserUpdated, onResetPasswor
 
           <span
             className={`flex items-center gap-1 shrink-0 px-2.5 py-0.5 rounded-full ${
-              isActive
+              isInactive
                 ? "text-emerald-400 bg-emerald-500/10 border border-emerald-500/20"
                 : "text-amber-400 bg-amber-500/10 border border-amber-500/20"
             }`}
           >
             <span
               className={`w-1.5 h-1.5 rounded-full ${
-                isActive ? "bg-emerald-400" : "bg-amber-400"
+                isInactive ? "bg-emerald-400" : "bg-amber-400"
               }`}
             />
             <MainLayoutTextSize size="badgeText" className="font-semibold whitespace-nowrap text-[11px]">
@@ -296,7 +296,7 @@ export default function DriverDetailsPanel({ user, onUserUpdated, onResetPasswor
 
         {/* Action Buttons: Centered inline row alignment */}
         <div className="pt-2.5 border-t border-[#27272a] grid grid-cols-2 gap-2 shrink-0">
-          {isActive ? (
+          {isInactive ? (
             <MainHeaderActionButton
               type="button"
               onClick={() => setIsDeactivateModalOpen(true)}
@@ -306,7 +306,7 @@ export default function DriverDetailsPanel({ user, onUserUpdated, onResetPasswor
                 alignItems: "center",
                 justifyContent: "center",
               }}
-              className="w-full py-2.5 px-3 rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 active:scale-[0.98] transition-all cursor-pointer flex-row items-center justify-center"
+              className="w-full py-2.5 px-3 rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 Inactive:scale-[0.98] transition-all cursor-pointer flex-row items-center justify-center"
             >
               <span className="flex items-center justify-center gap-1.5">
                 <UserX className="w-4 h-4 shrink-0 text-rose-400" />
@@ -326,7 +326,7 @@ export default function DriverDetailsPanel({ user, onUserUpdated, onResetPasswor
                 alignItems: "center",
                 justifyContent: "center",
               }}
-              className="w-full py-2.5 px-3 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 disabled:opacity-60 active:scale-[0.98] transition-all cursor-pointer flex-row items-center justify-center"
+              className="w-full py-2.5 px-3 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 disabled:opacity-60 Inactive:scale-[0.98] transition-all cursor-pointer flex-row items-center justify-center"
             >
               <span className="flex items-center justify-center gap-1.5">
                 <UserX className="w-4 h-4 shrink-0 text-emerald-400" />
@@ -346,7 +346,7 @@ export default function DriverDetailsPanel({ user, onUserUpdated, onResetPasswor
               alignItems: "center",
               justifyContent: "center",
             }}
-            className="w-full py-2.5 px-3 rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 active:scale-[0.98] transition-all cursor-pointer flex-row items-center justify-center"
+            className="w-full py-2.5 px-3 rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 Inactive:scale-[0.98] transition-all cursor-pointer flex-row items-center justify-center"
           >
             <span className="flex items-center justify-center gap-1.5">
               <KeyRound className="w-4 h-4 shrink-0 text-amber-400" />

@@ -101,7 +101,7 @@ export default function BillPaymentTable({ onPayNow }) {
           size="sectionTitle"
           className="font-bold tracking-wide block text-[14px]"
         >
-          Active Products
+          Inactive Products
         </MainLayoutColor>
       </h2>
 

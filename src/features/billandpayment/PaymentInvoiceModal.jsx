@@ -158,7 +158,7 @@ export default function PaymentInvoiceModal({
             alignItems: "center",
             justifyContent: "center",
           }}
-          className="w-full py-2.5 px-4 rounded-xl bg-[var(--color-yellow,#ffd60a)] hover:bg-[#e6c200] active:scale-[0.99] text-black font-bold border border-[var(--color-yellow,#ffd60a)] transition-all cursor-pointer shadow-md"
+          className="w-full py-2.5 px-4 rounded-xl bg-[var(--color-yellow,#ffd60a)] hover:bg-[#e6c200] Inactive:scale-[0.99] text-black font-bold border border-[var(--color-yellow,#ffd60a)] transition-all cursor-pointer shadow-md"
         >
           <span className="text-[14px] font-bold text-black whitespace-nowrap leading-none">
             Pay Now

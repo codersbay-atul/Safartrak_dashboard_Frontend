@@ -1,9 +1,9 @@
 import React from "react";
 import MainLayoutHeader from "../../components/Ui/MainLayoutUI/MainLayoutHeader";
 
-export default function ProductsHeader({
-  title = "Subscriptions",
-  subtitle = "Manage your Inactive subscriptions, licenses, and billing profiles for all SafarTrak solutions.",
+export default function IotSimHeader({
+  title = "IoT SIMs",
+  subtitle = "Manage SIM activation, KYC status, validity and billing details",
 }) {
   return (
     <MainLayoutHeader

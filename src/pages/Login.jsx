@@ -93,7 +93,7 @@ export default function Login() {
       subtitle="Sign In to continue managing your fleet operations."
       // sectionLabel="Login"
     >
-      <form onSubmit={handleSubmit} className="flex flex-col gap-5" noValidate>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-5" noValidate autoComplete="off">
         <AuthField
           id="username"
           label="Email"
@@ -106,7 +106,7 @@ export default function Login() {
             }
           }}
           placeholder="Enter your email"
-          autoComplete="username"
+          // autoComplete="username"
           disabled={isLoading}
           error={fieldErrors.username}
         />
@@ -123,7 +123,7 @@ export default function Login() {
             }
           }}
           placeholder="Enter your password"
-          autoComplete="current-password"
+          // autoComplete="current-password"
           disabled={isLoading}
           error={fieldErrors.password}
         />

@@ -12,9 +12,9 @@ const ROLE_OPTIONS = [
 
 const STATUS_OPTIONS = [
   { label: "Status", value: "All" },
-  { label: "Active", value: "active" },
+  { label: "Inactive", value: "Inactive" },
   { label: "Pending", value: "pending" },
-  { label: "Inactive", value: "inactive" },
+  { label: "InInactive", value: "inInactive" },
 ];
 
 export default function DriverList({ selectedUser, onSelectUser, refreshTrigger = 0 }) {
@@ -33,7 +33,7 @@ export default function DriverList({ selectedUser, onSelectUser, refreshTrigger 
     fleet: user.fleet || "",
     role: user.role || "",
     status: user.status ? user.status.charAt(0).toUpperCase() + user.status.slice(1) : "",
-    lastActive: user.last_active_at || "",
+    lastInactive: user.last_Inactive_at || "",
   }));
 
   useEffect(() => {
@@ -171,7 +171,7 @@ export default function DriverList({ selectedUser, onSelectUser, refreshTrigger 
               </th>
               <th className="pt-1.5 pb-1 px-3.5 w-[14%] whitespace-nowrap">
                 <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText" className="uppercase font-medium">
-                  Last Active
+                  Last Inactive
                 </MainLayoutColor>
               </th>
             </tr>
@@ -275,9 +275,9 @@ export default function DriverList({ selectedUser, onSelectUser, refreshTrigger 
                     <td className="py-2.5 px-3.5 overflow-visible">
                       <span
                         className={`inline-flex items-center px-2.5 py-0.5 rounded-full whitespace-nowrap shrink-0 ${
-                          user.status === "Active"
+                          user.status === "Inactive"
                             ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
-                            : user.status === "Inactive"
+                            : user.status === "InInactive"
                             ? "bg-rose-500/10 text-rose-400 border border-rose-500/20"
                             : "bg-amber-500/10 text-amber-400 border border-amber-500/20"
                         }`}
@@ -288,7 +288,7 @@ export default function DriverList({ selectedUser, onSelectUser, refreshTrigger 
                       </span>
                     </td>
 
-                    {/* Last Active */}
+                    {/* Last Inactive */}
                     <td className="py-2.5 px-3.5 truncate">
                       <MainLayoutColor
                         as={MainLayoutTextSize}
@@ -296,7 +296,7 @@ export default function DriverList({ selectedUser, onSelectUser, refreshTrigger 
                         size="subInfoText"
                         className="truncate block"
                       >
-                        {user.lastActive}
+                        {user.lastInactive}
                       </MainLayoutColor>
                     </td>
                   </tr>

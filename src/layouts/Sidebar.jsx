@@ -518,7 +518,7 @@ export default function Sidebar() {
                         to={targetPath}
                         preventScrollReset
                         onClick={handleNavigation}
-                        className={({ isActive }) =>
+                        className={({ isInactive }) =>
                           `
                             flex
                             items-center
@@ -530,7 +530,7 @@ export default function Sidebar() {
                             transition-colors
 
                             ${
-                              isActive
+                              isInactive
                                 ? "bg-[#232328] text-white"
                                 : "hover:bg-[#232328]"
                             }

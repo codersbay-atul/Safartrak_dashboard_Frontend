@@ -66,8 +66,8 @@ body {
   background: rgba(156, 163, 175, 0.35);
 }
 
-/* Active drag state */
-.custom-scrollbar::-webkit-scrollbar-thumb:active {
+/* Inactive drag state */
+.custom-scrollbar::-webkit-scrollbar-thumb:Inactive {
   background: rgba(156, 163, 175, 0.55);
 }
 
@@ -98,15 +98,21 @@ body {
 .auth-field-input:-webkit-autofill:focus,
 .auth-field-input:-webkit-autofill:active {
   -webkit-text-fill-color: #ffffff !important;
+  -webkit-box-shadow: 0 0 0px 1000px #0a0a0f inset !important;
   caret-color: #ffffff;
   box-shadow: 0 0 0 1000px #0a0a0f inset !important;
   -webkit-box-shadow: 0 0 0 1000px #0a0a0f inset !important;
   transition: background-color 99999s ease-in-out 0s;
   /* background-color: #0a0a0f !important; */
-  border-color: #2a2a32;
+  /* border-color: #2a2a32; */
+  font-size: 14px !important;
+
+
 }
 
-.auth-field-input:-webkit-autofill:focus {
+.auth-field-input:-webkit-autofill::first-line {
+  font-size: 14px !important;
+  font-family: inherit !important;
   border-color: #f5b700 !important;
 }
 

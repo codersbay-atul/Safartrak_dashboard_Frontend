@@ -25,21 +25,21 @@ function buildStatsData(summary, { isLoading = false } = {}) {
       icon: Truck,
       value: valueOrSkeleton(values.totalVehicles),
       subtitle:
-        values.activeVehicles === "Not Available" ||
-        values.activeVehicles === "-"
-          ? "Active Vehicles"
-          : `${values.activeVehicles} Active Vehicles`,
+        values.InactiveVehicles === "Not Available" ||
+        values.InactiveVehicles === "-"
+          ? "Inactive Vehicles"
+          : `${values.InactiveVehicles} Inactive Vehicles`,
       title: "Total Vehicles",
       bgIcon: "bg-[#3B2A00]",
       colorIcon: "text-[#ffd60a]",
       showArrow: false,
     },
     {
-      id: "active_vehicles",
+      id: "Inactive_vehicles",
       icon: Circle,
-      value: valueOrSkeleton(values.activeVehicles),
+      value: valueOrSkeleton(values.InactiveVehicles),
       subtitle: "69% of Total Fleet",
-      title: "Active Vehicle",
+      title: "Inactive Vehicle",
       bgIcon: "bg-[#052E16]",
       colorIcon: "text-[#16A34A]",
       showArrow: true,
@@ -99,7 +99,7 @@ export default function StatsCard() {
         <div key={card.id} className="min-h-[100px] xl:min-h-[112px] min-w-0 [&>*]:h-full">
           <MainStatsCard
             {...card}
-            onClick={card.id === "active_vehicles" ? () => navigate("/vehicles") : card.onClick}
+            onClick={card.id === "Inactive_vehicles" ? () => navigate("/vehicles") : card.onClick}
           />
         </div>
       ))}
