@@ -73,21 +73,23 @@ export default function AoiListPanel({
         })}
       </div>
 
-      <div className="flex flex-col overflow-y-visible lg:overflow-y-auto flex-none lg:flex-1 custom-scrollbar min-h-0 divide-y divide-[#1f1f23]/70">
+      <div className="flex flex-col overflow-y-visible lg:overflow-y-auto flex-none lg:flex-1 custom-scrollbar min-h-0 space-y-2">
         {aois.length > 0 ? (
           aois.map((aoi) => {
             const isSelected = selectedId === aoi.id;
             const isActive = aoi.status === "active";
 
             return (
-              <button
+              <MainLayoutColor
                 key={aoi.id}
+                as="button"
                 type="button"
+                background="cardSurface"
+                border="cardBorder"
+                borderHover="cardBorderHover"
                 onClick={() => onSelect(aoi)}
-                className={`w-full text-left py-3 px-2.5 transition-all cursor-pointer shrink-0 rounded-xl my-0.5 ${
-                  isSelected
-                    ? "bg-[#1d1d21] border border-[#2e2e35] shadow-sm"
-                    : "hover:bg-[#18181c]/50 border border-transparent"
+                className={`w-full text-left py-3 px-3.5 transition-all cursor-pointer shrink-0 rounded-xl border ${
+                  isSelected ? "shadow-sm ring-1 ring-[#2e2e35]" : ""
                 }`}
               >
                 <div className="flex items-center justify-between gap-2">
@@ -142,7 +144,7 @@ export default function AoiListPanel({
                     </MainLayoutTextSize>
                   </span>
                 </div>
-              </button>
+              </MainLayoutColor>
             );
           })
         ) : (
