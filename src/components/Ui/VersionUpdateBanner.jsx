@@ -7,8 +7,6 @@ import { useVersionCheck } from "../../useVersionCheck";
 
 export default function VersionUpdateBanner() {
 
-
-  
   const updateAvailable = useVersionCheck();
   // const updateAvailable = true;
 
