@@ -8,6 +8,7 @@ import VersionUpdateBanner from "../components/Ui/VersionUpdateBanner";
 export default function MainLayout({
   children,
   activeTab,
+  InactiveTab,
   setActiveTab,
   isRouteView,
   onExitRouteView,
@@ -26,7 +27,7 @@ export default function MainLayout({
           <Navbar
             isRouteView={isRouteView}
             onExitRouteView={onExitRouteView}
-            activeTab={activeTab}
+            InactiveTab={InactiveTab || activeTab}
             user={authUser}
           />
           <main

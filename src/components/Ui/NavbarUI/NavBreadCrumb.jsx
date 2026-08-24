@@ -1,5 +1,4 @@
 import React from "react";
-import { ChevronRight } from "lucide-react";
 import NavText from "./NavTextSize";
 import TextColor from "./NavTextColor";
 
@@ -28,7 +27,9 @@ export default function NavBreadcrumb({ items = [] }) {
                 <TextColor color="navbarText">{item.label}</TextColor>
               </NavText>
             )}
-            {!isLast && <ChevronRight size={14} className="text-[#52525b] shrink-0" />}
+            {!isLast && (
+              <span className="text-[#52525b] shrink-0 font-bold">/</span>
+            )}
           </React.Fragment>
         );
       })}

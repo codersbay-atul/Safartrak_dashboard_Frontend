@@ -77,6 +77,24 @@ const iconMap = {
   "Bills & Payments": CreditCard,
 };
 
+const breadcrumbSections = {
+  Dashboard: "Home",
+  Analytics: "Home",
+  Reports: "Home",
+  "Mobilize / Immobilize": "Actions & Events",
+  Alerts: "Actions & Events",
+  "Saved Places": "Geo Services",
+  Activity: "Geo Services",
+  Vehicles: "Management",
+  "Vehicle Details": "Management",
+  Users: "Management",
+  "API Credentials": "Developer Settings",
+  "Your Products": "Billing",
+  "Bills & Payments": "Billing",
+  Subscriptions: "Billing",
+  "IOT SIM": "Billing",
+};
+
 export default function Navbar({
   InactiveTab,
   isRouteView,
@@ -87,6 +105,16 @@ export default function Navbar({
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const showRouteBreadcrumb = InactiveTab === "Dashboard" && isRouteView;
+  const breadcrumbItems = showRouteBreadcrumb
+    ? [
+        { label: "Home" },
+        { label: "Dashboard", onClick: onExitRouteView },
+        { label: "Route Details" },
+      ]
+    : [
+        { label: breadcrumbSections[InactiveTab] || "Home" },
+        { label: InactiveTab || "Dashboard" },
+      ];
 
   const [beforeCursor, setBeforeCursor] = useState(null);
   const [InactivePopover, setInactivePopover] = useState(null);
@@ -148,25 +176,9 @@ export default function Navbar({
       <div className="flex items-center gap-2 xl:gap-2.5 min-w-0 flex-1">
         <div className="w-10 h-1 shrink-0 lg:hidden" />
         <InactiveIcon size={20} className="text-[#71717a] shrink-0" />
-        {showRouteBreadcrumb ? (
-          <div className="flex items-center gap-1.5 min-w-0">
-            <NavBreadcrumb
-              items={[
-                { label: "Dashboard", onClick: onExitRouteView },
-                { label: "Route Details" },
-              ]}
-            />
-          </div>
-        ) : (
-          <NavTextColor
-            color="navbarText"
-            as={NavTextSize}
-            size="moduleName"
-            className="truncate font-semibold"
-          >
-            {InactiveTab || "Dashboard"}
-          </NavTextColor>
-        )}
+        <div className="flex items-center gap-1.5 min-w-0">
+          <NavBreadcrumb items={breadcrumbItems} />
+        </div>
       </div>
 
       <div className="flex items-center gap-2 xl:gap-2.5 shrink-0">
