@@ -46,16 +46,24 @@ export default function LivePositions({
       ref={panelRef}
       className="w-full h-full min-h-0 min-w-0 border border-[#1f1f23]/60 rounded-xl flex flex-col select-none overflow-hidden relative"
     >
-      {/* Header Area - Compact padding and sizing */}
+      {/* Header Area */}
       <div className="flex items-center justify-between px-3 py-2 xl:px-3.5 xl:py-2.5 border-b border-[#1f1f23]/60 bg-[#141414]/90 z-10 shrink-0">
-        <MainLayoutColor
-          as={MainLayoutTextSize}
-          color="title"
-          size="sectionTitle"
-          className="tracking-tight block truncate text-[13px] xl:text-[14px]"
-        >
-          Live Position
-        </MainLayoutColor>
+        <div className="flex items-center gap-2">
+          <MainLayoutColor
+            as={MainLayoutTextSize}
+            color="title"
+            size="sectionTitle"
+            className="tracking-tight block truncate text-[13px] xl:text-[14px]"
+          >
+            Live Position
+          </MainLayoutColor>
+
+         
+          <span className="relative flex top-[2px] w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+          </span>
+        </div>
 
         {!hideViewMapButton && (
           <button
@@ -76,7 +84,6 @@ export default function LivePositions({
         )}
       </div>
 
-      {/* Map Area */}
       <div className="flex-1 min-h-0 w-full relative overflow-hidden bg-[#161619]">
         <LiveMap selectedVehicle={selectedVehicle} showRoutePath={showRoutePath} />
       </div>

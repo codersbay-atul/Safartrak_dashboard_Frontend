@@ -10,7 +10,7 @@ export const MAIN_LAYOUT_TEXT_SIZES = {
   captionText: "text-[9px] leading-tight",
   filterText: "text-[11px] leading-tight font-medium",
   plateText: "text-[14px] leading-tight font-medium",
-  subInfoText: "text-[12px] leading-tight",
+  subInfoText: "text-[12px] leading-tight font-medium",
   speedText: "text-[12px] xl:text-[13px] leading-tight font-medium",
   locationText: "text-[10px] leading-tight",
   lastSeenText: "text-[11px] xl:text-[12px] leading-tight",

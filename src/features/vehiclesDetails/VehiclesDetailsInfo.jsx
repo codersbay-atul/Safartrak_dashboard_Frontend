@@ -75,7 +75,7 @@ export default function VehiclesDetailsInfo({
     <MainLayoutColor
       as="aside"
       background="surface"
-      className="w-full h-auto lg:h-full border border-[#27272a] flex flex-col p-2.5 rounded-xl min-h-0 overflow-hidden select-none font-sans"
+      className="w-full h-auto lg:h-full flex flex-col p-2.5 rounded-xl min-h-0 overflow-hidden select-none font-sans"
     >
       {/* 14px Header Title */}
       <div className="flex items-center justify-between mb-2 shrink-0">
@@ -87,11 +87,15 @@ export default function VehiclesDetailsInfo({
         >
           Vehicles
         </MainLayoutColor>
-        <span className="text-[#a1a1aa] bg-[#18181b] border border-[#27272a] px-2 py-0.5 rounded-md">
+        <MainLayoutColor
+          as="span"
+          background="filterInactiveBg"
+          className="text-[#a1a1aa] border border-[#232329] px-2 py-0.5 rounded-md"
+        >
           <MainLayoutTextSize size="captionText" className="font-medium">
             {filteredVehicles.length}
           </MainLayoutTextSize>
-        </span>
+        </MainLayoutColor>
       </div>
 
       {/* Search Input */}
@@ -102,7 +106,7 @@ export default function VehiclesDetailsInfo({
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search vehicle, driver..."
-          className="w-full bg-[#18181b]/80 border border-[#27272a] focus:border-[var(--color-yellow,#ffd60a)] text-[12px] text-white rounded-lg pl-2.5 pr-8 py-1.5 focus:outline-none transition-all placeholder-[#52525b]"
+          className="w-full bg-[#18181b]/80 border border-[#27272a] focus:border-[#FDB914] text-[12px] text-white rounded-lg pl-2.5 pr-8 py-1.5 focus:outline-none transition-all placeholder-[#52525b]"
         />
         <Search className="w-3.5 h-3.5 absolute right-2.5 top-1/2 -translate-y-1/2 text-[#a1a1aa] pointer-events-none" />
       </div>
@@ -116,10 +120,10 @@ export default function VehiclesDetailsInfo({
               key={filter.value}
               type="button"
               onClick={() => setActiveFilter(filter.value)}
-              className={`px-2.5 py-1 rounded-full whitespace-nowrap transition-all flex items-center gap-1.5 shrink-0 cursor-pointer border ${
+              className={`px-2.5 py-1 rounded-full whitespace-nowrap transition-all flex items-center gap-1.5 shrink-0 cursor-pointer ${
                 isActive
-                  ? "bg-[#27272a] text-white border-[var(--color-yellow,#ffd60a)]"
-                  : "bg-[#18181b]/60 text-[#a1a1aa] border-[#27272a] hover:border-[#3f3f46] hover:text-white"
+                  ? "bg-[#27272a] text-white"
+                  : "bg-[#18181b]/60 text-[#a1a1aa] hover:text-white"
               }`}
             >
               {filter.isYellowDot ? (
@@ -160,13 +164,16 @@ export default function VehiclesDetailsInfo({
             const isMaint = v.status === "Maint.";
 
             return (
-              <div
+              <MainLayoutColor
                 key={v.id}
+                as="div"
+                border="cardBorder"
+                borderHover="cardBorderHover"
                 onClick={() => onSelectVehicle?.(v.uniqueId)}
                 className={`p-2.5 rounded-xl border transition-all flex items-center justify-between cursor-pointer group ${
                   isSelected
-                    ? "bg-[#18181b] border-[var(--color-yellow,#ffd60a)] shadow-md shadow-[var(--color-yellow,#ffd60a)]/5"
-                    : "bg-[#18181b]/50 border-[#27272a] hover:border-[#3f3f46] hover:bg-[#18181b]/80"
+                    ? "bg-[#18181b]"
+                    : "bg-[#18181b]/50 hover:bg-[#18181b]/80"
                 }`}
               >
                 <div className="space-y-0.5 min-w-0 flex-1">
@@ -220,24 +227,18 @@ export default function VehiclesDetailsInfo({
                   </MainLayoutColor>
                 </div>
 
-                {isSelected ? (
-                  <MainLayoutColor
-                    as="button"
-                    type="button"
-                    background="yellow"
-                    className="w-6 h-6 rounded-lg flex items-center justify-center transition-all shrink-0 ml-2 text-black cursor-pointer"
-                  >
-                    <ChevronRight className="w-3.5 h-3.5" />
-                  </MainLayoutColor>
-                ) : (
-                  <button
-                    type="button"
-                    className="w-6 h-6 rounded-lg flex items-center justify-center transition-all shrink-0 ml-2 bg-[#27272a]/60 text-[#a1a1aa] group-hover:bg-[var(--color-yellow,#ffd60a)] group-hover:text-black cursor-pointer"
-                  >
-                    <ChevronRight className="w-3.5 h-3.5" />
-                  </button>
-                )}
-              </div>
+                {/* Unified Chevron Button Style */}
+                <button
+                  type="button"
+                  className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all shrink-0 ml-2 cursor-pointer ${
+                    isSelected
+                      ? "bg-[#27272a] text-[#FDB914]"
+                      : "bg-[#27272a]/60 text-[#a1a1aa] group-hover:bg-[#27272a] group-hover:text-white"
+                  }`}
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </MainLayoutColor>
             );
           })
         ) : (

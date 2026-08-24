@@ -26,7 +26,8 @@ export default function RecentAlertsTable({
     <MainLayoutColor
       as="div"
       background="surface"
-      className="w-full min-w-0 flex-none min-h-[280px] border border-[#1f1f23] rounded-xl p-2.5 sm:p-3 flex flex-col select-none overflow-hidden"
+      border="cardBorder"
+      className="w-full min-w-0 flex-none min-h-[280px] border rounded-xl p-2.5 sm:p-3 flex flex-col select-none overflow-hidden"
     >
       <div className="flex items-center justify-between mb-2.5 shrink-0">
         {/* 14px Section Title */}
@@ -58,12 +59,12 @@ export default function RecentAlertsTable({
                   key={heading}
                   className="text-left px-2.5 py-2 whitespace-nowrap"
                 >
-                  {/* 14px Column Header */}
+                  {/* 12px Subtitle Color Header */}
                   <MainLayoutColor
                     as={MainLayoutTextSize}
                     color="subtitle"
-                    size="sectionTitle"
-                    className="font-semibold uppercase tracking-wide block"
+                    size="subInfoText"
+                    className=" uppercase tracking-wide block"
                   >
                     {heading}
                   </MainLayoutColor>

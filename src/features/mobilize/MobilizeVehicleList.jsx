@@ -37,7 +37,8 @@ export default function MobilizeVehicleList({
     <MainLayoutColor
       as="div"
       background="surface"
-      className="w-full h-auto lg:h-full min-h-0 border border-[#27272a] rounded-2xl p-3 flex flex-col select-none overflow-hidden shadow-2xl font-sans"
+      border="cardBorder"
+      className="w-full h-auto lg:h-full min-h-0 border rounded-2xl p-3 flex flex-col select-none overflow-hidden shadow-2xl font-sans"
     >
       {/* 14px Title */}
       <MainLayoutColor
@@ -80,11 +81,11 @@ export default function MobilizeVehicleList({
                 key={vehicle.id}
                 as="div"
                 background="surface"
+                border="cardBorder"
+                borderHover="cardBorderHover"
                 onClick={() => onSelectVehicle?.(vehicle)}
-                className={`flex items-center justify-between py-2 px-3 rounded-xl border transition-all duration-150 w-full gap-2 shrink-0 cursor-pointer ${
-                  isSelected
-                    ? "border-[var(--color-yellow,#ffd60a)] shadow-md bg-[#18181b]"
-                    : "border-[#27272a] hover:border-[#3f3f46] hover:bg-[#18181b]/80"
+                className={`group flex items-center justify-between py-2 px-3 rounded-xl border transition-all duration-150 w-full gap-2 shrink-0 cursor-pointer ${
+                  isSelected ? "bg-[#18181b] shadow-md" : "hover:bg-[#18181b]/80"
                 }`}
               >
                 <div className="min-w-0 flex-1 grid grid-cols-1 sm:grid-cols-2 gap-2 items-center">
@@ -152,7 +153,8 @@ export default function MobilizeVehicleList({
           <MainLayoutColor
             as="div"
             background="surface"
-            className="flex flex-1 items-center justify-center rounded-xl border border-dashed border-[#27272a] p-6 text-center"
+            border="cardBorder"
+            className="flex flex-1 items-center justify-center rounded-xl border border-dashed p-6 text-center"
           >
             <MainLayoutColor
               as={MainLayoutTextSize}

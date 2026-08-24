@@ -13,7 +13,8 @@ export default function AlertTypeGrid({
     <MainLayoutColor
       as="div"
       background="surface"
-      className="w-full min-w-0 border border-[#1f1f23] rounded-xl p-2.5 sm:p-3 select-none shrink-0"
+      border="cardBorder"
+      className="w-full min-w-0 border rounded-xl p-2.5 sm:p-3 select-none shrink-0"
     >
       <MainLayoutColor
         as={MainLayoutTextSize}
@@ -60,14 +61,16 @@ export default function AlertTypeGrid({
                 key={type.id}
                 as="button"
                 background="surface"
+                border="cardBorder"
+                borderHover="cardBorderHover"
                 type="button"
                 onClick={() =>
                   onTypeSelect?.(isActive ? "all" : type.id)
                 }
                 className={`relative flex min-w-0 flex-col items-center justify-center gap-1 rounded-xl border px-1.5 py-2.5 sm:gap-1.5 sm:px-2 sm:py-3 min-h-[68px] sm:min-h-[72px] transition-all cursor-pointer ${
                   isActive
-                    ? "bg-[#FDBB24]/10 border-[#FDBB24]/40 text-white"
-                    : "border-[#232329] text-[#d4d4d8] hover:border-[#2e2e36]"
+                    ? "bg-[#FDBB24]/10 text-white"
+                    : "text-[#d4d4d8]"
                 }`}
               >
                 {type.count ? (

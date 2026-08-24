@@ -15,9 +15,11 @@ export default function MainReportCard({
     <MainLayoutColor
       as="button"
       background="surface"
+      border="cardBorder"
+      borderHover="cardBorderHover"
       type="button"
       onClick={onClick}
-      className={`group relative flex flex-col text-left w-full border border-[#232329] rounded-xl p-3.5 sm:p-4 shadow-lg select-none cursor-pointer transition-all duration-200 hover:border-[#FDBB24]/35 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FDBB24]/50 ${className}`}
+      className={`group relative flex flex-col text-left w-full border rounded-xl p-3.5 sm:p-4 shadow-lg select-none cursor-pointer transition-all duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FDBB24]/50 ${className}`}
     >
       <div className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-lg bg-[#FDBB24] shrink-0 shadow-sm shadow-[#FDBB24]/20">
         <Icon size={15} strokeWidth={2.25} className="text-[#121214]" />
@@ -42,13 +44,13 @@ export default function MainReportCard({
       </MainLayoutColor>
 
       <div className="mt-auto pt-3.5 flex items-center justify-between gap-2 w-full">
-      <MainLayoutColor
-  as="span"
-  color="kpiTitle"
-  className="text-[13px] font-medium"
->
-  {actionLabel}
-</MainLayoutColor>
+        <MainLayoutColor
+          as="span"
+          color="kpiTitle"
+          className="text-[13px] font-medium"
+        >
+          {actionLabel}
+        </MainLayoutColor>
 
         <ArrowRight
           size={14}

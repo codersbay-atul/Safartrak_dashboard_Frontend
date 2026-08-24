@@ -12,10 +12,6 @@ import {
   Power,
   RefreshCw,
   Share2,
-  Pencil,
-  Image,
-  Video,
-  StickyNote,
   TriangleAlert,
 } from "lucide-react";
 import MainLayoutButton from "../../components/Ui/MainLayoutUI/MainLayoutButton";
@@ -25,12 +21,6 @@ import { toast } from "../../components/Ui/toast";
 import { ACTIVITY_DETAILS } from "./activityData";
 import useActivityNote from "../../hooks/useActivityNote";
 import MainStatusBadge from "../../components/Ui/MainLayoutUI/MainStatusBadge";
-
-const ATTACHMENT_ICONS = {
-  "Dashcam Snap": Image,
-  "Camera Clip": Video,
-  "Driver Notes": StickyNote,
-};
 
 function DetailRow({ icon: Icon, label, value, valueClass = "", children }) {
   return (
@@ -142,7 +132,7 @@ export default function ActivityDetails({
       <MainLayoutColor
         as="div"
         background="surface"
-        className="w-full h-auto lg:h-full border border-[#1f1f23] rounded-xl p-4 flex items-center justify-center select-none"
+        className="w-full h-full border border-[#1f1f23] rounded-xl p-4 flex items-center justify-center select-none"
       >
         <MainLayoutColor
           as={MainLayoutTextSize}
@@ -159,7 +149,7 @@ export default function ActivityDetails({
     <MainLayoutColor
       as="div"
       background="surface"
-      className="w-full h-auto lg:h-full border border-[#1f1f23] rounded-xl flex flex-col overflow-hidden select-none font-sans"
+      className="w-full h-full border border-[#1f1f23] rounded-xl flex flex-col overflow-hidden select-none font-sans"
     >
       {/* 14px Header Title */}
       <div className="shrink-0 px-3 pt-3 pb-2.5 flex items-center justify-between gap-2 border-b border-[#1f1f23]">
@@ -174,7 +164,7 @@ export default function ActivityDetails({
         <MainStatusBadge label={detailsData.status} variant="active" pulse />
       </div>
 
-      <div className="flex-none lg:flex-1 min-h-0 overflow-y-visible lg:overflow-y-auto custom-scrollbar px-3 py-3 flex flex-col gap-3">
+      <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar px-3 py-3 flex flex-col gap-3">
         {detailsData.alert && (
           <div className="flex items-stretch gap-0 rounded-lg overflow-hidden border border-[#FDBB24]/25 bg-[#FDBB24]/08">
             <div className="w-1 shrink-0 bg-[#ef4444]" />
@@ -256,40 +246,6 @@ export default function ActivityDetails({
             value={detailsData.lastUpdated}
           />
         </div>
-
-        <div>
-          {/* 12px Section Heading */}
-          <MainLayoutColor
-            as={MainLayoutTextSize}
-            color="title"
-            size="subInfoText"
-            className="font-bold mb-2 block"
-          >
-            Event Attachments
-          </MainLayoutColor>
-          <div className="grid grid-cols-3 gap-2">
-            {detailsData.attachments.map((item) => {
-              const Icon = ATTACHMENT_ICONS[item.label] || Image;
-              return (
-                <button
-                  key={item.id}
-                  type="button"
-                  className="aspect-square rounded-lg border border-[#27272a] bg-[#18181b] flex flex-col items-center justify-center gap-1.5 hover:border-[#FDBB24]/35 transition-colors cursor-pointer"
-                >
-                  <Icon size={16} className="text-[#71717a]" />
-                  <MainLayoutColor
-                    as={MainLayoutTextSize}
-                    color="subtitle"
-                    size="subInfoText"
-                    className="text-center px-1 leading-tight block truncate w-full"
-                  >
-                    {item.label}
-                  </MainLayoutColor>
-                </button>
-              );
-            })}
-          </div>
-        </div>
       </div>
 
       <div className="px-3 py-2.5 border-t border-[#1f1f23] space-y-3">
@@ -334,27 +290,16 @@ export default function ActivityDetails({
           </div>
         )}
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center">
           <MainLayoutButton
             variant="secondary"
             size="sm"
             icon={Share2}
             onClick={onShare}
-            className="flex-1 justify-center font-semibold"
+            className="w-full justify-center font-semibold"
           >
             <MainLayoutTextSize size="headerButtonText">
               Share Event
-            </MainLayoutTextSize>
-          </MainLayoutButton>
-          <MainLayoutButton
-            variant="primary"
-            size="sm"
-            icon={Pencil}
-            onClick={() => setShowNoteEditor((prev) => !prev)}
-            className="flex-1 justify-center font-bold"
-          >
-            <MainLayoutTextSize size="headerButtonText">
-              {showNoteEditor ? "Hide Note" : "Add Note"}
             </MainLayoutTextSize>
           </MainLayoutButton>
         </div>

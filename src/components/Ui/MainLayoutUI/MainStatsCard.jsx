@@ -23,8 +23,10 @@ export const MainStatsCard = ({
     <MainLayoutColor
       as="div"
       background="surface"
+      border="cardBorder"
+      borderHover="cardBorderHover"
       onClick={onClick}
-      className="border border-[#1d1d20] rounded-xl p-2 min-[1152px]:p-2.5 flex flex-col justify-between hover:border-[#27272a] transition-all relative overflow-hidden group cursor-pointer w-full h-full min-h-[76px] min-w-0"
+      className="border rounded-xl p-2 min-[1152px]:p-2.5 flex flex-col justify-between transition-all relative overflow-hidden group cursor-pointer w-full h-full min-h-[76px] min-w-0"
     >
       <div className="flex-1 flex items-center min-h-0">
         <div className="flex items-center justify-between gap-1.5 min-w-0 w-full">
@@ -69,7 +71,6 @@ export const MainStatsCard = ({
                     as={MainLayoutTextSize}
                     color="subtitle"
                     size="captionText"
-                    
                   >
                     {metric.label}
                   </MainLayoutColor>

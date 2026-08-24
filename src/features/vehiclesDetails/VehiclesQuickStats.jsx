@@ -5,7 +5,7 @@ import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
 import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
 
 export default function VehiclesQuickStats({ uniqueId }) {
-  const { stats, isLoading, isError } = useVehicleStats(uniqueId);
+  const { stats, isLoading } = useVehicleStats(uniqueId);
 
   const topStats = [
     {
@@ -49,7 +49,9 @@ export default function VehiclesQuickStats({ uniqueId }) {
             key={idx}
             as="div"
             background="surface"
-            className="border border-[#27272a] p-2.5 rounded-xl flex items-center gap-2.5 hover:border-[#3f3f46] transition-all group"
+            border="cardBorder"
+            borderHover="cardBorderHover"
+            className="border p-2.5 rounded-xl flex items-center gap-2.5 transition-all group"
           >
             <div className="w-7 h-7 rounded-lg bg-[#ffd60a]/10 border border-[#ffd60a]/20 flex items-center justify-center text-[#ffd60a] shrink-0 group-hover:scale-105 transition-transform">
               <Icon className="w-3.5 h-3.5" />

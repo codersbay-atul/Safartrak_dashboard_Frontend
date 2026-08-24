@@ -8,6 +8,12 @@ const MAIN_LAYOUT_COLORS = {
   filterInactiveBg: "bg-[#0d0e10]",
   selectedRowBg: "bg-[#07080a]",
 
+  // Global Borders
+  cardBorder: "border-[#232329]",
+  cardBorderHover: "hover:border-[#FDBB24]/35",
+  border: "border-[#232329]",
+  borderHover: "hover:border-[#FDBB24]/35",
+
   // Text Typography
   title: "text-[rgb(255,255,255)]",
   white: "text-[rgb(255,255,255)]",
@@ -81,6 +87,8 @@ export default function MainLayoutColor({
   as: Component = "span",
   color,
   background,
+  border,
+  borderHover,
   className = "",
   children,
   style,
@@ -88,11 +96,12 @@ export default function MainLayoutColor({
 }) {
   const colorClass = color ? MAIN_LAYOUT_COLORS[color] || "" : "";
   const backgroundClass = background ? MAIN_LAYOUT_COLORS[background] || "" : "";
-  // const backgroundStyle = background === "surface" ? { backgroundColor: "#141414" } : {};
+  const borderClass = border ? MAIN_LAYOUT_COLORS[border] || "" : "";
+  const borderHoverClass = borderHover ? MAIN_LAYOUT_COLORS[borderHover] || "" : "";
 
   return (
     <Component
-      className={`${colorClass} ${backgroundClass} ${className}`.trim()}
+      className={`${colorClass} ${backgroundClass} ${borderClass} ${borderHoverClass} ${className}`.trim()}
       style={{ ...style }}
       {...props}
     >

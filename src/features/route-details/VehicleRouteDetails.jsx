@@ -23,6 +23,7 @@ import {
   shouldShowNoActiveTrip,
 } from "./routeVehicleDisplay";
 import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
+import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
 
 const STATUS_BADGE = {
   Running: {
@@ -144,29 +145,44 @@ export default function VehicleRouteDetails({ vehicle, onViewRoute, onClose }) {
   const showRunningIndicator = !noActiveTrip && statusLabel === "Running";
 
   return (
-    <MainLayoutColor as="div" background="surface" className="w-full h-full border border-[#1f1f23] rounded-xl p-3.5 flex flex-col justify-between select-none overflow-hidden font-sans text-zinc-100">
-      
-      {/* 1. Top Header Row (Reflects exact layout without X icon) */}
+    <MainLayoutColor
+      as="div"
+      background="surface"
+      border="cardBorder"
+      borderHover="cardBorderHover"
+      className="w-full h-full border rounded-xl p-3.5 flex flex-col justify-between select-none overflow-hidden font-sans text-zinc-100 transition-all"
+    >
+      {/* 1. Top Header Row */}
       <div className="flex items-center justify-between pb-2 shrink-0">
         <div className="flex items-center gap-2 min-w-0">
-          <h3 className="text-[13px] font-bold text-white tracking-tight">
+          <MainLayoutColor
+            as={MainLayoutTextSize}
+            
+            size="sectionTitle"
+            className="font-bold tracking-tight block"
+          >
             Vehicle Details
-          </h3>
+          </MainLayoutColor>
+
+          {/* Status Badges */}
           {showRunningIndicator ? (
-            <span className="text-[9px] font-bold text-[#10b981] bg-[#10b981]/10 px-2 py-0.5 rounded-sm flex items-center gap-1 shrink-0">
-              <span className="w-1 h-1 rounded-full bg-[#10b981]"></span> Running
+            <span className="font-bold text-[#10b981] bg-[#10b981]/10 px-2 py-0.5 rounded-sm flex items-center gap-1 shrink-0">
+              <span className="w-1 h-1 rounded-full bg-[#10b981]" />
+              <MainLayoutTextSize size="badgeText">Running</MainLayoutTextSize>
             </span>
           ) : (
             <span
-              className={`text-[9px] font-bold ${badge.text} ${badge.bg} px-2 py-0.5 rounded-sm flex items-center gap-1 shrink-0`}
+              className={`font-bold ${badge.text} ${badge.bg} px-2 py-0.5 rounded-sm flex items-center gap-1 shrink-0`}
             >
-              <span className={`w-1 h-1 rounded-full ${badge.dot}`} />{" "}
-              {statusLabel}
+              <span className={`w-1 h-1 rounded-full ${badge.dot}`} />
+              <MainLayoutTextSize size="badgeText">
+                {statusLabel}
+              </MainLayoutTextSize>
             </span>
           )}
         </div>
-        
-        <button 
+
+        <button
           type="button"
           onClick={() => {}}
           className="text-zinc-400 hover:text-white transition-colors cursor-pointer"
@@ -180,28 +196,55 @@ export default function VehicleRouteDetails({ vehicle, onViewRoute, onClose }) {
         <div className="flex items-center gap-2 min-w-0">
           <div className="w-8 h-8 bg-[#d9d9d9] rounded-md shrink-0" />
           <div className="leading-tight min-w-0">
-            <h4 className="text-[12.5px] font-bold text-white tracking-tight truncate">
+            <MainLayoutTextSize
+              as="h4"
+              size="subInfoText"
+              className="font-bold text-white tracking-tight truncate"
+            >
               {displayOrDash(vehicle?.plate)}
-            </h4>
-            <p className="text-[10px] text-zinc-500 font-medium truncate mt-0.5">
+            </MainLayoutTextSize>
+
+            {/* Subtitle color and subInfoText size applied for driver label */}
+            <MainLayoutColor
+              as={MainLayoutTextSize}
+              color="subtitle"
+              size="subInfoText"
+              className="font-medium truncate mt-0.5 block"
+            >
               {displayOrDash(vehicle?.driver)}
-            </p>
+            </MainLayoutColor>
           </div>
         </div>
         <div className="text-right leading-tight shrink-0">
-          <p className="text-[12.5px] font-bold text-white">
+          <MainLayoutTextSize
+            as="p"
+            size="subInfoText"
+            className="font-bold text-white block"
+          >
             {formatKm(remaining)}
-          </p>
-          <p className="text-[10px] text-zinc-500 font-medium mt-0.5">Remaining Distance</p>
+          </MainLayoutTextSize>
+          <MainLayoutColor
+            as={MainLayoutTextSize}
+            color="subtitle"
+            size="subInfoText"
+            className="font-medium mt-0.5 block"
+          >
+            Remaining Distance
+          </MainLayoutColor>
         </div>
       </div>
 
       {/* 3. Timeline Tracker with Labels */}
       <div className="mb-3 mt-1.5 px-1 shrink-0">
         {noActiveTrip ? (
-          <p className="text-[10px] text-zinc-500 font-medium text-center py-2">
+          <MainLayoutColor
+            as={MainLayoutTextSize}
+            color="subtitle"
+            size="subInfoText"
+            className="font-medium text-center py-2 block"
+          >
             No active trip available
-          </p>
+          </MainLayoutColor>
         ) : (
           <>
             <div className="relative w-full h-3 flex items-center">
@@ -225,9 +268,13 @@ export default function VehicleRouteDetails({ vehicle, onViewRoute, onClose }) {
               <div className="absolute right-0 w-2.5 h-2.5 rounded-full bg-[#141414] border-2 border-[#2e2e36] transform translate-x-1/2 z-10" />
             </div>
 
-            <div className="flex items-center justify-between mt-1 text-[9px] text-zinc-400 font-medium">
-              <span>{displayOrDash(origin)}</span>
-              <span>{displayOrDash(destination)}</span>
+            <div className="flex items-center justify-between mt-1 font-medium">
+              <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText">
+                {displayOrDash(origin)}
+              </MainLayoutColor>
+              <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText">
+                {displayOrDash(destination)}
+              </MainLayoutColor>
             </div>
           </>
         )}
@@ -240,21 +287,29 @@ export default function VehicleRouteDetails({ vehicle, onViewRoute, onClose }) {
         
         {/* Speed */}
         <div className="flex items-center justify-between shrink-0 gap-2">
-          <div className="flex items-center gap-2 text-zinc-500 font-medium min-w-0">
-            <Gauge size={12.5} className="text-zinc-500 shrink-0" /> <span className="truncate">Speed</span>
+          <div className="flex items-center gap-2 font-medium min-w-0">
+            <Gauge size={12.5} className="text-zinc-500 shrink-0" />
+            <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText" className="truncate">
+              Speed
+            </MainLayoutColor>
           </div>
-          <span className="font-bold text-white shrink-0">
+          <MainLayoutTextSize size="subInfoText" className="font-bold text-white shrink-0">
             {displayOrDash(vehicle?.speed)}
-          </span>
+          </MainLayoutTextSize>
         </div>
 
         {/* Fuel Level */}
         <div className="flex items-center justify-between shrink-0 gap-2">
-          <div className="flex items-center gap-2 text-zinc-500 font-medium min-w-0">
-            <Fuel size={12.5} className="text-zinc-500 shrink-0" /> <span className="truncate">Fuel Level</span>
+          <div className="flex items-center gap-2 font-medium min-w-0">
+            <Fuel size={12.5} className="text-zinc-500 shrink-0" />
+            <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText" className="truncate">
+              Fuel Level
+            </MainLayoutColor>
           </div>
           <div className="flex items-center gap-2 shrink-0">
-            <span className="font-bold text-white">{formatPct(fuel)}</span>
+            <MainLayoutTextSize size="subInfoText" className="font-bold text-white">
+              {formatPct(fuel)}
+            </MainLayoutTextSize>
             <div className="w-12 h-[3px] bg-zinc-800 rounded-full overflow-hidden">
               <div
                 className="h-full bg-[#22c55e] rounded-full"
@@ -266,41 +321,55 @@ export default function VehicleRouteDetails({ vehicle, onViewRoute, onClose }) {
 
         {/* Battery */}
         <div className="flex items-center justify-between shrink-0 gap-2">
-          <div className="flex items-center gap-2 text-zinc-500 font-medium min-w-0">
-            <Battery size={12.5} className="text-zinc-500 shrink-0" /> <span className="truncate">Battery</span>
+          <div className="flex items-center gap-2 font-medium min-w-0">
+            <Battery size={12.5} className="text-zinc-500 shrink-0" />
+            <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText" className="truncate">
+              Battery
+            </MainLayoutColor>
           </div>
-          <span className="font-bold text-white shrink-0">
+          <MainLayoutTextSize size="subInfoText" className="font-bold text-white shrink-0">
             {displayOrDash(battery)}
-          </span>
+          </MainLayoutTextSize>
         </div>
 
         {/* Engine Health */}
         <div className="flex items-center justify-between shrink-0 gap-2">
-          <div className="flex items-center gap-2 text-zinc-500 font-medium min-w-0">
-            <ShieldCheck size={12.5} className="text-zinc-500 shrink-0" /> <span className="truncate">Engine Health</span>
+          <div className="flex items-center gap-2 font-medium min-w-0">
+            <ShieldCheck size={12.5} className="text-zinc-500 shrink-0" />
+            <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText" className="truncate">
+              Engine Health
+            </MainLayoutColor>
           </div>
-          <span className="font-bold text-zinc-200 shrink-0">
+          <MainLayoutTextSize size="subInfoText" className="font-bold text-zinc-200 shrink-0">
             {displayOrDash(engineHealth)}
-          </span>
+          </MainLayoutTextSize>
         </div>
 
         {/* Odometer */}
         <div className="flex items-center justify-between shrink-0 gap-2">
-          <div className="flex items-center gap-2 text-zinc-500 font-medium min-w-0">
-            <Milestone size={12.5} className="text-zinc-500 shrink-0" /> <span className="truncate">Odometer</span>
+          <div className="flex items-center gap-2 font-medium min-w-0">
+            <Milestone size={12.5} className="text-zinc-500 shrink-0" />
+            <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText" className="truncate">
+              Odometer
+            </MainLayoutColor>
           </div>
-          <span className="font-bold text-white shrink-0">
+          <MainLayoutTextSize size="subInfoText" className="font-bold text-white shrink-0">
             {odometer == null ? "Not Available" : formatKm(odometer)}
-          </span>
+          </MainLayoutTextSize>
         </div>
 
         {/* Trip Process */}
         <div className="flex items-center justify-between shrink-0 gap-2">
-          <div className="flex items-center gap-2 text-zinc-500 font-medium min-w-0">
-            <Waypoints size={12.5} className="text-zinc-500 shrink-0" /> <span className="truncate">Trip Process</span>
+          <div className="flex items-center gap-2 font-medium min-w-0">
+            <Waypoints size={12.5} className="text-zinc-500 shrink-0" />
+            <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText" className="truncate">
+              Trip Process
+            </MainLayoutColor>
           </div>
           <div className="flex items-center gap-2 shrink-0">
-            <span className="font-bold text-white">{formatPct(progress)}</span>
+            <MainLayoutTextSize size="subInfoText" className="font-bold text-white">
+              {formatPct(progress)}
+            </MainLayoutTextSize>
             <div className="w-12 h-[3px] bg-zinc-800 rounded-full overflow-hidden">
               <div
                 className="h-full bg-[#FDBB24] rounded-full"
@@ -312,40 +381,53 @@ export default function VehicleRouteDetails({ vehicle, onViewRoute, onClose }) {
 
         {/* ETA */}
         <div className="flex items-center justify-between shrink-0 gap-2">
-          <div className="flex items-center gap-2 text-zinc-500 font-medium min-w-0">
-            <Clock size={12.5} className="text-zinc-500 shrink-0" /> <span className="truncate">ETA</span>
+          <div className="flex items-center gap-2 font-medium min-w-0">
+            <Clock size={12.5} className="text-zinc-500 shrink-0" />
+            <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText" className="truncate">
+              ETA
+            </MainLayoutColor>
           </div>
-          <span className="font-bold text-white shrink-0">
+          <MainLayoutTextSize size="subInfoText" className="font-bold text-white shrink-0">
             {displayOrDash(eta)}
-          </span>
+          </MainLayoutTextSize>
         </div>
 
         {/* Current Address */}
         <div className="flex items-center justify-between shrink-0 gap-2">
-          <div className="flex items-center gap-2 text-zinc-500 font-medium min-w-0">
-            <MapPin size={12.5} className="text-zinc-500 shrink-0" /> <span className="truncate">Current Address</span>
+          <div className="flex items-center gap-2 font-medium min-w-0">
+            <MapPin size={12.5} className="text-zinc-500 shrink-0" />
+            <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText" className="truncate">
+              Current Address
+            </MainLayoutColor>
           </div>
-          <span className="font-bold text-white text-right truncate pl-4 max-w-[150px]">
+          <MainLayoutTextSize size="subInfoText" className="font-bold text-white text-right truncate pl-4 max-w-[150px]">
             {displayOrDash(address)}
-          </span>
+          </MainLayoutTextSize>
         </div>
 
         {/* GPS Signal */}
         <div className="flex items-center justify-between shrink-0 gap-2">
-          <div className="flex items-center gap-2 text-zinc-500 font-medium min-w-0">
-            <Radio size={12.5} className="text-zinc-500 shrink-0" /> <span className="truncate">Gps Signal</span>
+          <div className="flex items-center gap-2 font-medium min-w-0">
+            <Radio size={12.5} className="text-zinc-500 shrink-0" />
+            <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText" className="truncate">
+              Gps Signal
+            </MainLayoutColor>
           </div>
-          <span className="font-bold text-white shrink-0">
+          <MainLayoutTextSize size="subInfoText" className="font-bold text-white shrink-0">
             {displayOrDash(gpsSignal ?? vehicle?.deviceStatus)}
-          </span>
+          </MainLayoutTextSize>
         </div>
 
         {/* Ignition */}
         <div className="flex items-center justify-between shrink-0 gap-2">
-          <div className="flex items-center gap-2 text-zinc-500 font-medium min-w-0">
-            <Key size={12.5} className="text-zinc-500 shrink-0" /> <span className="truncate">Ignition</span>
+          <div className="flex items-center gap-2 font-medium min-w-0">
+            <Key size={12.5} className="text-zinc-500 shrink-0" />
+            <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText" className="truncate">
+              Ignition
+            </MainLayoutColor>
           </div>
-          <span
+          <MainLayoutTextSize
+            size="subInfoText"
             className={`font-bold shrink-0 ${
               String(ignition).toUpperCase() === "ON"
                 ? "text-[#10b981]"
@@ -353,37 +435,39 @@ export default function VehicleRouteDetails({ vehicle, onViewRoute, onClose }) {
             }`}
           >
             {displayOrDash(ignition)}
-          </span>
+          </MainLayoutTextSize>
         </div>
 
         {/* Last Updated */}
         <div className="flex items-center justify-between shrink-0 gap-2">
-          <div className="flex items-center gap-2 text-zinc-500 font-medium min-w-0">
-            <Calendar size={12.5} className="text-zinc-500 shrink-0" /> <span className="truncate">Last Updated</span>
+          <div className="flex items-center gap-2 font-medium min-w-0">
+            <Calendar size={12.5} className="text-zinc-500 shrink-0" />
+            <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText" className="truncate">
+              Last Updated
+            </MainLayoutColor>
           </div>
-          <span className="font-bold text-zinc-200 shrink-0">
+          <MainLayoutTextSize size="subInfoText" className="font-bold text-zinc-200 shrink-0">
             {displayOrDash(vehicle?.lastUpdated ?? vehicle?.info)}
-          </span>
+          </MainLayoutTextSize>
         </div>
 
       </div>
 
       <div className="border-b border-dashed border-[#232329] w-full shrink-0 mb-3" />
 
-      {/* 5. Image Style Action Footer Buttons (3 Columns Layout) */}
+      {/* 5. Footer Buttons Layout */}
       <div className="grid grid-cols-3 gap-2 shrink-0">
-        
-        {/* Track Live Card */}
         <button 
           type="button"
           onClick={onViewRoute}
           className="flex flex-col items-center justify-center gap-1.5 py-2.5 rounded-lg border border-[#232329] bg-transparent hover:bg-zinc-800/40 transition-colors text-center text-zinc-400 hover:text-white cursor-pointer"
         >
           <TrackIcon size={14} className="text-zinc-400" />
-          <span className="text-[9.5px] font-semibold tracking-wide">Track Live</span>
+          <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText" className="font-semibold tracking-wide">
+            Track Live
+          </MainLayoutColor>
         </button>
 
-        {/* Replay Card */}
         <button 
           type="button"
           onClick={() => {}}
@@ -392,17 +476,20 @@ export default function VehicleRouteDetails({ vehicle, onViewRoute, onClose }) {
           <div className="flex items-center justify-center rotate-180 scale-x-[-1]">
             <RotateCcw size={14} className="text-zinc-400" />
           </div>
-          <span className="text-[9.5px] font-semibold tracking-wide">Replay</span>
+          <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText" className="font-semibold tracking-wide">
+            Replay
+          </MainLayoutColor>
         </button>
 
-        {/* Share Card */}
         <button 
           type="button"
           onClick={() => {}}
           className="flex flex-col items-center justify-center gap-1.5 py-2.5 rounded-lg border border-[#232329] bg-transparent hover:bg-zinc-800/40 transition-colors text-center text-zinc-400 hover:text-white cursor-pointer"
         >
           <Share2 size={14} className="text-zinc-400" />
-          <span className="text-[9.5px] font-semibold tracking-wide">Share</span>
+          <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText" className="font-semibold tracking-wide">
+            Share
+          </MainLayoutColor>
         </button>
       </div>
 

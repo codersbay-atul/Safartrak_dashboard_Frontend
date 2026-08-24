@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Search } from "lucide-react";
 import { getTickets } from "../../api/ticketsApi";
+import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
+import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
 
 function formatStatus(status) {
   if (!status) return "";
@@ -29,7 +31,7 @@ function mapApiTicket(ticket) {
     return ticket;
   }
   return {
-   id: ticket.id != null ? String(ticket.id) : "",
+    id: ticket.id != null ? String(ticket.id) : "",
     subject: ticket.subject || "",
     status: formatStatus(ticket.status),
     updated: formatDate(ticket.updated_at || ticket.created_at),
@@ -81,30 +83,67 @@ export default function ProfileTickets({ tickets: ticketsProp }) {
   );
 
   return (
-    <div className="bg-[#121214] border border-[#1f1f23] rounded-2xl p-3.5 sm:p-4 text-white w-full">
+    <MainLayoutColor
+      as="div"
+      background="surface"
+      border="cardBorder"
+      borderHover="cardBorderHover"
+      className="border rounded-2xl p-3.5 sm:p-4 text-white w-full transition-all"
+    >
       <div className="flex items-center justify-between gap-3 pb-3 border-b border-[#1f1f23]">
-        <h2 className="text-sm font-semibold text-white">My Tickets</h2>
+        {/* Header Title -> sectionTitle */}
+        <MainLayoutColor
+          as={MainLayoutTextSize}
+          color="title"
+          size="sectionTitle"
+          className="font-semibold block"
+        >
+          My Tickets
+        </MainLayoutColor>
 
+        {/* Search Input -> searchText */}
         <div className="relative w-full max-w-[200px]">
-          <input
-            type="text"
-            placeholder="Search Ticket..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-[#09090b] text-[10.5px] text-white placeholder-[#71717a] rounded-full pl-3.5 pr-8 py-1.25 border border-[#27272a] focus:outline-none focus:border-[#3f3f46]"
-          />
-          <Search className="w-3.5 h-3.5 text-[#71717a] absolute right-2.5 top-1/2 -translate-y-1/2" />
+          <MainLayoutColor
+            as={MainLayoutTextSize}
+            size="searchText"
+            className="w-full block"
+          >
+            <input
+              type="text"
+              placeholder="Search Ticket..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full bg-[#09090b] text-white placeholder-[#71717a] rounded-full pl-3.5 pr-8 py-1.25 border border-[#27272a] focus:outline-none focus:border-[#3f3f46] text-inherit"
+            />
+          </MainLayoutColor>
+          <Search className="w-3.5 h-3.5 text-[#71717a] absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
         </div>
       </div>
 
       <div className="w-full overflow-x-auto mt-1">
         <table className="w-full text-left border-collapse min-w-[480px]">
           <thead>
-            <tr className="text-[10.5px] text-[#71717a] border-b border-[#1f1f23]/60">
-              <th className="py-2.5 font-normal w-[12%]">ID</th>
-              <th className="py-2.5 font-normal w-[58%]">Subject</th>
-              <th className="py-2.5 font-normal text-center w-[15%]">Status</th>
-              <th className="py-2.5 font-normal text-right w-[15%]">Updated</th>
+            <tr className="border-b border-[#1f1f23]/60">
+              <th className="py-2.5 font-normal w-[12%]">
+                <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="metricText">
+                  ID
+                </MainLayoutColor>
+              </th>
+              <th className="py-2.5 font-normal w-[58%]">
+                <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="metricText">
+                  Subject
+                </MainLayoutColor>
+              </th>
+              <th className="py-2.5 font-normal text-center w-[15%]">
+                <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="metricText">
+                  Status
+                </MainLayoutColor>
+              </th>
+              <th className="py-2.5 font-normal text-right w-[15%]">
+                <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="metricText">
+                  Updated
+                </MainLayoutColor>
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-transparent">
@@ -112,30 +151,45 @@ export default function ProfileTickets({ tickets: ticketsProp }) {
               const isResolved = (ticket.status || "").toLowerCase() === "resolved";
 
               return (
-                <tr key={ticket.id} className="text-[11px] hover:bg-[#18181b]/50 transition-colors">
-                  <td className="py-2.5 text-white font-medium">{ticket.id}</td>
+                <tr key={ticket.id} className="hover:bg-[#18181b]/50 transition-colors">
+                  {/* Table Details -> sectionTitle */}
+                  <td className="py-2.5 font-medium">
+                    <MainLayoutColor as={MainLayoutTextSize} color="title" size="sectionTitle">
+                      {ticket.id}
+                    </MainLayoutColor>
+                  </td>
 
-                  <td className="py-2.5 text-[#e4e4e7] font-normal">{ticket.subject}</td>
+                  <td className="py-2.5 font-normal">
+                    <MainLayoutColor as={MainLayoutTextSize} color="title" size="sectionTitle">
+                      {ticket.subject}
+                    </MainLayoutColor>
+                  </td>
 
                   <td className="py-2.5 text-center">
                     <span
-                      className={`inline-block text-[9.5px] font-medium px-2.5 py-0.5 rounded-full ${
+                      className={`inline-block font-medium px-2.5 py-0.5 rounded-full ${
                         isResolved
                           ? "bg-[#052e16] text-[#22c55e] border border-[#14532d]/40"
                           : "bg-[#451a03] text-[#f59e0b] border border-[#78350f]/40"
                       }`}
                     >
-                      {ticket.status}
+                      <MainLayoutTextSize size="badgeText">
+                        {ticket.status}
+                      </MainLayoutTextSize>
                     </span>
                   </td>
 
-                  <td className="py-2.5 text-right text-white font-medium">{ticket.updated}</td>
+                  <td className="py-2.5 text-right font-medium">
+                    <MainLayoutColor as={MainLayoutTextSize} color="title" size="sectionTitle">
+                      {ticket.updated}
+                    </MainLayoutColor>
+                  </td>
                 </tr>
               );
             })}
           </tbody>
         </table>
       </div>
-    </div>
+    </MainLayoutColor>
   );
 }
