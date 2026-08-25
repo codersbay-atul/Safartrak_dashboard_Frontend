@@ -1,14 +1,20 @@
 import React from "react";
-import { MoreVertical } from "lucide-react";
+import { MoreVertical, BellRing } from "lucide-react";
 import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
 import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
+import MainTableHeader from "../../components/Ui/MainLayoutUI/MainTableHeader";
+import MainStatusBadge from "../../components/Ui/MainLayoutUI/MainStatusBadge";
 
-const STATUS_STYLES = {
-  Critical: "bg-[#ef4444]/15 text-[#ef4444] border-[#ef4444]/30",
-  High: "bg-[#ef4444]/15 text-[#ef4444] border-[#ef4444]/30",
-  Medium: "bg-[#FDBB24]/15 text-[#FDBB24] border-[#FDBB24]/30",
-  Low: "bg-[#71717a]/15 text-[#a1a1aa] border-[#71717a]/30",
-};
+const TABLE_HEADINGS = [
+  "Date & Time",
+  "Vehicle",
+  "Driver",
+  "Location",
+  "Recorded Speed",
+  "Speed Limit",
+  "Status",
+  "Action",
+];
 
 function formatSpeed(value) {
   if (value == null || value === "" || value === "-") return "-";
@@ -23,205 +29,212 @@ export default function RecentAlertsTable({
   isError = false,
 }) {
   return (
-    <MainLayoutColor
-      as="div"
-      background="surface"
-      border="cardBorder"
-      className="w-full min-w-0 flex-none min-h-[280px] border rounded-xl p-2.5 sm:p-3 flex flex-col select-none overflow-hidden"
-    >
-      <div className="flex items-center justify-between mb-2.5 shrink-0">
-        {/* 14px Section Title */}
-        <MainLayoutColor
-          as={MainLayoutTextSize}
-          color="title"
-          size="sectionTitle"
-          className="font-bold tracking-tight block"
-        >
-          Recent Alerts
-        </MainLayoutColor>
+    <div className="w-full min-w-0 flex flex-col gap-2 font-sans select-none shrink-0">
+      {/* 1. Outside Header Toolbar */}
+      <div className="flex items-center justify-between gap-2 px-1 shrink-0">
+        <div className="flex items-center gap-2">
+          <MainLayoutColor
+            as={BellRing}
+            color="yellow"
+            className="w-4 h-4 shrink-0"
+          />
+          <MainLayoutColor
+            as={MainLayoutTextSize}
+            color="title"
+            size="sectionTitle"
+            className="font-bold tracking-tight block"
+          >
+            Recent Alerts
+          </MainLayoutColor>
+        </div>
       </div>
 
-      <div className="flex-none min-w-0 overflow-x-auto custom-scrollbar">
-        <table className="w-full min-w-[760px] border-collapse">
-          <thead className="sticky top-0 z-10 bg-[#121214]">
-            <tr className="border-b border-[#1f1f23]">
-              {[
-                "Date & Time",
-                "Vehicle",
-                "Driver",
-                "Location",
-                "Recorded Speed",
-                "Speed Limit",
-                "Status",
-                "Action",
-              ].map((heading) => (
-                <th
-                  key={heading}
-                  className="text-left px-2.5 py-2 whitespace-nowrap"
-                >
-                  {/* 12px Subtitle Color Header */}
-                  <MainLayoutColor
-                    as={MainLayoutTextSize}
-                    color="subtitle"
-                    size="subInfoText"
-                    className=" uppercase tracking-wide block"
+      {/* 2. End-to-End Table Card Container */}
+      <MainLayoutColor
+        as="div"
+        background="surface"
+        border="cardBorder"
+        className="w-full min-w-0 flex-none min-h-[280px] rounded-2xl flex flex-col overflow-hidden shadow-2xl"
+      >
+        <div className="w-full overflow-x-auto custom-scrollbar flex-1 min-h-0 relative">
+          <table className="w-full min-w-[760px] border-collapse">
+            <thead className="sticky top-0 z-10 shadow-sm">
+              <MainLayoutColor
+                as="tr"
+                background="tableHeaderBg"
+                border="cardBorder"
+                className="border-b w-full"
+              >
+                {TABLE_HEADINGS.map((heading, index) => (
+                  <MainTableHeader
+                    key={heading}
+                    className={`py-3 text-left ${
+                      index === 0
+                        ? "pl-4 pr-3"
+                        : index === TABLE_HEADINGS.length - 1
+                        ? "pr-4 pl-3"
+                        : "px-3"
+                    }`}
                   >
                     {heading}
-                  </MainLayoutColor>
-                </th>
-              ))}
-            </tr>
-          </thead>
+                  </MainTableHeader>
+                ))}
+              </MainLayoutColor>
+            </thead>
 
-          <tbody>
-            {isLoading ? (
-              <tr>
-                <td colSpan={8} className="px-2.5 py-10 text-center">
-                  <MainLayoutColor
-                    as={MainLayoutTextSize}
-                    color="subtitle"
-                    size="sectionTitle"
-                  >
-                    Loading...
-                  </MainLayoutColor>
-                </td>
-              </tr>
-            ) : isError ? (
-              <tr>
-                <td colSpan={8} className="px-2.5 py-10 text-center text-[#ef4444]">
-                  <MainLayoutTextSize size="sectionTitle">
-                    Failed to load alerts
-                  </MainLayoutTextSize>
-                </td>
-              </tr>
-            ) : alerts.length > 0 ? (
-              alerts.map((alert) => {
-                const recorded = alert.recordedSpeed;
-                const limit = alert.speedLimit;
-                const overLimit =
-                  recorded != null &&
-                  limit != null &&
-                  Number.isFinite(Number(recorded)) &&
-                  Number.isFinite(Number(limit)) &&
-                  Number(recorded) > Number(limit);
+            <tbody className="divide-y divide-[#27272a]/50">
+              {isLoading ? (
+                <tr>
+                  <td colSpan={8} className="px-3 py-10 text-center">
+                    <MainLayoutColor
+                      as={MainLayoutTextSize}
+                      color="subtitle"
+                      size="subInfoText"
+                    >
+                      Loading alerts...
+                    </MainLayoutColor>
+                  </td>
+                </tr>
+              ) : isError ? (
+                <tr>
+                  <td colSpan={8} className="px-3 py-10 text-center">
+                    <MainLayoutColor
+                      as={MainLayoutTextSize}
+                      color="expiredStatusBadge"
+                      size="subInfoText"
+                    >
+                      Failed to load alerts
+                    </MainLayoutColor>
+                  </td>
+                </tr>
+              ) : alerts.length > 0 ? (
+                alerts.map((alert) => {
+                  const recorded = alert.recordedSpeed;
+                  const limit = alert.speedLimit;
+                  const overLimit =
+                    recorded != null &&
+                    limit != null &&
+                    Number.isFinite(Number(recorded)) &&
+                    Number.isFinite(Number(limit)) &&
+                    Number(recorded) > Number(limit);
 
-                return (
-                  <tr
-                    key={alert.id}
-                    className="border-b border-[#1f1f23]/70 hover:bg-[#16161a]/80 transition-colors"
-                  >
-                    {/* 14px Date & Time */}
-                    <td className="px-2.5 py-2.5 whitespace-nowrap">
-                      <MainLayoutColor
-                        as={MainLayoutTextSize}
-                        color="subtitle"
-                        size="sectionTitle"
-                      >
-                        {alert.dateTime}
-                      </MainLayoutColor>
-                    </td>
-
-                    {/* 14px Vehicle Plate */}
-                    <td className="px-2.5 py-2.5 whitespace-nowrap">
-                      <MainLayoutColor
-                        as={MainLayoutTextSize}
-                        color="title"
-                        size="plateText"
-                        className="font-semibold"
-                      >
-                        {alert.vehicle}
-                      </MainLayoutColor>
-                    </td>
-
-                    {/* 14px Driver */}
-                    <td className="px-2.5 py-2.5 whitespace-nowrap">
-                      <MainLayoutColor
-                        as={MainLayoutTextSize}
-                        color="subtitle"
-                        size="sectionTitle"
-                      >
-                        {alert.driver}
-                      </MainLayoutColor>
-                    </td>
-
-                    {/* 14px Location */}
-                    <td className="px-2.5 py-2.5 max-w-[180px] truncate">
-                      <MainLayoutColor
-                        as={MainLayoutTextSize}
-                        color="subtitle"
-                        size="sectionTitle"
-                        className="truncate block"
-                      >
-                        {alert.location}
-                      </MainLayoutColor>
-                    </td>
-
-                    {/* 14px Recorded Speed */}
-                    <td className="px-2.5 py-2.5 whitespace-nowrap">
-                      <MainLayoutTextSize
-                        size="sectionTitle"
-                        className={`font-semibold ${
-                          overLimit ? "text-[#ef4444]" : "text-[#d4d4d8]"
-                        }`}
-                      >
-                        {formatSpeed(recorded)}
-                      </MainLayoutTextSize>
-                    </td>
-
-                    {/* 14px Speed Limit */}
-                    <td className="px-2.5 py-2.5 whitespace-nowrap">
-                      <MainLayoutColor
-                        as={MainLayoutTextSize}
-                        color="subtitle"
-                        size="sectionTitle"
-                      >
-                        {formatSpeed(limit)}
-                      </MainLayoutColor>
-                    </td>
-
-                    {/* Badge Text */}
-                    <td className="px-2.5 py-2.5 whitespace-nowrap">
-                      <span
-                        className={`inline-flex items-center px-2 py-0.5 rounded-full border ${
-                          STATUS_STYLES[alert.status] || STATUS_STYLES.Low
-                        }`}
-                      >
-                        <MainLayoutTextSize
-                          size="badgeText"
-                          className="font-bold"
+                  return (
+                    <MainLayoutColor
+                      key={alert.id}
+                      as="tr"
+                      className="border-b transition-colors hover:bg-[#18181b]/40 cursor-pointer"
+                    >
+                      {/* Date & Time */}
+                      <td className="pl-4 pr-3 py-3 whitespace-nowrap">
+                        <MainLayoutColor
+                          as={MainLayoutTextSize}
+                          color="subtitle"
+                          size="subInfoText"
+                          className="font-normal"
                         >
-                          {alert.status}
-                        </MainLayoutTextSize>
-                      </span>
-                    </td>
+                          {alert.dateTime}
+                        </MainLayoutColor>
+                      </td>
 
-                    <td className="px-2.5 py-2.5 whitespace-nowrap">
-                      <button
-                        type="button"
-                        className="p-1 rounded-md text-[#71717a] hover:text-white hover:bg-[#1f1f23] transition-colors cursor-pointer"
-                      >
-                        <MoreVertical size={14} />
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })
-            ) : (
-              <tr>
-                <td colSpan={8} className="px-2.5 py-10 text-center">
-                  <MainLayoutColor
-                    as={MainLayoutTextSize}
-                    color="subtitle"
-                    size="sectionTitle"
-                  >
-                    No alerts found
-                  </MainLayoutColor>
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-    </MainLayoutColor>
+                      {/* Vehicle Plate */}
+                      <td className="px-3 py-3 whitespace-nowrap">
+                        <MainLayoutColor
+                          as={MainLayoutTextSize}
+                          color="title"
+                          size="plateText"
+                          className="font-semibold"
+                        >
+                          {alert.vehicle}
+                        </MainLayoutColor>
+                      </td>
+
+                      {/* Driver */}
+                      <td className="px-3 py-3 whitespace-nowrap">
+                        <MainLayoutColor
+                          as={MainLayoutTextSize}
+                          color="subtitle"
+                          size="subInfoText"
+                          className="font-normal"
+                        >
+                          {alert.driver}
+                        </MainLayoutColor>
+                      </td>
+
+                      {/* Location */}
+                      <td className="px-3 py-3 max-w-[180px] truncate">
+                        <MainLayoutColor
+                          as={MainLayoutTextSize}
+                          color="subtitle"
+                          size="subInfoText"
+                          className="truncate block font-normal"
+                        >
+                          {alert.location}
+                        </MainLayoutColor>
+                      </td>
+
+                      {/* Recorded Speed */}
+                      <td className="px-3 py-3 whitespace-nowrap">
+                        <MainLayoutColor
+                          as={MainLayoutTextSize}
+                          color={overLimit ? "expiredStatusBadge" : "title"}
+                          size="subInfoText"
+                          className="font-semibold"
+                        >
+                          {formatSpeed(recorded)}
+                        </MainLayoutColor>
+                      </td>
+
+                      {/* Speed Limit */}
+                      <td className="px-3 py-3 whitespace-nowrap">
+                        <MainLayoutColor
+                          as={MainLayoutTextSize}
+                          color="subtitle"
+                          size="subInfoText"
+                          className="font-normal"
+                        >
+                          {formatSpeed(limit)}
+                        </MainLayoutColor>
+                      </td>
+
+                      {/* Badge Status */}
+                      <td className="px-3 py-3 whitespace-nowrap">
+                        <MainStatusBadge
+                          status={alert.status || "Inactive"}
+                          showDot={false}
+                        />
+                      </td>
+
+                      {/* Action Menu Button */}
+                      <td className="pr-4 pl-3 py-3 whitespace-nowrap">
+                        <MainLayoutColor
+                          as="button"
+                          type="button"
+                          color="subtitle"
+                          className="p-1 rounded-md transition-colors cursor-pointer hover:text-white"
+                        >
+                          <MoreVertical size={14} />
+                        </MainLayoutColor>
+                      </td>
+                    </MainLayoutColor>
+                  );
+                })
+              ) : (
+                <tr>
+                  <td colSpan={8} className="px-3 py-10 text-center">
+                    <MainLayoutColor
+                      as={MainLayoutTextSize}
+                      color="subtitle"
+                      size="subInfoText"
+                    >
+                      No alerts found
+                    </MainLayoutColor>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </MainLayoutColor>
+    </div>
   );
 }

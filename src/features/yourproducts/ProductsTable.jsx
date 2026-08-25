@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Filter, ArrowUpDown, Search } from "lucide-react";
+import { Filter, ArrowUpDown, Package, X, Check } from "lucide-react";
+import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
+import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
+import MainLayoutFilterButton from "../../components/Ui/MainLayoutUI/MainLayoutFilterButton";
+import MainDropDown from "../../components/Ui/MainLayoutUI/MainDropDown";
+import MainSearchInput from "../../components/Ui/MainLayoutUI/MainSearchInput";
+import MainTableHeader from "../../components/Ui/MainLayoutUI/MainTableHeader";
+import MainStatusBadge from "../../components/Ui/MainLayoutUI/MainStatusBadge";
 
 const PRODUCTS_DATA = [
   {
@@ -42,133 +49,414 @@ const PRODUCTS_DATA = [
 
 export default function ProductsTable() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [sortAsc, setSortAsc] = useState(true);
 
-  const getStatusBadge = (status) => {
-    switch (status.toLowerCase()) {
-      case "active":
-        return "bg-[#0c2417] text-[#22c55e]";
-      case "pending":
-        return "bg-[#291e0a] text-[#f59e0b]";
-      case "expired":
-        return "bg-[#270e0f] text-[#ef4444]";
-      default:
-        return "bg-[#18181b] text-[#a1a1aa]";
-    }
+  const [filters, setFilters] = useState({
+    status: [],
+    pricingModel: [],
+  });
+
+  const toggleFilter = (category, value) => {
+    setFilters((prev) => {
+      const current = prev[category] || [];
+      const updated = current.includes(value)
+        ? current.filter((item) => item !== value)
+        : [...current, value];
+      return { ...prev, [category]: updated };
+    });
   };
 
-  const filteredProducts = PRODUCTS_DATA.filter((item) =>
-    item.productName.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const handleResetFilters = () => {
+    setFilters({
+      status: [],
+      pricingModel: [],
+    });
+  };
+
+  const handleApplyFilters = () => {
+    setIsFilterOpen(false);
+  };
+
+  const hasActiveFilters =
+    filters.status.length > 0 || filters.pricingModel.length > 0;
+
+  const renderCheckbox = (category, value) => {
+    const isChecked = filters[category]?.includes(value);
+    return (
+      <div
+        onMouseDown={(event) => event.stopPropagation()}
+        onClick={() => toggleFilter(category, value)}
+        className="flex items-center gap-2 cursor-pointer group py-0.5 select-none"
+      >
+        {isChecked ? (
+          <MainLayoutColor
+            as="div"
+            background="yellow"
+            className="w-3.5 h-3.5 rounded flex items-center justify-center transition-all shrink-0"
+          >
+            <Check size={10} strokeWidth={3} className="text-black" />
+          </MainLayoutColor>
+        ) : (
+          <MainLayoutColor
+            as="div"
+            background="surface"
+            border="cardBorder"
+            borderHover="filterBorderHover"
+            className="w-3.5 h-3.5 rounded flex items-center justify-center transition-all shrink-0"
+          />
+        )}
+        <MainLayoutColor
+          as={MainLayoutTextSize}
+          color="subtitle"
+          size="subInfoText"
+          className="group-hover:text-white transition-colors text-[12px]"
+        >
+          {value}
+        </MainLayoutColor>
+      </div>
+    );
+  };
+
+  const filteredProducts = PRODUCTS_DATA.filter((item) => {
+    const matchesSearch = item.productName
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+
+    const matchesStatus =
+      filters.status.length === 0 ||
+      filters.status.some(
+        (s) => s.toLowerCase() === String(item.status || "").toLowerCase()
+      );
+
+    const matchesPricing =
+      filters.pricingModel.length === 0 ||
+      filters.pricingModel.some(
+        (p) => p.toLowerCase() === String(item.pricingModel || "").toLowerCase()
+      );
+
+    return matchesSearch && matchesStatus && matchesPricing;
+  }).sort((a, b) => {
+    return sortAsc
+      ? a.productName.localeCompare(b.productName)
+      : b.productName.localeCompare(a.productName);
+  });
 
   return (
-    <div className="w-full h-fit bg-[#0d0e12] border border-[#1d1d20] rounded-xl overflow-hidden select-none">
-      <div className="px-4 py-3 flex flex-col gap-3 border-b border-[#1d1d20] shrink-0 bg-[#0d0e12] z-20 text-[12px]">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <h2 className="text-[12px] font-bold text-white tracking-wide">
+    <div className="w-full flex flex-col gap-3 font-sans select-none">
+      {/* Outside Header Toolbar */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-1">
+        <div className="flex items-center gap-2">
+          <MainLayoutColor
+            as={Package}
+            color="yellow"
+            className="w-4 h-4 shrink-0"
+          />
+          <MainLayoutColor
+            as={MainLayoutTextSize}
+            color="title"
+            size="sectionTitle"
+            className="font-bold tracking-wide block"
+          >
             Active Products
-          </h2>
+          </MainLayoutColor>
+        </div>
 
-          <div className="flex flex-wrap items-center justify-end gap-2.5">
-            <button
-              type="button"
-              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#121215] border border-[#27272a] text-[#a1a1aa] hover:text-white hover:border-[#3f3f46] text-[12px] transition cursor-pointer"
+        <div className="flex flex-wrap items-center justify-end gap-2 shrink-0">
+          {/* Reusable Filter Dropdown Trigger with h-[34px] & Border */}
+          <MainDropDown
+            isOpen={isFilterOpen}
+            onClose={() => setIsFilterOpen(false)}
+            className="!w-[280px] sm:!w-[300px] max-w-[calc(100vw-1rem)] right-0 p-3 flex flex-col gap-2.5 z-50 shadow-2xl text-left border border-[#27272a] rounded-2xl"
+            customTrigger={
+              <MainLayoutFilterButton
+                isActive={isFilterOpen || hasActiveFilters}
+                onClick={() => setIsFilterOpen((prev) => !prev)}
+                className="h-[34px] px-3.5 border border-[#27272a] hover:border-[#FDBB24]/40 rounded-full flex items-center gap-1.5 transition-colors"
+              >
+                <MainLayoutTextSize size="filterText">Filter</MainLayoutTextSize>
+                <Filter size={11} className="shrink-0" />
+              </MainLayoutFilterButton>
+            }
+          >
+           
+            <MainLayoutColor
+              as="div"
+              border="cardBorder"
+              className="flex items-center justify-between pb-1.5 border-b"
             >
-              <span>Filter</span>
-              <Filter size={12} />
-            </button>
+              <MainLayoutColor
+                as={MainLayoutTextSize}
+                color="title"
+                size="sectionTitle"
+                className="font-bold text-[13px]"
+              >
+                Filters
+              </MainLayoutColor>
+              <MainLayoutColor
+                as="button"
+                type="button"
+                color="subtitle"
+                onClick={() => setIsFilterOpen(false)}
+                className="hover:text-white transition cursor-pointer p-0.5"
+              >
+                <X size={14} />
+              </MainLayoutColor>
+            </MainLayoutColor>
 
-            <button
-              type="button"
-              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#121215] border border-[#27272a] text-[#a1a1aa] hover:text-white hover:border-[#3f3f46] text-[11px] transition cursor-pointer"
-            >
-              <span>Sort</span>
-              <ArrowUpDown size={12} />
-            </button>
+            {/* Filter Options */}
+            <div className="grid grid-cols-2 gap-3 pr-1">
+              {/* Status Filter */}
+              <div className="flex flex-col gap-1">
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="subInfoText"
+                  className="font-semibold text-[11px]"
+                >
+                  Status
+                </MainLayoutColor>
+                <div className="flex flex-col gap-1 pl-0.5">
+                  {renderCheckbox("status", "Active")}
+                  {renderCheckbox("status", "Pending")}
+                  {renderCheckbox("status", "Expired")}
+                </div>
+              </div>
 
-            <div className="relative flex items-center w-[150px] sm:w-[170px]">
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search product..."
-                className="w-full h-8 pl-3 pr-7 bg-[#121215] border border-[#27272a] rounded-full text-[12px] text-white placeholder-[#71717a] focus:outline-none focus:border-[#3f3f46] transition"
-              />
-              <Search
-                size={12}
-                className="absolute right-2.5 text-[#71717a] pointer-events-none"
-              />
+              {/* Pricing Model Filter */}
+              <div className="flex flex-col gap-1">
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="subInfoText"
+                  className="font-semibold text-[11px]"
+                >
+                  Pricing
+                </MainLayoutColor>
+                <div className="flex flex-col gap-1 pl-0.5">
+                  {renderCheckbox("pricingModel", "Paid")}
+                  {renderCheckbox("pricingModel", "Free")}
+                </div>
+              </div>
             </div>
+
+            {/* Bottom Actions */}
+            <MainLayoutColor
+              as="div"
+              border="cardBorder"
+              className="grid grid-cols-2 gap-2 pt-2 border-t mt-1"
+            >
+              <MainLayoutColor
+                as="button"
+                type="button"
+                background="filterBg"
+                border="filterBorder"
+                color="subtitle"
+                onClick={handleResetFilters}
+                className="py-1 px-2.5 rounded-lg text-[11px] font-medium transition cursor-pointer text-center hover:text-white"
+              >
+                Reset
+              </MainLayoutColor>
+              <MainLayoutColor
+                as="button"
+                type="button"
+                background="yellow"
+                onClick={handleApplyFilters}
+                className="py-1 px-2.5 rounded-lg text-black text-[11px] font-medium transition cursor-pointer text-center shadow-sm hover:opacity-90"
+              >
+                Apply
+              </MainLayoutColor>
+            </MainLayoutColor>
+          </MainDropDown>
+
+        
+          <MainLayoutFilterButton
+            isActive={!sortAsc}
+            onClick={() => setSortAsc((prev) => !prev)}
+            className="h-[34px] px-3.5 border border-[#27272a] hover:border-[#FDBB24]/40 rounded-full flex items-center gap-1.5 transition-colors"
+          >
+            <MainLayoutTextSize size="filterText">
+              {sortAsc ? "Sort A-Z" : "Sort Z-A"}
+            </MainLayoutTextSize>
+            <ArrowUpDown size={11} className="shrink-0" />
+          </MainLayoutFilterButton>
+
+          {/* Search Input h-[34px] */}
+          <div className="w-[150px] sm:w-[170px] shrink-0 h-[34px]">
+            <MainSearchInput
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search product..."
+              iconPosition="right"
+              className="w-full h-[34px]"
+            />
           </div>
         </div>
       </div>
 
-      <div className="w-full overflow-x-auto [scrollbar-width:thin]">
-        <table className="w-full text-left border-collapse min-w-[900px] text-[12px]">
-          <thead className="bg-[#09090b] border-b border-[#1d1d20]">
-            <tr className="text-white text-[12px] font-medium uppercase tracking-wider">
-              <th className="py-2.5 px-3 pl-4 font-normal text-[12px] text-white">Product Name</th>
-              <th className="py-2.5 px-3 font-normal text-[12px] text-white">Assigned</th>
-              <th className="py-2.5 px-3 font-normal text-[12px] text-white">Available</th>
-              <th className="py-2.5 px-3 font-normal text-[12px] text-white">Status</th>
-              <th className="py-2.5 px-3 font-normal text-[12px] text-white">Renewal Date</th>
-              <th className="py-2.5 px-3 font-normal text-[12px] text-white">Billing Profile</th>
-              <th className="py-2.5 px-3 font-normal text-[12px] text-white">Purchase Channel</th>
-              <th className="py-2.5 px-3 font-normal text-[12px] text-white">Product Type</th>
-              <th className="py-2.5 px-3 pr-4 font-normal text-[12px] text-white">Pricing Model</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-[#1d1d20]/50 text-[12px]">
-            {filteredProducts.map((item) => (
-              <tr
-                key={item.id}
-                className="hover:bg-[#12121610] transition-colors text-[#d4d4d8] align-middle"
+      {/* Table Card Container */}
+      <MainLayoutColor
+        as="div"
+        background="surface"
+        border="cardBorder"
+        className="w-full h-fit rounded-2xl overflow-hidden shadow-2xl border"
+      >
+        <div className="w-full overflow-x-auto [scrollbar-width:thin] custom-scrollbar">
+          <table className="w-full text-left border-collapse min-w-[900px]">
+            <thead className="sticky top-0 z-10 shadow-sm">
+              <MainLayoutColor
+                as="tr"
+                background="tableHeaderBg"
+                border="cardBorder"
+                className="border-b"
               >
-                <td className="py-3 px-3 pl-4 font-normal text-[14px]">
-                  {item.productName}
-                </td>
+                <MainTableHeader className="py-3 px-4 pl-5">
+                  Product Name
+                </MainTableHeader>
+                <MainTableHeader className="py-3 px-4">
+                  Assigned
+                </MainTableHeader>
+                <MainTableHeader className="py-3 px-4">
+                  Available
+                </MainTableHeader>
+                <MainTableHeader className="py-3 px-4">
+                  Status
+                </MainTableHeader>
+                <MainTableHeader className="py-3 px-4">
+                  Renewal Date
+                </MainTableHeader>
+                <MainTableHeader className="py-3 px-4">
+                  Billing Profile
+                </MainTableHeader>
+                <MainTableHeader className="py-3 px-4">
+                  Purchase Channel
+                </MainTableHeader>
+                <MainTableHeader className="py-3 px-4">
+                  Product Type
+                </MainTableHeader>
+                <MainTableHeader className="py-3 px-4 pr-5">
+                  Pricing Model
+                </MainTableHeader>
+              </MainLayoutColor>
+            </thead>
 
-                <td className="py-3 px-3 font-normal text-[#a1a1aa] text-[14px]">
-                  {item.assignedLicense}
-                </td>
-
-                <td className="py-3 px-3 font-normal text-[#a1a1aa] text-[14px]">
-                  {item.availableLicense}
-                </td>
-
-                <td className="py-3 px-3">
-                  <span
-                    className={`inline-block px-2 py-1 rounded-full text-[12px] font-medium leading-none ${getStatusBadge(
-                      item.status
-                    )}`}
+            <tbody className="divide-y divide-[#1d1d20]/50">
+              {filteredProducts.length > 0 ? (
+                filteredProducts.map((item) => (
+                  <tr
+                    key={item.id}
+                    className="hover:bg-[#18181b]/40 transition-colors align-middle cursor-pointer"
                   >
-                    {item.status}
-                  </span>
-                </td>
+                    <td className="py-3.5 px-4 pl-5">
+                      <MainLayoutColor
+                        as={MainLayoutTextSize}
+                        color="title"
+                        size="sectionTitle"
+                        className="font-medium block"
+                      >
+                        {item.productName}
+                      </MainLayoutColor>
+                    </td>
 
-                <td className="py-3 px-3 font-normal text-[#a1a1aa] text-[14px]">
-                  {item.renewalDate}
-                </td>
+                    <td className="py-3.5 px-4">
+                      <MainLayoutColor
+                        as={MainLayoutTextSize}
+                        color="subtitle"
+                        size="sectionTitle"
+                        className="font-normal block"
+                      >
+                        {item.assignedLicense}
+                      </MainLayoutColor>
+                    </td>
 
-                <td className="py-3 px-3 font-normal text-[#a1a1aa] text-[14px]">
-                  {item.billingProfile}
-                </td>
+                    <td className="py-3.5 px-4">
+                      <MainLayoutColor
+                        as={MainLayoutTextSize}
+                        color="subtitle"
+                        size="sectionTitle"
+                        className="font-normal block"
+                      >
+                        {item.availableLicense}
+                      </MainLayoutColor>
+                    </td>
 
-                <td className="py-3 px-3 font-normal text-[#a1a1aa] text-[14px]">
-                  {item.purchaseChannel}
-                </td>
+                    <td className="py-3.5 px-4">
+                      <MainStatusBadge status={item.status} showDot={false} />
+                    </td>
 
-                <td className="py-3 px-3 font-normal text-[#a1a1aa] text-[14px]">
-                  {item.productType}
-                </td>
+                    <td className="py-3.5 px-4">
+                      <MainLayoutColor
+                        as={MainLayoutTextSize}
+                        color="subtitle"
+                        size="sectionTitle"
+                        className="font-normal block"
+                      >
+                        {item.renewalDate}
+                      </MainLayoutColor>
+                    </td>
 
-                <td className="py-3 px-3 pr-4 font-normal text-[#a1a1aa] text-[14px]">
-                  {item.pricingModel}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+                    <td className="py-3.5 px-4">
+                      <MainLayoutColor
+                        as={MainLayoutTextSize}
+                        color="subtitle"
+                        size="sectionTitle"
+                        className="font-normal block"
+                      >
+                        {item.billingProfile}
+                      </MainLayoutColor>
+                    </td>
+
+                    <td className="py-3.5 px-4">
+                      <MainLayoutColor
+                        as={MainLayoutTextSize}
+                        color="subtitle"
+                        size="sectionTitle"
+                        className="font-normal block"
+                      >
+                        {item.purchaseChannel}
+                      </MainLayoutColor>
+                    </td>
+
+                    <td className="py-3.5 px-4">
+                      <MainLayoutColor
+                        as={MainLayoutTextSize}
+                        color="subtitle"
+                        size="sectionTitle"
+                        className="font-normal block"
+                      >
+                        {item.productType}
+                      </MainLayoutColor>
+                    </td>
+
+                    <td className="py-3.5 px-4 pr-5">
+                      <MainLayoutColor
+                        as={MainLayoutTextSize}
+                        color="subtitle"
+                        size="sectionTitle"
+                        className="font-normal block"
+                      >
+                        {item.pricingModel}
+                      </MainLayoutColor>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={9} className="py-8 text-center">
+                    <MainLayoutColor
+                      as={MainLayoutTextSize}
+                      color="subtitle"
+                      size="subInfoText"
+                    >
+                      No matching products found.
+                    </MainLayoutColor>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </MainLayoutColor>
     </div>
   );
 }

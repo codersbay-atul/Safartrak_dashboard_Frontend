@@ -3,6 +3,7 @@ import { useAnalyticsDistanceSeries } from "../../hooks/useAnalyticsDistanceSeri
 import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
 import MainLayoutIcon from "../../components/Ui/MainLayoutUI/MainLayoutIcon";
 import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
+import MainStatusBadge from "../../components/Ui/MainLayoutUI/MainStatusBadge";
 
 const RANGE_OPTIONS = [
   { key: "24h", label: "24H" },
@@ -108,14 +109,7 @@ export default function FleetPerformanceChart({
             </MainLayoutColor>
           </div>
 
-          <MainLayoutTextSize
-            as="span"
-            size="badgeText"
-            className="flex items-center gap-1 bg-[#052e16] border border-[#14532d] text-[#22c55e] font-bold px-2 py-0.5 rounded-full"
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-[#22c55e] animate-pulse" />
-            Live
-          </MainLayoutTextSize>
+          <MainStatusBadge status="Live" showDot={true} />
         </div>
 
         <div className="flex items-center gap-3">

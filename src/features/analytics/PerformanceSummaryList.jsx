@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, Activity } from "lucide-react";
 import { getAnalyticsPerformance } from "../../api/analyticsApi";
 import MainSearchInput from "../../components/Ui/MainLayoutUI/MainSearchInput";
 import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
 import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
+import MainLayoutFilterButton from "../../components/Ui/MainLayoutUI/MainLayoutFilterButton";
+import MainTableHeader from "../../components/Ui/MainLayoutUI/MainTableHeader";
 
 function formatDistance(item) {
   if (
@@ -75,6 +77,7 @@ function formatContribution(item) {
 
 export default function PerformanceSummaryList({ range = "24h" }) {
   const [searchTerm, setSearchTerm] = useState("");
+  const [sortAsc, setSortAsc] = useState(true);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -128,161 +131,194 @@ export default function PerformanceSummaryList({ range = "24h" }) {
     };
   }, [range]);
 
-  const filteredData = data.filter(
-    (item) =>
-      (item.vehicleNumber || "")
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase()) ||
-      (item.vehicleType || "")
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase())
-  );
+  const filteredData = data
+    .filter(
+      (item) =>
+        (item.vehicleNumber || "")
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        (item.vehicleType || "")
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase())
+    )
+    .sort((a, b) => {
+      return sortAsc
+        ? a.vehicleNumber.localeCompare(b.vehicleNumber)
+        : b.vehicleNumber.localeCompare(a.vehicleNumber);
+    });
 
   return (
-    <MainLayoutColor
-      as="div"
-      background="surface"
-      className="w-full h-full flex flex-col justify-between font-sans text-white select-none"
-    >
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
-        <MainLayoutColor
-          as={MainLayoutTextSize}
-          color="title"
-          size="sectionTitle"
-          className="text-white"
-        >
-          Performance Summary
-        </MainLayoutColor>
-
+    <div className="w-full flex flex-col gap-3 font-sans select-none">
+      {/* Outside Header Toolbar */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-1">
         <div className="flex items-center gap-2">
-          <button
-            type="button"
-            className="flex items-center gap-2 px-3 py-1.5 bg-[#18181c] hover:bg-[#222226] border border-[#27272a] rounded-full text-xs font-medium text-[#a1a1aa] transition-colors h-[34px]"
-          >
-            <span>Sort by</span>
-            <ArrowUpDown className="w-3.5 h-3.5 text-[#a1a1aa]" />
-          </button>
-
-          <MainSearchInput
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search Vehicle..."
-            iconPosition="right"
-            containerClassName="w-48 sm:w-56"
-            className="!rounded-full !bg-[#09090b] !border-[#27272a] h-[34px] py-1.5 text-xs text-white placeholder-[#71717a]"
+          <MainLayoutColor
+            as={Activity}
+            color="yellow"
+            className="w-4 h-4 shrink-0"
           />
+          <MainLayoutColor
+            as={MainLayoutTextSize}
+            color="title"
+            size="sectionTitle"
+            className="font-bold tracking-wide block"
+          >
+            Performance Summary
+          </MainLayoutColor>
+        </div>
+
+        <div className="flex flex-wrap items-center justify-end gap-2 shrink-0">
+          {/* Sort Button */}
+          <MainLayoutFilterButton
+            isActive={!sortAsc}
+            onClick={() => setSortAsc((prev) => !prev)}
+            className="h-[34px] px-3.5 border border-[#27272a] hover:border-[#FDBB24]/40 rounded-full flex items-center gap-1.5 transition-colors"
+          >
+            <MainLayoutTextSize size="filterText">
+              {sortAsc ? "Sort A-Z" : "Sort Z-A"}
+            </MainLayoutTextSize>
+            <ArrowUpDown size={11} className="shrink-0" />
+          </MainLayoutFilterButton>
+
+          {/* Search Input h-[34px] */}
+          <div className="w-[150px] sm:w-[170px] shrink-0 h-[34px]">
+            <MainSearchInput
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search Vehicle..."
+              iconPosition="right"
+              className="w-full h-[34px]"
+            />
+          </div>
         </div>
       </div>
 
-      <div className="w-full overflow-x-auto">
-        <table className="w-full table-fixed border-collapse min-w-[650px]">
-          <thead>
-            <tr className="bg-[#18181c]/60 font-normal">
-              <th className="w-1/5 py-2.5 px-4 text-left rounded-l-lg">
-                <MainLayoutColor
-                  as={MainLayoutTextSize}
-                  color="subtitle"
-                  size="metricText"
-                  className="font-normal"
-                >
+      {/* Table Card Container */}
+      <MainLayoutColor
+        as="div"
+        background="surface"
+        border="cardBorder"
+        className="w-full h-fit rounded-2xl overflow-hidden shadow-2xl border"
+      >
+        <div className="w-full overflow-x-auto [scrollbar-width:thin] custom-scrollbar">
+          <table className="w-full text-left border-collapse min-w-[650px]">
+            <thead className="sticky top-0 z-10 shadow-sm">
+              <MainLayoutColor
+                as="tr"
+                background="tableHeaderBg"
+                border="cardBorder"
+                className="border-b"
+              >
+                <MainTableHeader className="py-3 px-4 pl-5">
                   Vehicle Number
-                </MainLayoutColor>
-              </th>
-              <th className="w-1/5 py-2.5 px-4 text-left">
-                <MainLayoutColor
-                  as={MainLayoutTextSize}
-                  color="subtitle"
-                  size="metricText"
-                  className="font-normal"
-                >
+                </MainTableHeader>
+                <MainTableHeader className="py-3 px-4">
                   Vehicle Type
-                </MainLayoutColor>
-              </th>
-              <th className="w-1/5 py-2.5 px-4 text-left">
-                <MainLayoutColor
-                  as={MainLayoutTextSize}
-                  color="subtitle"
-                  size="metricText"
-                  className="font-normal"
-                >
+                </MainTableHeader>
+                <MainTableHeader className="py-3 px-4">
                   Distance
-                </MainLayoutColor>
-              </th>
-              <th className="w-1/5 py-2.5 px-4 text-left">
-                <MainLayoutColor
-                  as={MainLayoutTextSize}
-                  color="subtitle"
-                  size="metricText"
-                  className="font-normal"
-                >
+                </MainTableHeader>
+                <MainTableHeader className="py-3 px-4">
                   Change
-                </MainLayoutColor>
-              </th>
-              <th className="w-1/5 py-2.5 px-4 text-left rounded-r-lg">
-                <MainLayoutColor
-                  as={MainLayoutTextSize}
-                  color="subtitle"
-                  size="metricText"
-                  className="font-normal"
-                >
+                </MainTableHeader>
+                <MainTableHeader className="py-3 px-4 pr-5">
                   Contribution
-                </MainLayoutColor>
-              </th>
-            </tr>
-          </thead>
+                </MainTableHeader>
+              </MainLayoutColor>
+            </thead>
 
-          <tbody className="divide-y divide-[#1c1c20] text-xs">
-            {loading ? (
-              <tr>
-                <td colSpan={5} className="py-8 text-center">
-                  <MainLayoutColor
-                    as={MainLayoutTextSize}
-                    color="subtitle"
-                    size="subInfoText"
-                  >
-                    Loading...
-                  </MainLayoutColor>
-                </td>
-              </tr>
-            ) : filteredData.length === 0 ? (
-              <tr>
-                <td colSpan={5} className="py-8 text-center">
-                  <MainLayoutColor
-                    as={MainLayoutTextSize}
-                    color="subtitle"
-                    size="subInfoText"
-                  >
-                    No data available
-                  </MainLayoutColor>
-                </td>
-              </tr>
-            ) : (
-              filteredData.map((row) => (
-                <tr
-                  key={row.id}
-                  className="hover:bg-[#18181c]/40 transition-colors"
-                >
-                  <td className="w-1/5 py-3 px-4 text-left font-semibold text-white truncate">
-                    {row.vehicleNumber}
-                  </td>
-                  <td className="w-1/5 py-3 px-4 text-left text-[#d4d4d8] font-medium truncate">
-                    {row.vehicleType}
-                  </td>
-                  <td className="w-1/5 py-3 px-4 text-left text-white font-semibold truncate">
-                    {row.distance}
-                  </td>
-                  <td className="w-1/5 py-3 px-4 text-left text-[#e4e4e7] font-medium truncate">
-                    {row.change}
-                  </td>
-                  <td className="w-1/5 py-3 px-4 text-left text-white font-semibold truncate">
-                    {row.contribution}
+            <tbody className="divide-y divide-[#1d1d20]/50">
+              {loading ? (
+                <tr>
+                  <td colSpan={5} className="py-8 text-center">
+                    <MainLayoutColor
+                      as={MainLayoutTextSize}
+                      color="subtitle"
+                      size="subInfoText"
+                    >
+                      Loading performance data...
+                    </MainLayoutColor>
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
-    </MainLayoutColor>
+              ) : filteredData.length > 0 ? (
+                filteredData.map((row) => (
+                  <tr
+                    key={row.id}
+                    className="hover:bg-[#18181b]/40 transition-colors align-middle cursor-pointer"
+                  >
+                    <td className="py-3.5 px-4 pl-5">
+                      <MainLayoutColor
+                        as={MainLayoutTextSize}
+                        color="title"
+                        size="sectionTitle"
+                        className="font-medium block truncate"
+                      >
+                        {row.vehicleNumber}
+                      </MainLayoutColor>
+                    </td>
+
+                    <td className="py-3.5 px-4">
+                      <MainLayoutColor
+                        as={MainLayoutTextSize}
+                        color="subtitle"
+                        size="sectionTitle"
+                        className="font-normal block truncate"
+                      >
+                        {row.vehicleType}
+                      </MainLayoutColor>
+                    </td>
+
+                    <td className="py-3.5 px-4">
+                      <MainLayoutColor
+                        as={MainLayoutTextSize}
+                        color="title"
+                        size="sectionTitle"
+                        className="font-medium block truncate"
+                      >
+                        {row.distance}
+                      </MainLayoutColor>
+                    </td>
+
+                    <td className="py-3.5 px-4">
+                      <MainLayoutColor
+                        as={MainLayoutTextSize}
+                        color="subtitle"
+                        size="sectionTitle"
+                        className="font-normal block truncate"
+                      >
+                        {row.change}
+                      </MainLayoutColor>
+                    </td>
+
+                    <td className="py-3.5 px-4 pr-5">
+                      <MainLayoutColor
+                        as={MainLayoutTextSize}
+                        color="title"
+                        size="sectionTitle"
+                        className="font-medium block truncate"
+                      >
+                        {row.contribution}
+                      </MainLayoutColor>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={5} className="py-8 text-center">
+                    <MainLayoutColor
+                      as={MainLayoutTextSize}
+                      color="subtitle"
+                      size="subInfoText"
+                    >
+                      No matching performance data found.
+                    </MainLayoutColor>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </MainLayoutColor>
+    </div>
   );
 }

@@ -1,5 +1,6 @@
 import React from "react";
-import { MAIN_LAYOUT_TEXT_SIZES } from "./MainLayoutTextSize"; 
+import MainLayoutColor, { MAIN_LAYOUT_COLORS } from "./MainLayoutColor";
+import MainLayoutTextSize from "./MainLayoutTextSize";
 
 export default function MainHeaderActionButton({
   children,
@@ -10,29 +11,55 @@ export default function MainHeaderActionButton({
   type = "button",
   ...props
 }) {
-  const fontBase =
-    "font-['Segoe_UI',-apple-system,BlinkMacSystemFont,Roboto,'Helvetica_Neue',Arial,sans-serif] not-italic";
+  const isPrimary = variant === "primary";
 
-  const baseStyles = `inline-flex items-center justify-center gap-1.5 h-8 px-3 rounded-lg ${fontBase} ${MAIN_LAYOUT_TEXT_SIZES.headerButtonText} transition-colors cursor-pointer select-none shrink-0`;
-
-  const variantStyles =
-    variant === "primary"
-      ? "bg-[#FDBB24] text-black hover:bg-[#e0a31f]"
-      : "bg-[#18181b]/70 border border-[#27272a] text-[#d4d4d8] hover:bg-[#27272a] hover:text-white";
+  if (isPrimary) {
+    return (
+      <button
+        type={type}
+        className={`inline-flex items-center justify-center gap-1.5 h-8 px-3.5 rounded-lg font-medium select-none shrink-0 cursor-pointer shadow-sm transition-opacity hover:opacity-90 bg-[#FDB914] text-black ${className}`.trim()}
+        {...props}
+      >
+        {Icon && iconPosition === "left" && (
+          <Icon size={14} className="shrink-0 text-black" />
+        )}
+        {children && (
+          <MainLayoutTextSize
+            size="headerButtonText"
+            className="leading-none text-black font-semibold"
+          >
+            {children}
+          </MainLayoutTextSize>
+        )}
+        {Icon && iconPosition === "right" && (
+          <Icon size={14} className="shrink-0 text-black" />
+        )}
+      </button>
+    );
+  }
 
   return (
-    <button
+    <MainLayoutColor
+      as="button"
       type={type}
-      className={`${baseStyles} ${variantStyles} ${className}`.trim()}
+      background="surface"
+      border="cardBorder"
+      borderHover="cardBorderHover"
+      color="subtitle"
+      className={`inline-flex items-center justify-center gap-1.5 h-8 px-3.5 rounded-lg select-none shrink-0 cursor-pointer transition-colors hover:text-white ${className}`.trim()}
       {...props}
     >
       {Icon && iconPosition === "left" && (
         <Icon size={14} className="shrink-0" />
       )}
-      {children && <span>{children}</span>}
+      {children && (
+        <MainLayoutTextSize size="headerButtonText" className="leading-none">
+          {children}
+        </MainLayoutTextSize>
+      )}
       {Icon && iconPosition === "right" && (
         <Icon size={14} className="shrink-0" />
       )}
-    </button>
+    </MainLayoutColor>
   );
 }

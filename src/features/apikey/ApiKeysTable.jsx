@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { ShieldCheck } from "lucide-react";
 import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
 import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
+import MainTableHeader from "../../components/Ui/MainLayoutUI/MainTableHeader";
 
 const DEFAULT_API_KEYS = [
   {
@@ -39,14 +40,18 @@ export default function ApiKeysTable({
 
   return (
     <div className="flex flex-col gap-2.5 font-sans select-none">
-      {/* Header Section (14px sectionTitle) */}
-      <div className="flex items-center gap-2">
-        <ShieldCheck size={18} className="text-[var(--color-yellow,#ffd60a)]" />
+      {/* Header Section */}
+      <div className="flex items-center gap-2 px-1">
+        <MainLayoutColor
+          as={ShieldCheck}
+          color="yellow"
+          className="w-4 h-4 shrink-0"
+        />
         <MainLayoutColor
           as={MainLayoutTextSize}
           color="title"
           size="sectionTitle"
-          className="font-bold tracking-tight block text-[14px]"
+          className="font-bold tracking-tight block"
         >
           Production Credentials
         </MainLayoutColor>
@@ -56,85 +61,48 @@ export default function ApiKeysTable({
       <MainLayoutColor
         as="div"
         background="surface"
-        className="w-full max-w-full border border-[#27272a] rounded-2xl shadow-xl overflow-hidden"
+        border="cardBorder"
+        className="w-full max-w-full border rounded-2xl shadow-xl overflow-hidden"
       >
-        <div className="w-full overflow-x-auto [scrollbar-width:thin]">
+        <div className="w-full overflow-x-auto [scrollbar-width:thin] custom-scrollbar">
           {apiKeys.length === 0 ? (
             <div className="py-12 text-center">
               <MainLayoutColor
                 as={MainLayoutTextSize}
                 color="subtitle"
                 size="subInfoText"
-                className="text-[12px]"
               >
                 No API keys found.
               </MainLayoutColor>
             </div>
           ) : (
             <table className="w-full text-left border-collapse table-fixed">
-              <thead>
-                <tr className="bg-[#18181b]/60 border-b border-[#27272a] uppercase">
-                  <th className="py-3 px-4 w-[180px]">
-                    <MainLayoutColor
-                      as={MainLayoutTextSize}
-                      color="subtitle"
-                      size="subInfoText"
-                      className="font-semibold tracking-wider text-[12px] block"
-                    >
-                      Production Credentials
-                    </MainLayoutColor>
-                  </th>
-                  <th className="py-3 px-4 w-[130px]">
-                    <MainLayoutColor
-                      as={MainLayoutTextSize}
-                      color="subtitle"
-                      size="subInfoText"
-                      className="font-semibold tracking-wider text-[12px] block"
-                    >
-                      Created On
-                    </MainLayoutColor>
-                  </th>
-                  <th className="py-3 px-4 w-[130px]">
-                    <MainLayoutColor
-                      as={MainLayoutTextSize}
-                      color="subtitle"
-                      size="subInfoText"
-                      className="font-semibold tracking-wider text-[12px] block"
-                    >
-                      Created By
-                    </MainLayoutColor>
-                  </th>
-                  <th className="py-3 px-4 w-[320px]">
-                    <MainLayoutColor
-                      as={MainLayoutTextSize}
-                      color="subtitle"
-                      size="subInfoText"
-                      className="font-semibold tracking-wider text-[12px] block"
-                    >
-                      API Key (Username)
-                    </MainLayoutColor>
-                  </th>
-                  <th className="py-3 px-4 w-[220px]">
-                    <MainLayoutColor
-                      as={MainLayoutTextSize}
-                      color="subtitle"
-                      size="subInfoText"
-                      className="font-semibold tracking-wider text-[12px] block"
-                    >
-                      API Token (Password)
-                    </MainLayoutColor>
-                  </th>
-                  <th className="py-3 px-4 w-[120px] text-right">
-                    <MainLayoutColor
-                      as={MainLayoutTextSize}
-                      color="subtitle"
-                      size="subInfoText"
-                      className="font-semibold tracking-wider text-[12px] block"
-                    >
-                      Action
-                    </MainLayoutColor>
-                  </th>
-                </tr>
+              <thead className="sticky top-0 z-10 shadow-sm">
+                <MainLayoutColor
+                  as="tr"
+                  background="tableHeaderBg"
+                  border="cardBorder"
+                  className="border-b"
+                >
+                  <MainTableHeader className="py-3 px-4 w-[180px]">
+                    Production Credentials
+                  </MainTableHeader>
+                  <MainTableHeader className="py-3 px-4 w-[130px]">
+                    Created On
+                  </MainTableHeader>
+                  <MainTableHeader className="py-3 px-4 w-[130px]">
+                    Created By
+                  </MainTableHeader>
+                  <MainTableHeader className="py-3 px-4 w-[320px]">
+                    API Key (Username)
+                  </MainTableHeader>
+                  <MainTableHeader className="py-3 px-4 w-[220px]">
+                    API Token (Password)
+                  </MainTableHeader>
+                  <MainTableHeader className="py-3 px-4 w-[120px] text-right">
+                    Action
+                  </MainTableHeader>
+                </MainLayoutColor>
               </thead>
               <tbody className="divide-y divide-[#27272a]">
                 {apiKeys.map(function (item) {
@@ -149,39 +117,39 @@ export default function ApiKeysTable({
                       key={item.id}
                       className="align-middle hover:bg-[#18181b]/50 transition-colors cursor-pointer"
                     >
-                      {/* Name (14px sectionTitle) */}
+                      {/* Name */}
                       <td className="py-3.5 px-4 truncate">
                         <MainLayoutColor
                           as={MainLayoutTextSize}
                           color="title"
                           size="sectionTitle"
-                          className="font-medium text-[14px] truncate block"
+                          className="font-medium truncate block"
                         >
                           {item.name}
                         </MainLayoutColor>
                       </td>
 
-                      {/* Created On (12px subInfoText) */}
+                      {/* Created On */}
                       <td className="py-3.5 px-4 whitespace-nowrap">
                         <MainLayoutColor
                           as={MainLayoutTextSize}
                           color="subtitle"
                           size="subInfoText"
-                          className="font-normal text-[12px] block"
+                          className="font-normal block"
                         >
                           {item.created}
                         </MainLayoutColor>
                       </td>
 
-                      {/* Created By (12px subInfoText) */}
+                      {/* Created By */}
                       <td className="py-3.5 px-4 whitespace-nowrap">
                         <MainLayoutColor
                           as={MainLayoutTextSize}
                           color="subtitle"
                           size="subInfoText"
-                          className="font-normal text-[12px] block"
+                          className="font-normal block"
                         >
-                          {item.author || ""}
+                          {item.author || "—"}
                         </MainLayoutColor>
                       </td>
 

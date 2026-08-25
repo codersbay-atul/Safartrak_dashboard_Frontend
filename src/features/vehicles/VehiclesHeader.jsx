@@ -17,14 +17,14 @@ export default function VehiclesHeader({
       showExport={false}
       showFilters={false}
       actionButtons={[
-        {
-          label: "Import Data",
-          icon: Download,
-          iconPosition: "left",
-          onClick: onImportClick,
-          variant: "secondary",
-          className: "min-w-[110px]",
-        },
+        // {
+        //   label: "Import Data",
+        //   icon: Download,
+        //   iconPosition: "left",
+        //   onClick: onImportClick,
+        //   variant: "secondary",
+        //   className: "min-w-[110px]",
+        // },
         {
           label: "Export Data",
           icon: Upload,

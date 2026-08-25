@@ -65,7 +65,8 @@ export default function Analytics() {
           </div>
         </div>
 
-        <div className="w-full shrink-0 bg-[#141416] border border-[#222226] rounded-2xl p-4 shadow-xl">
+        {/* Outer Card styles removed: ab title standalone bahar rahega aur table single card me render hogi */}
+        <div className="w-full shrink-0">
           <PerformanceSummaryList range={range} />
         </div>
       </div>

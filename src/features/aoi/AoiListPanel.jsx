@@ -1,13 +1,15 @@
 import React from "react";
-import { Search } from "lucide-react";
 import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
 import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
+import MainLayoutFilterButton from "../../components/Ui/MainLayoutUI/MainLayoutFilterButton";
+import MainSearchInput from "../../components/Ui/MainLayoutUI/MainSearchInput";
+import MainStatusBadge from "../../components/Ui/MainLayoutUI/MainStatusBadge";
 
 const AOI_FILTERS = [
-  { label: "All", value: "all", color: "" },
-  { label: "Mobilized", value: "mobilized", color: "bg-[#10b981]" },
-  { label: "Immobilized", value: "immobilized", color: "bg-[#f59e0b]" },
-  { label: "Offline", value: "offline", color: "bg-[#ef4444]" },
+  { label: "All", value: "all", dotBg: "filterDotAll" },
+  { label: "Mobilized", value: "mobilized", dotBg: "filterDotMoving" },
+  { label: "Immobilized", value: "immobilized", dotBg: "filterDotIdle" },
+  { label: "Offline", value: "offline", dotBg: "filterDotOffline" },
 ];
 
 export default function AoiListPanel({
@@ -23,7 +25,8 @@ export default function AoiListPanel({
     <MainLayoutColor
       as="div"
       background="surface"
-      className="w-full h-auto lg:h-full border border-[#1f1f23] rounded-2xl p-4 flex flex-col select-none overflow-hidden font-sans"
+      border="cardBorder"
+      className="w-full h-auto lg:h-full rounded-2xl p-4 flex flex-col select-none overflow-hidden font-sans"
     >
       {/* 14px Header Title */}
       <MainLayoutColor
@@ -35,56 +38,56 @@ export default function AoiListPanel({
         All Saved Places
       </MainLayoutColor>
 
-      <div className="relative w-full mb-3 shrink-0">
-        <input
-          type="text"
+      {/* Full Width Search Box with Custom Sizing */}
+      <div className="w-full mb-3 shrink-0">
+        <MainSearchInput
           placeholder="Search vehicles..."
           value={searchQuery}
           onChange={onSearchChange}
-          className="w-full rounded-full bg-[#09090b] border border-[#27272a] focus:border-[#3f3f46] text-[12px] py-2 pl-4 pr-10 text-white placeholder-[#52525b] outline-none transition-all"
+          iconPosition="right"
+          containerClassName="!w-full min-w-full"
+          className="!w-full !h-9 !py-2 !pl-4 !pr-10"
         />
-        <div className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#71717a] pointer-events-none flex items-center justify-center">
-          <Search size={15} />
-        </div>
       </div>
 
+      {/* Filter Tabs */}
       <div className="flex items-center gap-2 overflow-x-auto pb-2 mb-2 shrink-0 no-scrollbar flex-nowrap w-full">
         {AOI_FILTERS.map((filter) => {
-          const isInactive = statusFilter === filter.value;
+          const isSelected = statusFilter === filter.value;
           return (
-            <button
+            <MainLayoutFilterButton
               key={filter.value}
-              type="button"
+              isActive={isSelected}
               onClick={() => onFilterChange(filter.value)}
-              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-full transition-all duration-200 cursor-pointer shrink-0 ${
-                isInactive
-                  ? "bg-[#27272a] text-white"
-                  : "bg-[#18181b] text-[#8e8e93] hover:text-white"
-              }`}
             >
-              {filter.color && (
-                <span className={`w-2 h-2 rounded-[2px] ${filter.color}`} />
+              {filter.dotBg && (
+                <MainLayoutColor
+                  as="span"
+                  background={filter.dotBg}
+                  className="w-2 h-2 rounded-[2px] shrink-0 inline-block"
+                />
               )}
-              <MainLayoutTextSize size="badgeText" className="font-medium">
+              <MainLayoutTextSize size="filterText">
                 {filter.label}
               </MainLayoutTextSize>
-            </button>
+            </MainLayoutFilterButton>
           );
         })}
       </div>
 
+      {/* Places List */}
       <div className="flex flex-col overflow-y-visible lg:overflow-y-auto flex-none lg:flex-1 custom-scrollbar min-h-0 space-y-2">
         {aois.length > 0 ? (
           aois.map((aoi) => {
             const isSelected = selectedId === aoi.id;
-            const isInactive = aoi.status === "Inactive";
+            const currentStatus = aoi.status || "Inactive";
 
             return (
               <MainLayoutColor
                 key={aoi.id}
                 as="button"
                 type="button"
-                background="cardSurface"
+                background={isSelected ? "selectedRowBg" : "surface"}
                 border="cardBorder"
                 borderHover="cardBorderHover"
                 onClick={() => onSelect(aoi)}
@@ -95,19 +98,17 @@ export default function AoiListPanel({
                 <div className="flex items-center justify-between gap-2">
                   <div className="min-w-0 flex-1">
                     <div className="flex items-baseline gap-2 truncate">
-                      {/* 14px Place Name */}
+                      {/* Place Name */}
                       <MainLayoutColor
                         as={MainLayoutTextSize}
                         color="title"
                         size="sectionTitle"
-                        className={`font-semibold truncate inline ${
-                          isSelected ? "text-white" : "text-[#e4e4e7]"
-                        }`}
+                        className="font-semibold truncate inline"
                       >
                         {aoi.name}
                       </MainLayoutColor>
 
-                      {/* 12px Sub Info */}
+                      {/* Sub Info */}
                       <MainLayoutColor
                         as={MainLayoutTextSize}
                         color="subtitle"
@@ -118,7 +119,7 @@ export default function AoiListPanel({
                       </MainLayoutColor>
                     </div>
 
-                    {/* 12px Sub Info Line */}
+                    {/* Sub Info Line */}
                     <MainLayoutColor
                       as={MainLayoutTextSize}
                       color="subtitle"
@@ -131,18 +132,10 @@ export default function AoiListPanel({
                     </MainLayoutColor>
                   </div>
 
-                  {/* Badge */}
-                  <span
-                    className={`shrink-0 px-3 py-1 rounded-full transition-colors ${
-                      isInactive
-                        ? "bg-[#042814] text-[#10b981]"
-                        : "bg-[#2e1d05] text-[#d97706]"
-                    }`}
-                  >
-                    <MainLayoutTextSize size="badgeText" className="font-medium">
-                      {isInactive ? "Active" : "Inactive"}
-                    </MainLayoutTextSize>
-                  </span>
+                  {/* Status Badge */}
+                  <div className="shrink-0">
+                    <MainStatusBadge status={currentStatus} showDot={false} />
+                  </div>
                 </div>
               </MainLayoutColor>
             );

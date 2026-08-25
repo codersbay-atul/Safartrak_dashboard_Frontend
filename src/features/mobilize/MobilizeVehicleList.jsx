@@ -2,12 +2,13 @@ import React from "react";
 import { ChevronRight } from "lucide-react";
 import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
 import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
+import MainLayoutFilterButton from "../../components/Ui/MainLayoutUI/MainLayoutFilterButton";
 
 const STATUS_FILTERS = [
-  { label: "All", value: "all", color: "bg-[#71717a]" },
-  { label: "Mobilized", value: "mobilized", color: "bg-[#10b981]" },
-  { label: "Immobilized", value: "immobilized", color: "bg-[#FDBB24]" },
-  { label: "Offline", value: "offline", color: "bg-[#ef4444]" },
+  { label: "All", value: "all", dotBg: "filterDotAll" },
+  { label: "Mobilized", value: "mobilized", dotBg: "filterDotMoving" },
+  { label: "Immobilized", value: "immobilized", dotBg: "filterDotIdle" },
+  { label: "Offline", value: "offline", dotBg: "filterDotOffline" },
 ];
 
 const ACTION_STYLES = {
@@ -50,23 +51,27 @@ export default function MobilizeVehicleList({
         Vehicle List
       </MainLayoutColor>
 
+      {/* Filter Tabs using MainLayoutFilterButton */}
       <div className="flex items-center gap-1.5 pb-1.5 mb-2 shrink-0 overflow-x-auto no-scrollbar">
-        {STATUS_FILTERS.map((filter) => (
-          <button
-            key={filter.value}
-            onClick={() => onFilterChange(filter.value)}
-            className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full transition-all duration-150 cursor-pointer shrink-0 ${
-              InactiveFilter === filter.value
-                ? "bg-[#27272a] text-white border border-[#3f3f46]"
-                : "bg-[#18181b]/60 text-[#a1a1aa] border border-[#27272a] hover:border-[#3f3f46] hover:text-white"
-            }`}
-          >
-            <span className={`w-1.5 h-1.5 rounded-[2px] ${filter.color}`} />
-            <MainLayoutTextSize size="badgeText" className="font-medium">
-              {filter.label}
-            </MainLayoutTextSize>
-          </button>
-        ))}
+        {STATUS_FILTERS.map((filter) => {
+          const isSelected = InactiveFilter === filter.value;
+          return (
+            <MainLayoutFilterButton
+              key={filter.value}
+              isActive={isSelected}
+              onClick={() => onFilterChange(filter.value)}
+            >
+              <MainLayoutColor
+                as="span"
+                background={filter.dotBg}
+                className="w-2 h-2 rounded-[2px] shrink-0 inline-block"
+              />
+              <MainLayoutTextSize size="filterText">
+                {filter.label}
+              </MainLayoutTextSize>
+            </MainLayoutFilterButton>
+          );
+        })}
       </div>
 
       <div className="flex flex-col gap-2 overflow-y-visible lg:overflow-y-auto pr-1 flex-none lg:flex-1 custom-scrollbar min-h-0">

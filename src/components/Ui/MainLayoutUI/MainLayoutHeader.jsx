@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Download } from "lucide-react";
 import MainLayoutColor from "./MainLayoutColor";
 import MainLayoutTextSize from "./MainLayoutTextSize";
-import MainLayoutButton from "./MainLayoutButton";
 import MainSearchInput from "./MainSearchInput";
 import MainDropDown from "./MainDropDown";
 import MainHeaderActionButton from "./MainHeaderActionButton";
@@ -14,7 +13,6 @@ export default function MainLayoutHeader({
   searchIconPosition = "left",
   onSearch,
   onExportClick,
-  exportLabel,
   onFilterChange,
   showSearch = true,
   showExport = true,
@@ -60,12 +58,12 @@ export default function MainLayoutHeader({
       className={`flex flex-col lg:flex-row lg:items-center justify-between gap-3 xl:gap-4 w-full select-none mt-0 pt-0 shrink-0 min-w-0 overflow-visible ${className}`.trim()}
     >
       {/* Left Side: Title & Subtitle */}
-      <div className="min-w-0 flex-1">
+      <div className="min-w-0 flex-1 gap-1">
         <MainLayoutColor
           as={MainLayoutTextSize}
           color="title"
           size="title"
-          className="block truncate font-bold text-white text-[17px] xl:text-[18px]"
+          className="block truncate"
         >
           {title}
         </MainLayoutColor>
@@ -75,7 +73,7 @@ export default function MainLayoutHeader({
             as={MainLayoutTextSize}
             color="subtitle"
             size="subtitle"
-            className="mt-0.5 block whitespace-normal break-words font-normal text-zinc-400 leading-snug"
+            className="mt-1 block whitespace-normal break-words leading-snug"
           >
             {subtitle}
           </MainLayoutColor>
@@ -130,7 +128,6 @@ export default function MainLayoutHeader({
             placeholder={searchPlaceholder}
             iconPosition={searchIconPosition}
             containerClassName="w-full min-w-0 lg:w-[170px] xl:w-[210px]"
-            className="!rounded-full !bg-[#0c0d12] !border-[#22252b] !text-[12px] h-[34px]"
           />
         )}
 
@@ -142,7 +139,7 @@ export default function MainLayoutHeader({
               icon={btn.icon}
               iconPosition={btn.iconPosition || "left"}
               onClick={btn.onClick}
-              variant={btn.variant}
+              variant={btn.variant || "primary"}
               className={btn.className}
             >
               {btn.label}
@@ -152,25 +149,25 @@ export default function MainLayoutHeader({
         {actionButtonLabel && (
           <MainHeaderActionButton
             icon={actionButtonIcon}
-            iconPosition="right"
+            iconPosition={actionButtonIcon ? "right" : "left"}
             onClick={onActionClick}
-            className={`min-w-[100px] ${actionButtonClassName}`}
+            variant="primary"
+            className={actionButtonClassName}
           >
             {actionButtonLabel}
           </MainHeaderActionButton>
         )}
 
-        {/* Fallback Export */}
+        {/* 4. Export / Download Button (Uses Standard Theme Border & Yellow Hover) */}
         {showExport && (
-          <MainLayoutButton
+          <MainHeaderActionButton
             variant="secondary"
-            size="sm"
+            icon={Download}
             onClick={() => onExportClick?.({ ...filters, search: searchQuery })}
             aria-label="Download Data"
-            className="!h-[34px] !w-[34px] !px-0 !py-0 !rounded-full !bg-[#0c0d12] !border-[#22252b] text-[#d4d4d8] hover:!bg-[#181920] hover:text-white flex-shrink-0"
-          >
-            <Download size={14} />
-          </MainLayoutButton>
+            title="Download Data"
+            className="w-8 !px-0"
+          />
         )}
 
         {children}

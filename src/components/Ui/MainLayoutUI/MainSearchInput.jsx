@@ -1,5 +1,6 @@
 import React from "react";
 import { Search } from "lucide-react";
+import MainLayoutColor from "./MainLayoutColor";
 import MainLayoutTextSize from "./MainLayoutTextSize";
 
 export default function MainSearchInput({
@@ -11,25 +12,33 @@ export default function MainSearchInput({
   containerClassName = "",
   ...props
 }) {
+  const isLeft = iconPosition === "left";
+
   return (
-    <div className={`relative flex-1 min-w-0 sm:flex-initial ${containerClassName}`}>
-      <MainLayoutTextSize
+    <div
+      className={`relative flex items-center w-full min-w-0 ${containerClassName}`.trim()}
+    >
+      <MainLayoutColor
         as="input"
-        size="searchText"
+        color="SearchTextColor"
+        border="SearchBorder"
+        borderHover="SearchBorderHover"
         type="text"
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        className={`w-full h-8 sm:h-9 px-3 rounded-full bg-[#05070B] border border-[#22252B] placeholder-[#8B8D97] focus:outline-none focus:border-[#FDBB24] text-white transition-all
-          ${iconPosition === "left" ? "pl-8 pr-3" : "pr-8 pl-3"}
-          ${className}`}
+        className={`w-full h-[34px] px-3.5 rounded-full text-[12px] placeholder-[#8B8D97] focus:outline-none transition-all box-border ${
+          isLeft ? "pl-9 pr-3.5" : "pr-9 pl-3.5"
+        } ${className}`.trim()}
         {...props}
       />
-      <Search
-        size={12}
-        className={`absolute top-1/2 -translate-y-1/2 text-[#8B8D97] pointer-events-none
-          ${iconPosition === "left" ? "left-2.5" : "right-2.5"}`}
-      />
+      <div
+        className={`absolute top-1/2 -translate-y-1/2 pointer-events-none flex items-center justify-center ${
+          isLeft ? "left-3" : "right-3"
+        }`}
+      >
+        <Search size={13} className="text-[#8B8D97]" />
+      </div>
     </div>
   );
 }

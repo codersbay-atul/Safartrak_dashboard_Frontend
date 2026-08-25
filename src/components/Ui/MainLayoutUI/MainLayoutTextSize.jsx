@@ -21,6 +21,7 @@ export const MAIN_LAYOUT_TEXT_SIZES = {
   headerButtonText: "text-[14px] leading-[20px] font-medium",
   searchText: "text-[12px] leading-tight font-normal",
   PopOverText: "text-[14px] leading-tight font-medium",
+  tableHeader: "text-[12px] font-medium tracking-wider",
 };
 
 export function formatDisplayValue(value, fallback = "Not Available") {

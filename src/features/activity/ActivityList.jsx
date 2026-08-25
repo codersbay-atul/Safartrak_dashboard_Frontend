@@ -1,19 +1,23 @@
 import React from "react";
-import { Search, SlidersHorizontal, MapPin, User, Truck } from "lucide-react";
+import { SlidersHorizontal, MapPin, User, Truck } from "lucide-react";
 import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
 import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
+import MainSearchInput from "../../components/Ui/MainLayoutUI/MainSearchInput";
+import MainLayoutFilterButton from "../../components/Ui/MainLayoutUI/MainLayoutFilterButton";
 
 function EventMeta({ event }) {
   if (!event.meta) return null;
 
   if (event.severity === "alert" && event.meta.alert) {
     return (
-      <MainLayoutTextSize
+      <MainLayoutColor
+        as={MainLayoutTextSize}
+        color="expiredStatusBadge"
         size="subInfoText"
-        className="mt-1 text-[#f87171] font-medium leading-snug block"
+        className="mt-1 font-medium leading-snug block"
       >
         {event.meta.alert}: {event.meta.speed} (Allowed {event.meta.allowed})
-      </MainLayoutTextSize>
+      </MainLayoutColor>
     );
   }
 
@@ -59,11 +63,16 @@ export default function ActivityList({
     <MainLayoutColor
       as="div"
       background="surface"
-      className="w-full h-auto lg:h-full border border-[#1f1f23] rounded-xl flex flex-col overflow-hidden select-none font-sans"
+      border="cardBorder"
+      className="w-full h-auto lg:h-full border rounded-xl flex flex-col overflow-hidden select-none font-sans"
     >
-      <div className="shrink-0 px-3 pt-3 pb-2.5 border-b border-[#1f1f23]">
+      {/* Header Controls */}
+      <MainLayoutColor
+        as="div"
+        border="cardBorder"
+        className="shrink-0 px-3 pt-3 pb-2.5 border-b"
+      >
         <div className="flex items-center justify-between gap-2 mb-2.5">
-          {/* 14px Header Title */}
           <MainLayoutColor
             as={MainLayoutTextSize}
             color="title"
@@ -75,30 +84,29 @@ export default function ActivityList({
         </div>
 
         <div className="flex items-center gap-1.5">
-          <div className="relative flex-1 min-w-0">
-            <Search
-              size={13}
-              className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#71717a] pointer-events-none"
-            />
-            <input
-              type="text"
+          {/* Centralized Search Input */}
+          <div className="flex-1 min-w-0">
+            <MainSearchInput
               value={searchQuery}
               onChange={onSearchChange}
               placeholder="Search routes..."
-              className="w-full pl-7 pr-2.5 py-1.5 text-[12px] rounded-lg bg-[#18181b] border border-[#27272a] placeholder-[#71717a] focus:outline-none focus:border-[#FDBB24] text-white transition-all"
+              iconPosition="left"
+              className="w-full rounded-lg py-1 px-2.5"
             />
           </div>
-          <button
-            type="button"
+
+          {/* Filter Trigger Button */}
+          <MainLayoutFilterButton
             onClick={onFilterClick}
             aria-label="Filter activity"
-            className="shrink-0 p-1.5 rounded-lg bg-[#18181b] border border-[#27272a] text-[#a1a1aa] hover:text-white hover:border-zinc-600 transition-colors cursor-pointer"
+            className="shrink-0 !px-2.5 !py-1.5"
           >
-            <SlidersHorizontal size={14} />
-          </button>
+            <SlidersHorizontal size={14} className="shrink-0" />
+          </MainLayoutFilterButton>
         </div>
-      </div>
+      </MainLayoutColor>
 
+      {/* Activity Timeline Content */}
       <div className="flex-none lg:flex-1 min-h-0 overflow-y-visible lg:overflow-y-auto custom-scrollbar px-3 py-3">
         {events.length === 0 ? (
           <div className="h-full flex items-center justify-center">
@@ -112,10 +120,14 @@ export default function ActivityList({
           </div>
         ) : (
           <div className="relative pl-1">
-            <div className="absolute left-[54px] top-2 bottom-2 w-px border-l border-dashed border-[#2a2a2e]" />
+            <MainLayoutColor
+              as="div"
+              border="cardBorder"
+              className="absolute left-[54px] top-2 bottom-2 w-px border-l border-dashed"
+            />
 
             <div className="flex flex-col gap-0">
-              {events.map((event, index) => {
+              {events.map((event) => {
                 const isSelected = selectedId === event.id;
                 const isAlert = event.severity === "alert";
 
@@ -126,7 +138,7 @@ export default function ActivityList({
                     onClick={() => onSelect?.(event)}
                     className="relative w-full text-left flex gap-2.5 pb-4 last:pb-0 group cursor-pointer"
                   >
-                    {/* 12px Timestamp */}
+                    {/* Timestamp */}
                     <MainLayoutColor
                       as={MainLayoutTextSize}
                       color="subtitle"
@@ -136,43 +148,61 @@ export default function ActivityList({
                       {event.time}
                     </MainLayoutColor>
 
+                    {/* Dot Indicator */}
                     <span className="relative z-10 mt-1.5 shrink-0 flex items-center justify-center">
-                      <span
-                        className={`w-2.5 h-2.5 rounded-full border-2 ${
+                      <MainLayoutColor
+                        as="span"
+                        background={
                           isAlert
-                            ? "bg-[#ef4444] border-[#ef4444] shadow-[0_0_8px_rgba(239,68,68,0.55)]"
+                            ? "expiredStatusBadge"
                             : isSelected
-                            ? "bg-[#FDBB24] border-[#FDBB24] shadow-[0_0_8px_rgba(253,187,36,0.45)]"
-                            : "bg-[#121214] border-[#a1a1aa] group-hover:border-[#FDBB24]"
-                        } transition-colors`}
+                            ? "yellow"
+                            : "filterBg"
+                        }
+                        border={
+                          isAlert
+                            ? "expiredStatusBadgeBorder"
+                            : isSelected
+                            ? "yellow"
+                            : "filterBorder"
+                        }
+                        className="w-2.5 h-2.5 rounded-full border-2 transition-colors"
                       />
                     </span>
 
-                    <div
-                      className={`flex-1 min-w-0 rounded-lg border px-2.5 py-2 transition-all ${
+                    {/* Card Content */}
+                    <MainLayoutColor
+                      as="div"
+                      background={
                         isSelected
-                          ? "bg-[#18181b] border-[#FDBB24]/35"
+                          ? "selectedRowBg"
                           : isAlert
-                          ? "bg-[#1a1214] border-[#7f1d1d]/50 hover:border-[#ef4444]/40"
-                          : "bg-transparent border-transparent hover:bg-[#16161a] hover:border-[#232329]"
-                      }`}
+                          ? "expiredStatusBadgeBg"
+                          : "transparent"
+                      }
+                      border={
+                        isSelected
+                          ? "cardBorderHover"
+                          : isAlert
+                          ? "expiredStatusBadgeBorder"
+                          : "cardBorder"
+                      }
+                      className="flex-1 min-w-0 rounded-lg border px-2.5 py-2 transition-all hover:opacity-90"
                     >
-                      {/* 14px Event Title */}
+                      {/* Event Title */}
                       <MainLayoutColor
                         as={MainLayoutTextSize}
-                        color="title"
+                        color={isAlert ? "expiredStatusBadge" : "title"}
                         size="sectionTitle"
-                        className={`font-bold tracking-tight leading-tight block ${
-                          isAlert ? "text-[#f87171]" : ""
-                        }`}
+                        className="font-bold tracking-tight leading-tight block"
                       >
                         {event.title}
                       </MainLayoutColor>
 
-                      {/* 12px Sub Info Details */}
+                      {/* Sub Info Details */}
                       <div className="mt-1.5 flex flex-col gap-0.5">
                         <div className="inline-flex items-center gap-1">
-                          <MapPin size={11} className="text-[#71717a] shrink-0" />
+                          <MainLayoutColor as={MapPin} color="subtitle" size={11} className="shrink-0" />
                           <MainLayoutColor
                             as={MainLayoutTextSize}
                             color="subtitle"
@@ -182,8 +212,9 @@ export default function ActivityList({
                             {event.location}
                           </MainLayoutColor>
                         </div>
+
                         <div className="inline-flex items-center gap-1">
-                          <User size={11} className="text-[#71717a] shrink-0" />
+                          <MainLayoutColor as={User} color="subtitle" size={11} className="shrink-0" />
                           <MainLayoutColor
                             as={MainLayoutTextSize}
                             color="subtitle"
@@ -193,8 +224,9 @@ export default function ActivityList({
                             {event.driver}
                           </MainLayoutColor>
                         </div>
+
                         <div className="inline-flex items-center gap-1">
-                          <Truck size={11} className="text-[#71717a] shrink-0" />
+                          <MainLayoutColor as={Truck} color="subtitle" size={11} className="shrink-0" />
                           <MainLayoutColor
                             as={MainLayoutTextSize}
                             color="subtitle"
@@ -207,7 +239,7 @@ export default function ActivityList({
                       </div>
 
                       <EventMeta event={event} />
-                    </div>
+                    </MainLayoutColor>
                   </button>
                 );
               })}

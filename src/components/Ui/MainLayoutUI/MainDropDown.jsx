@@ -45,26 +45,33 @@ export default function MainDropDown({
     options.find((opt) => opt.value === selectedValue)?.label || label;
 
   const trigger = customTrigger || (
-    <button
+    <MainLayoutColor
+      as="button"
       type="button"
+      background="dropdownBg"
+      border="dropdownBorder"
+      borderHover="dropdownBorderHover"
+      color="dropdownText"
       onClick={() =>
         isControlled
           ? onClose?.()
           : setInternalIsOpen((previous) => !previous)
       }
-      className={`w-full sm:w-auto flex items-center justify-between gap-2 h-8 sm:h-9 px-3 rounded-full bg-[#05070B] border border-[#22252B] text-[#d4d4d8] hover:border-[#FDBB24]/40 hover:text-white transition-colors cursor-pointer focus:outline-none ${className}`}
+      className={`w-full sm:w-auto flex items-center justify-between gap-2 h-8 sm:h-9 px-3 rounded-full hover:text-white transition-colors cursor-pointer focus:outline-none ${className}`.trim()}
     >
       <MainLayoutTextSize size="dropdownText" className="truncate">
         {currentLabel}
       </MainLayoutTextSize>
 
-      <ChevronDown
+      <MainLayoutColor
+        as={ChevronDown}
+        color="dropdownIcon"
         size={13}
-        className={`text-[#8B8D97] shrink-0 transition-transform duration-200 ${
+        className={`shrink-0 transition-transform duration-200 ${
           isOpen ? "rotate-180" : ""
         }`}
       />
-    </button>
+    </MainLayoutColor>
   );
 
   return (
@@ -74,30 +81,35 @@ export default function MainDropDown({
       {isOpen && (
         <MainLayoutColor
           as="div"
-          background={customTrigger ? "surface" : undefined}
-          className={`absolute right-0 mt-1.5 w-full sm:w-44 ${customTrigger ? "" : "bg-[#0f1115]"} border border-[#22252B] rounded-xl shadow-2xl overflow-hidden z-50 animate-in fade-in duration-100 ${customTrigger ? className : ""}`}
+          background={customTrigger ? "surface" : "dropdownMenuBg"}
+          border="dropdownMenuBorder"
+          className={`absolute right-0 mt-1.5 w-full sm:w-44 rounded-xl shadow-2xl overflow-hidden z-50 animate-in fade-in duration-100 ${customTrigger ? className : ""}`.trim()}
         >
           {children || (
             <div className="py-1">
-              {options.map((option) => (
-                <button
-                  key={option.value}
-                  type="button"
-                  onClick={() => {
-                    onSelect(option.value);
-                    closeDropdown();
-                  }}
-                  className={`w-full text-left px-3 py-2 transition-colors cursor-pointer block truncate ${
-                    option.value === selectedValue
-                      ? "bg-[#FDBB24]/10 text-[#FDBB24] font-semibold"
-                      : "text-[#a1a1aa] hover:bg-[#18181b] hover:text-white"
-                  }`}
-                >
-                  <MainLayoutTextSize size="dropdownOptionText" className="block truncate">
-                    {option.label}
-                  </MainLayoutTextSize>
-                </button>
-              ))}
+              {options.map((option) => {
+                const isSelected = option.value === selectedValue;
+                return (
+                  <MainLayoutColor
+                    key={option.value}
+                    as="button"
+                    type="button"
+                    background={isSelected ? "dropdownOptionActiveBg" : "transparent"}
+                    color={isSelected ? "dropdownOptionActiveText" : "dropdownOptionText"}
+                    onClick={() => {
+                      onSelect(option.value);
+                      closeDropdown();
+                    }}
+                    className={`w-full text-left px-3 py-2 transition-colors cursor-pointer block truncate hover:text-white ${
+                      isSelected ? "font-semibold" : "hover:bg-[#18181b]"
+                    }`.trim()}
+                  >
+                    <MainLayoutTextSize size="dropdownOptionText" className="block truncate">
+                      {option.label}
+                    </MainLayoutTextSize>
+                  </MainLayoutColor>
+                );
+              })}
             </div>
           )}
         </MainLayoutColor>

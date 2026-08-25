@@ -4,76 +4,116 @@ import MainLayoutTextSize from "./MainLayoutTextSize";
 
 const STATUS_CONFIG = {
   running: {
-    color: "running",
-    bg: "runningBg",
-    dot: "runningDot",
-    border: "border-[#10b981]/25",
+    color: "activeText",
+    bg: "activeBg",
     label: "Running",
+  },
+  live: {
+    color: "activeText",
+    bg: "activeBg",
+    label: "Live",
   },
   moving: {
-    color: "running",
-    bg: "runningBg",
-    dot: "runningDot",
-    border: "border-[#10b981]/25",
-    label: "Running",
+    color: "activeText",
+    bg: "activeBg",
+    dot: "filterDotMoving",
+    label: "Moving",
+  },
+  active: {
+    color: "activeText",
+    bg: "activeBg",
+    dot: "filterDotMoving",
+    label: "Active",
+  },
+  online: {
+    color: "activeText",
+    bg: "activeBg",
+    dot: "filterDotMoving",
+    label: "Online",
+  },
+  yes: {
+    color: "activeText",
+    bg: "activeBg",
+    dot: "filterDotMoving",
+    label: "Yes",
   },
   idle: {
-    color: "idle",
+    color: "idleText",
     bg: "idleBg",
-    dot: "idleDot",
-    border: "border-[#f59e0b]/25",
+    dot: "filterDotIdle",
     label: "Idle",
   },
+  pending: {
+    color: "pendingText",
+    bg: "pendingBg",
+    dot: "filterDotIdle",
+    label: "Pending",
+  },
   critical: {
-    color: "critical",
-    bg: "criticalBg",
-    dot: "criticalDot",
-    border: "border-[#f97316]/25",
+    color: "expiredText",
+    bg: "expiredBg",
+    dot: "filterDotCritical",
     label: "Critical",
   },
   maintenance: {
-    color: "maintenance",
-    bg: "maintenanceBg",
-    dot: "maintenanceDot",
-    border: "border-[#f97316]/25",
+    color: "expiredText",
+    bg: "expiredBg",
+    dot: "filterDotCritical",
     label: "Maintenance",
   },
+  expired: {
+    color: "expiredText",
+    bg: "expiredBg",
+    dot: "filterDotCritical",
+    label: "Expired",
+  },
   offline: {
-    color: "offline",
-    bg: "offlineBg",
-    dot: "offlineDot",
-    border: "border-[#ef4444]/25",
+    color: "offlineText",
+    bg: "expiredBg",
+    dot: "filterDotOffline",
     label: "Offline",
+  },
+  inactive: {
+    color: "inactiveText",
+    bg: "inactiveBg",
+    dot: "filterDotAll",
+    label: "Inactive",
   },
 };
 
 const DEFAULT_CONFIG = {
-  color: "defaultStatus",
-  bg: "defaultStatusBg",
-  dot: "defaultStatusDot",
-  border: "border-zinc-700/50",
+  color: "inactiveText",
+  bg: "inactiveBg",
+  dot: "filterDotAll",
   label: "Unknown",
 };
 
-export default function MainStatusBadge({ status, className = "" }) {
+export default function MainStatusBadge({
+  status,
+  showDot = true,
+  className = "",
+}) {
   const normalizedKey = String(status || "").toLowerCase().trim();
   const config = STATUS_CONFIG[normalizedKey] || DEFAULT_CONFIG;
   const displayLabel = status || config.label;
 
   return (
     <MainLayoutColor
-      as={MainLayoutTextSize}
+      as="span"
       color={config.color}
       background={config.bg}
-      size="badgeText"
-      className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full border ${config.border} font-semibold leading-none shrink-0 ${className}`.trim()}
+      className={`inline-flex items-center justify-center gap-1.5 px-2.5 py-0.5 rounded-full font-medium leading-none shrink-0 ${className}`.trim()}
     >
-      <MainLayoutColor
-        as="span"
-        background={config.dot}
-        className="w-1.5 h-1.5 rounded-full shrink-0"
-      />
-      <span className="truncate">{displayLabel}</span>
+      {showDot && (
+        <MainLayoutColor
+          as="span"
+          background={config.dot || "filterDotMoving"}
+          className="w-1.5 h-1.5 rounded-full shrink-0"
+        />
+      )}
+      <MainLayoutTextSize size="badgeText" className="truncate whitespace-nowrap">
+        {displayLabel}
+      </MainLayoutTextSize>
     </MainLayoutColor>
   );
 }

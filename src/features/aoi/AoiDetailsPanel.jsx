@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { Pencil, Search, ArrowRight } from "lucide-react";
+import { Pencil, ArrowRight } from "lucide-react";
 import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
 import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
+import MainStatusBadge from "../../components/Ui/MainLayoutUI/MainStatusBadge";
+import MainSearchInput from "../../components/Ui/MainLayoutUI/MainSearchInput";
 
 const TABS = ["Overview", "Vehicle", "Alerts", "Activity"];
 
@@ -11,7 +13,7 @@ export default function AoiDetailsPanel({
   onDelete,
   onViewVehicle,
 }) {
-  const [InactiveTab, setInactiveTab] = useState("Overview");
+  const [activeTab, setActiveTab] = useState("Overview");
 
   const [vehicleSearch, setVehicleSearch] = useState("");
   const [vehicleFilter, setVehicleFilter] = useState("all");
@@ -24,7 +26,8 @@ export default function AoiDetailsPanel({
       <MainLayoutColor
         as="div"
         background="surface"
-        className="w-full h-full border border-[#1f1f23] rounded-2xl p-4 flex items-center justify-center select-none"
+        border="cardBorder"
+        className="w-full h-full rounded-2xl p-4 flex items-center justify-center select-none"
       >
         <MainLayoutColor
           as={MainLayoutTextSize}
@@ -37,7 +40,7 @@ export default function AoiDetailsPanel({
     );
   }
 
-  const isInactive = aoi.status === "Inactive";
+  const currentStatus = aoi.status || "Inactive";
   const displayType = aoi.type || aoi.raw?.geometry?.shape || "";
   const displayRadius = aoi.radius ?? aoi.size ?? "";
   const displayLocation =
@@ -112,46 +115,34 @@ export default function AoiDetailsPanel({
     <MainLayoutColor
       as="div"
       background="surface"
-      className="w-full h-auto lg:h-full border border-[#1f1f23] rounded-2xl p-4 flex flex-col select-none overflow-hidden font-sans"
+      border="cardBorder"
+      className="w-full h-auto lg:h-full rounded-2xl p-4 flex flex-col select-none overflow-hidden font-sans"
     >
-      {/* Top Header */}
-      <div className="shrink-0 mb-4">
-        <div className="flex items-center justify-between">
-          <MainLayoutColor
-            as={MainLayoutTextSize}
-            color="title"
-            size="sectionTitle"
-            className="font-bold tracking-tight truncate block text-[14px]"
-          >
-            {aoi.name}
-          </MainLayoutColor>
-        </div>
+      {/* Top Header: AOI Name and Status Badge in Single Row */}
+      <div className="flex items-center justify-between gap-3 shrink-0 mb-4">
+        <MainLayoutColor
+          as={MainLayoutTextSize}
+          color="title"
+          size="sectionTitle"
+          className="font-bold tracking-tight truncate block text-[14px] min-w-0 flex-1"
+        >
+          {aoi.name}
+        </MainLayoutColor>
 
-        {/* Badge */}
-        <div className="mt-2">
-          <span
-            className={`px-3 py-1 rounded-full inline-block ${
-              isInactive
-                ? "bg-[#042814] text-[#10b981]"
-                : "bg-[#2e1d05] text-[#d97706]"
-            }`}
-          >
-            <MainLayoutTextSize size="badgeText" className="font-medium">
-              {isInactive ? "Inactive" : "InInactive"}
-            </MainLayoutTextSize>
-          </span>
+        <div className="shrink-0">
+          <MainStatusBadge status={currentStatus} showDot={false} />
         </div>
       </div>
 
       {/* Tabs */}
       <div className="flex items-center border-b border-[#1f1f23] mb-4 shrink-0 w-full">
         {TABS.map((tab) => {
-          const isSelected = InactiveTab === tab;
+          const isSelected = activeTab === tab;
           return (
             <button
               key={tab}
               type="button"
-              onClick={() => setInactiveTab(tab)}
+              onClick={() => setActiveTab(tab)}
               className={`flex-1 py-2 transition-all text-center relative cursor-pointer ${
                 isSelected
                   ? "text-[#f59e0b]"
@@ -174,7 +165,7 @@ export default function AoiDetailsPanel({
 
       <div className="flex-none lg:flex-1 min-h-0 overflow-y-visible lg:overflow-y-auto custom-scrollbar pr-1">
         {/* ==================== OVERVIEW TAB ==================== */}
-        {InactiveTab === "Overview" && (
+        {activeTab === "Overview" && (
           <div className="space-y-6">
             <div>
               <MainLayoutColor
@@ -276,17 +267,13 @@ export default function AoiDetailsPanel({
                   <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText">
                     Vehicle Entry Alert
                   </MainLayoutColor>
-                  <MainLayoutTextSize size="subInfoText" className="text-[#10b981] font-medium">
-                    {entryAlertStatus}
-                  </MainLayoutTextSize>
+                  <MainStatusBadge status={entryAlertStatus || "Online"} showDot={false} />
                 </div>
                 <div className="flex justify-between items-center">
                   <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText">
                     Vehicle Exit Alert
                   </MainLayoutColor>
-                  <MainLayoutTextSize size="subInfoText" className="text-[#10b981] font-medium">
-                    {exitAlertStatus}
-                  </MainLayoutTextSize>
+                  <MainStatusBadge status={exitAlertStatus || "Online"} showDot={false} />
                 </div>
               </div>
             </div>
@@ -329,16 +316,10 @@ export default function AoiDetailsPanel({
                           {vehicle.type || vehicle.vehicle_type || ""}
                         </MainLayoutColor>
                       </div>
-                      <MainLayoutTextSize
-                        size="subInfoText"
-                        className={`font-medium ${
-                          vehicle.status === "Inside"
-                            ? "text-[#10b981]"
-                            : "text-[#ef4444]"
-                        }`}
-                      >
-                        {vehicle.status || ""}
-                      </MainLayoutTextSize>
+                      <MainStatusBadge
+                        status={vehicle.status === "Inside" ? "Active" : "Offline"}
+                        showDot={false}
+                      />
                     </div>
                   ))
                 ) : (
@@ -352,19 +333,15 @@ export default function AoiDetailsPanel({
         )}
 
         {/* ==================== VEHICLE TAB ==================== */}
-        {InactiveTab === "Vehicle" && (
+        {activeTab === "Vehicle" && (
           <div className="space-y-4">
-            <div className="relative w-full">
-              <input
-                type="text"
+            <div className="w-full">
+              <MainSearchInput
                 placeholder="Search Vehicle..."
                 value={vehicleSearch}
                 onChange={(e) => setVehicleSearch(e.target.value)}
-                className="w-full rounded-full bg-[#09090b] border border-[#27272a] focus:border-[#3f3f46] text-[12px] py-2 pl-4 pr-10 text-white placeholder-[#52525b] outline-none"
-              />
-              <Search
-                size={15}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#71717a] pointer-events-none"
+                iconPosition="right"
+                containerClassName="w-full"
               />
             </div>
 
@@ -429,17 +406,10 @@ export default function AoiDetailsPanel({
                       >
                         {v.plate}
                       </MainLayoutColor>
-                      <span
-                        className={`px-3 py-0.5 rounded-full ${
-                          v.isInside
-                            ? "bg-[#042814] text-[#10b981]"
-                            : "bg-[#2e1d05] text-[#d97706]"
-                        }`}
-                      >
-                        <MainLayoutTextSize size="badgeText" className="font-medium">
-                          • {v.status}
-                        </MainLayoutTextSize>
-                      </span>
+                      <MainStatusBadge
+                        status={v.isInside ? "Active" : "Idle"}
+                        showDot={true}
+                      />
                     </div>
 
                     <MainLayoutColor
@@ -483,19 +453,15 @@ export default function AoiDetailsPanel({
         )}
 
         {/* ==================== ALERTS TAB ==================== */}
-        {InactiveTab === "Alerts" && (
+        {activeTab === "Alerts" && (
           <div className="space-y-4">
-            <div className="relative w-full">
-              <input
-                type="text"
+            <div className="w-full">
+              <MainSearchInput
                 placeholder="Search Vehicle..."
                 value={alertSearch}
                 onChange={(e) => setAlertSearch(e.target.value)}
-                className="w-full rounded-full bg-[#09090b] border border-[#27272a] focus:border-[#3f3f46] text-[12px] py-2 pl-4 pr-10 text-white placeholder-[#52525b] outline-none"
-              />
-              <Search
-                size={15}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#71717a] pointer-events-none"
+                iconPosition="right"
+                containerClassName="w-full"
               />
             </div>
 
@@ -560,17 +526,10 @@ export default function AoiDetailsPanel({
                       >
                         {alt.title}
                       </MainLayoutColor>
-                      <span
-                        className={`px-3 py-0.5 rounded-full ${
-                          alt.isEntry
-                            ? "bg-[#042814] text-[#10b981]"
-                            : "bg-[#2e1d05] text-[#d97706]"
-                        }`}
-                      >
-                        <MainLayoutTextSize size="badgeText" className="font-medium">
-                          • {alt.badgeText}
-                        </MainLayoutTextSize>
-                      </span>
+                      <MainStatusBadge
+                        status={alt.isEntry ? "Active" : "Idle"}
+                        showDot={true}
+                      />
                     </div>
 
                     <MainLayoutColor
@@ -603,7 +562,7 @@ export default function AoiDetailsPanel({
         )}
 
         {/* ==================== ACTIVITY TAB ==================== */}
-        {InactiveTab === "Activity" && (
+        {activeTab === "Activity" && (
           <div className="space-y-4 pt-1">
             {activitiesList.length > 0 ? (
               activitiesList.map((act, idx) => (

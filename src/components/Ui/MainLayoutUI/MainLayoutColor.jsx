@@ -1,120 +1,82 @@
 import React from "react";
 
-const MAIN_LAYOUT_COLORS = {
+export const MAIN_LAYOUT_COLORS = {
   // Surfaces & Backgrounds
   surface: "bg-[#141414]",
   background: "bg-[#09090b]",
-  filterInactiveBg: "bg-[#292a30]",
-  filterInInactiveBg: "bg-[#0d0e10]",
   selectedRowBg: "bg-[#07080a]",
 
-  // Active Status Badges
-  greenStatusBadge: "text-[#34D399]",
-  greenStatusBadgeBg: "bg-[#052E1A]",
-  greenStatusBadgeBorder: "border-[#0E9F6E]",
+  // SearchInput
+  SearchBorderHover: "hover:border-[#FDBB24]/40",
+  SearchTextColor: "text-[#A8A8A8]",
+  SearchBorder: "border border-[#22252B]",
+  SearchPlaceholder: "placeholder-[#8B8D97]",
 
-  // Inactive Status Badges
-  inactiveStatusBadge: "text-[#D1D5DB]",
-  inactiveStatusBadgeBg: "bg-[#1F2937]",
-  inactiveStatusBadgeBorder: "border-[#4B5563]",
+  // Table Headers
+  tableHeaderBg: "bg-[#161618]",
 
-  // Expired Status Badges
-  expiredStatusBadge: "text-[#F87171]",
-  expiredStatusBadgeBg: "bg-[#3B0A12]",
-  expiredStatusBadgeBorder: "border-[#DC2626]",
+  // Dropdown UI Colors
+  dropdownBg: "bg-[#05070B]",
+  dropdownBorder: "border border-[#22252B]",
+  dropdownBorderHover: "hover:border-[#FDBB24]/40",
+  dropdownText: "text-[#A8A8A8]",
+  dropdownIcon: "text-[#8B8D97]",
+  
+  // Dropdown Menu & Options
+  dropdownMenuBg: "bg-[#0f1115]",
+  dropdownMenuBorder: "border border-[#22252B]",
+  dropdownOptionText: "text-[#a1a1aa]",
+  dropdownOptionHoverBg: "hover:bg-[#18181b]",
+  dropdownOptionActiveText: "text-[#FDBB24]",
+  dropdownOptionActiveBg: "bg-[#FDBB24]/10",
 
-  // Pending Status Badges
-  pendingStatusBadge: "text-amber-400",
-  pendingStatusBadgeBg: "bg-amber-500/10",
-  pendingStatusBadgeBorder: "border-amber-500/20",
-
-  // KYC Specific Badges
-  kycYesStatusBadge: "text-[#34D399]",
-  kycYesStatusBadgeBg: "bg-[#052E1A]",
-  kycYesStatusBadgeBorder: "border-[#0E9F6E]",
-
-  kycNoStatusBadge: "text-[#FBBF24]",
-  kycNoStatusBadgeBg: "bg-[#3A1D00]",
-  kycNoStatusBadgeBorder: "border-[#D97706]",
-
-  // Standard Red Status Fallback
-  redStatusBadge: "text-[#F87171]",
-  redStatusBadgeBg: "bg-[#3B0A12]",
-  redStatusBadgeBorder: "border-[#DC2626]",
-
-  // Global Borders
-  cardBorder: "border-[#232329]",
-  cardBorderHover: "hover:border-[#FDBB24]/35",
-  border: "border-[#232329]",
-  borderHover: "hover:border-[#FDBB24]/35",
-
-  // Text Typography
-  title: "text-[rgb(255,255,255)]",
-  white: "text-[rgb(255,255,255)]",
-  text: "text-[rgb(255,255,255)]",
-  subtitle: "text-[#A8A8A8]",
-  footerText: "text-[#9D6F00]",
-  kpiTitle: "text-[#9D6F00]",
-  grey: "text-[#A8A8A8]",
-  muted: "text-[#A1A1AA]",
-  yellow: "text-[#FDB914]", 
-
-  // Filter Buttons & Counts
-  filterTextInactive: "text-[rgb(255,255,255)]",
-  filterTextInInactive: "text-[#8e8e93]",
+  // Filter Active / 
+  filterActiveBg: "bg-[#292a30]",
+  filterActiveText: "text-white",
+  filterBg: "bg-[#000000]",
+  filterBorder: "border border-[#7e7e7e]",
+  filterBorderHover: "hover:border-[#A8A8A8]",
+  filterText: "text-[#8e8e93]",
   filterCount: "text-[#8e8e93]",
 
-  // Filter Indicator Dots
+  // Filter Dots
   filterDotAll: "bg-[#8e8e93]",
   filterDotMoving: "bg-[#10b981]",
   filterDotIdle: "bg-[#f59e0b]",
   filterDotCritical: "bg-[#f97316]",
   filterDotOffline: "bg-[#ef4444]",
 
-  // Vehicle List & Card Specific
-  vehiclePlate: "text-[rgb(255,255,255)]",
-  vehicleSubtext: "text-[#A8A8A8]",
-  vehicleSpeed: "text-[rgb(255,255,255)]",
-  vehicleLocation: "text-[#8e8e93]",
-  separator: "text-[#52525b]",
+  // --- BADGES (Exact Required Colors) ---
+  // Pending
+  pendingText: "text-[#FDB914]",
+  pendingBg: "bg-[#372700]",
 
-  // Metrics Items
-  metricLabel: "text-[#A1A1AA]",
-  metricValue: "text-[rgb(255,255,255)]",
-  metricIcon: "text-[#71717A]",
+  // Idle
+  idleText: "text-[#3B82F6]",
+  idleBg: "bg-[#172554]",
 
-  // Status Colors
-  running: "text-[#10b981]",
-  runningBg: "bg-[#10b981]/10",
-  runningDot: "bg-[#10b981]",
+  // Active / Online / Yes
+  activeText: "text-[#10B981]",
+  activeBg: "bg-[#022C22]",
 
-  idle: "text-[#f59e0b]",
-  idleBg: "bg-[#f59e0b]/10",
-  idleDot: "bg-[#f59e0b]",
+  // Offline
+  offlineText: "text-red-500",
 
-  critical: "text-[#f97316]",
-  criticalBg: "bg-[#f97316]/10",
-  criticalDot: "bg-[#f97316]",
+  // Inactive
+  inactiveText: "text-[#E4E4E7]",
+  inactiveBg: "bg-[#27272A]",
 
-  maintenance: "text-[#f97316]",
-  maintenanceBg: "bg-[#f97316]/10",
-  maintenanceDot: "bg-[#f97316]",
+  // Expired
+  expiredText: "text-[#F87171]",
+  expiredBg: "bg-[#450A0A]",
 
-  offline: "text-[#ef4444]",
-  offlineBg: "bg-[#ef4444]/10",
-  offlineDot: "bg-[#ef4444]",
-
-  defaultStatus: "text-[#d4d4d8]",
-  defaultStatusBg: "bg-zinc-500/10",
-  defaultStatusDot: "bg-[#a1a1aa]",
-
-  // Action / UI Elements & Buttons
-  arrowIcon: "text-[#FDB914]",
-  buttonText: "text-[#FDB914]",
-  buttonBorder: "border-[#FDB914]/70",
-  actionButtonText: "text-[#FDB914]",
-  actionButtonBorder: "border-[#FDB914]/70",
-  actionButtonHoverBg: "hover:bg-[#FDB914]/10",
+  // Global Borders & Typography
+  cardBorder: "border border-[#232329]",
+  cardBorderHover: "hover:border-[#FDBB24]/35",
+  title: "text-white",
+  subtitle: "text-[#A8A8A8]",
+  muted: "text-[#A1A1AA]",
+  yellow: "text-[#FDB914]",
 };
 
 export default function MainLayoutColor({
@@ -123,6 +85,7 @@ export default function MainLayoutColor({
   background,
   border,
   borderHover,
+  hoverBorder,
   className = "",
   children,
   style,
@@ -131,7 +94,8 @@ export default function MainLayoutColor({
   const colorClass = color ? MAIN_LAYOUT_COLORS[color] || "" : "";
   const backgroundClass = background ? MAIN_LAYOUT_COLORS[background] || "" : "";
   const borderClass = border ? MAIN_LAYOUT_COLORS[border] || "" : "";
-  const borderHoverClass = borderHover ? MAIN_LAYOUT_COLORS[borderHover] || "" : "";
+  const hoverClassKey = borderHover || hoverBorder;
+  const borderHoverClass = hoverClassKey ? MAIN_LAYOUT_COLORS[hoverClassKey] || "" : "";
 
   return (
     <Component

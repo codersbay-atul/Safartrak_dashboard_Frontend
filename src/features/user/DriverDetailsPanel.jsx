@@ -6,6 +6,7 @@ import { toast } from "../../components/Ui/toast";
 import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
 import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
 import MainHeaderActionButton from "../../components/Ui/MainLayoutUI/MainHeaderActionButton";
+import MainStatusBadge from "../../components/Ui/MainLayoutUI/MainStatusBadge";
 
 export default function DriverDetailsPanel({ user, onUserUpdated, onResetPassword }) {
   const [isDeactivateModalOpen, setIsDeactivateModalOpen] = useState(false);
@@ -17,7 +18,8 @@ export default function DriverDetailsPanel({ user, onUserUpdated, onResetPasswor
       <MainLayoutColor
         as="div"
         background="surface"
-        className="w-full h-full border border-[#27272a] rounded-2xl p-4 flex items-center justify-center select-none shadow-2xl font-sans"
+        border="cardBorder"
+        className="w-full h-full rounded-2xl p-4 flex items-center justify-center select-none shadow-2xl font-sans"
       >
         <MainLayoutColor
           as={MainLayoutTextSize}
@@ -31,7 +33,7 @@ export default function DriverDetailsPanel({ user, onUserUpdated, onResetPasswor
     );
   }
 
-  const isInactive = String(user.status || "").toLowerCase() === "Inactive";
+  const isActive = String(user.status || "").toLowerCase() === "active";
 
   const handleConfirmDeactivate = async () => {
     const userId = user?.id ?? user?.empId;
@@ -47,7 +49,7 @@ export default function DriverDetailsPanel({ user, onUserUpdated, onResetPasswor
 
       const updatedUser = {
         ...user,
-        status: "InInactive",
+        status: "Inactive",
       };
 
       onUserUpdated?.(updatedUser);
@@ -74,7 +76,7 @@ export default function DriverDetailsPanel({ user, onUserUpdated, onResetPasswor
 
       const updatedUser = {
         ...user,
-        status: "Inactive",
+        status: "Active",
       };
 
       onUserUpdated?.(updatedUser);
@@ -91,14 +93,20 @@ export default function DriverDetailsPanel({ user, onUserUpdated, onResetPasswor
       <MainLayoutColor
         as="div"
         background="surface"
-        className="w-full h-auto lg:h-full border border-[#27272a] rounded-2xl p-3 flex flex-col overflow-hidden select-none shadow-2xl font-sans"
+        border="cardBorder"
+        className="w-full h-auto lg:h-full rounded-2xl p-3 flex flex-col overflow-hidden select-none shadow-2xl font-sans"
       >
-        {/* Header with 14px Name & 12px Sub Info */}
+        {/* Header with Name, Sub Info & Synced Status Badge */}
         <div className="flex items-center justify-between pb-2.5 border-b border-[#27272a] shrink-0">
           <div className="flex items-center gap-2.5 min-w-0">
-            <div className="w-8 h-8 rounded-full bg-[#27272a] border border-[#3f3f46] flex items-center justify-center shrink-0 text-[#ffd60a] font-bold text-[12px]">
+            <MainLayoutColor
+              as="div"
+              background="filterActiveBg"
+              color="yellow"
+              className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 font-bold text-[12px]"
+            >
               {user.name ? user.name.charAt(0) : "U"}
-            </div>
+            </MainLayoutColor>
             <div className="truncate">
               <MainLayoutColor
                 as={MainLayoutTextSize}
@@ -119,22 +127,9 @@ export default function DriverDetailsPanel({ user, onUserUpdated, onResetPasswor
             </div>
           </div>
 
-          <span
-            className={`flex items-center gap-1 shrink-0 px-2.5 py-0.5 rounded-full ${
-              isInactive
-                ? "text-emerald-400 bg-emerald-500/10 border border-emerald-500/20"
-                : "text-amber-400 bg-amber-500/10 border border-amber-500/20"
-            }`}
-          >
-            <span
-              className={`w-1.5 h-1.5 rounded-full ${
-                isInactive ? "bg-emerald-400" : "bg-amber-400"
-              }`}
-            />
-            <MainLayoutTextSize size="badgeText" className="font-semibold whitespace-nowrap text-[11px]">
-              {user.status}
-            </MainLayoutTextSize>
-          </span>
+          <div className="shrink-0">
+            <MainStatusBadge status={user.status || "Inactive"} showDot={false} />
+          </div>
         </div>
 
         {/* Details Content */}
@@ -294,9 +289,9 @@ export default function DriverDetailsPanel({ user, onUserUpdated, onResetPasswor
           </div>
         </div>
 
-        {/* Action Buttons: Centered inline row alignment */}
+        {/* Action Buttons */}
         <div className="pt-2.5 border-t border-[#27272a] grid grid-cols-2 gap-2 shrink-0">
-          {isInactive ? (
+          {isActive ? (
             <MainHeaderActionButton
               type="button"
               onClick={() => setIsDeactivateModalOpen(true)}
@@ -306,7 +301,7 @@ export default function DriverDetailsPanel({ user, onUserUpdated, onResetPasswor
                 alignItems: "center",
                 justifyContent: "center",
               }}
-              className="w-full py-2.5 px-3 rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 Inactive:scale-[0.98] transition-all cursor-pointer flex-row items-center justify-center"
+              className="w-full py-2.5 px-3 rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 active:scale-[0.98] transition-all cursor-pointer flex-row items-center justify-center"
             >
               <span className="flex items-center justify-center gap-1.5">
                 <UserX className="w-4 h-4 shrink-0 text-rose-400" />
@@ -326,7 +321,7 @@ export default function DriverDetailsPanel({ user, onUserUpdated, onResetPasswor
                 alignItems: "center",
                 justifyContent: "center",
               }}
-              className="w-full py-2.5 px-3 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 disabled:opacity-60 Inactive:scale-[0.98] transition-all cursor-pointer flex-row items-center justify-center"
+              className="w-full py-2.5 px-3 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 disabled:opacity-60 active:scale-[0.98] transition-all cursor-pointer flex-row items-center justify-center"
             >
               <span className="flex items-center justify-center gap-1.5">
                 <UserX className="w-4 h-4 shrink-0 text-emerald-400" />
@@ -346,7 +341,7 @@ export default function DriverDetailsPanel({ user, onUserUpdated, onResetPasswor
               alignItems: "center",
               justifyContent: "center",
             }}
-            className="w-full py-2.5 px-3 rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 Inactive:scale-[0.98] transition-all cursor-pointer flex-row items-center justify-center"
+            className="w-full py-2.5 px-3 rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 active:scale-[0.98] transition-all cursor-pointer flex-row items-center justify-center"
           >
             <span className="flex items-center justify-center gap-1.5">
               <KeyRound className="w-4 h-4 shrink-0 text-amber-400" />

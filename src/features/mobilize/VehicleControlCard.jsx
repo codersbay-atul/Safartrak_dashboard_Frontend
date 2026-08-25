@@ -3,6 +3,7 @@ import { Check, ShieldCheck, HelpCircle, Lock } from "lucide-react";
 import { getCommandVehicle } from "../../api/mobilizeApi";
 import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
 import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
+import MainStatusBadge from "../../components/Ui/MainLayoutUI/MainStatusBadge";
 
 export default function VehicleControlCard({
   vehicle,
@@ -61,7 +62,8 @@ export default function VehicleControlCard({
       <MainLayoutColor
         as="div"
         background="surface"
-        className="w-full h-auto lg:h-full min-h-0 text-white rounded-2xl p-3 border border-[#27272a] shadow-2xl flex flex-col justify-between select-none font-sans"
+        border="cardBorder"
+        className="w-full h-auto lg:h-full min-h-0 rounded-2xl p-3 shadow-2xl flex flex-col justify-between select-none font-sans"
       >
         {/* Top Header */}
         <div className="flex items-center justify-between pb-2 border-b border-[#27272a] shrink-0">
@@ -69,14 +71,12 @@ export default function VehicleControlCard({
             as={MainLayoutTextSize}
             color="title"
             size="sectionTitle"
-            className="uppercase font-semibold text-[13px]"
+            className="font-semibold"
           >
             Vehicle Control
           </MainLayoutColor>
 
-          <span className="bg-[#18181b] border border-[#27272a] px-2 py-0.5 rounded-full text-[#71717a]">
-            <MainLayoutTextSize size="badgeText">Offline</MainLayoutTextSize>
-          </span>
+          <MainStatusBadge status="Offline" showDot={false} />
         </div>
 
         {/* Placeholder Center Content */}
@@ -122,45 +122,29 @@ export default function VehicleControlCard({
     <MainLayoutColor
       as="div"
       background="surface"
-      className="w-full h-auto lg:h-full min-h-0 text-white rounded-2xl p-3 border border-[#27272a] shadow-2xl flex flex-col gap-2 overflow-hidden select-none font-sans"
+      border="cardBorder"
+      className="w-full h-auto lg:h-full min-h-0 rounded-2xl p-3 shadow-2xl flex flex-col gap-2 overflow-hidden select-none font-sans"
     >
       {/* Header */}
-      <div className="flex items-center justify-between gap-2 shrink-0 pb-1 border-b border-[#27272a]">
+      <div className="flex items-center justify-between gap-2 shrink-0 pb-2 border-b border-[#27272a]">
         <MainLayoutColor
           as={MainLayoutTextSize}
           color="title"
           size="sectionTitle"
-          className="tracking-wide uppercase font-semibold text-[13px]"
+          className="font-semibold"
         >
           Vehicle Control
         </MainLayoutColor>
 
-        <div
-          className={`flex items-center gap-1 px-2 py-0.5 rounded-full shrink-0 ${
-            online
-              ? "bg-emerald-500/10 border border-emerald-500/20"
-              : "bg-rose-500/10 border border-rose-500/20"
-          }`}
-        >
-          <span
-            className={`w-1.5 h-1.5 rounded-full ${
-              online ? "bg-emerald-400 animate-pulse" : "bg-rose-400"
-            }`}
-          />
-          <MainLayoutTextSize
-            size="badgeText"
-            className={online ? "text-emerald-400" : "text-rose-400"}
-          >
-            {online ? "Online" : "Offline"}
-          </MainLayoutTextSize>
-        </div>
+        <MainStatusBadge status={online ? "Online" : "Offline"} showDot={true} />
       </div>
 
       {/* Vehicle Info Card */}
       <MainLayoutColor
         as="div"
         background="surface"
-        className="flex items-center gap-2 shrink-0 bg-[#18181b]/80 p-2 rounded-xl border border-[#27272a]"
+        border="cardBorder"
+        className="flex items-center gap-2 shrink-0 p-2 rounded-xl"
       >
         <div className="w-7 h-7 bg-white/10 border border-[#3f3f46] rounded-lg shrink-0 flex items-center justify-center text-[10px] font-bold text-white">
           {String(plate).slice(0, 2)}
@@ -210,33 +194,36 @@ export default function VehicleControlCard({
         ) : null}
 
         {/* Eligibility Pill */}
-        <div
-          className={`flex items-center gap-1.5 ${
-            isEligible
-              ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
-              : "bg-rose-500/10 border-rose-500/20 text-rose-400"
-          } border rounded-xl px-2.5 py-1.5`}
+        <MainLayoutColor
+          as="div"
+          background={isEligible ? "activeBg" : "expiredBg"}
+          className="flex items-center gap-1.5 rounded-xl px-2.5 py-1.5"
         >
           <div className="w-3 h-3 rounded flex items-center justify-center shrink-0">
-            <Check className="w-2.5 h-2.5 text-emerald-400 stroke-3" />
+            <MainLayoutColor
+              as={Check}
+              color={isEligible ? "activeText" : "expiredText"}
+              className="w-2.5 h-2.5 stroke-3"
+            />
           </div>
-          <MainLayoutTextSize
+          <MainLayoutColor
+            as={MainLayoutTextSize}
+            color={isEligible ? "activeText" : "expiredText"}
             size="subInfoText"
-            className={`font-medium ${
-              isEligible ? "text-emerald-400" : "text-rose-400"
-            }`}
+            className="font-medium"
           >
             {isEligible
               ? "Vehicle is eligible for remote immobilization."
               : detail?.ineligible_reasons?.[0] ?? "Not eligible for immobilization"}
-          </MainLayoutTextSize>
-        </div>
+          </MainLayoutColor>
+        </MainLayoutColor>
 
         {/* Current Status Box */}
         <MainLayoutColor
           as="div"
           background="surface"
-          className="flex items-center justify-between bg-[#18181b]/80 px-2.5 py-1.5 rounded-xl border border-[#27272a] shrink-0"
+          border="cardBorder"
+          className="flex items-center justify-between px-2.5 py-1.5 rounded-xl shrink-0"
         >
           <MainLayoutColor
             as={MainLayoutTextSize}
@@ -247,19 +234,19 @@ export default function VehicleControlCard({
             Current Status
           </MainLayoutColor>
           <div className="flex items-center gap-1.5">
-            <ShieldCheck
-              className={`w-3.5 h-3.5 ${
-                online ? "text-emerald-400" : "text-rose-400"
-              }`}
+            <MainLayoutColor
+              as={ShieldCheck}
+              color={online ? "activeText" : "offlineText"}
+              className="w-3.5 h-3.5"
             />
-            <MainLayoutTextSize
+            <MainLayoutColor
+              as={MainLayoutTextSize}
+              color={online ? "activeText" : "offlineText"}
               size="metricText"
-              className={`font-semibold ${
-                online ? "text-emerald-400" : "text-rose-400"
-              }`}
+              className="font-semibold"
             >
               {currentStatus}
-            </MainLayoutTextSize>
+            </MainLayoutColor>
           </div>
         </MainLayoutColor>
 
@@ -267,7 +254,8 @@ export default function VehicleControlCard({
         <MainLayoutColor
           as="div"
           background="surface"
-          className="grid grid-cols-2 gap-1.5 text-left shrink-0 bg-[#18181b]/60 border border-[#27272a] p-2 rounded-xl"
+          border="cardBorder"
+          className="grid grid-cols-2 gap-1.5 text-left shrink-0 p-2 rounded-xl"
         >
           <div className="min-w-0">
             <MainLayoutColor
@@ -335,12 +323,14 @@ export default function VehicleControlCard({
             >
               Ignition
             </MainLayoutColor>
-            <MainLayoutTextSize
+            <MainLayoutColor
+              as={MainLayoutTextSize}
+              color={ignition ? "activeText" : "subtitle"}
               size="subInfoText"
-              className="font-bold text-emerald-400 truncate block"
+              className="font-bold truncate block"
             >
               {ignition === undefined ? "—" : ignition ? "ON" : "OFF"}
-            </MainLayoutTextSize>
+            </MainLayoutColor>
           </div>
         </MainLayoutColor>
 
@@ -348,7 +338,8 @@ export default function VehicleControlCard({
         <MainLayoutColor
           as="div"
           background="surface"
-          className="flex items-center gap-1.5 bg-[#18181b]/80 border border-[#27272a] rounded-xl p-1.5 shrink-0"
+          border="cardBorder"
+          className="flex items-center gap-1.5 rounded-xl p-1.5 shrink-0"
         >
           <HelpCircle className="w-3 h-3 text-[#a1a1aa] shrink-0" />
           <MainLayoutColor
@@ -366,7 +357,7 @@ export default function VehicleControlCard({
       <button
         type="button"
         onClick={() => onRequestImmobilize?.(detail ?? vehicle)}
-        className="w-full flex items-center justify-center gap-1.5 bg-[#f59e0b] hover:bg-[#d97706] text-black Inactive:scale-[0.99] py-2 px-3 rounded-xl transition-all duration-150 shrink-0 cursor-pointer"
+        className="w-full flex items-center justify-center gap-1.5 bg-[#f59e0b] hover:bg-[#d97706] text-black py-2 px-3 rounded-xl transition-all duration-150 shrink-0 cursor-pointer"
       >
         <Lock className="w-3.5 h-3.5 stroke-2" />
         <MainLayoutTextSize size="headerButtonText">

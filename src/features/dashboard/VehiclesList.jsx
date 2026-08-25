@@ -8,6 +8,7 @@ import MainLayoutTextSize, {
 } from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
 import MainLayoutButton from "../../components/Ui/MainLayoutUI/MainLayoutButton";
 import MainStatusBadge from "../../components/Ui/MainLayoutUI/MainStatusBadge";
+import MainLayoutFilterButton from "../../components/Ui/MainLayoutUI/MainLayoutFilterButton";
 
 const FILTER_DEFS = [
   { label: "All", dotBg: "filterDotAll" },
@@ -60,7 +61,7 @@ export default function VehiclesList({
   selectedVehicle,
   search = "",
 }) {
-  const [InactiveFilter, setInactiveFilter] = useState("All");
+  const [activeFilter, setActiveFilter] = useState("All");
   const [selectedId, setSelectedId] = useState(
     () => selectedVehicle?.id ?? null
   );
@@ -74,10 +75,10 @@ export default function VehiclesList({
   const filteredVehicles = useMemo(
     () =>
       vehicles
-        .filter((vehicle) => matchesVehicleFilter(vehicle, InactiveFilter))
+        .filter((vehicle) => matchesVehicleFilter(vehicle, activeFilter))
         .slice()
         .sort((a, b) => getVehicleSortPriority(a) - getVehicleSortPriority(b)),
-    [vehicles, InactiveFilter]
+    [vehicles, activeFilter]
   );
 
   const filters = FILTER_DEFS.map((filter) => ({
@@ -106,38 +107,36 @@ export default function VehiclesList({
     <MainLayoutColor
       as="div"
       background="surface"
-      className="w-full h-full border border-[#232428] rounded-xl py-3.5 flex flex-col select-none overflow-hidden text-white min-w-0"
+      className="w-full h-full border border-[#232428] rounded-xl py-3.5 flex flex-col select-none overflow-hidden min-w-0"
     >
-      {/* Header */}
       <div className="mb-2.5 px-4 shrink-0">
         <MainLayoutColor
           as={MainLayoutTextSize}
           color="title"
           size="sectionTitle"
-          className="block tracking-tight"
+          className="block tracking-tight font-medium"
         >
           Vehicle List
         </MainLayoutColor>
       </div>
 
-      {/* Filter Tabs */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2 mb-1 px-4 shrink-0 no-scrollbar flex-nowrap">
+      {/* Real-time Status Filter Tabs */}
+      <div className="flex items-center gap-1.5 overflow-x-auto pb-2 mb-1 px-4 shrink-0 no-scrollbar flex-nowrap">
         {filters.map((filter) => {
-          const isInactive = InactiveFilter === filter.label;
+          const isSelected = activeFilter === filter.label;
           return (
-            <MainLayoutColor
+            <MainLayoutFilterButton
               key={filter.label}
-              as="button"
-              background={isInactive ? "filterInactiveBg" : "filterInInactiveBg"}
-              color={isInactive ? "filterTextInactive" : "filterTextInInactive"}
-              onClick={() => setInactiveFilter(filter.label)}
-              className="flex items-center gap-2 px-3 py-1 rounded-full transition-colors shrink-0 cursor-pointer hover:text-white text-[11px]"
+              isActive={isSelected}
+              onClick={() => setActiveFilter(filter.label)}
             >
-              <MainLayoutColor
-                as="span"
-                background={filter.dotBg}
-                className="w-2 h-2 rounded-[2px] shrink-0"
-              />
+              {filter.dotBg && (
+                <MainLayoutColor
+                  as="span"
+                  background={filter.dotBg}
+                  className="w-2 h-2 rounded-[2px] shrink-0 inline-block"
+                />
+              )}
               <MainLayoutTextSize size="filterText">
                 {filter.label}
               </MainLayoutTextSize>
@@ -150,7 +149,7 @@ export default function VehiclesList({
                   ({filter.count})
                 </MainLayoutColor>
               )}
-            </MainLayoutColor>
+            </MainLayoutFilterButton>
           );
         })}
       </div>
@@ -189,7 +188,7 @@ export default function VehiclesList({
                   {plateDisplay}
                 </MainLayoutColor>
 
-                <div className="flex items-center gap-1.5 text-zinc-400 min-w-0 text-[11px] xl:text-[12px] leading-tight">
+                <div className="flex items-center gap-1.5 min-w-0 leading-tight">
                   <MainLayoutColor
                     as={MainLayoutTextSize}
                     color="vehicleSubtext"
@@ -215,9 +214,8 @@ export default function VehiclesList({
                 </div>
               </div>
 
-              {/* Right Section: MainStatusBadge + Last Seen + Speed/Location + Reusable View Details Button */}
+              {/* Right Section: Status Badge + Last Seen + Speed/Location + View Details Button */}
               <div className="flex items-center gap-3 shrink-0 ml-auto">
-                {/* Reusable Status Badge + Last Seen */}
                 <div className="w-[85px] xl:w-[95px] flex flex-col items-center justify-center shrink-0">
                   <MainStatusBadge status={vehicle.status} />
 
@@ -225,19 +223,18 @@ export default function VehiclesList({
                     as={MainLayoutTextSize}
                     color="vehicleLocation"
                     size="lastSeenText"
-                    className="mt-1 truncate block text-center font-normal text-zinc-400 max-w-full text-[10.5px] xl:text-[11.5px]"
+                    className="mt-1 truncate block text-center font-normal max-w-full"
                   >
                     {lastSeenDisplay}
                   </MainLayoutColor>
                 </div>
 
-                {/* Speed & Location */}
                 <div className="text-right leading-tight w-[55px] xl:w-[65px] shrink-0 flex flex-col items-end justify-center">
                   <MainLayoutColor
                     as={MainLayoutTextSize}
                     color="vehicleSpeed"
                     size="speedText"
-                    className="block font-bold tracking-tight whitespace-nowrap text-right text-[13px] xl:text-[14px]"
+                    className="block font-bold tracking-tight whitespace-nowrap text-right"
                   >
                     {speedDisplay}
                   </MainLayoutColor>
@@ -246,18 +243,17 @@ export default function VehiclesList({
                     as={MainLayoutTextSize}
                     color="vehicleLocation"
                     size="locationText"
-                    className="mt-0.5 truncate block text-right font-normal text-zinc-400 max-w-full"
+                    className="mt-0.5 truncate block text-right font-normal max-w-full"
                   >
                     {locationDisplay}
                   </MainLayoutColor>
                 </div>
 
-                {/* Reusable View Details Button */}
                 <div className="shrink-0">
                   <MainLayoutButton
                     variant="outlineYellow"
                     size="xs"
-                    className="whitespace-nowrap px-2.5"
+                    className="whitespace-nowrap px-2.5 font-medium"
                     onClick={(event) => handleViewDetailsClick(event, vehicle)}
                   >
                     View Details
