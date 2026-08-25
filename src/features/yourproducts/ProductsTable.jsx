@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Filter, ArrowUpDown, Package, X, Check } from "lucide-react";
+import {
+  Filter,
+  ArrowUpDown,
+  Package,
+  X,
+  Check,
+  HelpCircleIcon,
+} from "lucide-react";
 import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
 import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
 import MainLayoutFilterButton from "../../components/Ui/MainLayoutUI/MainLayoutFilterButton";
@@ -47,7 +54,7 @@ const PRODUCTS_DATA = [
   },
 ];
 
-export default function ProductsTable() {
+export default function ProductsTable({ onHelpClick }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [sortAsc, setSortAsc] = useState(true);
@@ -126,13 +133,14 @@ export default function ProductsTable() {
     const matchesStatus =
       filters.status.length === 0 ||
       filters.status.some(
-        (s) => s.toLowerCase() === String(item.status || "").toLowerCase()
+        (s) => s.toLowerCase() === String(item.status || "").toLowerCase(),
       );
 
     const matchesPricing =
       filters.pricingModel.length === 0 ||
       filters.pricingModel.some(
-        (p) => p.toLowerCase() === String(item.pricingModel || "").toLowerCase()
+        (p) =>
+          p.toLowerCase() === String(item.pricingModel || "").toLowerCase(),
       );
 
     return matchesSearch && matchesStatus && matchesPricing;
@@ -163,6 +171,21 @@ export default function ProductsTable() {
         </div>
 
         <div className="flex flex-wrap items-center justify-end gap-2 shrink-0">
+          <button
+            type="button"
+            onClick={onHelpClick}
+            className="cursor-pointer flex items-center gap-2"
+          >
+            <HelpCircleIcon size={16} className="text-[#FDB914]" />
+            <MainLayoutColor
+              as={MainLayoutTextSize}
+              color="yellow"
+              size="sectionTitle"
+              className="font-bold tracking-tight block text-[14px] cursor-pointer"
+            >
+              Help me understand this table
+            </MainLayoutColor>
+          </button>
           {/* Reusable Filter Dropdown Trigger with h-[34px] & Border */}
           <MainDropDown
             isOpen={isFilterOpen}
@@ -174,12 +197,13 @@ export default function ProductsTable() {
                 onClick={() => setIsFilterOpen((prev) => !prev)}
                 className="h-[34px] px-3.5 border border-[#27272a] hover:border-[#FDBB24]/40 rounded-full flex items-center gap-1.5 transition-colors"
               >
-                <MainLayoutTextSize size="filterText">Filter</MainLayoutTextSize>
+                <MainLayoutTextSize size="filterText">
+                  Filter
+                </MainLayoutTextSize>
                 <Filter size={11} className="shrink-0" />
               </MainLayoutFilterButton>
             }
           >
-           
             <MainLayoutColor
               as="div"
               border="cardBorder"
@@ -269,7 +293,6 @@ export default function ProductsTable() {
             </MainLayoutColor>
           </MainDropDown>
 
-        
           <MainLayoutFilterButton
             isActive={!sortAsc}
             onClick={() => setSortAsc((prev) => !prev)}
@@ -319,9 +342,7 @@ export default function ProductsTable() {
                 <MainTableHeader className="py-3 px-4">
                   Available
                 </MainTableHeader>
-                <MainTableHeader className="py-3 px-4">
-                  Status
-                </MainTableHeader>
+                <MainTableHeader className="py-3 px-4">Status</MainTableHeader>
                 <MainTableHeader className="py-3 px-4">
                   Renewal Date
                 </MainTableHeader>
