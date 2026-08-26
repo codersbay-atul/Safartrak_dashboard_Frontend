@@ -78,8 +78,8 @@ function FooterBlock({ footer }) {
           >
             {footer.linkLabel}
           </MainLayoutColor>
-          <ArrowRight size={13} className="shrink-0" />
-          {isExternal ? <ExternalLink size={12} className="shrink-0" /> : null}
+          
+          {isExternal ? <ExternalLink size={12} className="shrink-0" /> : <ArrowRight size={13} className="shrink-0" />}
         </a>
       ) : null}
     </div>
