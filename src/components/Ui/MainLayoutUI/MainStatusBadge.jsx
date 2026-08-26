@@ -79,6 +79,43 @@ const STATUS_CONFIG = {
     dot: "filterDotAll",
     label: "Inactive",
   },
+  no: {
+    color: "inactiveText",
+    bg: "inactiveBg",
+    dot: "filterDotAll",
+    label: "No",
+  },
+  suspended: {
+    color: "pendingText",
+    bg: "pendingBg",
+    dot: "filterDotIdle",
+    label: "Suspended",
+  },
+  "past due": {
+    color: "expiredText",
+    bg: "expiredBg",
+    label: "Past Due",
+  },
+  paid: {
+    color: "activeText",
+    bg: "activeBg",
+    label: "Paid",
+  },
+  void: {
+    color: "inactiveText",
+    bg: "inactiveBg",
+    label: "Void",
+  },
+  "pay now": {
+    color: "pendingText",
+    bg: "pendingBg",
+    label: "Pay Now",
+  },
+  "n/a": {
+    color: "inactiveText",
+    bg: "inactiveBg",
+    label: "N/A",
+  },
 };
 
 const DEFAULT_CONFIG = {

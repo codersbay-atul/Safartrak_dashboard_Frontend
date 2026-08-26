@@ -5,6 +5,7 @@ import {
   Download,
   ChevronRight,
   Receipt,
+  HelpCircleIcon,
 } from "lucide-react";
 import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
 import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
@@ -60,7 +61,7 @@ const INVOICES_DATA = [
   },
 ];
 
-export default function BillPaymentTable({ onPayNow }) {
+export default function BillPaymentTable({ onPayNow, onHelpClick }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("All");
   const [selectedBillingProfile, setSelectedBillingProfile] = useState("All");
@@ -79,7 +80,8 @@ export default function BillPaymentTable({ onPayNow }) {
       {/* Outside Header Toolbar */}
       <div className="flex flex-col gap-2.5 px-1 shrink-0">
         {/* Title Row */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 justify-between">
+          <div className="flex items-center gap-2">
           <MainLayoutColor
             as={Receipt}
             color="yellow"
@@ -93,11 +95,28 @@ export default function BillPaymentTable({ onPayNow }) {
           >
             Bill & Payment Invoices
           </MainLayoutColor>
+          </div>
+          <button
+            type="button"
+            onClick={onHelpClick}
+            className="cursor-pointer flex items-center gap-2"
+          >
+            <HelpCircleIcon size={18} className="text-[#FDB914]" />
+            <MainLayoutColor
+              as={MainLayoutTextSize}
+              color="yellow"
+              size="sectionTitle"
+              className="font-bold tracking-tight block text-[14px] cursor-pointer"
+            >
+              Help me understand this table
+            </MainLayoutColor>
+          </button>
         </div>
 
         {/* Controls Row: Uniform h-[34px] Height */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-2.5">
           {/* Left Side: Reusable Dropdown Filters */}
+          
           <div className="flex flex-wrap items-center gap-2">
             <MainDropDown
               label="Status"

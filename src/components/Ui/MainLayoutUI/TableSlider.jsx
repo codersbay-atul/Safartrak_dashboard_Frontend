@@ -94,9 +94,9 @@ function StatusLegend({ statuses }) {
       {statuses.map((row, index) => (
         <li
           key={row.status || row.label || index}
-          className="flex items-center gap-2 min-w-0"
+          className="flex items-center gap-2 min-w-0 "
         >
-          <MainStatusBadge status={row.status || row.label} />
+          <MainStatusBadge status={row.status || row.label} showDot={false} />
           {row.content ? (
             <>
               <MainLayoutColor as="span" color="muted" className="shrink-0">

@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Filter, ChevronLeft, ChevronRight, X, Check, Cpu } from "lucide-react";
+import {
+  Filter,
+  ChevronLeft,
+  ChevronRight,
+  X,
+  Check,
+  Cpu,
+  HelpCircleIcon,
+} from "lucide-react";
 import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
 import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
 import MainLayoutIcon from "../../components/Ui/MainLayoutUI/MainLayoutIcon";
@@ -10,7 +18,7 @@ import MainTableHeader from "../../components/Ui/MainLayoutUI/MainTableHeader";
 import MainStatusBadge from "../../components/Ui/MainLayoutUI/MainStatusBadge";
 import { SIMS_DATA } from "../../data/IotSimData";
 
-export default function IotSimTable() {
+export default function IotSimTable({ onHelpClick }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -64,11 +72,14 @@ export default function IotSimTable() {
     const matchesStatus =
       filters.status.length === 0 ||
       filters.status.some(
-        (s) => s.toLowerCase() === String(item.status || "").toLowerCase()
+        (s) => s.toLowerCase() === String(item.status || "").toLowerCase(),
       );
 
     const isItemKycCompliant =
-      item.kyc === true || String(item.kyc || "").toLowerCase().trim() === "yes";
+      item.kyc === true ||
+      String(item.kyc || "")
+        .toLowerCase()
+        .trim() === "yes";
     const matchesKyc =
       filters.kycStatus.length === 0 ||
       (filters.kycStatus.includes("Compliant") && isItemKycCompliant) ||
@@ -201,6 +212,21 @@ export default function IotSimTable() {
 
         <div className="flex flex-wrap items-center justify-end gap-2">
           {/* Custom Multi-Filter Dropdown */}
+          <button
+            type="button"
+            onClick={onHelpClick}
+            className="cursor-pointer flex items-center gap-2"
+          >
+            <HelpCircleIcon size={18} className="text-[#FDB914]" />
+            <MainLayoutColor
+              as={MainLayoutTextSize}
+              color="yellow"
+              size="sectionTitle"
+              className="font-bold tracking-tight block text-[14px] cursor-pointer"
+            >
+              Help me understand this table
+            </MainLayoutColor>
+          </button>
           <MainDropDown
             isOpen={isFilterOpen}
             onClose={() => setIsFilterOpen(false)}
@@ -210,7 +236,9 @@ export default function IotSimTable() {
                 isActive={isFilterOpen || hasActiveFilters}
                 onClick={() => setIsFilterOpen((prev) => !prev)}
               >
-                <MainLayoutTextSize size="filterText">Filter</MainLayoutTextSize>
+                <MainLayoutTextSize size="filterText">
+                  Filter
+                </MainLayoutTextSize>
                 <Filter size={11} className="shrink-0" />
               </MainLayoutFilterButton>
             }
@@ -372,12 +400,8 @@ export default function IotSimTable() {
                 <MainTableHeader className="py-2 px-3 pl-3.5">
                   ICCID Number
                 </MainTableHeader>
-                <MainTableHeader className="py-2 px-3">
-                  KYC
-                </MainTableHeader>
-                <MainTableHeader className="py-2 px-3">
-                  Status
-                </MainTableHeader>
+                <MainTableHeader className="py-2 px-3">KYC</MainTableHeader>
+                <MainTableHeader className="py-2 px-3">Status</MainTableHeader>
                 <MainTableHeader className="py-2 px-3">
                   Activated
                 </MainTableHeader>
@@ -395,7 +419,9 @@ export default function IotSimTable() {
                 currentSims.map((item) => {
                   const isKycYes =
                     item.kyc === true ||
-                    String(item.kyc || "").toLowerCase().trim() === "yes";
+                    String(item.kyc || "")
+                      .toLowerCase()
+                      .trim() === "yes";
 
                   return (
                     <tr
@@ -417,11 +443,16 @@ export default function IotSimTable() {
                           <button
                             type="button"
                             title="Copy ICCID"
-                            onClick={(e) => handleCopy(e, item.iccidNumber, item.id)}
+                            onClick={(e) =>
+                              handleCopy(e, item.iccidNumber, item.id)
+                            }
                             className="p-1 rounded text-[#a1a1aa] hover:text-white transition cursor-pointer"
                           >
                             {copiedId === item.id ? (
-                              <Check size={12} className="stroke-[2.5] text-[#FDB914]" />
+                              <Check
+                                size={12}
+                                className="stroke-[2.5] text-[#FDB914]"
+                              />
                             ) : (
                               <MainLayoutIcon
                                 name="copy"
@@ -486,10 +517,7 @@ export default function IotSimTable() {
                 })
               ) : (
                 <tr>
-                  <td
-                    colSpan={6}
-                    className="py-5 text-center"
-                  >
+                  <td colSpan={6} className="py-5 text-center">
                     <MainLayoutColor
                       as={MainLayoutTextSize}
                       color="subtitle"

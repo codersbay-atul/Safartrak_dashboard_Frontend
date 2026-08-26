@@ -252,9 +252,9 @@ export default function VehicleListTable() {
                     <tr key={vehicleId} className="hover:bg-[#18181b]/40 transition-colors">
                       <td className="py-2.5 px-3 pl-4">
                         <div className="flex items-center gap-2.5">
-                          <MainLayoutColor as="div" background="filterActiveBg" className="w-6 h-6 rounded shrink-0" />
-                          <div>
+                          {/* <MainLayoutColor as="div" background="filterActiveBg" className="w-6 h-6 rounded shrink-0" /> */}
                           <img src={"/images/truck.png"} alt={vehicleNumber} className="w-16 h-16 aspect-square object-contain" />
+                          <div>
                             <MainLayoutColor
                               as={MainLayoutTextSize}
                               color="title"
@@ -299,9 +299,9 @@ export default function VehicleListTable() {
 
                       <td className="py-2.5 px-3">
                         <div className="flex items-center gap-2">
-                          <MainLayoutColor as="div" background="filterActiveBg" className="w-5 h-5 rounded-full shrink-0" />
-                          <div>
+                          {/* <MainLayoutColor as="div" background="filterActiveBg" className="w-5 h-5 rounded-full shrink-0" /> */}
                           <img src={"/images/man.png"} alt={vehicleNumber} className="w-8 h-8 aspect-square object-contain" />
+                          <div>
                             <MainLayoutColor
                               as={MainLayoutTextSize}
                               color="title"
