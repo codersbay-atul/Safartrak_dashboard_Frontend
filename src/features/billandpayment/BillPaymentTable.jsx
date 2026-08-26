@@ -244,7 +244,7 @@ export default function BillPaymentTable({ onPayNow, onHelpClick }) {
                       <MainLayoutColor
                         as={MainLayoutTextSize}
                         color="subtitle"
-                        size="subInfoText"
+                        size="plateText"
                         className="font-normal block truncate"
                       >
                         {item.invoiceDate}
@@ -255,7 +255,7 @@ export default function BillPaymentTable({ onPayNow, onHelpClick }) {
                       <MainLayoutColor
                         as={MainLayoutTextSize}
                         color="subtitle"
-                        size="subInfoText"
+                        size="plateText"
                         className="font-normal block truncate"
                       >
                         {item.billingPeriod}

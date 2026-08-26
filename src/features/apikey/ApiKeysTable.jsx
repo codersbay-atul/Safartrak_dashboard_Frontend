@@ -223,8 +223,8 @@ export default function ApiKeysTable({
                       </td>
 
                       {/* Actions */}
-                      <td className="py-3.5 px-4 text-right whitespace-nowrap pr-20">
-                        <div className="flex items-center justify-end gap-3 text-[#71717a]">
+                      <td className="relative py-3.5 px-4 text-right whitespace-nowrap pr-20">
+                        <div className="absolute right-20 top-3.5 flex items-center gap-3 text-[#71717a]">
                           <button
                             type="button"
                             onClick={function (e) {
