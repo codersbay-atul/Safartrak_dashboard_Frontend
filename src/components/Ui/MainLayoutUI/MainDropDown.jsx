@@ -13,6 +13,7 @@ export default function MainDropDown({
   customTrigger,
   isOpen: controlledIsOpen,
   onClose,
+  menuAlign = "right",
 }) {
   const [internalIsOpen, setInternalIsOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -83,7 +84,7 @@ export default function MainDropDown({
           as="div"
           background={customTrigger ? "surface" : "dropdownMenuBg"}
           border="dropdownMenuBorder"
-          className={`absolute right-0 mt-1.5 w-full sm:w-44 rounded-xl shadow-2xl overflow-hidden z-50 animate-in fade-in duration-100 ${customTrigger ? className : ""}`.trim()}
+          className={`absolute ${menuAlign === "left" ? "left-0" : "right-0"} mt-1.5 w-full sm:w-44 rounded-xl shadow-2xl overflow-hidden z-50 animate-in fade-in duration-100 ${customTrigger ? className : ""}`.trim()}
         >
           {children || (
             <div className="py-1">

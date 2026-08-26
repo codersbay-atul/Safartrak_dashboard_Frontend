@@ -99,8 +99,7 @@ export default function ProductsTable({ onHelpClick }) {
         {isChecked ? (
           <MainLayoutColor
             as="div"
-            background="yellow"
-            className="w-3.5 h-3.5 rounded flex items-center justify-center transition-all shrink-0"
+            className="bg-[#FDB914] w-3.5 h-3.5 rounded flex items-center justify-center transition-all shrink-0"
           >
             <Check size={10} strokeWidth={3} className="text-black" />
           </MainLayoutColor>
@@ -133,14 +132,14 @@ export default function ProductsTable({ onHelpClick }) {
     const matchesStatus =
       filters.status.length === 0 ||
       filters.status.some(
-        (s) => s.toLowerCase() === String(item.status || "").toLowerCase(),
+        (s) => s.toLowerCase() === String(item.status || "").toLowerCase()
       );
 
     const matchesPricing =
       filters.pricingModel.length === 0 ||
       filters.pricingModel.some(
         (p) =>
-          p.toLowerCase() === String(item.pricingModel || "").toLowerCase(),
+          p.toLowerCase() === String(item.pricingModel || "").toLowerCase()
       );
 
     return matchesSearch && matchesStatus && matchesPricing;
@@ -174,7 +173,7 @@ export default function ProductsTable({ onHelpClick }) {
           <button
             type="button"
             onClick={onHelpClick}
-            className="cursor-pointer flex items-center gap-2"
+            className="cursor-pointer flex items-center gap-2 outline-none focus:outline-none"
           >
             <HelpCircleIcon size={16} className="text-[#FDB914]" />
             <MainLayoutColor
@@ -186,7 +185,8 @@ export default function ProductsTable({ onHelpClick }) {
               Help me understand this table
             </MainLayoutColor>
           </button>
-          {/* Reusable Filter Dropdown Trigger with h-[34px] & Border */}
+
+          {/* Reusable Filter Dropdown Trigger */}
           <MainDropDown
             isOpen={isFilterOpen}
             onClose={() => setIsFilterOpen(false)}
@@ -195,20 +195,17 @@ export default function ProductsTable({ onHelpClick }) {
               <MainLayoutFilterButton
                 isActive={isFilterOpen || hasActiveFilters}
                 onClick={() => setIsFilterOpen((prev) => !prev)}
-                className="h-[34px] px-3.5 border border-[#27272a] hover:border-[#FDBB24]/40 rounded-full flex items-center gap-1.5 transition-colors"
+                className="h-[34px] px-3.5 border border-[#27272a] hover:border-[#FDBB24]/40 rounded-full flex items-center gap-1.5 transition-colors outline-none focus:outline-none ring-0 focus:ring-0"
               >
-                <MainLayoutTextSize size="filterText">
+                <MainLayoutTextSize size="metricText" className="border-none outline-none focus:outline-none shadow-none">
                   Filter
                 </MainLayoutTextSize>
-                <Filter size={11} className="shrink-0" />
+                <Filter size={12} className="shrink-0" />
               </MainLayoutFilterButton>
             }
           >
-            <MainLayoutColor
-              as="div"
-              border="cardBorder"
-              className="flex items-center justify-between pb-1.5 border-b"
-            >
+            {/* Filter Dropdown Header */}
+            <div className="flex items-center justify-between pb-1.5">
               <MainLayoutColor
                 as={MainLayoutTextSize}
                 color="title"
@@ -222,21 +219,20 @@ export default function ProductsTable({ onHelpClick }) {
                 type="button"
                 color="subtitle"
                 onClick={() => setIsFilterOpen(false)}
-                className="hover:text-white transition cursor-pointer p-0.5"
+                className="hover:text-white transition cursor-pointer p-0.5 outline-none focus:outline-none"
               >
                 <X size={14} />
               </MainLayoutColor>
-            </MainLayoutColor>
+            </div>
 
-            {/* Filter Options */}
             <div className="grid grid-cols-2 gap-3 pr-1">
               {/* Status Filter */}
               <div className="flex flex-col gap-1">
                 <MainLayoutColor
                   as={MainLayoutTextSize}
-                  color="subtitle"
+                  // color="subtitle"
                   size="subInfoText"
-                  className="font-semibold text-[11px]"
+                  // className="font-semibold text-[11px]"
                 >
                   Status
                 </MainLayoutColor>
@@ -251,9 +247,9 @@ export default function ProductsTable({ onHelpClick }) {
               <div className="flex flex-col gap-1">
                 <MainLayoutColor
                   as={MainLayoutTextSize}
-                  color="subtitle"
+                  // color="subtitle"
                   size="subInfoText"
-                  className="font-semibold text-[11px]"
+                  // className="font-semibold text-[11px]"
                 >
                   Pricing
                 </MainLayoutColor>
@@ -265,46 +261,36 @@ export default function ProductsTable({ onHelpClick }) {
             </div>
 
             {/* Bottom Actions */}
-            <MainLayoutColor
-              as="div"
-              border="cardBorder"
-              className="grid grid-cols-2 gap-2 pt-2 border-t mt-1"
-            >
-              <MainLayoutColor
-                as="button"
+            <div className="grid grid-cols-2 gap-2 pt-2 border-t border-[#27272a] mt-1">
+              <button
                 type="button"
-                background="filterBg"
-                border="filterBorder"
-                color="subtitle"
                 onClick={handleResetFilters}
-                className="py-1 px-2.5 rounded-lg text-[11px] font-medium transition cursor-pointer text-center hover:text-white"
+                className="py-1 px-2.5 rounded-lg bg-[#18181b] border border-[#27272a] text-[#a1a1aa] text-[11px] font-medium transition cursor-pointer text-center hover:text-white outline-none focus:outline-none"
               >
                 Reset
-              </MainLayoutColor>
-              <MainLayoutColor
-                as="button"
+              </button>
+              <button
                 type="button"
-                background="yellow"
                 onClick={handleApplyFilters}
-                className="py-1 px-2.5 rounded-lg text-black text-[11px] font-medium transition cursor-pointer text-center shadow-sm hover:opacity-90"
+                className="py-1 px-2.5 rounded-lg bg-[#FDB914] text-black text-[11px] font-medium transition cursor-pointer text-center shadow-sm hover:opacity-90 border-none outline-none focus:outline-none"
               >
                 Apply
-              </MainLayoutColor>
-            </MainLayoutColor>
+              </button>
+            </div>
           </MainDropDown>
 
+          {/* Sort Button */}
           <MainLayoutFilterButton
             isActive={!sortAsc}
             onClick={() => setSortAsc((prev) => !prev)}
-            className="h-[34px] px-3.5 border border-[#27272a] hover:border-[#FDBB24]/40 rounded-full flex items-center gap-1.5 transition-colors"
+            className="h-[34px] px-3.5 border border-[#27272a] hover:border-[#FDBB24]/40 rounded-full flex items-center gap-1.5 transition-colors outline-none focus:outline-none ring-0 focus:ring-0"
           >
-            <MainLayoutTextSize size="filterText">
+            <MainLayoutTextSize size="metricText" className="border-none outline-none focus:outline-none shadow-none">
               {sortAsc ? "Sort A-Z" : "Sort Z-A"}
             </MainLayoutTextSize>
-            <ArrowUpDown size={11} className="shrink-0" />
+            <ArrowUpDown size={12} className="shrink-0" />
           </MainLayoutFilterButton>
 
-          {/* Search Input h-[34px] */}
           <div className="w-[150px] sm:w-[170px] shrink-0 h-[34px]">
             <MainSearchInput
               value={searchTerm}
@@ -325,136 +311,133 @@ export default function ProductsTable({ onHelpClick }) {
         className="w-full h-fit rounded-2xl overflow-hidden shadow-2xl border"
       >
         <div className="w-full overflow-x-auto [scrollbar-width:thin] custom-scrollbar">
-          <table className="w-full text-left border-collapse min-w-[900px]">
+          <table className="w-full table-fixed text-left border-collapse min-w-[1000px]">
             <thead className="sticky top-0 z-10 shadow-sm">
-              <MainLayoutColor
-                as="tr"
-                background="tableHeaderBg"
-                border="cardBorder"
-                className="border-b"
-              >
-                <MainTableHeader className="py-3 px-4 pl-5">
+              <tr className="bg-[#121214] border-b border-[#232329] w-full">
+                <th className="w-[11.11%] py-3 px-4 pl-5 text-[#a1a1aa] text-[12px] font-semibold truncate">
                   Product Name
-                </MainTableHeader>
-                <MainTableHeader className="py-3 px-4">
+                </th>
+                <th className="w-[11.11%] py-3 px-4 text-[#a1a1aa] text-[12px] font-semibold truncate">
                   Assigned
-                </MainTableHeader>
-                <MainTableHeader className="py-3 px-4">
+                </th>
+                <th className="w-[11.11%] py-3 px-4 text-[#a1a1aa] text-[12px] font-semibold truncate">
                   Available
-                </MainTableHeader>
-                <MainTableHeader className="py-3 px-4">Status</MainTableHeader>
-                <MainTableHeader className="py-3 px-4">
+                </th>
+                <th className="w-[11.11%] py-3 px-4 text-[#a1a1aa] text-[12px] font-semibold truncate">
+                  Status
+                </th>
+                <th className="w-[11.11%] py-3 px-4 text-[#a1a1aa] text-[12px] font-semibold truncate">
                   Renewal Date
-                </MainTableHeader>
-                <MainTableHeader className="py-3 px-4">
+                </th>
+                <th className="w-[11.11%] py-3 px-4 text-[#a1a1aa] text-[12px] font-semibold truncate">
                   Billing Profile
-                </MainTableHeader>
-                <MainTableHeader className="py-3 px-4">
+                </th>
+                <th className="w-[11.11%] py-3 px-4 text-[#a1a1aa] text-[12px] font-semibold truncate">
                   Purchase Channel
-                </MainTableHeader>
-                <MainTableHeader className="py-3 px-4">
+                </th>
+                <th className="w-[11.11%] py-3 px-4 text-[#a1a1aa] text-[12px] font-semibold truncate">
                   Product Type
-                </MainTableHeader>
-                <MainTableHeader className="py-3 px-4 pr-5">
+                </th>
+                <th className="w-[11.11%] py-3 px-4 pr-5 text-[#a1a1aa] text-[12px] font-semibold truncate">
                   Pricing Model
-                </MainTableHeader>
-              </MainLayoutColor>
+                </th>
+              </tr>
             </thead>
 
-            <tbody className="divide-y divide-[#1d1d20]/50">
+            <tbody className="[&>tr:not(:last-child)>td]:border-b [&>tr:not(:last-child)>td]:border-[#232329]/40">
               {filteredProducts.length > 0 ? (
                 filteredProducts.map((item) => (
                   <tr
                     key={item.id}
-                    className="hover:bg-[#18181b]/40 transition-colors align-middle cursor-pointer"
+                    className="hover:bg-[#18181b]/40 transition-colors align-middle cursor-pointer w-full"
                   >
-                    <td className="py-3.5 px-4 pl-5">
+                    <td className="w-[11.11%] py-3.5 px-4 pl-5 truncate">
                       <MainLayoutColor
                         as={MainLayoutTextSize}
                         color="title"
                         size="sectionTitle"
-                        className="font-medium block"
+                        className="font-medium block truncate"
                       >
                         {item.productName}
                       </MainLayoutColor>
                     </td>
 
-                    <td className="py-3.5 px-4">
+                    <td className="w-[11.11%] py-3.5 px-4 truncate">
                       <MainLayoutColor
                         as={MainLayoutTextSize}
                         color="subtitle"
                         size="sectionTitle"
-                        className="font-normal block"
+                        className="font-normal block truncate"
                       >
                         {item.assignedLicense}
                       </MainLayoutColor>
                     </td>
 
-                    <td className="py-3.5 px-4">
+                    <td className="w-[11.11%] py-3.5 px-4 truncate">
                       <MainLayoutColor
                         as={MainLayoutTextSize}
                         color="subtitle"
                         size="sectionTitle"
-                        className="font-normal block"
+                        className="font-normal block truncate"
                       >
                         {item.availableLicense}
                       </MainLayoutColor>
                     </td>
 
-                    <td className="py-3.5 px-4">
+                    <td className="w-[11.11%] py-3.5 px-4 truncate">
                       <MainStatusBadge status={item.status} showDot={false} />
                     </td>
 
-                    <td className="py-3.5 px-4">
+                    <td className="w-[11.11%] py-3.5 px-4 truncate">
                       <MainLayoutColor
                         as={MainLayoutTextSize}
                         color="subtitle"
                         size="sectionTitle"
-                        className="font-normal block"
+                        className="font-normal block truncate"
                       >
                         {item.renewalDate}
                       </MainLayoutColor>
                     </td>
 
-                    <td className="py-3.5 px-4">
+                    <td className="w-[11.11%] py-3.5 px-4 truncate">
                       <MainLayoutColor
                         as={MainLayoutTextSize}
                         color="subtitle"
                         size="sectionTitle"
-                        className="font-normal block"
+                        className="font-normal block truncate"
                       >
                         {item.billingProfile}
                       </MainLayoutColor>
                     </td>
 
-                    <td className="py-3.5 px-4">
+                    <td className="w-[11.11%] py-3.5 px-4 truncate">
                       <MainLayoutColor
                         as={MainLayoutTextSize}
                         color="subtitle"
                         size="sectionTitle"
-                        className="font-normal block"
+                        className="font-normal block truncate"
                       >
                         {item.purchaseChannel}
                       </MainLayoutColor>
                     </td>
 
-                    <td className="py-3.5 px-4">
+                    <td className="w-[11.11%] py-3.5 px-4 truncate">
                       <MainLayoutColor
                         as={MainLayoutTextSize}
                         color="subtitle"
                         size="sectionTitle"
-                        className="font-normal block"
+                        className="font-normal block truncate"
                       >
                         {item.productType}
                       </MainLayoutColor>
                     </td>
 
-                    <td className="py-3.5 px-4 pr-5">
+                    <td className="w-[11.11%] py-3.5 px-4 pr-5 truncate">
                       <MainLayoutColor
                         as={MainLayoutTextSize}
                         color="subtitle"
                         size="sectionTitle"
-                        className="font-normal block"
+                        className="font-normal block truncate"
                       >
                         {item.pricingModel}
                       </MainLayoutColor>

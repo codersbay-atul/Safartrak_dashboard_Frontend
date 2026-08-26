@@ -87,8 +87,8 @@ export default function Products() {
 
   return (
     <>
-      <MainLayout InactiveTab="Your Products">
-        <div className="flex-1 flex flex-col gap-2.5 min-h-0 min-w-0 overflow-y-auto min-[1152px]:overflow-hidden pr-0.5 custom-scrollbar">
+      <MainLayout InactiveTab="Your Products" allowPageScroll>
+        <div className="flex-1 flex flex-col gap-2.5 min-h-0 min-w-0 overflow-y-auto pr-0.5 custom-scrollbar">
           <div className="shrink-0">
             <ProductsHeader />
           </div>
@@ -97,7 +97,7 @@ export default function Products() {
             <ProductDueBanner onPayNow={handlePayNow} />
           </div>
 
-          <div className="shrink-0 w-full overflow-hidden">
+          <div className="shrink-0 w-full overflow-visible">
             <TableSlider
               isOpen={isTableHelpOpen}
               onOpen={() => setIsTableHelpOpen(true)}

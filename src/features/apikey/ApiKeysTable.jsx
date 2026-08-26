@@ -18,7 +18,6 @@ const DEFAULT_API_KEYS = [
 export default function ApiKeysTable({
   apiKeys = DEFAULT_API_KEYS,
   onRefresh,
-  onEdit,
   onDelete,
   onHelpClick,
 }) {
@@ -44,38 +43,35 @@ export default function ApiKeysTable({
       {/* Header Section */}
       <div className="flex items-center gap-2 px-1 justify-between">
         <div className="flex items-center gap-2">
-        <MainLayoutColor
-          as={ShieldCheck}
-          color="yellow"
-          className="w-4 h-4 shrink-0"
-        />
-        <MainLayoutColor
-          as={MainLayoutTextSize}
-          color="title"
-          size="sectionTitle"
-          className="font-bold tracking-tight block"
-        >
-          Production Credentials
-        </MainLayoutColor>
+          <MainLayoutColor
+            as={ShieldCheck}
+            color="yellow"
+            className="w-4 h-4 shrink-0"
+          />
+          <MainLayoutColor
+            as={MainLayoutTextSize}
+            color="title"
+            size="sectionTitle"
+            className="font-bold tracking-tight block"
+          >
+            Production Credentials
+          </MainLayoutColor>
         </div>
         <button
-            type="button"
-            onClick={onHelpClick}
-            className="cursor-pointer flex items-center gap-2"
+          type="button"
+          onClick={onHelpClick}
+          className="cursor-pointer flex items-center gap-2"
+        >
+          <HelpCircleIcon size={18} className="text-[#FDB914]" />
+          <MainLayoutColor
+            as={MainLayoutTextSize}
+            color="yellow"
+            size="sectionTitle"
+            className="font-bold tracking-tight block text-[14px] cursor-pointer"
           >
-            <HelpCircleIcon
-              size={18}
-              className="text-[#FDB914]"
-            />
-            <MainLayoutColor
-              as={MainLayoutTextSize}
-              color="yellow"
-              size="sectionTitle"
-              className="font-bold tracking-tight block text-[14px] cursor-pointer"
-            >
-              Help me understand this table
-            </MainLayoutColor>
-          </button>
+            Help me understand this table
+          </MainLayoutColor>
+        </button>
       </div>
 
       {/* Surface Card Container & Table */}
@@ -105,22 +101,22 @@ export default function ApiKeysTable({
                   border="cardBorder"
                   className="border-b"
                 >
-                  <MainTableHeader className="py-3 px-4 w-[180px]">
+                  <MainTableHeader className="py-3 px-4 w-[160px]">
                     Production Credentials
                   </MainTableHeader>
-                  <MainTableHeader className="py-3 px-4 w-[130px]">
+                  <MainTableHeader className="py-3 px-4 w-[120px]">
                     Created On
                   </MainTableHeader>
-                  <MainTableHeader className="py-3 px-4 w-[130px]">
+                  <MainTableHeader className="py-3 px-4 w-[120px]">
                     Created By
                   </MainTableHeader>
-                  <MainTableHeader className="py-3 px-4 w-[320px]">
+                  <MainTableHeader className="py-3 px-4 w-[280px]">
                     API Key (Username)
                   </MainTableHeader>
-                  <MainTableHeader className="py-3 px-4 w-[220px]">
+                  <MainTableHeader className="py-3 px-4 w-[300px]">
                     API Token (Password)
                   </MainTableHeader>
-                  <MainTableHeader className="py-3 px-4 w-[120px] text-right">
+                  <MainTableHeader className="py-3 px-4 w-[110px] text-right pr-30">
                     Action
                   </MainTableHeader>
                 </MainLayoutColor>
@@ -136,7 +132,7 @@ export default function ApiKeysTable({
                   return (
                     <tr
                       key={item.id}
-                      className="align-middle hover:bg-[#18181b]/50 transition-colors cursor-pointer"
+                      className="align-top hover:bg-[#18181b]/50 transition-colors cursor-pointer"
                     >
                       {/* Name */}
                       <td className="py-3.5 px-4 truncate">
@@ -175,12 +171,12 @@ export default function ApiKeysTable({
                       </td>
 
                       {/* API Key */}
-                      <td className="py-3.5 px-4 align-middle">
-                        <div className="flex items-center justify-between gap-2 min-w-0">
+                      <td className="py-3.5 px-4">
+                        <div className="grid grid-cols-[1fr_auto] items-start gap-2">
                           <MainLayoutColor
                             as="span"
                             color="subtitle"
-                            className="font-mono text-[12px] break-all whitespace-normal leading-relaxed min-w-0"
+                            className="font-mono text-[12px] break-all block min-w-0"
                           >
                             {item.apiKey}
                           </MainLayoutColor>
@@ -190,7 +186,7 @@ export default function ApiKeysTable({
                               e.stopPropagation();
                               handleCopy(item.apiKey, item.id, "key");
                             }}
-                            className="text-[#71717a] hover:text-white transition-colors shrink-0 p-1 focus:outline-none inline-flex items-center justify-center cursor-pointer"
+                            className="text-[#71717a] hover:text-white transition-colors p-1 focus:outline-none inline-flex items-center justify-center cursor-pointer shrink-0"
                             title="Copy API Key"
                           >
                             {isKeyCopied ? <CheckIcon /> : <CopyIcon />}
@@ -198,14 +194,14 @@ export default function ApiKeysTable({
                         </div>
                       </td>
 
-                      {/* API Token */}
-                      <td className="py-3.5 px-4 align-middle">
-                        <div className="flex items-center justify-between gap-2 min-w-0">
+                    
+                      <td className="py-3.5 px-4">
+                        <div className="grid grid-cols-[18ch_auto] items-start gap-2 min-w-0">
                           <span
-                            className={`tracking-widest font-mono text-[12px] break-all whitespace-normal leading-relaxed min-w-0 ${
+                            className={`font-mono text-[12px] leading-5 block w-[18ch] min-w-0 break-all whitespace-normal ${
                               isSecretVisible
                                 ? "text-[var(--color-yellow,#ffd60a)]"
-                                : "text-[#71717a]"
+                                : "text-[#71717a] tracking-widest"
                             }`}
                           >
                             {isSecretVisible
@@ -218,7 +214,7 @@ export default function ApiKeysTable({
                               e.stopPropagation();
                               handleCopy(item.apiSecret, item.id, "secret");
                             }}
-                            className="text-[#71717a] hover:text-white transition-colors shrink-0 p-1 focus:outline-none inline-flex items-center justify-center cursor-pointer"
+                            className="-translate-x-24 text-[#71717a] hover:text-white transition-colors shrink-0 p-1 focus:outline-none inline-flex items-center justify-center cursor-pointer"
                             title="Copy API Secret"
                           >
                             {isSecretCopied ? <CheckIcon /> : <CopyIcon />}
@@ -227,8 +223,8 @@ export default function ApiKeysTable({
                       </td>
 
                       {/* Actions */}
-                      <td className="py-3.5 px-4 text-right whitespace-nowrap align-middle">
-                        <div className="flex items-center justify-end gap-2 text-[#71717a]">
+                      <td className="py-3.5 px-4 text-right whitespace-nowrap pr-20">
+                        <div className="flex items-center justify-end gap-3 text-[#71717a]">
                           <button
                             type="button"
                             onClick={function (e) {
@@ -241,18 +237,6 @@ export default function ApiKeysTable({
                             }
                           >
                             {isSecretVisible ? <EyeClosedIcon /> : <EyeIcon />}
-                          </button>
-
-                          <button
-                            type="button"
-                            onClick={function (e) {
-                              e.stopPropagation();
-                              onEdit && onEdit(item);
-                            }}
-                            className="hover:text-white transition-colors p-1 focus:outline-none flex items-center justify-center cursor-pointer"
-                            title="Edit API Key"
-                          >
-                            <EditIcon />
                           </button>
 
                           <button
@@ -355,24 +339,6 @@ function EyeClosedIcon() {
         d="M3 12s3.5-6 9-6 9 6 9 6-3.5 6-9 6-9-6-9-6z"
       />
       <path strokeLinecap="round" strokeLinejoin="round" d="M4 20L20 4" />
-    </svg>
-  );
-}
-
-function EditIcon() {
-  return (
-    <svg
-      className="w-4 h-4"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.75"
-      viewBox="0 0 24 24"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-      />
     </svg>
   );
 }

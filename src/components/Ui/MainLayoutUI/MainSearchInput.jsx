@@ -1,7 +1,7 @@
 import React from "react";
 import { Search } from "lucide-react";
 import MainLayoutColor from "./MainLayoutColor";
-import MainLayoutTextSize from "./MainLayoutTextSize";
+import { MAIN_LAYOUT_TEXT_SIZES } from "./MainLayoutTextSize";
 
 export default function MainSearchInput({
   placeholder = "Search...",
@@ -13,6 +13,7 @@ export default function MainSearchInput({
   ...props
 }) {
   const isLeft = iconPosition === "left";
+  const textToken = MAIN_LAYOUT_TEXT_SIZES.searchText;
 
   return (
     <div
@@ -20,14 +21,15 @@ export default function MainSearchInput({
     >
       <MainLayoutColor
         as="input"
-        color="SearchTextColor"
-        border="SearchBorder"
-        borderHover="SearchBorderHover"
         type="text"
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        className={`w-full h-[34px] px-3.5 rounded-full text-[12px] placeholder-[#8B8D97] focus:outline-none transition-all box-border ${
+        background="surface"
+        border="cardBorder"
+        borderHover="cardBorderHover"
+        color="title"
+        className={`w-full h-[34px] px-3.5 rounded-full ${textToken} placeholder:font-medium placeholder-[#8B8D97] focus:outline-none transition-all box-border ${
           isLeft ? "pl-9 pr-3.5" : "pr-9 pl-3.5"
         } ${className}`.trim()}
         {...props}

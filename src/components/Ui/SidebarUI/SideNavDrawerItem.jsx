@@ -38,14 +38,14 @@ export default function SideNavDrawerItem({ onNavigate }) {
       <div
         aria-hidden="true"
         className="pointer-events-none absolute left-[4px] top-0 z-20 w-[2px] bg-[#3A3A3F]"
-        style={{ height: `${workflowItems.length * 40 - 20}px` }}
+        style={{ height: `${(workflowItems.length - 1) * 40 + 18}px` }}
       />
 
       {selectedIndex >= 0 && (
         <div
           aria-hidden="true"
           className="pointer-events-none absolute left-[4px] top-0 z-50 w-[2px] bg-[#FDB914]"
-          style={{ height: `${selectedIndex * 40 + 14}px` }}
+          style={{ height: `${selectedIndex * 40 + 18}px` }}
         />
       )}
 
@@ -127,8 +127,8 @@ export default function SideNavDrawerItem({ onNavigate }) {
                 h-[14px]
                 w-[22px]
                 rounded-bl-[10px]
-                border-b-[2px]
-                border-l-[2px]
+                border-b-[3px]
+                border-l-[3px]
               `}
               style={{
                 borderColor: isSelected ? "#FDB914" : "#3A3A3F",

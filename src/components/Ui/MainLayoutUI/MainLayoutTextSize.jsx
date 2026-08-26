@@ -19,7 +19,7 @@ export const MAIN_LAYOUT_TEXT_SIZES = {
   dropdownOptionText: "text-[10.5px] sm:text-[11.5px] leading-tight font-medium",
   kpiTitle: "text-[13px] xl:text-[13px] leading-tight font-medium tracking-wide",
   headerButtonText: "text-[14px] leading-[20px] font-medium",
-  searchText: "text-[12px] leading-tight font-normal",
+  searchText: "text-[12px] leading-tight font-medium",
   PopOverText: "text-[14px] leading-tight font-medium",
   tableHeader: "text-[12px] font-medium tracking-wider",
 };

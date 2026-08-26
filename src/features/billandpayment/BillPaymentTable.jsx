@@ -78,23 +78,23 @@ export default function BillPaymentTable({ onPayNow, onHelpClick }) {
   return (
     <div className="w-full flex flex-col gap-3 font-sans select-none">
       {/* Outside Header Toolbar */}
-      <div className="flex flex-col gap-2.5 px-1 shrink-0">
+      <div className="flex flex-col gap-2.5 px-1 shrink-0 relative z-30">
         {/* Title Row */}
         <div className="flex items-center gap-2 justify-between">
           <div className="flex items-center gap-2">
-          <MainLayoutColor
-            as={Receipt}
-            color="yellow"
-            className="w-4 h-4 shrink-0"
-          />
-          <MainLayoutColor
-            as={MainLayoutTextSize}
-            color="title"
-            size="sectionTitle"
-            className="font-bold tracking-tight block"
-          >
-            Bill & Payment Invoices
-          </MainLayoutColor>
+            <MainLayoutColor
+              as={Receipt}
+              color="yellow"
+              className="w-4 h-4 shrink-0"
+            />
+            <MainLayoutColor
+              as={MainLayoutTextSize}
+              color="title"
+              size="sectionTitle"
+              className="font-bold tracking-tight block"
+            >
+              Bill & Payment Invoices
+            </MainLayoutColor>
           </div>
           <button
             type="button"
@@ -116,13 +116,13 @@ export default function BillPaymentTable({ onPayNow, onHelpClick }) {
         {/* Controls Row: Uniform h-[34px] Height */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-2.5">
           {/* Left Side: Reusable Dropdown Filters */}
-          
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2 relative z-50">
             <MainDropDown
               label="Status"
               options={STATUS_OPTIONS}
               selectedValue={selectedStatus}
               onSelect={(val) => setSelectedStatus(val)}
+              menuAlign="left"
             />
 
             <MainDropDown
@@ -187,36 +187,36 @@ export default function BillPaymentTable({ onPayNow, onHelpClick }) {
         as="div"
         background="surface"
         border="cardBorder"
-        className="w-full h-fit flex flex-col rounded-2xl overflow-hidden shadow-2xl border"
+        className="w-full h-fit flex flex-col rounded-2xl overflow-visible shadow-2xl border relative z-10"
       >
-        <div className="w-full overflow-x-auto [scrollbar-width:thin] custom-scrollbar">
-          <table className="w-full text-left border-collapse min-w-[950px]">
+        <div className="w-full overflow-x-auto [scrollbar-width:thin] custom-scrollbar rounded-2xl">
+          <table className="w-full table-fixed text-left border-collapse min-w-[950px]">
             <thead className="sticky top-0 z-10 shadow-sm">
               <MainLayoutColor
                 as="tr"
                 background="tableHeaderBg"
                 border="cardBorder"
-                className="border-b"
+                className="border-b w-full"
               >
-                <MainTableHeader className="py-3 px-5">
+                <MainTableHeader className="w-[14.28%] py-3 px-4 truncate">
                   Invoice ID
                 </MainTableHeader>
-                <MainTableHeader className="py-3 px-5">
+                <MainTableHeader className="w-[14.28%] py-3 px-4 truncate">
                   Invoice Date
                 </MainTableHeader>
-                <MainTableHeader className="py-3 px-5">
+                <MainTableHeader className="w-[14.28%] py-3 px-4 truncate">
                   Billing Period
                 </MainTableHeader>
-                <MainTableHeader className="py-3 px-5">
+                <MainTableHeader className="w-[14.28%] py-3 px-4 truncate">
                   Total Amount
                 </MainTableHeader>
-                <MainTableHeader className="py-3 px-5">
+                <MainTableHeader className="w-[14.28%] py-3 px-4 truncate">
                   Status
                 </MainTableHeader>
-                <MainTableHeader className="py-3 px-5">
+                <MainTableHeader className="w-[14.28%] py-3 px-4 truncate">
                   Payment Action
                 </MainTableHeader>
-                <MainTableHeader align="right" className="py-3 px-5">
+                <MainTableHeader className="w-[14.28%] py-3 px-4 truncate">
                   Download Invoice
                 </MainTableHeader>
               </MainLayoutColor>
@@ -227,57 +227,57 @@ export default function BillPaymentTable({ onPayNow, onHelpClick }) {
                 filteredInvoices.map((item) => (
                   <tr
                     key={item.id}
-                    className="hover:bg-[#18181b]/50 transition-colors align-middle cursor-pointer"
+                    className="hover:bg-[#18181b]/50 transition-colors align-middle cursor-pointer w-full"
                   >
-                    <td className="py-3.5 px-5 whitespace-nowrap">
+                    <td className="w-[14.28%] py-3.5 px-4 truncate">
                       <MainLayoutColor
                         as={MainLayoutTextSize}
                         color="title"
                         size="sectionTitle"
-                        className="font-medium block"
+                        className="font-medium block truncate"
                       >
                         {item.id}
                       </MainLayoutColor>
                     </td>
 
-                    <td className="py-3.5 px-5 whitespace-nowrap">
+                    <td className="w-[14.28%] py-3.5 px-4 truncate">
                       <MainLayoutColor
                         as={MainLayoutTextSize}
                         color="subtitle"
                         size="subInfoText"
-                        className="font-normal block"
+                        className="font-normal block truncate"
                       >
                         {item.invoiceDate}
                       </MainLayoutColor>
                     </td>
 
-                    <td className="py-3.5 px-5 whitespace-nowrap">
+                    <td className="w-[14.28%] py-3.5 px-4 truncate">
                       <MainLayoutColor
                         as={MainLayoutTextSize}
                         color="subtitle"
                         size="subInfoText"
-                        className="font-normal block"
+                        className="font-normal block truncate"
                       >
                         {item.billingPeriod}
                       </MainLayoutColor>
                     </td>
 
-                    <td className="py-3.5 px-5 whitespace-nowrap">
+                    <td className="w-[14.28%] py-3.5 px-4 truncate">
                       <MainLayoutColor
                         as={MainLayoutTextSize}
                         color="title"
                         size="sectionTitle"
-                        className="font-medium block"
+                        className="font-medium block truncate"
                       >
                         {item.totalAmount}
                       </MainLayoutColor>
                     </td>
 
-                    <td className="py-3.5 px-5 whitespace-nowrap">
+                    <td className="w-[14.28%] py-3.5 px-4 truncate">
                       <MainStatusBadge status={item.status} showDot={false} />
                     </td>
 
-                    <td className="py-3.5 px-5 whitespace-nowrap">
+                    <td className="w-[14.28%] py-3.5 px-4 truncate">
                       {item.hasPayNow ? (
                         <button
                           type="button"
@@ -290,13 +290,13 @@ export default function BillPaymentTable({ onPayNow, onHelpClick }) {
                           <ChevronRight size={12} className="stroke-[2.5]" />
                         </button>
                       ) : (
-                        <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText" className="block">
+                        <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText" className="block truncate">
                           N/A
                         </MainLayoutColor>
                       )}
                     </td>
 
-                    <td className="py-3.5 px-5 text-right whitespace-nowrap">
+                    <td className="w-[14.28%] py-3.5 px-4 truncate">
                       <button
                         type="button"
                         className="inline-flex items-center gap-1.5 hover:opacity-80 transition cursor-pointer"

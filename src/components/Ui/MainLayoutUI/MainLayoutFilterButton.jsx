@@ -16,10 +16,10 @@ export default function MainLayoutFilterButton({
       type="button"
       onClick={onClick}
       background={isActive ? "filterActiveBg" : "filterBg"}
-      // border={isActive ? "filterActiveBorder" : "filterBorder"}
+      border={isActive ? "filterActiveBorder" : "filterBorder"}
       borderHover="filterBorderHover"
       color={isActive ? "filterActiveText" : "filterText"}
-      className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full transition-all select-none cursor-pointer font-medium ${className}`.trim()}
+      className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full transition-all select-none cursor-pointer font-medium outline-none focus:outline-none ring-0 focus:ring-0 ${className}`.trim()}
       {...props}
     >
       {children ? (
