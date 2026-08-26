@@ -90,28 +90,41 @@ function StatusLegend({ statuses }) {
   if (!statuses?.length) return null;
 
   return (
-    <ul className="flex flex-col gap-2 mt-2">
+    <ul className="grid grid-cols-[auto_auto_1fr] items-start gap-x-2 gap-y-2 mt-2">
       {statuses.map((row, index) => (
         <li
           key={row.status || row.label || index}
-          className="flex items-center gap-2 min-w-0 "
+          className="contents"
         >
-          <MainStatusBadge status={row.status || row.label} showDot={false} />
+          <MainStatusBadge
+            status={row.status || row.label}
+            showDot={false}
+            className="w-full justify-center"
+          />
           {row.content ? (
             <>
-              <MainLayoutColor as="span" color="muted" className="shrink-0">
+              <MainLayoutColor
+                as="span"
+                color="muted"
+                className="inline-flex h-[18px] items-center shrink-0 leading-none"
+              >
                 –
               </MainLayoutColor>
               <MainLayoutColor
                 as={MainLayoutTextSize}
                 color="muted"
                 size="subInfoText"
-                className="font-normal leading-4.5"
+                className="font-normal leading-4.5 min-w-0 mt-px"
               >
                 {row.content}
               </MainLayoutColor>
             </>
-          ) : null}
+          ) : (
+            <>
+              <span aria-hidden="true" />
+              <span aria-hidden="true" />
+            </>
+          )}
         </li>
       ))}
     </ul>
