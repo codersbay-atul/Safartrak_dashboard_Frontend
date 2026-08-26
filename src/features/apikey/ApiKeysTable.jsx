@@ -151,7 +151,7 @@ export default function ApiKeysTable({
                         <MainLayoutColor
                           as={MainLayoutTextSize}
                           color="subtitle"
-                          size="subInfoText"
+                          size="plateText"
                           className="font-normal block"
                         >
                           {item.created}
@@ -163,7 +163,7 @@ export default function ApiKeysTable({
                         <MainLayoutColor
                           as={MainLayoutTextSize}
                           color="subtitle"
-                          size="subInfoText"
+                          size="plateText"
                           className="font-normal block"
                         >
                           {item.author || "—"}

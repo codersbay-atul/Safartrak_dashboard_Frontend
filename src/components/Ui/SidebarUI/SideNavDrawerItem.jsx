@@ -37,14 +37,14 @@ export default function SideNavDrawerItem({ onNavigate }) {
     <div className="relative ml-[12px] flex flex-col gap-2 pt-2">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute left-[4px] top-0 z-20 w-[2px] bg-[#3A3A3F]"
+        className="pointer-events-none absolute left-[4px] top-0 z-20 w-[3px] bg-[#3A3A3F]"
         style={{ height: `${(workflowItems.length - 1) * 40 + 18}px` }}
       />
 
       {selectedIndex >= 0 && (
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute left-[4px] top-0 z-50 w-[2px] bg-[#FDB914]"
+          className="pointer-events-none absolute left-[4px] top-0 z-50 w-[3px] bg-[#FDB914]"
           style={{ height: `${selectedIndex * 40 + 18}px` }}
         />
       )}
