@@ -45,6 +45,7 @@ export const MAIN_LAYOUT_COLORS = {
   filterDotIdle: "bg-[#f59e0b]",
   filterDotCritical: "bg-[#f97316]",
   filterDotOffline: "bg-[#ef4444]",
+  filterDotMaint: "bg-[#FDB914]",
 
   // --- BADGES (Exact Required Colors) ---
   // Pending

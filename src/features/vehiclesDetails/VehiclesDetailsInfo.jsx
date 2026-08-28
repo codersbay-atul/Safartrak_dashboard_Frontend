@@ -6,9 +6,9 @@ import MainLayoutFilterButton from "../../components/Ui/MainLayoutUI/MainLayoutF
 import MainSearchInput from "../../components/Ui/MainLayoutUI/MainSearchInput";
 
 const FILTERS = [
-  { label: "All Vehicles", value: "All" },
+  { label: "All", value: "All" },
   { label: "Inactive", value: "Inactive", dotBg: "filterDotMoving" },
-  { label: "Maint.", value: "Maint.", dotBg: "yellow" },
+  { label: "Maint.", value: "Maint.", dotBg: "filterDotMaint" },
   { label: "Idle", value: "Idle", dotBg: "filterDotIdle" },
   { label: "Offline", value: "Offline", dotBg: "filterDotOffline" },
 ];
@@ -44,23 +44,69 @@ export default function VehiclesDetailsInfo({
             "Unknown",
         }))
       : [
-          { id: "MH14ZZ8765", type: "Heavy Truck", driver: "Ashoke Sharma", fleet: "West Fleet", status: "Inactive" },
-          { id: "MH14ZZ8766", type: "Heavy Truck", driver: "Ashoke Sharma", fleet: "West Fleet", status: "Inactive" },
-          { id: "MH14ZZ8767", type: "Heavy Truck", driver: "Ashoke Sharma", fleet: "West Fleet", status: "Maint." },
-          { id: "MH14ZZ8768", type: "Heavy Truck", driver: "Ashoke Sharma", fleet: "West Fleet", status: "Idle" },
-          { id: "MH14ZZ8769", type: "Heavy Truck", driver: "Ashoke Sharma", fleet: "West Fleet", status: "Offline" },
+          {
+            id: "MH14ZZ8765",
+            type: "Heavy Truck",
+            driver: "Ashoke Sharma",
+            fleet: "West Fleet",
+            status: "Inactive",
+          },
+          {
+            id: "MH14ZZ8766",
+            type: "Heavy Truck",
+            driver: "Ashoke Sharma",
+            fleet: "West Fleet",
+            status: "Inactive",
+          },
+          {
+            id: "MH14ZZ8767",
+            type: "Heavy Truck",
+            driver: "Ashoke Sharma",
+            fleet: "West Fleet",
+            status: "Maint.",
+          },
+          {
+            id: "MH14ZZ8768",
+            type: "Heavy Truck",
+            driver: "Ashoke Sharma",
+            fleet: "West Fleet",
+            status: "Idle",
+          },
+          {
+            id: "MH14ZZ8769",
+            type: "Heavy Truck",
+            driver: "Ashoke Sharma",
+            fleet: "West Fleet",
+            status: "Offline",
+          },
         ];
 
   const getStatusBadgeConfig = (status) => {
     switch (status) {
       case "Inactive":
-        return { color: "greenStatusBadge", background: "greenStatusBadgeBg", border: "greenStatusBadgeBorder" };
+        return {
+          color: "greenStatusBadge",
+          background: "greenStatusBadgeBg",
+          border: "greenStatusBadgeBorder",
+        };
       case "Maint.":
-        return { color: "yellow", background: "pendingStatusBadgeBg", border: "pendingStatusBadgeBorder" };
+        return {
+          color: "yellow",
+          background: "pendingStatusBadgeBg",
+          border: "pendingStatusBadgeBorder",
+        };
       case "Idle":
-        return { color: "kycNoStatusBadge", background: "kycNoStatusBadgeBg", border: "kycNoStatusBadgeBorder" };
+        return {
+          color: "kycNoStatusBadge",
+          background: "kycNoStatusBadgeBg",
+          border: "kycNoStatusBadgeBorder",
+        };
       default:
-        return { color: "inactiveStatusBadge", background: "inactiveStatusBadgeBg", border: "inactiveStatusBadgeBorder" };
+        return {
+          color: "inactiveStatusBadge",
+          background: "inactiveStatusBadgeBg",
+          border: "inactiveStatusBadgeBorder",
+        };
     }
   };
 
@@ -142,14 +188,29 @@ export default function VehiclesDetailsInfo({
       <div className="flex-none lg:flex-1 overflow-y-visible lg:overflow-y-auto space-y-1.5 pr-0.5 custom-scrollbar min-h-0">
         {isLoading ? (
           <div className="py-16 flex flex-col items-center justify-center gap-2.5">
-            <MainLayoutColor as={Loader2} color="yellow" size={24} className="animate-spin" />
-            <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText" className="font-medium">
+            <MainLayoutColor
+              as={Loader2}
+              color="yellow"
+              size={24}
+              className="animate-spin"
+            />
+            <MainLayoutColor
+              as={MainLayoutTextSize}
+              color="subtitle"
+              size="subInfoText"
+              className="font-medium"
+            >
               Loading vehicles...
             </MainLayoutColor>
           </div>
         ) : isError ? (
           <div className="py-16 text-center">
-            <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText" className="font-medium">
+            <MainLayoutColor
+              as={MainLayoutTextSize}
+              color="subtitle"
+              size="subInfoText"
+              className="font-medium"
+            >
               Failed to load vehicles list.
             </MainLayoutColor>
           </div>
@@ -163,12 +224,14 @@ export default function VehiclesDetailsInfo({
               <MainLayoutColor
                 key={v.id}
                 as="div"
-                background={isSelected ? "filterActiveBg" : "surface"}
-                border="cardBorder"
-                borderHover="cardBorderHover"
+                // background={isSelected ? "filterActiveBg" : "surface"}
+                // border="cardBorder"
+                // borderHover="cardBorderHover"
                 onClick={() => onSelectVehicle?.(v.uniqueId)}
-                className={`p-2.5 rounded-xl border transition-all flex items-center justify-between cursor-pointer group ${
-                  isSelected ? "shadow-md" : "hover:opacity-90"
+                className={`p-2.5  transition-all flex items-center justify-between cursor-pointer group ${
+                  isSelected
+                    ? "bg-[#07080a] border-l-2 border-l-[#ffd60a]"
+                    : "hover:bg-[#1f2025]"
                 }`}
               >
                 <div className="space-y-0.5 min-w-0 flex-1">
@@ -195,7 +258,10 @@ export default function VehiclesDetailsInfo({
                         background={isMaint ? "yellow" : badgeConfig.color}
                         className="w-1 h-1 rounded-full shrink-0"
                       />
-                      <MainLayoutTextSize size="badgeText" className="font-medium">
+                      <MainLayoutTextSize
+                        size="badgeText"
+                        className="font-medium"
+                      >
                         {v.status}
                       </MainLayoutTextSize>
                     </MainLayoutColor>
@@ -219,7 +285,11 @@ export default function VehiclesDetailsInfo({
                     >
                       {v.driver}
                     </MainLayoutColor>
-                    <MainLayoutColor as="span" color="subtitle" className="shrink-0">
+                    <MainLayoutColor
+                      as="span"
+                      color="subtitle"
+                      className="shrink-0"
+                    >
                       •
                     </MainLayoutColor>
                     <MainLayoutColor
@@ -248,7 +318,12 @@ export default function VehiclesDetailsInfo({
           })
         ) : (
           <div className="h-full flex items-center justify-center p-4 text-center">
-            <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText" className="font-medium">
+            <MainLayoutColor
+              as={MainLayoutTextSize}
+              color="subtitle"
+              size="subInfoText"
+              className="font-medium"
+            >
               No vehicles found
             </MainLayoutColor>
           </div>

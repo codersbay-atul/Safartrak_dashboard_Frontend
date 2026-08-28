@@ -349,7 +349,7 @@ export default function ProductsTable({ onHelpClick }) {
                 filteredProducts.map((item) => (
                   <tr
                     key={item.id}
-                    className="hover:bg-[#18181b]/40 transition-colors align-middle cursor-pointer w-full"
+                    className="hover:bg-[#1f2025] transition-colors align-middle cursor-pointer w-full"
                   >
                     <td className="w-[11.11%] py-3.5 px-4 pl-5 truncate">
                       <MainLayoutColor

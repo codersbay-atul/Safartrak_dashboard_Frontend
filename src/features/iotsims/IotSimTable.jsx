@@ -421,7 +421,7 @@ export default function IotSimTable({ onHelpClick }) {
                   return (
                     <tr
                       key={item.id}
-                      className="hover:bg-[#18181b]/45 transition-colors align-middle cursor-pointer w-full h-[52px]"
+                      className="hover:bg-[#1f2025] transition-colors align-middle cursor-pointer w-full h-[52px]"
                     >
                       {/* ICCID Column */}
                       <td className="w-1/6 py-2 px-4 pl-5 truncate">

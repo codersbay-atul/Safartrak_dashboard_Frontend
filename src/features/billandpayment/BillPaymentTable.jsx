@@ -227,7 +227,7 @@ export default function BillPaymentTable({ onPayNow, onHelpClick }) {
                 filteredInvoices.map((item) => (
                   <tr
                     key={item.id}
-                    className="hover:bg-[#18181b]/50 transition-colors align-middle cursor-pointer w-full"
+                    className="hover:bg-[#1f2025] transition-colors align-middle cursor-pointer w-full"
                   >
                     <td className="w-[14.28%] py-3.5 px-4 truncate">
                       <MainLayoutColor

@@ -87,12 +87,14 @@ export default function AoiListPanel({
                 key={aoi.id}
                 as="button"
                 type="button"
-                background={isSelected ? "selectedRowBg" : "surface"}
-                border="cardBorder"
-                borderHover="cardBorderHover"
+                // background={isSelected ? "selectedRowBg" : "surface"}
+                // border="cardBorder"
+                // borderHover="cardBorderHover"
                 onClick={() => onSelect(aoi)}
-                className={`w-full text-left py-3 px-3.5 transition-all cursor-pointer shrink-0 rounded-xl border ${
-                  isSelected ? "shadow-sm ring-1 ring-[#2e2e35]" : ""
+                className={`w-full text-left py-3 px-3.5 transition-all cursor-pointer shrink-0 ${
+                  isSelected
+                    ? "bg-[#07080a] border-l-2 border-l-[#ffd60a]"
+                    : "hover:bg-[#1f2025]"
                 }`}
               >
                 <div className="flex items-center justify-between gap-2">
@@ -115,7 +117,8 @@ export default function AoiListPanel({
                         size="subInfoText"
                         className="shrink-0 font-normal inline"
                       >
-                        {aoi.assignedVehiclesCount ?? aoi.vehicles ?? 0} Assigned Vehicles
+                        {aoi.assignedVehiclesCount ?? aoi.vehicles ?? 0}{" "}
+                        Assigned Vehicles
                       </MainLayoutColor>
                     </div>
 

@@ -63,7 +63,7 @@ export default function DriverList({ selectedUser, onSelectUser, refreshTrigger 
 
   return (
     <div className="w-full h-auto lg:h-full min-h-0 flex flex-col gap-2.5 font-sans select-none">
-      {/* Outside Header Toolbar */}
+      {/* Outside Header Toolbar
       <div className="flex items-center justify-between gap-2 px-1 shrink-0">
         <div className="flex items-center gap-2">
           <MainLayoutColor
@@ -80,7 +80,7 @@ export default function DriverList({ selectedUser, onSelectUser, refreshTrigger 
             Drivers List
           </MainLayoutColor>
         </div>
-      </div>
+      </div> */}
 
       {/* Users Table Card Container */}
       <MainLayoutColor
