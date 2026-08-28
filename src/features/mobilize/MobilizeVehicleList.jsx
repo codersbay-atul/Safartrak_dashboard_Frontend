@@ -77,8 +77,7 @@ export default function MobilizeVehicleList({
       <div className="flex flex-col gap-2 overflow-y-visible lg:overflow-y-auto pr-1 flex-none lg:flex-1 custom-scrollbar min-h-0">
         {vehicles.length > 0 ? (
           vehicles.map((vehicle) => {
-            const action =
-              ACTION_STYLES[vehicle.status] || ACTION_STYLES.offline;
+            const action = ACTION_STYLES[vehicle.status] || ACTION_STYLES.offline;
             const isOffline = vehicle.status === "offline";
             const isSelected = selectedVehicle?.id === vehicle.id;
 
@@ -86,14 +85,12 @@ export default function MobilizeVehicleList({
               <MainLayoutColor
                 key={vehicle.id}
                 as="div"
-                // background="surface"
-                // border="cardBorder"
-                // borderHover="cardBorderHover"
+                background="surface"
+                border="cardBorder"
+                borderHover="cardBorderHover"
                 onClick={() => onSelectVehicle?.(vehicle)}
-                className={`group flex items-center justify-between py-2 px-3 transition-all duration-150 w-full gap-2 shrink-0 cursor-pointer ${
-                  isSelected
-                    ? "bg-[#07080a] border-l-2 border-l-[#ffd60a]"
-                    : "hover:bg-[#1f2025]"
+                className={`group flex items-center justify-between py-2 px-3 rounded-xl border transition-all duration-150 w-full gap-2 shrink-0 cursor-pointer ${
+                  isSelected ? "bg-[#18181b] shadow-md" : "hover:bg-[#18181b]/80"
                 }`}
               >
                 <div className="min-w-0 flex-1 grid grid-cols-1 sm:grid-cols-2 gap-2 items-center">
@@ -144,10 +141,7 @@ export default function MobilizeVehicleList({
                       action.className
                     }`}
                   >
-                    <MainLayoutTextSize
-                      size="badgeText"
-                      className="font-medium text-[11px]"
-                    >
+                    <MainLayoutTextSize size="badgeText" className="font-medium text-[11px]">
                       {action.label}
                     </MainLayoutTextSize>
                   </button>

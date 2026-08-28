@@ -173,8 +173,8 @@ export default function VehiclesList({
               onClick={() => handleSelectVehicle(vehicle)}
               className={`flex items-center justify-between py-2.5 px-4 w-full transition-colors duration-150 gap-3 cursor-pointer min-w-0 ${
                 isSelected
-                  ? "bg-[#07080a] border-l-2 border-l-[#ffd60a]"
-                  : "hover:bg-[#1f2025]"
+                  ? "bg-[#07080a]"
+                  : "bg-transparent hover:bg-[#1f2025]"
               }`}
             >
               {/* Left Section: Vehicle Plate & Driver / Info */}

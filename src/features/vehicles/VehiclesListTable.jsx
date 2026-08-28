@@ -105,7 +105,7 @@ export default function VehicleListTable() {
           border="cardBorder"
           className="px-4 py-3 flex flex-col gap-3 border-b shrink-0 z-20"
         >
-          {/* Status tabs on the left, filters + search on the right */}
+          {/* Top Row: Status Filter Tabs (Left) & Search (Right) */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
               {STATUS_TABS.map((tab) => {
@@ -127,49 +127,51 @@ export default function VehicleListTable() {
               })}
             </div>
 
-            <div className="flex w-full sm:w-auto flex-wrap items-center justify-end gap-2 shrink-0">
-              <MainDropDown
-                options={FLEET_OPTIONS}
-                selectedValue={selectedFleet}
-                onSelect={(value) => {
-                  setSelectedFleet(value);
+            {/* Centralized Search Input on Right */}
+            <div className="w-full sm:w-[220px] shrink-0">
+              <MainSearchInput
+                value={searchQuery}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
                   setPage(1);
                 }}
-                label="Fleet Group"
+                placeholder="Search Vehicle..."
+                iconPosition="right"
               />
-
-              <MainDropDown
-                options={VEHICLE_OPTIONS}
-                selectedValue={selectedVehicleType}
-                onSelect={(value) => {
-                  setSelectedVehicleType(value);
-                  setPage(1);
-                }}
-                label="Vehicle Type"
-              />
-
-              <MainDropDown
-                options={TRACKING_OPTIONS}
-                selectedValue={selectedTrackingStatus}
-                onSelect={(value) => {
-                  setSelectedTrackingStatus(value);
-                  setPage(1);
-                }}
-                label="Tracking status"
-              />
-
-              <div className="w-full sm:w-[220px] shrink-0">
-                <MainSearchInput
-                  value={searchQuery}
-                  onChange={(e) => {
-                    setSearchQuery(e.target.value);
-                    setPage(1);
-                  }}
-                  placeholder="Search Vehicle..."
-                  iconPosition="right"
-                />
-              </div>
             </div>
+          </div>
+
+          {/* Bottom Row: Dropdown Filters on Left */}
+          <div className="flex flex-wrap items-center gap-2">
+            <MainDropDown
+              options={FLEET_OPTIONS}
+              selectedValue={selectedFleet}
+              onSelect={(value) => {
+                setSelectedFleet(value);
+                setPage(1);
+              }}
+              label="Fleet Group"
+            />
+
+            <MainDropDown
+              options={VEHICLE_OPTIONS}
+              selectedValue={selectedVehicleType}
+              onSelect={(value) => {
+                setSelectedVehicleType(value);
+                setPage(1);
+              }}
+              label="Vehicle Type"
+            />
+
+            <MainDropDown
+              options={TRACKING_OPTIONS}
+              selectedValue={selectedTrackingStatus}
+              onSelect={(value) => {
+                setSelectedTrackingStatus(value);
+                setPage(1);
+              }}
+              label="Tracking status"
+            />
           </div>
         </MainLayoutColor>
 
@@ -247,7 +249,7 @@ export default function VehicleListTable() {
                   const statusLabel = item.status || item.raw?.status || "Offline";
 
                   return (
-                    <tr key={vehicleId} className="hover:bg-[#1f2025] transition-colors">
+                    <tr key={vehicleId} className="hover:bg-[#18181b]/40 transition-colors">
                       <td className="py-2.5 px-3 pl-4">
                         <div className="flex items-center gap-2.5">
                           {/* <MainLayoutColor as="div" background="filterActiveBg" className="w-6 h-6 rounded shrink-0" /> */}

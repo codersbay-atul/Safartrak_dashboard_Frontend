@@ -177,33 +177,3 @@ body {
 .announcement-slider-panel.is-closing {
   transition: transform 280ms cubic-bezier(0.4, 0, 1, 1);
 }
-
-/* =========================
-    Dropdown menu slide
-========================= */
-
-.dropdown-menu-panel {
-  opacity: 0;
-  transform: translateY(-8px);
-  transform-origin: top center;
-  pointer-events: none;
-  will-change: transform, opacity;
-  transition:
-    opacity 160ms ease,
-    transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.dropdown-menu-panel.is-open {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
-
-.dropdown-menu-panel.is-closing {
-  opacity: 0;
-  transform: translateY(-8px);
-  pointer-events: none;
-  transition:
-    opacity 140ms ease,
-    transform 180ms cubic-bezier(0.4, 0, 1, 1);
-}

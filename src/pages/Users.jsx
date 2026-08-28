@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import MainLayout from "../layouts/MainLayout";
 import UserHeader from "../features/user/UserHeader";
@@ -6,9 +7,7 @@ import DriverList from "../features/user/DriverList";
 import DriverDetailsPanel from "../features/user/DriverDetailsPanel";
 import { getUserDetails, createUser } from "../api/userApi";
 import { toast } from "../components/Ui/toast";
-import MainLayoutColor from "../components/Ui/MainLayoutUI/MainLayoutColor";
-import MainLayoutTextSize from "../components/Ui/MainLayoutUI/MainLayoutTextSize";
-import { Users as UsersIcon } from "lucide-react";
+
 import UserInfo from "../features/user/UserInfo";
 import AccountDetails from "../features/user/AccountDetails";
 import ContactAndNotification from "../features/user/ContactAndNotification";
@@ -96,9 +95,7 @@ export default function Users() {
     const accountData = newUserFormData.accountData || {};
 
     if (!userInfo.email || !accountData.username || !accountData.password) {
-      toast.error(
-        "Please complete personal information and account details before saving.",
-      );
+      toast.error("Please complete personal information and account details before saving.");
       return;
     }
 
@@ -156,24 +153,7 @@ export default function Users() {
         <div className="shrink-0">
           <UserStats />
         </div>
-        {/* Outside Header Toolbar */}
-        <div className="flex items-center justify-between gap-2 px-1 shrink-0">
-          <div className="flex items-center gap-2">
-            <MainLayoutColor
-              as={UsersIcon}
-              color="yellow"
-              className="w-4 h-4 shrink-0"
-            />
-            <MainLayoutColor
-              as={MainLayoutTextSize}
-              color="title"
-              size="sectionTitle"
-              className="font-bold tracking-tight block"
-            >
-              Drivers List
-            </MainLayoutColor>
-          </div>
-        </div>
+
         <div className="flex flex-col lg:flex-row gap-3.5 items-stretch w-full flex-none lg:flex-1 min-h-0 overflow-visible lg:overflow-hidden">
           <div className="w-full lg:flex-1 shrink-0 h-auto lg:h-full min-h-0 overflow-hidden">
             <DriverList
