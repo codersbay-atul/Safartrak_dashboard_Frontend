@@ -108,7 +108,7 @@ export default function Alerts() {
 
   return (
     <MainLayout InactiveTab="Alerts">
-      <div className="flex-1 flex flex-col gap-2.5 min-h-0 min-w-0 overflow-y-auto min-[1152px]:overflow-hidden pr-0.5 text-white custom-scrollbar">
+      <div className="flex-1 flex flex-col gap-4 xl:gap-5 min-h-0 min-w-0 overflow-y-auto overflow-x-hidden no-scrollbar pr-0.5 text-white">
         <div className="shrink-0">
           <AlertsHeader
             searchQuery={searchQuery}

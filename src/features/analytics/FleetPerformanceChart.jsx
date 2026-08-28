@@ -89,9 +89,9 @@ export default function FleetPerformanceChart({
       background="surface"
       className="w-full h-full flex flex-col justify-between select-none"
     >
-      <div className="flex flex-wrap items-center justify-between gap-4 pb-2">
-        <div className="flex items-center gap-3">
-          <div>
+      <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center justify-between gap-3 pb-2 min-w-0">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 min-w-0">
+          <div className="min-w-0">
             <MainLayoutColor
               as={MainLayoutTextSize}
               color="title"
@@ -103,7 +103,7 @@ export default function FleetPerformanceChart({
               as={MainLayoutTextSize}
               color="subtitle"
               size="subInfoText"
-              className="mt-0.5 block"
+              className="mt-0.5 block truncate"
             >
               Last Updated: {formatLastUpdated(lastUpdated)}
             </MainLayoutColor>
@@ -112,7 +112,7 @@ export default function FleetPerformanceChart({
           <MainStatusBadge status="Live" showDot={true} />
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0 self-start sm:self-auto">
           <button
             type="button"
             onClick={() => refetch()}
@@ -126,7 +126,7 @@ export default function FleetPerformanceChart({
             />
           </button>
 
-          <div className="flex items-center bg-[#18181b] border border-[#27272a] rounded-lg p-0.5">
+          <div className="flex items-center bg-[#18181b] border border-[#27272a] rounded-lg p-0.5 overflow-x-auto no-scrollbar max-w-full">
             {RANGE_OPTIONS.map((option) => {
               const isActive = range === option.key;
               return (
@@ -134,7 +134,7 @@ export default function FleetPerformanceChart({
                   key={option.key}
                   type="button"
                   onClick={() => onRangeChange?.(option.key)}
-                  className={`px-2.5 py-0.5 rounded-md transition-colors ${
+                  className={`px-2 sm:px-2.5 py-0.5 rounded-md transition-colors whitespace-nowrap ${
                     isActive
                       ? "bg-[#27272a] text-white shadow"
                       : "text-zinc-400 hover:text-zinc-200 font-semibold cursor-pointer"
@@ -150,7 +150,7 @@ export default function FleetPerformanceChart({
         </div>
       </div>
 
-      <div className="relative flex-1 min-h-[200px] mt-2 flex">
+      <div className="relative flex-1 min-h-[180px] sm:min-h-[200px] mt-2 flex min-w-0">
         {!hasData ? (
           <MainLayoutColor
             as={MainLayoutTextSize}
@@ -162,7 +162,7 @@ export default function FleetPerformanceChart({
           </MainLayoutColor>
         ) : (
           <>
-            <div className="flex flex-col justify-between font-bold pr-2.5 select-none pb-5 pt-1">
+            <div className="flex flex-col justify-between font-bold pr-1.5 sm:pr-2.5 select-none pb-5 pt-1 shrink-0">
               {geometry.yTicks.map((tick, index) => (
                 <MainLayoutColor
                   as={MainLayoutTextSize}
@@ -175,7 +175,7 @@ export default function FleetPerformanceChart({
               ))}
             </div>
 
-            <div className="flex-1 relative">
+            <div className="flex-1 relative min-w-0">
               <div className="absolute inset-0 flex flex-col justify-between pb-5 pt-1 pointer-events-none opacity-20">
                 <div className="border-b border-dashed border-zinc-700 w-full" />
                 <div className="border-b border-dashed border-zinc-700 w-full" />
@@ -235,13 +235,14 @@ export default function FleetPerformanceChart({
                 </MainLayoutColor>
               </div>
 
-              <div className="absolute bottom-0 left-0 right-0 flex justify-between font-bold px-1 select-none">
+              <div className="absolute bottom-0 left-0 right-0 flex justify-between font-bold px-0.5 sm:px-1 select-none gap-0.5 overflow-hidden">
                 {geometry.xLabels.map((label, index) => (
                   <MainLayoutColor
                     as={MainLayoutTextSize}
                     color="subtitle"
                     size="captionText"
                     key={`${label}-${index}`}
+                    className="truncate max-w-[3.5rem] sm:max-w-none text-center"
                   >
                     {label}
                   </MainLayoutColor>

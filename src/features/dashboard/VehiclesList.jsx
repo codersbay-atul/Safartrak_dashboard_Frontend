@@ -24,7 +24,7 @@ function matchesVehicleFilter(vehicle, filterLabel) {
   const raw = vehicle?.raw ?? {};
   const status = String(raw.status ?? "").toLowerCase();
   const deviceStatus = String(
-    raw.device_status ?? raw.deviceStatus ?? ""
+    raw.device_status ?? raw.deviceStatus ?? "",
   ).toLowerCase();
   const speed = Number(raw.speed_kmh ?? raw.speedKmh ?? 0);
   const inMaintenance = raw.in_maintenance ?? raw.inMaintenance;
@@ -45,10 +45,10 @@ function matchesVehicleFilter(vehicle, filterLabel) {
 
 function getVehicleSortPriority(vehicle) {
   const rawStatus = String(
-    vehicle?.raw?.status ?? vehicle?.status ?? ""
+    vehicle?.raw?.status ?? vehicle?.status ?? "",
   ).toLowerCase();
   const speed = Number(
-    vehicle?.raw?.speed_kmh ?? vehicle?.raw?.speedKmh ?? vehicle?.speed ?? 0
+    vehicle?.raw?.speed_kmh ?? vehicle?.raw?.speedKmh ?? vehicle?.speed ?? 0,
   );
   const isRunning =
     rawStatus === "moving" || rawStatus === "running" || speed > 0;
@@ -63,7 +63,7 @@ export default function VehiclesList({
 }) {
   const [activeFilter, setActiveFilter] = useState("All");
   const [selectedId, setSelectedId] = useState(
-    () => selectedVehicle?.id ?? null
+    () => selectedVehicle?.id ?? null,
   );
 
   const { vehicles, filterCounts } = useVehiclesList({
@@ -78,7 +78,7 @@ export default function VehiclesList({
         .filter((vehicle) => matchesVehicleFilter(vehicle, activeFilter))
         .slice()
         .sort((a, b) => getVehicleSortPriority(a) - getVehicleSortPriority(b)),
-    [vehicles, activeFilter]
+    [vehicles, activeFilter],
   );
 
   const filters = FILTER_DEFS.map((filter) => ({
@@ -107,9 +107,9 @@ export default function VehiclesList({
     <MainLayoutColor
       as="div"
       background="surface"
-      className="w-full h-full border border-[#232428] rounded-xl py-3.5 flex flex-col select-none overflow-hidden min-w-0"
+      className="w-full h-full border border-[#232428] rounded-xl py-4 flex flex-col select-none overflow-hidden min-w-0"
     >
-      <div className="mb-2.5 px-4 shrink-0">
+      <div className="mb-3.5 px-4 shrink-0">
         <MainLayoutColor
           as={MainLayoutTextSize}
           color="title"
@@ -121,7 +121,7 @@ export default function VehiclesList({
       </div>
 
       {/* Real-time Status Filter Tabs */}
-      <div className="flex items-center gap-1.5 overflow-x-auto pb-2 mb-1 px-4 shrink-0 no-scrollbar flex-nowrap">
+      <div className="flex items-center gap-2 overflow-x-auto pb-3 mb-1.5 px-4 shrink-0 no-scrollbar flex-nowrap">
         {filters.map((filter) => {
           const isSelected = activeFilter === filter.label;
           return (
@@ -160,7 +160,7 @@ export default function VehiclesList({
           const isSelected = selectedId === vehicle.id;
 
           const plateDisplay = formatDisplayValue(
-            vehicle.plate || vehicle.registrationNumber
+            vehicle.plate || vehicle.registrationNumber,
           );
           const driverDisplay = formatDisplayValue(vehicle.driver);
           const speedDisplay = formatDisplayValue(vehicle.speed);
@@ -171,7 +171,7 @@ export default function VehiclesList({
             <div
               key={vehicle.id}
               onClick={() => handleSelectVehicle(vehicle)}
-              className={`flex items-center justify-between py-2.5 px-4 w-full transition-colors duration-150 gap-3 cursor-pointer min-w-0 ${
+              className={`flex items-center justify-between py-3.5 px-4 w-full transition-colors duration-150 gap-3 cursor-pointer min-w-0 ${
                 isSelected
                   ? "bg-[#07080a] border-l-2 border-l-[#ffd60a]"
                   : "hover:bg-[#1f2025]"
@@ -215,7 +215,7 @@ export default function VehiclesList({
               </div>
 
               {/* Right Section: Status Badge + Last Seen + Speed/Location + View Details Button */}
-              <div className="flex items-center gap-3 shrink-0 ml-auto">
+              <div className="flex items-center gap-3.5 xl:gap-4 shrink-0 ml-auto">
                 <div className="w-[85px] xl:w-[95px] flex flex-col items-center justify-center shrink-0">
                   <MainStatusBadge status={vehicle.status} />
 

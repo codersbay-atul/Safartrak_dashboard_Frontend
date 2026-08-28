@@ -68,9 +68,9 @@ export default function VehicleListTable() {
   });
 
   return (
-    <div className="w-full h-full flex flex-col font-sans select-none gap-2.5">
+    <div className="w-full flex flex-col font-sans select-none gap-4">
       {/* 1. OUT OF CARD: Title & Total Count */}
-      <div className="flex items-center gap-2 px-1 shrink-0">
+      <div className="flex items-center gap-2 px-1 shrink-0 mt-4">
         <MainLayoutColor
           as={Truck}
           color="yellow"
@@ -97,7 +97,7 @@ export default function VehicleListTable() {
         as="div"
         background="surface"
         border="cardBorder"
-        className="w-full h-auto min-[1152px]:h-full flex flex-col min-h-0 rounded-2xl overflow-hidden shadow-2xl"
+        className="w-full h-[80vh] min-h-0 flex flex-col rounded-2xl overflow-hidden shadow-2xl"
       >
         {/* Card Header Toolbar Area */}
         <MainLayoutColor
@@ -174,16 +174,16 @@ export default function VehicleListTable() {
         </MainLayoutColor>
 
         {/* Scrollable Table Area with Fixed Header */}
-        <div className="flex-none min-[1152px]:flex-1 min-h-0 min-w-0 w-full overflow-x-auto min-[1152px]:overflow-y-auto custom-scrollbar relative">
+        <div className="flex-1 min-h-0 min-w-0 w-full overflow-x-auto overflow-y-auto custom-scrollbar relative">
           {isLoading ? (
-            <div className="h-full min-h-[250px] flex flex-col items-center justify-center gap-2.5">
+            <div className="h-full min-h-0 flex flex-col items-center justify-center gap-2.5">
               <MainLayoutColor as={Loader2} color="yellow" size={24} className="animate-spin" />
               <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText" className="font-medium">
                 Fetching vehicle fleet data...
               </MainLayoutColor>
             </div>
           ) : isError ? (
-            <div className="h-full min-h-[250px] flex flex-col items-center justify-center text-center px-4">
+            <div className="h-full min-h-0 flex flex-col items-center justify-center text-center px-4">
               <AlertCircle size={26} className="text-rose-500 mb-2" />
               <MainLayoutTextSize size="subInfoText" className="text-rose-400 font-medium">
                 {error?.message || "Failed to load vehicles data"}
@@ -202,7 +202,7 @@ export default function VehicleListTable() {
               </MainLayoutColor>
             </div>
           ) : vehicles.length === 0 ? (
-            <div className="h-full min-h-[250px] flex items-center justify-center">
+            <div className="h-full min-h-0 flex items-center justify-center">
               <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="subInfoText" className="font-medium">
                 No vehicles found matching your criteria.
               </MainLayoutColor>

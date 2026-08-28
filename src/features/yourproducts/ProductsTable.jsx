@@ -152,7 +152,7 @@ export default function ProductsTable({ onHelpClick }) {
   return (
     <div className="w-full flex flex-col gap-3 font-sans select-none">
       {/* Outside Header Toolbar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-1">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-1 mt-4">
         <div className="flex items-center gap-2">
           <MainLayoutColor
             as={Package}

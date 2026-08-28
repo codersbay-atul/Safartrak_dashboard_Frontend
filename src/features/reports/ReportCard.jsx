@@ -149,7 +149,7 @@ export default function ReportCard({
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 pb-1">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 xl:gap-5 pb-1">
       {filteredReports.map((report) => (
         <MainReportCard
           key={report.id}

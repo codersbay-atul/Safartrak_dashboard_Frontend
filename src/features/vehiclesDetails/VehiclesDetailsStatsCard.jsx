@@ -50,10 +50,14 @@ export default function VehiclesDetailsStatsCard() {
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 mt-0 pt-0 select-none w-full shrink-0">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 min-[1152px]:gap-3.5 xl:gap-4 mt-0 pt-0 select-none w-full shrink-0">
       {VEHICLE_STATS_DATA.map((card) => (
-        <div key={card.id} className="min-h-[72px] [&>*]:h-full">
-          <MainStatsCard {...card} />
+        <div key={card.id} className="min-h-[112px] xl:min-h-[124px] [&>*]:h-full">
+          <MainStatsCard
+            {...card}
+            padding="p-3 min-[1152px]:p-3.5 xl:p-4"
+            footerSpacing="pt-2.5 mt-2"
+          />
         </div>
       ))}
     </div>

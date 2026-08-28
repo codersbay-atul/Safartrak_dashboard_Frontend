@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { Activity as ActivityIcon } from "lucide-react";
 import MainLayout from "../layouts/MainLayout";
+import MainSectionHeader from "../components/Ui/MainLayoutUI/MainSectionHeader";
 import ActivityHeader from "../features/activity/ActivityHeader";
 import ActivityStats from "../features/activity/ActivityStats";
 import ActivityList from "../features/activity/ActivityList";
@@ -87,7 +89,7 @@ export default function Activity() {
 
   return (
     <MainLayout activeTab="Activity">
-      <div className="flex-1 flex flex-col gap-2.5 min-h-0 min-w-0 overflow-y-auto pr-0.5 custom-scrollbar">
+      <div className="flex-1 flex flex-col gap-4 xl:gap-5 min-h-0 min-w-0 overflow-y-auto overflow-x-hidden no-scrollbar pr-0.5">
         <div className="shrink-0">
           <ActivityHeader
             vehicleFilter={vehicleFilter}
@@ -106,7 +108,9 @@ export default function Activity() {
           <ActivityStats />
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-3.5 items-stretch w-full flex-none lg:flex-1 min-h-0 overflow-visible lg:overflow-hidden">
+        <MainSectionHeader icon={ActivityIcon} title="Vehicle Activity" />
+
+        <div className="flex flex-col lg:flex-row gap-4 xl:gap-5 items-stretch w-full flex-none lg:flex-1 min-h-[420px] xl:min-h-[480px] overflow-visible lg:overflow-hidden">
           <div className="w-full lg:w-[300px] shrink-0 h-auto lg:h-full min-h-0 overflow-hidden">
             <ActivityList
               events={isLoading ? [] : events}

@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { MapPinned } from "lucide-react";
 import MainLayout from "../layouts/MainLayout";
+import MainSectionHeader from "../components/Ui/MainLayoutUI/MainSectionHeader";
 import AoiHeader from "../features/aoi/AoiHeader";
 import AoiStats from "../features/aoi/AoiStats";
 import AoiListPanel from "../features/aoi/AoiListPanel";
@@ -415,9 +417,9 @@ export default function Aoi() {
   };
 
   return (
-    <MainLayout activeTab="Saved Places">
-      <div className="flex-1 flex flex-col gap-2.5 min-h-0 overflow-y-auto min-[1152px]:overflow-hidden pr-0.5 text-white custom-scrollbar">
-        <div className="shrink-0">
+    <MainLayout activeTab="Saved Places" allowPageScroll>
+      <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-3.5 overflow-x-hidden pr-0.5 text-white sm:gap-4 xl:gap-5">
+        <div className="shrink-0 w-full min-w-0">
           <AoiHeader onCreateClick={handleOpenCreateModal} />
         </div>
 
@@ -425,9 +427,10 @@ export default function Aoi() {
           <AoiStats />
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-3.5 items-stretch w-full flex-none lg:flex-1 min-h-0 overflow-visible lg:overflow-hidden">
-         
-          <div className="w-full lg:w-[320px] xl:w-[340px] shrink-0 h-auto lg:h-full min-h-0 overflow-hidden">
+        <MainSectionHeader icon={MapPinned} title="Places" />
+
+        <div className="grid w-full min-w-0 grid-cols-1 items-stretch gap-3.5 sm:gap-4 md:grid-cols-2 xl:min-h-120 xl:flex-1 xl:grid-cols-[minmax(260px,320px)_minmax(340px,1fr)_minmax(280px,320px)] xl:gap-5">
+          <div className="order-1 h-90 min-h-0 min-w-0 overflow-hidden sm:h-100 md:h-110 xl:h-full">
             <AoiListPanel
               aois={formattedAois}
               selectedId={selectedId}
@@ -439,13 +442,11 @@ export default function Aoi() {
             />
           </div>
 
-        
-          <div className="w-full lg:flex-1 shrink-0 h-[350px] lg:h-full min-w-0 min-h-0 overflow-hidden">
+          <div className="order-2 h-90 min-h-0 min-w-0 overflow-hidden sm:h-105 md:order-3 md:col-span-2 md:h-120 xl:order-2 xl:col-span-1 xl:h-full">
             <AoiMap aois={formattedAois} selectedAoi={selectedAoi} />
           </div>
 
-         
-          <div className="w-full lg:w-[300px] xl:w-[320px] shrink-0 h-auto lg:h-full min-h-0 overflow-hidden">
+          <div className="order-3 h-130 min-h-0 min-w-0 overflow-hidden md:order-2 md:h-110 xl:order-3 xl:h-full">
             <AoiDetailsPanel
               aoi={selectedAoi}
               onEdit={() => handleEditClick(selectedAoi)}
@@ -455,7 +456,6 @@ export default function Aoi() {
         </div>
       </div>
 
-    
       <CreateAOI
         isOpen={isCreateModalOpen}
         initialData={editingAoi}

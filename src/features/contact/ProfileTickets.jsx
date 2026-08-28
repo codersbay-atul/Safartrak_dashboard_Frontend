@@ -87,8 +87,8 @@ export default function ProfileTickets({ tickets: ticketsProp }) {
       as="div"
       background="surface"
       border="cardBorder"
-      borderHover="cardBorderHover"
-      className="border rounded-2xl p-3.5 sm:p-4 text-white w-full transition-all"
+      // borderHover="cardBorderHover"
+      className="border rounded-2xl p-3.5 sm:p-4 text-white w-full transition-all "
     >
       <div className="flex items-center justify-between gap-3 pb-3 border-b border-[#1f1f23]">
         {/* Header Title -> sectionTitle */}
@@ -124,7 +124,7 @@ export default function ProfileTickets({ tickets: ticketsProp }) {
         <table className="w-full text-left border-collapse min-w-[480px]">
           <thead>
             <tr className="border-b border-[#1f1f23]/60">
-              <th className="py-2.5 font-normal w-[12%]">
+              <th className="py-2.5 pl-2 font-normal w-[12%]">
                 <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="metricText">
                   ID
                 </MainLayoutColor>
@@ -139,7 +139,7 @@ export default function ProfileTickets({ tickets: ticketsProp }) {
                   Status
                 </MainLayoutColor>
               </th>
-              <th className="py-2.5 font-normal text-right w-[15%]">
+              <th className="py-2.5 pr-2 font-normal text-right w-[15%]">
                 <MainLayoutColor as={MainLayoutTextSize} color="subtitle" size="metricText">
                   Updated
                 </MainLayoutColor>
@@ -151,21 +151,21 @@ export default function ProfileTickets({ tickets: ticketsProp }) {
               const isResolved = (ticket.status || "").toLowerCase() === "resolved";
 
               return (
-                <tr key={ticket.id} className="hover:bg-[#18181b]/50 transition-colors">
+                <tr key={ticket.id} className="group">
                   {/* Table Details -> sectionTitle */}
-                  <td className="py-2.5 font-medium">
+                  <td className="py-2.5 pl-2 font-medium group-hover:bg-[#1f2025] transition-colors rounded-l-lg">
                     <MainLayoutColor as={MainLayoutTextSize} color="title" size="sectionTitle">
                       {ticket.id}
                     </MainLayoutColor>
                   </td>
 
-                  <td className="py-2.5 font-normal">
+                  <td className="py-2.5 font-normal group-hover:bg-[#1f2025] transition-colors">
                     <MainLayoutColor as={MainLayoutTextSize} color="title" size="sectionTitle">
                       {ticket.subject}
                     </MainLayoutColor>
                   </td>
 
-                  <td className="py-2.5 text-center">
+                  <td className="py-2.5 text-center group-hover:bg-[#1f2025] transition-colors">
                     <span
                       className={`inline-block font-medium px-2.5 py-0.5 rounded-full ${
                         isResolved
@@ -179,7 +179,7 @@ export default function ProfileTickets({ tickets: ticketsProp }) {
                     </span>
                   </td>
 
-                  <td className="py-2.5 text-right font-medium">
+                  <td className="py-2.5 pr-2 text-right font-medium group-hover:bg-[#1f2025] transition-colors rounded-r-lg">
                     <MainLayoutColor as={MainLayoutTextSize} color="title" size="sectionTitle">
                       {ticket.updated}
                     </MainLayoutColor>

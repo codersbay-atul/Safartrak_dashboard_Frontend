@@ -81,15 +81,20 @@ export default function AnalyticsStatsCard({ range = "24h" }) {
   });
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5 mt-0 pt-0 select-none w-full">
+    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-2.5 sm:gap-3 min-[1152px]:gap-3.5 xl:gap-4 mt-0 pt-0 select-none w-full min-w-0">
       {cards.map((card, index) => (
-        <div key={card.id ?? index} className="min-h-[112px] min-w-0 [&>*]:h-full">
+        <div
+          key={card.id ?? index}
+          className="min-h-[96px] sm:min-h-[112px] xl:min-h-[124px] min-w-0 [&>*]:h-full"
+        >
           <MainStatsCard
             value={card.value}
             subtitle={card.subtitle}
             title={card.title}
             icon={card.icon}
             showArrow={card.showArrow}
+            padding="p-2.5 sm:p-3 min-[1152px]:p-3.5 xl:p-4"
+            footerSpacing="pt-2 mt-1.5 sm:pt-2.5 sm:mt-2"
           />
         </div>
       ))}

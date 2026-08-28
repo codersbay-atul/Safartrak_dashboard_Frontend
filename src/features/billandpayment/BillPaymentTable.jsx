@@ -80,7 +80,7 @@ export default function BillPaymentTable({ onPayNow, onHelpClick }) {
       {/* Outside Header Toolbar */}
       <div className="flex flex-col gap-2.5 px-1 shrink-0 relative z-30">
         {/* Title Row */}
-        <div className="flex items-center gap-2 justify-between">
+        <div className="flex items-center gap-2 justify-between mt-4 mb-2">
           <div className="flex items-center gap-2">
             <MainLayoutColor
               as={Receipt}

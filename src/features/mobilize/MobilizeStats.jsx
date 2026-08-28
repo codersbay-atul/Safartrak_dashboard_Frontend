@@ -78,7 +78,7 @@ export default function MobilizeStats() {
   }, []);
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 w-full select-none shrink-0">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 min-[1152px]:gap-3.5 xl:gap-4 w-full select-none shrink-0">
       {MOBILIZE_STATS.map((card) => {
         const accent = ACCENT_STYLES[card.accent] || ACCENT_STYLES.yellow;
 
@@ -103,7 +103,7 @@ export default function MobilizeStats() {
         }
 
         return (
-          <div key={card.id} className="min-w-0 h-full">
+          <div key={card.id} className="min-w-0 h-full min-h-[112px] xl:min-h-[124px]">
             <MainStatsCard
               value={loading ? "—" : value}
               subtitle={loading ? "Loading..." : subtitle}
@@ -111,6 +111,8 @@ export default function MobilizeStats() {
               icon={card.icon}
               bgIcon={accent.iconWrap}
               colorIcon={accent.icon}
+              padding="p-3 min-[1152px]:p-3.5 xl:p-4"
+              footerSpacing="pt-2.5 mt-2"
             />
           </div>
         );

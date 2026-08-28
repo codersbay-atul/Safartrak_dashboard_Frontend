@@ -38,13 +38,14 @@ function PerformanceRow({ item, variant }) {
   const sparkline = buildSparklinePath(item.sparkline);
 
   return (
-    <div className="flex items-center justify-between gap-4">
-      <div className="flex flex-col gap-0.75">
-        <div className="flex items-center gap-1.5 font-bold">
+    <div className="flex items-center justify-between gap-2 sm:gap-4 min-w-0">
+      <div className="flex flex-col gap-0.75 min-w-0">
+        <div className="flex flex-wrap items-center gap-1.5 font-bold min-w-0">
           <MainLayoutColor
             as={MainLayoutTextSize}
             color="title"
             size="filterText"
+            className="truncate"
           >
             {item.plate}
           </MainLayoutColor>
@@ -52,26 +53,26 @@ function PerformanceRow({ item, variant }) {
             as={MainLayoutTextSize}
             color="subtitle"
             size="captionText"
-            className="font-medium"
+            className="font-medium truncate"
           >
             {item.vehicleType}
           </MainLayoutColor>
         </div>
-        <p className="text-[16px] font-extrabold" style={{ color }}>
+        <p className="text-[15px] sm:text-[16px] font-extrabold" style={{ color }}>
           {item.distance}
         </p>
 
         <MainLayoutTextSize
           as="div"
           size="captionText"
-          className={`inline-flex items-center gap-1 ${badgeBg} font-extrabold px-1.5 py-0.5 rounded-md w-max`}
+          className={`inline-flex items-center gap-1 ${badgeBg} font-extrabold px-1.5 py-0.5 rounded-md w-max max-w-full`}
         >
-          <span className={`w-1.5 h-1.5 rounded-full ${badgeDot}`} />
-          {badgeLabel}
+          <span className={`w-1.5 h-1.5 rounded-full ${badgeDot} shrink-0`} />
+          <span className="truncate">{badgeLabel}</span>
         </MainLayoutTextSize>
       </div>
 
-      <div className="w-[90px] h-[40px] shrink-0">
+      <div className="w-[72px] sm:w-[90px] h-[40px] shrink-0">
         {sparkline ? (
           <svg className="w-full h-full" viewBox="0 0 100 50">
             <path
@@ -126,15 +127,15 @@ export default function PerformanceSummary({ range = "24h" }) {
     <MainLayoutColor
       as="div"
       background="surface"
-      className="w-full h-full p-4 flex flex-col justify-between select-none"
+      className="w-full h-full p-3 sm:p-4 flex flex-col justify-between select-none min-w-0"
     >
-      <div className="flex items-start justify-between border-b border-zinc-800/50 pb-3">
-        <div>
+      <div className="flex flex-col sm:flex-row items-start justify-between gap-3 border-b border-zinc-800/50 pb-3 min-w-0">
+        <div className="min-w-0">
           <MainLayoutColor
             as={MainLayoutTextSize}
             color="title"
             size="sectionTitle"
-            className="font-bold tracking-tight block"
+            className="font-bold tracking-tight block truncate"
           >
             Performance Summary
           </MainLayoutColor>
@@ -147,7 +148,7 @@ export default function PerformanceSummary({ range = "24h" }) {
             {periodLabel ?? "-"}
           </MainLayoutColor>
         </div>
-        <div className="text-right">
+        <div className="text-left sm:text-right shrink-0">
           <MainLayoutColor
             as={MainLayoutTextSize}
             color="subtitle"
@@ -156,7 +157,7 @@ export default function PerformanceSummary({ range = "24h" }) {
           >
             Total Distance
           </MainLayoutColor>
-          <div className="flex items-center gap-1 mt-0.5 justify-end">
+          <div className="flex items-center gap-1 mt-0.5 justify-start sm:justify-end">
             <MainLayoutColor
               as={MainLayoutTextSize}
               color="title"
@@ -177,7 +178,7 @@ export default function PerformanceSummary({ range = "24h" }) {
         </div>
       </div>
 
-      <div className="flex flex-col gap-4 pt-3 flex-1 justify-center">
+      <div className="flex flex-col gap-4 pt-3 flex-1 justify-center min-w-0">
         {results.length === 0 ? (
           <MainLayoutColor
             as={MainLayoutTextSize}

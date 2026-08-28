@@ -47,7 +47,7 @@ export default function LivePositions({
       className="w-full h-full min-h-0 min-w-0 border border-[#1f1f23]/60 rounded-xl flex flex-col select-none overflow-hidden relative"
     >
       {/* Header Area */}
-      <div className="flex items-center justify-between px-3 py-2 xl:px-3.5 xl:py-2.5 border-b border-[#1f1f23]/60 bg-[#141414]/90 z-10 shrink-0">
+      <div className="flex items-center justify-between px-4 py-3 xl:px-4 xl:py-3.5 border-b border-[#1f1f23]/60 bg-[#141414]/90 z-10 shrink-0">
         <div className="flex items-center gap-2">
           <MainLayoutColor
             as={MainLayoutTextSize}

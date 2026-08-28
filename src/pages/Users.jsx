@@ -6,8 +6,7 @@ import DriverList from "../features/user/DriverList";
 import DriverDetailsPanel from "../features/user/DriverDetailsPanel";
 import { getUserDetails, createUser } from "../api/userApi";
 import { toast } from "../components/Ui/toast";
-import MainLayoutColor from "../components/Ui/MainLayoutUI/MainLayoutColor";
-import MainLayoutTextSize from "../components/Ui/MainLayoutUI/MainLayoutTextSize";
+import MainSectionHeader from "../components/Ui/MainLayoutUI/MainSectionHeader";
 import { Users as UsersIcon } from "lucide-react";
 import UserInfo from "../features/user/UserInfo";
 import AccountDetails from "../features/user/AccountDetails";
@@ -148,7 +147,7 @@ export default function Users() {
 
   return (
     <MainLayout activeTab="Users">
-      <div className="flex-1 flex flex-col gap-2.5 min-h-0 overflow-y-auto min-[1152px]:overflow-hidden pr-0.5 text-white custom-scrollbar">
+      <div className="flex-1 flex flex-col gap-4 xl:gap-5 min-h-0 overflow-y-auto overflow-x-hidden no-scrollbar pr-0.5 text-white">
         <div className="shrink-0">
           <UserHeader onAddUserClick={handleAddUser} />
         </div>
@@ -156,25 +155,8 @@ export default function Users() {
         <div className="shrink-0">
           <UserStats />
         </div>
-        {/* Outside Header Toolbar */}
-        <div className="flex items-center justify-between gap-2 px-1 shrink-0">
-          <div className="flex items-center gap-2">
-            <MainLayoutColor
-              as={UsersIcon}
-              color="yellow"
-              className="w-4 h-4 shrink-0"
-            />
-            <MainLayoutColor
-              as={MainLayoutTextSize}
-              color="title"
-              size="sectionTitle"
-              className="font-bold tracking-tight block"
-            >
-              Drivers List
-            </MainLayoutColor>
-          </div>
-        </div>
-        <div className="flex flex-col lg:flex-row gap-3.5 items-stretch w-full flex-none lg:flex-1 min-h-0 overflow-visible lg:overflow-hidden">
+        <MainSectionHeader icon={UsersIcon} title="Drivers List" />
+        <div className="flex flex-col lg:flex-row gap-4 xl:gap-5 items-stretch w-full flex-none lg:flex-1 min-h-0 overflow-visible lg:overflow-hidden">
           <div className="w-full lg:flex-1 shrink-0 h-auto lg:h-full min-h-0 overflow-hidden">
             <DriverList
               selectedUser={selectedUser}

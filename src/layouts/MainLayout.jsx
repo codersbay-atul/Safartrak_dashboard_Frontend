@@ -31,9 +31,9 @@ export default function MainLayout({
             user={authUser}
           />
           <main
-            className={`flex-1 p-2.5 min-[1152px]:p-3 xl:p-3 bg-[#000000] flex flex-col gap-2 min-[1152px]:gap-2.5 min-h-0 ${
+            className={`flex-1 p-3.5 min-[1152px]:p-4 xl:p-4 bg-[#000000] flex flex-col gap-4 min-[1152px]:gap-4 min-h-0 ${
               allowPageScroll
-                ? "overflow-y-auto overflow-x-hidden"
+                ? "overflow-y-auto overflow-x-hidden no-scrollbar"
                 : "overflow-hidden"
             }`}
           >

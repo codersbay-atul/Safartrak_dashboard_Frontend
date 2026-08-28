@@ -191,7 +191,7 @@ export default function DashboardVehicleDetails({
       <div className="border-b border-zinc-800/20 w-full shrink-0 mb-1.5" />
 
       {/* Metrics List */}
-      <div className="flex flex-col flex-1 py-1 gap-y-2 overflow-y-auto pr-0.5 mb-1.5 scrollbar-thin scrollbar-thumb-zinc-800 scrollbar-track-transparent">
+      <div className="flex flex-col flex-1 py-1 gap-y-2 overflow-y-auto pr-0.5 mb-1.5 no-scrollbar">
         {metrics.map(({ key, label, value, icon: Icon }) => (
           <div key={key} className="flex items-center justify-between shrink-0 gap-2">
             <div className="flex items-center gap-1.5 min-w-0">

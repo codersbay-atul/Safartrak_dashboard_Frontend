@@ -73,7 +73,7 @@ export default function ActivityStats() {
   }, [summary]);
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-2.5 shrink-0">
+    <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-3 min-[1152px]:gap-3.5 xl:gap-4 shrink-0">
       {stats.map((stat) => (
         <MainStatsCard
           key={stat.id}
@@ -81,6 +81,8 @@ export default function ActivityStats() {
           subtitle={stat.subtitle}
           bottomLabel={stat.bottomLabel}
           icon={ICON_MAP[stat.id]}
+          padding="p-3 min-[1152px]:p-3.5 xl:p-4"
+          footerSpacing="pt-2.5 mt-2"
           // showArrow
         />
       ))}

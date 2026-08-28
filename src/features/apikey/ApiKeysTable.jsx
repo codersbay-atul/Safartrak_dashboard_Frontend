@@ -41,7 +41,7 @@ export default function ApiKeysTable({
   return (
     <div className="flex flex-col gap-2.5 font-sans select-none">
       {/* Header Section */}
-      <div className="flex items-center gap-2 px-1 justify-between">
+      <div className="flex items-center gap-2 px-1 justify-between mt-4">
         <div className="flex items-center gap-2">
           <MainLayoutColor
             as={ShieldCheck}

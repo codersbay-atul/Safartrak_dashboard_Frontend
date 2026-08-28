@@ -16,6 +16,8 @@ export const MainStatsCard = ({
   showArrow = false,
   sideMetrics = [],
   onClick,
+  padding = "p-2 min-[1152px]:p-2.5",
+  footerSpacing = "pt-1.5 mt-1",
 }) => {
   const footerText = bottomLabel || title;
 
@@ -26,7 +28,7 @@ export const MainStatsCard = ({
       border="cardBorder"
       borderHover="cardBorderHover"
       onClick={onClick}
-      className="border rounded-xl p-2 min-[1152px]:p-2.5 flex flex-col justify-between transition-all relative overflow-hidden group cursor-pointer w-full h-full min-h-[76px] min-w-0"
+      className={`border rounded-xl ${padding} flex flex-col justify-between transition-all relative overflow-hidden group cursor-pointer w-full h-full min-h-[76px] min-w-0`}
     >
       <div className="flex-1 flex items-center min-h-0">
         <div className="flex items-center justify-between gap-1.5 min-w-0 w-full">
@@ -82,7 +84,9 @@ export const MainStatsCard = ({
       </div>
 
       {footerText && (
-        <div className="flex items-center justify-between w-full pt-1.5 mt-1 border-t border-[#1d1d20]/40 shrink-0">
+        <div
+          className={`flex items-center justify-between w-full ${footerSpacing} border-t border-[#1d1d20]/40 shrink-0`}
+        >
           <MainLayoutColor
             as={MainLayoutTextSize}
             color="kpiTitle"

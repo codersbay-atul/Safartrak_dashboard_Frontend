@@ -78,7 +78,7 @@ export default function IotSim() {
   return (
     <>
       <MainLayout InactiveTab="IOT SIM" allowPageScroll>
-        <div className="flex-1 flex flex-col gap-2.5 min-h-0 min-w-0 overflow-y-auto pr-0.5 custom-scrollbar">
+        <div className="flex-1 flex flex-col gap-4 xl:gap-5 min-h-0 min-w-0 overflow-y-auto overflow-x-hidden no-scrollbar pr-0.5">
           <div className="shrink-0">
             <IotSimHeader />
           </div>

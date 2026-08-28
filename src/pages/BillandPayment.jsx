@@ -96,7 +96,7 @@ export default function BillandPayment() {
   return (
     <>
       <MainLayout activeTab="Bills & Payments" allowPageScroll>
-        <div className="flex-1 flex flex-col gap-2.5 min-h-0 min-w-0 overflow-visible pr-0.5 custom-scrollbar">
+        <div className="flex-1 flex flex-col gap-4 xl:gap-5 min-h-0 min-w-0 overflow-visible no-scrollbar pr-0.5">
           <div className="shrink-0">
             <BillPaymentHeader
               title="Bills & Payments"

@@ -26,14 +26,14 @@ export default function AoiListPanel({
       as="div"
       background="surface"
       border="cardBorder"
-      className="w-full h-auto lg:h-full rounded-2xl p-4 flex flex-col select-none overflow-hidden font-sans"
+      className="w-full h-full rounded-xl sm:rounded-2xl p-3 sm:p-4 flex flex-col select-none overflow-hidden font-sans min-w-0"
     >
       {/* 14px Header Title */}
       <MainLayoutColor
         as={MainLayoutTextSize}
         color="title"
         size="sectionTitle"
-        className="font-semibold mb-3 tracking-tight block"
+        className="font-semibold mb-3 tracking-tight block shrink-0"
       >
         All Saved Places
       </MainLayoutColor>
@@ -76,7 +76,7 @@ export default function AoiListPanel({
       </div>
 
       {/* Places List */}
-      <div className="flex flex-col overflow-y-visible lg:overflow-y-auto flex-none lg:flex-1 custom-scrollbar min-h-0 space-y-2">
+      <div className="flex flex-col overflow-y-auto flex-1 custom-scrollbar min-h-0 space-y-2">
         {aois.length > 0 ? (
           aois.map((aoi) => {
             const isSelected = selectedId === aoi.id;
@@ -87,30 +87,25 @@ export default function AoiListPanel({
                 key={aoi.id}
                 as="button"
                 type="button"
-                // background={isSelected ? "selectedRowBg" : "surface"}
-                // border="cardBorder"
-                // borderHover="cardBorderHover"
                 onClick={() => onSelect(aoi)}
-                className={`w-full text-left py-3 px-3.5 transition-all cursor-pointer shrink-0 ${
+                className={`w-full text-left py-3 px-3 sm:px-3.5 transition-all cursor-pointer shrink-0 ${
                   isSelected
                     ? "bg-[#07080a] border-l-2 border-l-[#ffd60a]"
                     : "hover:bg-[#1f2025]"
                 }`}
               >
-                <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center justify-between gap-2 min-w-0">
                   <div className="min-w-0 flex-1">
-                    <div className="flex items-baseline gap-2 truncate">
-                      {/* Place Name */}
+                    <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5 min-w-0">
                       <MainLayoutColor
                         as={MainLayoutTextSize}
                         color="title"
                         size="sectionTitle"
-                        className="font-semibold truncate inline"
+                        className="font-semibold truncate inline max-w-full"
                       >
                         {aoi.name}
                       </MainLayoutColor>
 
-                      {/* Sub Info */}
                       <MainLayoutColor
                         as={MainLayoutTextSize}
                         color="subtitle"
@@ -122,7 +117,6 @@ export default function AoiListPanel({
                       </MainLayoutColor>
                     </div>
 
-                    {/* Sub Info Line */}
                     <MainLayoutColor
                       as={MainLayoutTextSize}
                       color="subtitle"
@@ -135,7 +129,6 @@ export default function AoiListPanel({
                     </MainLayoutColor>
                   </div>
 
-                  {/* Status Badge */}
                   <div className="shrink-0">
                     <MainStatusBadge status={currentStatus} showDot={false} />
                   </div>

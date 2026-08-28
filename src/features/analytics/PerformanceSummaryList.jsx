@@ -148,10 +148,10 @@ export default function PerformanceSummaryList({ range = "24h" }) {
     });
 
   return (
-    <div className="w-full flex flex-col gap-3 font-sans select-none">
+    <div className="w-full flex flex-col gap-3 font-sans select-none min-w-0">
       {/* Outside Header Toolbar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-1">
-        <div className="flex items-center gap-2">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-1 mt-2 sm:mt-4 min-w-0">
+        <div className="flex items-center gap-2 min-w-0">
           <MainLayoutColor
             as={Activity}
             color="yellow"
@@ -161,18 +161,17 @@ export default function PerformanceSummaryList({ range = "24h" }) {
             as={MainLayoutTextSize}
             color="title"
             size="sectionTitle"
-            className="font-bold tracking-wide block"
+            className="font-bold tracking-wide block truncate"
           >
             Performance Summary
           </MainLayoutColor>
         </div>
 
-        <div className="flex flex-wrap items-center justify-end gap-2 shrink-0">
-          {/* Sort Button */}
+        <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center sm:justify-end gap-2 w-full sm:w-auto shrink-0">
           <MainLayoutFilterButton
             isActive={!sortAsc}
             onClick={() => setSortAsc((prev) => !prev)}
-            className="h-[34px] px-3.5 border border-[#27272a] hover:border-[#FDBB24]/40 rounded-full flex items-center gap-1.5 transition-colors"
+            className="h-[34px] px-3.5 border border-[#27272a] hover:border-[#FDBB24]/40 rounded-full flex items-center justify-center gap-1.5 transition-colors w-full sm:w-auto"
           >
             <MainLayoutTextSize size="filterText">
               {sortAsc ? "Sort A-Z" : "Sort Z-A"}
@@ -180,8 +179,7 @@ export default function PerformanceSummaryList({ range = "24h" }) {
             <ArrowUpDown size={11} className="shrink-0" />
           </MainLayoutFilterButton>
 
-          {/* Search Input h-[34px] */}
-          <div className="w-[150px] sm:w-[170px] shrink-0 h-[34px]">
+          <div className="w-full sm:w-[170px] shrink-0 h-[34px]">
             <MainSearchInput
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -198,10 +196,10 @@ export default function PerformanceSummaryList({ range = "24h" }) {
         as="div"
         background="surface"
         border="cardBorder"
-        className="w-full h-fit rounded-2xl overflow-hidden shadow-2xl border"
+        className="w-full h-fit rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl border min-w-0"
       >
         <div className="w-full overflow-x-auto [scrollbar-width:thin] custom-scrollbar">
-          <table className="w-full text-left border-collapse min-w-[650px]">
+          <table className="w-full text-left border-collapse min-w-[560px] sm:min-w-[650px]">
             <thead className="sticky top-0 z-10 shadow-sm">
               <MainLayoutColor
                 as="tr"
@@ -209,19 +207,19 @@ export default function PerformanceSummaryList({ range = "24h" }) {
                 border="cardBorder"
                 className="border-b"
               >
-                <MainTableHeader className="py-3 px-4 pl-5">
+                <MainTableHeader className="py-2.5 sm:py-3 px-3 sm:px-4 pl-4 sm:pl-5">
                   Vehicle Number
                 </MainTableHeader>
-                <MainTableHeader className="py-3 px-4">
+                <MainTableHeader className="py-2.5 sm:py-3 px-3 sm:px-4">
                   Vehicle Type
                 </MainTableHeader>
-                <MainTableHeader className="py-3 px-4">
+                <MainTableHeader className="py-2.5 sm:py-3 px-3 sm:px-4">
                   Distance
                 </MainTableHeader>
-                <MainTableHeader className="py-3 px-4">
+                <MainTableHeader className="py-2.5 sm:py-3 px-3 sm:px-4">
                   Change
                 </MainTableHeader>
-                <MainTableHeader className="py-3 px-4 pr-5">
+                <MainTableHeader className="py-2.5 sm:py-3 px-3 sm:px-4 pr-4 sm:pr-5">
                   Contribution
                 </MainTableHeader>
               </MainLayoutColor>
@@ -246,7 +244,7 @@ export default function PerformanceSummaryList({ range = "24h" }) {
                     key={row.id}
                     className="hover:bg-[#18181b]/40 transition-colors align-middle cursor-pointer"
                   >
-                    <td className="py-3.5 px-4 pl-5">
+                    <td className="py-3 sm:py-3.5 px-3 sm:px-4 pl-4 sm:pl-5 max-w-[140px]">
                       <MainLayoutColor
                         as={MainLayoutTextSize}
                         color="title"
@@ -257,7 +255,7 @@ export default function PerformanceSummaryList({ range = "24h" }) {
                       </MainLayoutColor>
                     </td>
 
-                    <td className="py-3.5 px-4">
+                    <td className="py-3 sm:py-3.5 px-3 sm:px-4 max-w-[140px]">
                       <MainLayoutColor
                         as={MainLayoutTextSize}
                         color="subtitle"
@@ -268,7 +266,7 @@ export default function PerformanceSummaryList({ range = "24h" }) {
                       </MainLayoutColor>
                     </td>
 
-                    <td className="py-3.5 px-4">
+                    <td className="py-3 sm:py-3.5 px-3 sm:px-4 whitespace-nowrap">
                       <MainLayoutColor
                         as={MainLayoutTextSize}
                         color="title"
@@ -279,7 +277,7 @@ export default function PerformanceSummaryList({ range = "24h" }) {
                       </MainLayoutColor>
                     </td>
 
-                    <td className="py-3.5 px-4">
+                    <td className="py-3 sm:py-3.5 px-3 sm:px-4 whitespace-nowrap">
                       <MainLayoutColor
                         as={MainLayoutTextSize}
                         color="subtitle"
@@ -290,7 +288,7 @@ export default function PerformanceSummaryList({ range = "24h" }) {
                       </MainLayoutColor>
                     </td>
 
-                    <td className="py-3.5 px-4 pr-5">
+                    <td className="py-3 sm:py-3.5 px-3 sm:px-4 pr-4 sm:pr-5 whitespace-nowrap">
                       <MainLayoutColor
                         as={MainLayoutTextSize}
                         color="title"

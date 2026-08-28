@@ -27,7 +27,7 @@ export default function AoiDetailsPanel({
         as="div"
         background="surface"
         border="cardBorder"
-        className="w-full h-full rounded-2xl p-4 flex items-center justify-center select-none"
+        className="w-full h-full rounded-xl sm:rounded-2xl p-3 sm:p-4 flex items-center justify-center select-none min-w-0"
       >
         <MainLayoutColor
           as={MainLayoutTextSize}
@@ -116,10 +116,10 @@ export default function AoiDetailsPanel({
       as="div"
       background="surface"
       border="cardBorder"
-      className="w-full h-auto lg:h-full rounded-2xl p-4 flex flex-col select-none overflow-hidden font-sans"
+      className="w-full h-full rounded-xl sm:rounded-2xl p-3 sm:p-4 flex flex-col select-none overflow-hidden font-sans min-w-0"
     >
       {/* Top Header: AOI Name and Status Badge in Single Row */}
-      <div className="flex items-center justify-between gap-3 shrink-0 mb-4">
+      <div className="flex items-center justify-between gap-2 sm:gap-3 shrink-0 mb-3 sm:mb-4 min-w-0">
         <MainLayoutColor
           as={MainLayoutTextSize}
           color="title"
@@ -135,7 +135,7 @@ export default function AoiDetailsPanel({
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center border-b border-[#1f1f23] mb-4 shrink-0 w-full">
+      <div className="flex items-center border-b border-[#1f1f23] mb-3 sm:mb-4 shrink-0 w-full overflow-x-auto no-scrollbar">
         {TABS.map((tab) => {
           const isSelected = activeTab === tab;
           return (
@@ -143,7 +143,7 @@ export default function AoiDetailsPanel({
               key={tab}
               type="button"
               onClick={() => setActiveTab(tab)}
-              className={`flex-1 py-2 transition-all text-center relative cursor-pointer ${
+              className={`flex-1 min-w-[4.5rem] py-2 transition-all text-center relative cursor-pointer ${
                 isSelected
                   ? "text-[#f59e0b]"
                   : "text-[#71717a] hover:text-white"
@@ -151,7 +151,7 @@ export default function AoiDetailsPanel({
             >
               <MainLayoutTextSize
                 size="dropdownText"
-                className="font-medium block"
+                className="font-medium block whitespace-nowrap"
               >
                 {tab}
               </MainLayoutTextSize>
@@ -163,7 +163,7 @@ export default function AoiDetailsPanel({
         })}
       </div>
 
-      <div className="flex-none lg:flex-1 min-h-0 overflow-y-visible lg:overflow-y-auto custom-scrollbar pr-1">
+      <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar pr-1">
         {/* ==================== OVERVIEW TAB ==================== */}
         {activeTab === "Overview" && (
           <div className="space-y-6">
@@ -600,7 +600,7 @@ export default function AoiDetailsPanel({
       </div>
 
       {/* Footer Buttons */}
-      <div className="shrink-0 pt-4 mt-2 border-t border-[#1f1f23] flex items-center gap-3">
+      <div className="shrink-0 pt-3 sm:pt-4 mt-2 border-t border-[#1f1f23] flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
         <button
           type="button"
           onClick={onEdit}

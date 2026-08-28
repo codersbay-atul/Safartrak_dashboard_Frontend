@@ -11,6 +11,8 @@ import VehiclesList from "../features/dashboard/VehiclesList";
 import VehiclesDetail from "../features/dashboard/VehiclesDetail";
 import { getDashboardExport } from "../services/dashboardService";
 import { toast } from "../components/Ui/toast";
+import { Truck } from "lucide-react";
+import MainSectionHeader from "../components/Ui/MainLayoutUI/MainSectionHeader";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -78,7 +80,7 @@ export default function Dashboard() {
     >
       <div className="relative flex-1 min-h-0 overflow-hidden flex flex-col">
         <div
-          className={`absolute inset-0 flex flex-col gap-2.5 xl:gap-3 overflow-hidden min-h-0 ${
+          className={`absolute inset-0 flex flex-col gap-4 xl:gap-5 overflow-y-auto overflow-x-hidden no-scrollbar min-h-0 ${
             isRouteView || isFullMapView
               ? "invisible pointer-events-none"
               : "visible pointer-events-auto"
@@ -95,8 +97,10 @@ export default function Dashboard() {
             <StatsCard />
           </div>
 
-          <div className="flex flex-col min-[1152px]:flex-row gap-2.5 min-[1152px]:gap-3 xl:gap-3.5 items-stretch w-full flex-1 min-h-0 overflow-y-auto min-[1152px]:overflow-hidden">
-            <div className="w-full min-[1152px]:w-[clamp(380px,38%,440px)] xl:w-[410px] 2xl:w-[480px] h-[340px] min-[1152px]:h-full min-h-0 overflow-hidden transition-all duration-300 shrink-0">
+          <MainSectionHeader icon={Truck} title="Vehicles" />
+
+          <div className="flex flex-col min-[1152px]:flex-row gap-4 min-[1152px]:gap-4 xl:gap-5 items-stretch w-full flex-1 min-h-[80vh] overflow-y-auto no-scrollbar min-[1152px]:overflow-hidden">
+            <div className="w-full min-[1152px]:w-[clamp(380px,38%,440px)] xl:w-[410px] 2xl:w-[480px] h-[440px] min-[1152px]:h-full min-h-0 overflow-hidden transition-all duration-300 shrink-0">
               <VehiclesList
                 search={vehicleSearch}
                 selectedVehicle={selectedVehicle}
@@ -105,12 +109,12 @@ export default function Dashboard() {
                 }}
                 onViewDetails={(v) => {
                   setSelectedVehicle(v);
-                  setShowDetailsPanel(true); 
+                  setShowDetailsPanel(true);
                 }}
               />
             </div>
 
-            <div className="w-full shrink-0 h-[360px] min-[1152px]:flex-1 min-[1152px]:h-full min-w-0 min-[1152px]:min-w-[240px] min-h-0 overflow-hidden">
+            <div className="w-full shrink-0 h-[440px] min-[1152px]:flex-1 min-[1152px]:h-full min-w-0 min-[1152px]:min-w-[240px] min-h-0 overflow-hidden">
               <LivePositions
                 selectedVehicle={selectedVehicle}
                 showRoutePath={false}
@@ -120,7 +124,7 @@ export default function Dashboard() {
             </div>
 
             {selectedVehicle && showDetailsPanel && (
-              <div className="w-full min-[1152px]:w-[clamp(240px,22%,290px)] xl:w-[310px] 2xl:w-[330px] shrink-0 h-[480px] min-[1152px]:h-full min-h-0 overflow-hidden animate-in slide-in-from-right-5 duration-300">
+              <div className="w-full min-[1152px]:w-[clamp(240px,22%,290px)] xl:w-[310px] 2xl:w-[330px] shrink-0 h-[520px] min-[1520px]:h-full min-h-0 overflow-hidden animate-in slide-in-from-right-5 duration-300">
                 <VehiclesDetail
                   vehicle={selectedVehicle}
                   onViewRoute={handleOpenRouteDetails}
@@ -135,7 +139,7 @@ export default function Dashboard() {
         </div>
 
         {isRouteView && !isFullMapView ? (
-          <div className="absolute inset-0 flex flex-col gap-2.5 overflow-hidden min-h-0 z-20 bg-[#070708]">
+          <div className="absolute inset-0 flex flex-col gap-4 xl:gap-5 overflow-hidden min-h-0 z-20 bg-[#070708]">
             <div className="shrink-0 flex items-center gap-3">
               <button
                 onClick={exitRouteView}
@@ -152,7 +156,7 @@ export default function Dashboard() {
               <TripStatsCard vehicle={selectedVehicle} />
             </div>
 
-            <div className="flex flex-row gap-2.5 min-[1152px]:gap-3 xl:gap-3.5 items-stretch w-full flex-1 min-h-0 overflow-hidden">
+            <div className="flex flex-row gap-4 min-[1152px]:gap-4 xl:gap-5 items-stretch w-full flex-1 min-h-0 overflow-hidden">
               <div className="flex-1 min-w-[220px] h-full min-h-0 overflow-hidden rounded-lg">
                 <LivePositions
                   selectedVehicle={selectedVehicle}
@@ -175,7 +179,6 @@ export default function Dashboard() {
           </div>
         ) : null}
 
-    
         {isFullMapView && (
           <div className="fixed inset-0 z-[9999] bg-[#0c0c0e] w-screen h-screen flex flex-col overflow-hidden">
             <div className="absolute top-4 left-4 z-[10000]">

@@ -70,12 +70,15 @@ export default function AoiStats() {
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 w-full select-none shrink-0">
+    <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3 min-[1152px]:gap-3.5 xl:gap-4 w-full min-w-0 select-none shrink-0">
       {cards.map((card) => {
         const accent = ACCENT_STYLES[card.accent] || ACCENT_STYLES.yellow;
 
         return (
-          <div key={card.id} className="min-w-0 h-full">
+          <div
+            key={card.id}
+            className="min-w-0 h-full min-h-[96px] sm:min-h-[112px] xl:min-h-[124px]"
+          >
             <MainStatsCard
               value={isLoading && !summary ? "Loading..." : card.value}
               subtitle={card.subtitle}
@@ -83,6 +86,8 @@ export default function AoiStats() {
               icon={card.icon}
               bgIcon={accent.iconWrap}
               colorIcon={accent.icon}
+              padding="p-2.5 sm:p-3 min-[1152px]:p-3.5 xl:p-4"
+              footerSpacing="pt-2 mt-1.5 sm:pt-2.5 sm:mt-2"
             />
           </div>
         );

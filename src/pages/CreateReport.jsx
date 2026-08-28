@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
+import { FileText } from 'lucide-react';
 import MainLayout from "../layouts/MainLayout";
+import MainSectionHeader from "../components/Ui/MainLayoutUI/MainSectionHeader";
 import MainLayoutHeader from "../components/Ui/MainLayoutUI/MainLayoutHeader";
 import { getVehiclesList } from "../services/vehicleService";
 import { generateReport } from "../services/reportsService";
@@ -71,7 +73,7 @@ export default function CreateReport() {
 
   return (
     <MainLayout activeTab="Reports">
-      <div className="flex-1 flex flex-col gap-3 min-h-0 p-4">
+      <div className="flex-1 flex flex-col gap-4 xl:gap-5 min-h-0 overflow-y-auto overflow-x-hidden no-scrollbar">
         <div className="flex items-center justify-between gap-3">
           <MainLayoutHeader
             title="Create Custom Report"
@@ -91,6 +93,8 @@ export default function CreateReport() {
             <button onClick={handleGenerate} className="px-4 py-2 bg-[#FFC107] rounded text-black font-semibold">Generate Report</button>
           </div>
         </div>
+
+        <MainSectionHeader icon={FileText} title="Trip Report" />
 
         <div className="flex-1">
           <ReportResults title="Trip Report" result={result} isLoading={isLoading} errorMessage={error} />

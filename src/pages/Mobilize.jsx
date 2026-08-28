@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
+import { Shield } from "lucide-react";
 import MainLayout from "../layouts/MainLayout";
+import MainSectionHeader from "../components/Ui/MainLayoutUI/MainSectionHeader";
 import MobilizeHeader from "../features/mobilize/MobilizeHeader";
 import MobilizeStats from "../features/mobilize/MobilizeStats";
 import MobilizeVehicleList from "../features/mobilize/MobilizeVehicleList";
@@ -215,7 +217,7 @@ export default function Mobilize() {
   return (
     <MainLayout activeTab="Mobilize / Immobilize">
       {activeView === "history" ? (
-        <div className="flex-1 flex flex-col gap-4 min-h-0 overflow-y-auto pr-0.5 text-white custom-scrollbar">
+        <div className="flex-1 flex flex-col gap-4 xl:gap-5 min-h-0 overflow-y-auto overflow-x-hidden no-scrollbar pr-0.5 text-white">
           <div className="shrink-0">
             <CommandHistoryHeader
               commandOptions={COMMAND_OPTIONS}
@@ -232,7 +234,7 @@ export default function Mobilize() {
           />
         </div>
       ) : (
-        <div className="flex-1 flex flex-col gap-2.5 min-h-0 min-w-0 overflow-y-auto pr-0.5 text-white custom-scrollbar">
+        <div className="flex-1 flex flex-col gap-4 xl:gap-5 min-h-0 min-w-0 overflow-y-auto overflow-x-hidden no-scrollbar pr-0.5 text-white">
           <div className="shrink-0">
             <MobilizeHeader
               onSearch={(value) => setSearchQuery(value)}
@@ -246,7 +248,9 @@ export default function Mobilize() {
             <MobilizeStats />
           </div>
 
-          <div className="flex flex-col lg:flex-row gap-3.5 items-stretch w-full flex-none lg:flex-1 min-h-0 overflow-visible lg:overflow-hidden">
+          <MainSectionHeader icon={Shield} title="Vehicle Control" />
+
+          <div className="flex flex-col lg:flex-row gap-4 xl:gap-5 items-stretch w-full flex-none lg:flex-1 min-h-[420px] xl:min-h-[480px] overflow-visible lg:overflow-hidden">
             <div className="w-full lg:flex-1 shrink-0 h-auto lg:h-full min-h-[420px] lg:min-h-0 overflow-hidden">
               <MobilizeVehicleList
                 vehicles={filteredVehicles}

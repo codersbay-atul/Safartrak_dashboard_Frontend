@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import { FileText } from "lucide-react";
 import MainLayout from "../layouts/MainLayout";
+import MainSectionHeader from "../components/Ui/MainLayoutUI/MainSectionHeader";
 import ReportsHeader from "../features/reports/ReportsHeader";
 import ReportCard from "../features/reports/ReportCard";
 import ReportResults from "../features/reports/ReportResults";
@@ -197,7 +199,7 @@ export default function Reports() {
 
   return (
     <MainLayout InactiveTab="Reports">
-      <div className="flex-1 flex flex-col gap-2.5 min-h-0 overflow-y-auto pr-0.5 custom-scrollbar">
+      <div className="flex-1 flex flex-col gap-4 xl:gap-5 min-h-0 overflow-y-auto overflow-x-hidden no-scrollbar pr-0.5">
         {isCustomReportView ? (
           <div className="flex-1 flex flex-col gap-4 min-h-0">
             <div className="shrink-0">
@@ -247,10 +249,13 @@ export default function Reports() {
                 onExport={handleExport}
               />
             ) : (
-              <ReportCard
-                searchQuery={searchQuery}
-                onReportSelect={handleReportSelect}
-              />
+              <>
+                <MainSectionHeader icon={FileText} title="Available Reports" />
+                <ReportCard
+                  searchQuery={searchQuery}
+                  onReportSelect={handleReportSelect}
+                />
+              </>
             )}
           </>
         )}

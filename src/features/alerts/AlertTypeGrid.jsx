@@ -11,7 +11,7 @@ export default function AlertTypeGrid({
   isError = false,
 }) {
   return (
-    <div className="w-full min-w-0 flex flex-col gap-2 font-sans select-none shrink-0">
+    <div className="w-full min-w-0 flex flex-col gap-2 font-sans select-none shrink-0 mt-4">
       {/* 1. Outside Header Title with Icon */}
       <div className="flex items-center gap-2 px-1 shrink-0">
         <MainLayoutColor

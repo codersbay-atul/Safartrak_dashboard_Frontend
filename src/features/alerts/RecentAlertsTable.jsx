@@ -29,7 +29,7 @@ export default function RecentAlertsTable({
   isError = false,
 }) {
   return (
-    <div className="w-full min-w-0 flex flex-col gap-2 font-sans select-none shrink-0">
+    <div className="w-full min-w-0 flex flex-col gap-2 font-sans select-none shrink-0 mt-4">
       {/* 1. Outside Header Toolbar */}
       <div className="flex items-center justify-between gap-2 px-1 shrink-0">
         <div className="flex items-center gap-2">

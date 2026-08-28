@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import useAccountProfile from "../hooks/useAccountProfile";
+import { Clock } from "lucide-react";
 import MainLayout from "../layouts/MainLayout";
+import MainSectionHeader from "../components/Ui/MainLayoutUI/MainSectionHeader";
 import ProfileHeader from "../features/profile/ProfileHeader";
 import ProfileHero from "../features/profile/ProfileHero";
 import ProfileStatsCard from "../features/profile/ProfileStatsCard";
@@ -24,7 +26,7 @@ export default function ProfilePage({ user: initialUser }) {
 
   return (
     <MainLayout activeTab="Profile">
-      <div className="flex-1 flex flex-col gap-2.5 h-full min-h-0 min-w-0 overflow-y-auto pr-0.5 custom-scrollbar">
+      <div className="flex-1 flex flex-col gap-4 xl:gap-5 h-full min-h-0 min-w-0 overflow-y-auto overflow-x-hidden no-scrollbar pr-0.5">
         <div className="shrink-0">
           <ProfileHeader onEditSettings={handleEditSettings} />
         </div>
@@ -38,7 +40,9 @@ export default function ProfilePage({ user: initialUser }) {
           <ProfileStatsCard stats={user ?? {}} />
         </div>
 
-        <div className="min-h-0 min-w-0 grid grid-cols-1 min-[1152px]:grid-cols-3 gap-2.5 items-stretch min-[1152px]:flex-1">
+        <MainSectionHeader icon={Clock} title="Account Activity" />
+
+        <div className="min-h-0 min-w-0 grid grid-cols-1 min-[1152px]:grid-cols-3 gap-4 xl:gap-5 items-stretch min-[1152px]:flex-1">
           <div className="w-full min-h-0 flex flex-col min-[1152px]:h-full min-[1152px]:overflow-hidden">
             <RecentActivity />
           </div>

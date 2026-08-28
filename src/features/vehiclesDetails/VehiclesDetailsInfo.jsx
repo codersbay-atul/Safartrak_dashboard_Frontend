@@ -123,7 +123,7 @@ export default function VehiclesDetailsInfo({
     <MainLayoutColor
       as="aside"
       background="surface"
-      className="w-full h-auto lg:h-full flex flex-col p-2.5 rounded-xl min-h-0 overflow-hidden select-none font-sans"
+      className="w-full h-full min-h-0 flex-1 flex flex-col p-2.5 rounded-xl overflow-hidden select-none font-sans"
     >
       {/* Header Title & Count */}
       <div className="flex items-center justify-between mb-2 shrink-0">
@@ -149,7 +149,7 @@ export default function VehiclesDetailsInfo({
       </div>
 
       {/* Centralized Search Input */}
-      <div className="mb-2 shrink-0">
+      <div className="mb-2.5 shrink-0">
         <MainSearchInput
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
@@ -160,7 +160,7 @@ export default function VehiclesDetailsInfo({
       </div>
 
       {/* Filter Tabs using MainLayoutFilterButton */}
-      <div className="flex items-center gap-1.5 mb-2 overflow-x-auto no-scrollbar shrink-0 pb-0.5">
+      <div className="flex items-center gap-1.5 mb-2.5 overflow-x-auto no-scrollbar shrink-0 pb-0.5">
         {FILTERS.map((filter) => {
           const isSelected = activeFilter === filter.value;
           return (
@@ -185,9 +185,9 @@ export default function VehiclesDetailsInfo({
       </div>
 
       {/* Vehicle List */}
-      <div className="flex-none lg:flex-1 overflow-y-visible lg:overflow-y-auto space-y-1.5 pr-0.5 custom-scrollbar min-h-0">
+      <div className="flex-1 overflow-y-auto space-y-1.5 pr-0.5 custom-scrollbar min-h-0">
         {isLoading ? (
-          <div className="py-16 flex flex-col items-center justify-center gap-2.5">
+          <div className="h-full min-h-[200px] flex flex-col items-center justify-center gap-2.5">
             <MainLayoutColor
               as={Loader2}
               color="yellow"
@@ -204,7 +204,7 @@ export default function VehiclesDetailsInfo({
             </MainLayoutColor>
           </div>
         ) : isError ? (
-          <div className="py-16 text-center">
+          <div className="h-full min-h-[200px] flex items-center justify-center text-center px-2">
             <MainLayoutColor
               as={MainLayoutTextSize}
               color="subtitle"
@@ -317,7 +317,7 @@ export default function VehiclesDetailsInfo({
             );
           })
         ) : (
-          <div className="h-full flex items-center justify-center p-4 text-center">
+          <div className="h-full min-h-[200px] flex items-center justify-center p-4 text-center">
             <MainLayoutColor
               as={MainLayoutTextSize}
               color="subtitle"

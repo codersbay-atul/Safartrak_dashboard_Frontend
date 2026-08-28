@@ -62,7 +62,7 @@ export default function Vehicles() {
 
   return (
     <MainLayout InactiveTab="Vehicles">
-      <div className="flex-1 flex flex-col gap-2.5 min-h-0 min-w-0 overflow-y-auto min-[1152px]:overflow-hidden pr-0.5 custom-scrollbar">
+      <div className="flex-1 flex flex-col gap-4 xl:gap-5 min-h-0 min-w-0 overflow-y-auto overflow-x-hidden no-scrollbar pr-0.5">
         {/* Top Header */}
         <div className="shrink-0">
           <VehiclesHeader
@@ -77,8 +77,7 @@ export default function Vehicles() {
           <VehicleStats />
         </div>
 
-        {/* Table Container (Occupies remaining flex space accurately) */}
-        <div className="shrink-0 min-[1152px]:flex-1 min-h-[420px] min-[1152px]:min-h-0 w-full overflow-hidden">
+        <div className="shrink-0 w-full min-w-0">
           <VehicleListTable />
         </div>
 
