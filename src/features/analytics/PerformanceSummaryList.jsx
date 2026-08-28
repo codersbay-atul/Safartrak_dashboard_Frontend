@@ -242,7 +242,7 @@ export default function PerformanceSummaryList({ range = "24h" }) {
                 filteredData.map((row) => (
                   <tr
                     key={row.id}
-                    className="hover:bg-[#18181b]/40 transition-colors align-middle cursor-pointer"
+                    className="hover:bg-[#1f2025] transition-colors align-middle cursor-pointer"
                   >
                     <td className="py-3 sm:py-3.5 px-3 sm:px-4 pl-4 sm:pl-5 max-w-[140px]">
                       <MainLayoutColor

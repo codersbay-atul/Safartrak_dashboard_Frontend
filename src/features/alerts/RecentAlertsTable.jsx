@@ -122,7 +122,7 @@ export default function RecentAlertsTable({
                     <MainLayoutColor
                       key={alert.id}
                       as="tr"
-                      className="border-b transition-colors hover:bg-[#18181b]/40 cursor-pointer"
+                      className="border-b transition-colors hover:bg-[#1f2025] cursor-pointer"
                     >
                       {/* Date & Time */}
                       <td className="pl-4 pr-3 py-3 whitespace-nowrap">

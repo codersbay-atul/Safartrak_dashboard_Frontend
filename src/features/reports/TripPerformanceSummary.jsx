@@ -67,7 +67,7 @@ export default function TripPerformanceSummary({
               data.map((row, index) => (
                 <tr
                   key={row.id || index}
-                  className="hover:bg-[#18181b]/50 transition-colors"
+                  className="hover:bg-[#1f2025] transition-colors"
                 >
                   <td className="py-3 px-3 font-semibold text-white">
                     {row.vehicleName}

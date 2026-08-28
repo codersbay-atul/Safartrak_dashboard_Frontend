@@ -160,7 +160,7 @@ export default function ReportResults({
                 {rows.map((row, index) => (
                   <tr
                     key={row?.id ?? row?.unique_id ?? index}
-                    className="hover:bg-[#16161a]/80"
+                    className="hover:bg-[#1f2025]"
                   >
                     {columns.map((col) => (
                       <td
