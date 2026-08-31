@@ -38,6 +38,7 @@ export default function MainDropDown({
   isOpen: controlledIsOpen,
   onClose,
   menuAlign = "right",
+  fullWidth = false,
 }) {
   const [internalIsOpen, setInternalIsOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
@@ -116,11 +117,17 @@ export default function MainDropDown({
       onClick={toggleDropdown}
       className={`w-full flex items-center justify-between gap-2 h-8 sm:h-9 px-3 rounded-full hover:text-white transition-colors cursor-pointer focus:outline-none ${className}`.trim()}
     >
-      <LabelWidthLock texts={widthLockLabels} size="dropdownText">
-        <MainLayoutTextSize size="dropdownText" className="block truncate">
+      {fullWidth ? (
+        <MainLayoutTextSize size="dropdownText" className="block min-w-0 truncate">
           {currentLabel}
         </MainLayoutTextSize>
-      </LabelWidthLock>
+      ) : (
+        <LabelWidthLock texts={widthLockLabels} size="dropdownText">
+          <MainLayoutTextSize size="dropdownText" className="block truncate">
+            {currentLabel}
+          </MainLayoutTextSize>
+        </LabelWidthLock>
+      )}
 
       <MainLayoutColor
         as={ChevronDown}
@@ -162,7 +169,10 @@ export default function MainDropDown({
   );
 
   return (
-    <div className="relative inline-block w-full sm:w-max" ref={dropdownRef}>
+    <div
+      className={`relative ${fullWidth ? "block w-full" : "inline-block w-full sm:w-max"}`}
+      ref={dropdownRef}
+    >
       {trigger}
 
       {/* Previous fade-in menu (no slide, unmounted immediately on close)

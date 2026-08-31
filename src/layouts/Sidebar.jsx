@@ -10,6 +10,7 @@ import {
   ScanSearch,
   Send,
   Truck,
+  ClipboardCheck,
   FileSearch,
   Users,
   Headphones,
@@ -77,6 +78,7 @@ export default function Sidebar() {
     Users: "/users",
 
     Contact: "/contact",
+    "Assign Vehicle": "/assign-vehicle",
 
     "API Credentials": "/api-credentials",
 
@@ -139,6 +141,10 @@ export default function Sidebar() {
     {
       title: "MANAGEMENT",
       items: [
+        {
+          icon: ClipboardCheck,
+          label: "Assign Vehicle",
+        },
         {
           icon: Truck,
           label: "Vehicles",

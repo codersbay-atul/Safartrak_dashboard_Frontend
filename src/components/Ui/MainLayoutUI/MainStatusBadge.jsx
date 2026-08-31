@@ -127,12 +127,13 @@ const DEFAULT_CONFIG = {
 
 export default function MainStatusBadge({
   status,
+  label,
   showDot = true,
   className = "",
 }) {
   const normalizedKey = String(status || "").toLowerCase().trim();
   const config = STATUS_CONFIG[normalizedKey] || DEFAULT_CONFIG;
-  const displayLabel = status || config.label;
+  const displayLabel = label || status || config.label;
 
   return (
     <MainLayoutColor

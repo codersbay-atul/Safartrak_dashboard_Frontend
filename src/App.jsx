@@ -33,6 +33,7 @@ import Products from "./pages/Products";
 import BillandPayment from "./pages/BillandPayment";
 import UnderConstruction from "./pages/UnderConstruction";
 import IotSim from "./pages/IotSim";
+import AssignVehicle from "./pages/AssignVehicle";
 
 function AppContent() {
   const dispatch = useDispatch();
@@ -131,6 +132,14 @@ function AppContent() {
           element={
             <ProtectedRoute>
               <Activity />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/assign-vehicle"
+          element={
+            <ProtectedRoute>
+              <AssignVehicle />
             </ProtectedRoute>
           }
         />

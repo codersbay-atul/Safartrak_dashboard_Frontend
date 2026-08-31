@@ -5,7 +5,7 @@ import {
   ChevronRight,
   X,
   Check,
-  Cpu,
+  ClipboardCheck,
   HelpCircleIcon,
 } from "lucide-react";
 import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
@@ -16,20 +16,50 @@ import MainSearchInput from "../../components/Ui/MainLayoutUI/MainSearchInput";
 import MainLayoutFilterButton from "../../components/Ui/MainLayoutUI/MainLayoutFilterButton";
 import MainTableHeader from "../../components/Ui/MainLayoutUI/MainTableHeader";
 import MainStatusBadge from "../../components/Ui/MainLayoutUI/MainStatusBadge";
-import { SIMS_DATA } from "../../data/IotSimData";
+import {
+  ASSIGN_VEHICLE_TRIPS_DUMMY,
+  TRIP_STATUSES,
+  getDriverInitials,
+} from "./assignVehicleData";
 
-export default function IotSimTable({ onHelpClick }) {
+const AVATAR_PALETTE = [
+  "bg-[#172554] text-[#3B82F6]",
+  "bg-[#27272A] text-[#E4E4E7]",
+  "bg-[#450A0A] text-[#F87171]",
+];
+
+
+
+function isTempAbuse(value) {
+  const normalized = String(value || "").trim().toLowerCase();
+  return normalized !== "" && normalized !== "none" && normalized !== "-";
+}
+
+const TRIP_STATUS_BADGE = {
+  upcoming: "Idle",
+  ongoing: "Active",
+  delivered: "Pending",
+  expired: "Expired",
+};
+
+function getTripStatusBadge(status) {
+  const key = String(status || "").toLowerCase().trim();
+  return TRIP_STATUS_BADGE[key] || "Expired";
+}
+
+export default function AssignVehicleTable({
+  trips = ASSIGN_VEHICLE_TRIPS_DUMMY,
+  isLoading = false,
+  onHelpClick,
+}) {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [copiedId, setCopiedId] = useState(null);
-  const itemsPerPage = 8; // Yahan se aap items per page change kar sakte hain
+  const itemsPerPage = 8;
 
   const [filters, setFilters] = useState({
     status: [],
-    kycStatus: [],
-    expiresOn: [],
-    activatedOn: [],
   });
 
   const handleCopy = (e, text, id) => {
@@ -52,9 +82,6 @@ export default function IotSimTable({ onHelpClick }) {
   const handleResetFilters = () => {
     setFilters({
       status: [],
-      kycStatus: [],
-      expiresOn: [],
-      activatedOn: [],
     });
     setCurrentPage(1);
   };
@@ -64,36 +91,28 @@ export default function IotSimTable({ onHelpClick }) {
     setCurrentPage(1);
   };
 
-  const filteredSims = SIMS_DATA.filter((item) => {
-    const matchesSearch = item.iccidNumber
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
+  const filteredTrips = (Array.isArray(trips) ? trips : []).filter((item) => {
+    const query = searchTerm.toLowerCase();
+    const matchesSearch =
+      String(item.tripId || "").toLowerCase().includes(query) ||
+      String(item.vehicleNumber || "").toLowerCase().includes(query) ||
+      String(item.driverName || "").toLowerCase().includes(query);
 
     const matchesStatus =
       filters.status.length === 0 ||
       filters.status.some(
-        (s) => s.toLowerCase() === String(item.status || "").toLowerCase(),
+        (status) =>
+          status.toLowerCase() === String(item.status || "").toLowerCase(),
       );
 
-    const isItemKycCompliant =
-      item.kyc === true ||
-      String(item.kyc || "")
-        .toLowerCase()
-        .trim() === "yes";
-    const matchesKyc =
-      filters.kycStatus.length === 0 ||
-      (filters.kycStatus.includes("Compliant") && isItemKycCompliant) ||
-      (filters.kycStatus.includes("Non-Compliant") && !isItemKycCompliant);
-
-    return matchesSearch && matchesStatus && matchesKyc;
+    return matchesSearch && matchesStatus;
   });
 
-  const totalItems = filteredSims.length;
+  const totalItems = filteredTrips.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
-
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
-  const currentSims = filteredSims.slice(startIndex, endIndex);
+  const currentTrips = filteredTrips.slice(startIndex, endIndex);
 
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
@@ -108,14 +127,12 @@ export default function IotSimTable({ onHelpClick }) {
       for (let i = 1; i <= totalPages; i++) {
         pages.push(i);
       }
+    } else if (currentPage <= 3) {
+      pages.push(1, 2, 3, "...", totalPages);
+    } else if (currentPage >= totalPages - 2) {
+      pages.push(1, "...", totalPages - 2, totalPages - 1, totalPages);
     } else {
-      if (currentPage <= 3) {
-        pages.push(1, 2, 3, "...", totalPages);
-      } else if (currentPage >= totalPages - 2) {
-        pages.push(1, "...", totalPages - 2, totalPages - 1, totalPages);
-      } else {
-        pages.push(1, "...", currentPage, "...", totalPages);
-      }
+      pages.push(1, "...", currentPage, "...", totalPages);
     }
 
     return pages.map((page, idx) => {
@@ -184,11 +201,7 @@ export default function IotSimTable({ onHelpClick }) {
     );
   };
 
-  const hasActiveFilters =
-    filters.status.length > 0 ||
-    filters.kycStatus.length > 0 ||
-    filters.expiresOn.length > 0 ||
-    filters.activatedOn.length > 0;
+  const hasActiveFilters = filters.status.length > 0;
 
   return (
     <div className="w-full flex flex-col gap-3 font-sans select-none">
@@ -196,7 +209,7 @@ export default function IotSimTable({ onHelpClick }) {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-1 mt-4">
         <div className="flex items-center gap-2">
           <MainLayoutColor
-            as={Cpu}
+            as={ClipboardCheck}
             color="yellow"
             className="w-4 h-4 shrink-0"
           />
@@ -206,13 +219,13 @@ export default function IotSimTable({ onHelpClick }) {
             size="sectionTitle"
             className="font-bold tracking-wide block"
           >
-            Active List
+            Recent Trip Assignments
           </MainLayoutColor>
         </div>
 
         <div className="flex flex-wrap items-center justify-end gap-2 shrink-0">
           {/* Help Button */}
-          <button
+          {/* <button
             type="button"
             onClick={onHelpClick}
             className="cursor-pointer flex items-center gap-2"
@@ -226,7 +239,7 @@ export default function IotSimTable({ onHelpClick }) {
             >
               Help me understand this table
             </MainLayoutColor>
-          </button>
+          </button> */}
 
           {/* Reusable Filter Dropdown Trigger */}
           <MainDropDown
@@ -268,72 +281,15 @@ export default function IotSimTable({ onHelpClick }) {
             </div>
 
             {/* Filter List Body */}
-            <div className="grid grid-cols-2 gap-x-4 gap-y-4 pr-1">
-              {/* Status */}
-              <div className="flex flex-col gap-1">
-                <MainLayoutColor
-                  as={MainLayoutTextSize}
-                  // color="subtitle"
-                  size="subInfoText"
-                  // className="font-semibold text-[11px]"
-                >
-                  Status
-                </MainLayoutColor>
-                <div className="flex flex-col gap-1.5 pl-0.5">
-                  {renderCheckbox("status", "Active")}
-                  {renderCheckbox("status", "Inactive")}
-                  {renderCheckbox("status", "Expired")}
-                </div>
-              </div>
-
-              {/* KYC Status */}
-              <div className="flex flex-col gap-1">
-                <MainLayoutColor
-                  as={MainLayoutTextSize}
-                  // color="subtitle"
-                  size="subInfoText"
-                  // className="font-semibold text-[11px]"
-                >
-                  KYC Status
-                </MainLayoutColor>
-                <div className="flex flex-col gap-1.5 pl-0.5">
-                  {renderCheckbox("kycStatus", "Compliant")}
-                  {renderCheckbox("kycStatus", "Non-Compliant")}
-                </div>
-              </div>
-
-              {/* Expires On */}
-              <div className="flex flex-col gap-1">
-                <MainLayoutColor
-                  as={MainLayoutTextSize}
-                  // color="subtitle"
-                  size="subInfoText"
-                  // className="font-semibold text-[11px]"
-                >
-                  Expires On
-                </MainLayoutColor>
-                <div className="flex flex-col gap-1.5 pl-0.5">
-                  {renderCheckbox("expiresOn", "Expiring in 30 days")}
-                  {renderCheckbox("expiresOn", "Expiring in 60 days")}
-                  {renderCheckbox("expiresOn", "Expiring in 90 days")}
-                </div>
-              </div>
-
-              {/* Activated On */}
-              <div className="flex flex-col gap-1">
-                <MainLayoutColor
-                  as={MainLayoutTextSize}
-                  // color="subtitle"
-                  size="subInfoText"
-                  className="font-medium"
-                >
-                  Activated On
-                </MainLayoutColor>
-                <div className="flex flex-col gap-1.5 pl-0.5">
-                  {renderCheckbox("activatedOn", "Last 30 days")}
-                  {renderCheckbox("activatedOn", "Last 90 days")}
-                  {renderCheckbox("activatedOn", "This year")}
-                </div>
+            <div className="flex flex-col gap-1">
+              <MainLayoutColor
+                as={MainLayoutTextSize}
+                size="subInfoText"
+              >
+                Status
+              </MainLayoutColor>
+              <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 pl-0.5">
+                {TRIP_STATUSES.map((status) => renderCheckbox("status", status))}
               </div>
             </div>
 
@@ -356,19 +312,18 @@ export default function IotSimTable({ onHelpClick }) {
             </div>
           </MainDropDown>
 
-          
-          <div className="w-[150px] sm:w-[170px] shrink-0 h-[34px]">
+          {/* <div className="w-[150px] sm:w-[170px] shrink-0 h-[34px]">
             <MainSearchInput
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value);
                 setCurrentPage(1);
               }}
-              placeholder="Search ICCID..."
+              placeholder="Search Trip ID..."
               iconPosition="right"
               className="w-full h-[34px]"
             />
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -380,7 +335,7 @@ export default function IotSimTable({ onHelpClick }) {
         className="w-full h-fit rounded-2xl overflow-hidden shadow-2xl border"
       >
         <div className="w-full overflow-x-auto [scrollbar-width:thin] custom-scrollbar">
-          <table className="w-full table-fixed text-left border-collapse min-w-[700px]">
+          <table className="w-full table-fixed text-left border-collapse min-w-[860px]">
             <thead className="sticky top-0 z-10 shadow-sm">
               <MainLayoutColor
                 as="tr"
@@ -388,123 +343,129 @@ export default function IotSimTable({ onHelpClick }) {
                 border="cardBorder"
                 className="border-b w-full"
               >
-                <MainTableHeader className="w-1/6 py-3 px-4 pl-5">
-                  ICCID Number
+                <MainTableHeader className="w-[16%] py-3 px-4 pl-5">
+                  Trip ID
                 </MainTableHeader>
-                <MainTableHeader className="w-1/6 py-3 px-4">
-                  KYC
+                <MainTableHeader className="w-[14%] py-3 px-4">
+                  Vehicle Number
                 </MainTableHeader>
-                <MainTableHeader className="w-1/6 py-3 px-4">
+                <MainTableHeader className="w-[16%] py-3 px-4">
+                  Driver
+                </MainTableHeader>
+                <MainTableHeader className="w-[13%] py-3 px-4">
                   Status
                 </MainTableHeader>
-                <MainTableHeader className="w-1/6 py-3 px-4">
-                  Activated
+                <MainTableHeader className="w-[13%] py-3 px-4">
+                  Pickup Time
                 </MainTableHeader>
-                <MainTableHeader className="w-1/6 py-3 px-4">
-                  Plan Expires
+                <MainTableHeader className="w-[14%] py-3 px-4">
+                  Delivery Date
                 </MainTableHeader>
-                <MainTableHeader className="w-1/6 py-3 px-4 pr-5">
-                  Amount
+                <MainTableHeader className="w-[14%] py-3 px-4 pr-5">
+                  Temp Abuse
                 </MainTableHeader>
               </MainLayoutColor>
             </thead>
 
             <tbody className="divide-y divide-[#1d1d20]/50">
-              {currentSims.length > 0 ? (
-                currentSims.map((item) => {
-                  const isKycYes =
-                    item.kyc === true ||
-                    String(item.kyc || "")
-                      .toLowerCase()
-                      .trim() === "yes";
+              {isLoading ? (
+                <tr>
+                  <td colSpan={7} className="py-8 text-center">
+                    <MainLayoutColor
+                      as={MainLayoutTextSize}
+                      color="subtitle"
+                      size="subInfoText"
+                    >
+                      Loading trip assignments...
+                    </MainLayoutColor>
+                  </td>
+                </tr>
+              ) : currentTrips.length > 0 ? (
+                currentTrips.map((item) => {
+                  const driverName = item.driverName || "Unassigned";
+                  const initials = getDriverInitials(driverName);
+                  const abuse = item.tempAbuse || "None";
 
                   return (
                     <tr
                       key={item.id}
                       className="hover:bg-[#1f2025] transition-colors align-middle cursor-pointer w-full h-[52px]"
                     >
-                      {/* ICCID Column */}
-                      <td className="w-1/6 py-2 px-4 pl-5 truncate">
+                      <td className="py-2 px-4 pl-5 truncate">
                         <div className="flex items-center gap-1.5 group w-fit">
                           <MainLayoutColor
                             as={MainLayoutTextSize}
-                            color="title"
+                            color="subtitle"
                             size="sectionTitle"
                             className="font-medium block truncate"
                           >
-                            {item.iccidNumber}
+                            {item.tripId}
                           </MainLayoutColor>
-
-                          <button
-                            type="button"
-                            title="Copy ICCID"
-                            onClick={(e) =>
-                              handleCopy(e, item.iccidNumber, item.id)
-                            }
-                            className="p-1 rounded text-[#a1a1aa] hover:text-white transition cursor-pointer shrink-0"
-                          >
-                            {copiedId === item.id ? (
-                              <Check
-                                size={12}
-                                className="stroke-[2.5] text-[#FDB914]"
-                              />
-                            ) : (
-                              <MainLayoutIcon
-                                name="copy"
-                                size="copy"
-                                className="group-hover:text-white"
-                              />
-                            )}
-                          </button>
                         </div>
                       </td>
 
-                      {/* KYC Badge Column */}
-                      <td className="w-1/6 py-2 px-4 truncate">
+                      <td className="py-2 px-4 truncate">
+                        <MainLayoutColor
+                          as={MainLayoutTextSize}
+                          color="subtitle"
+                          size="sectionTitle"
+                          className="font-normal block truncate"
+                        >
+                          {item.vehicleNumber}
+                        </MainLayoutColor>
+                      </td>
+
+                      <td className="py-2 px-4 truncate">
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <MainLayoutColor
+                            as={MainLayoutTextSize}
+                            color="subtitle"
+                            size="sectionTitle"
+                            className="font-medium block truncate"
+                          >
+                            {driverName}
+                          </MainLayoutColor>
+                        </div>
+                      </td>
+
+                      <td className="py-2 px-4 truncate">
                         <MainStatusBadge
-                          status={isKycYes ? "Yes" : "Expired"}
+                          status={getTripStatusBadge(item.status)}
+                          label={item.status || "Upcoming"}
                           showDot={false}
                         />
                       </td>
 
-                      {/* Status Badge Column */}
-                      <td className="w-1/6 py-2 px-4 truncate">
-                        <MainStatusBadge
-                          status={item.status || "Inactive"}
-                          showDot={false}
-                        />
-                      </td>
-
-                      <td className="w-1/6 py-2 px-4 truncate">
+                      <td className="py-2 px-4 truncate">
                         <MainLayoutColor
                           as={MainLayoutTextSize}
                           color="subtitle"
                           size="sectionTitle"
                           className="font-normal block truncate"
                         >
-                          {item.activatedOn}
+                          {item.pickupTime}
                         </MainLayoutColor>
                       </td>
 
-                      <td className="w-1/6 py-2 px-4 truncate">
+                      <td className="py-2 px-4 truncate">
                         <MainLayoutColor
                           as={MainLayoutTextSize}
                           color="subtitle"
                           size="sectionTitle"
                           className="font-normal block truncate"
                         >
-                          {item.expiresOn}
+                          {item.deliveryDate}
                         </MainLayoutColor>
                       </td>
 
-                      <td className="w-1/6 py-2 px-4 pr-5 truncate">
+                      <td className="py-2 px-4 pr-5 truncate">
                         <MainLayoutColor
                           as={MainLayoutTextSize}
-                          color="subtitle"
+                          color={isTempAbuse(abuse) ? "expiredText" : "subtitle"}
                           size="sectionTitle"
                           className="font-normal block truncate"
                         >
-                          {item.amount}
+                          {abuse}
                         </MainLayoutColor>
                       </td>
                     </tr>
@@ -512,13 +473,13 @@ export default function IotSimTable({ onHelpClick }) {
                 })
               ) : (
                 <tr>
-                  <td colSpan={6} className="py-8 text-center">
+                  <td colSpan={7} className="py-8 text-center">
                     <MainLayoutColor
                       as={MainLayoutTextSize}
                       color="subtitle"
                       size="subInfoText"
                     >
-                      No SIM records found.
+                      No trip assignments found.
                     </MainLayoutColor>
                   </td>
                 </tr>
@@ -541,12 +502,11 @@ export default function IotSimTable({ onHelpClick }) {
             className="text-[12px]"
           >
             {totalItems > 0
-              ? `${endIndex} of ${totalItems} SIMs`
-              : "Showing 0 of 0 SIMs"}
+              ? `${endIndex} of ${totalItems} trips`
+              : "Showing 0 of 0 trips"}
           </MainLayoutColor>
 
           <div className="flex items-center gap-1.5">
-            {/* Left Chevron Arrow */}
             <MainLayoutColor
               as="button"
               type="button"
@@ -564,7 +524,6 @@ export default function IotSimTable({ onHelpClick }) {
               {renderPaginationButtons()}
             </div>
 
-            {/* Right Chevron Arrow */}
             <MainLayoutColor
               as="button"
               type="button"
