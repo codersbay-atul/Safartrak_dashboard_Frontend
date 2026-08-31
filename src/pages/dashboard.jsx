@@ -99,7 +99,7 @@ export default function Dashboard() {
 
           <MainSectionHeader icon={Truck} title="Vehicles" />
 
-          <div className="flex flex-col min-[1152px]:flex-row gap-4 min-[1152px]:gap-4 xl:gap-5 items-stretch w-full flex-1 min-h-[80vh] overflow-y-auto no-scrollbar min-[1152px]:overflow-hidden">
+          <div className="flex flex-col min-[1152px]:flex-row gap-4 min-[1152px]:gap-4 xl:gap-5 items-stretch w-full flex-1 min-h-[40vh] overflow-y-auto no-scrollbar min-[1152px]:overflow-hidden">
             <div className="w-full min-[1152px]:w-[clamp(380px,38%,440px)] xl:w-[410px] 2xl:w-[480px] h-[440px] min-[1152px]:h-full min-h-0 overflow-hidden transition-all duration-300 shrink-0">
               <VehiclesList
                 search={vehicleSearch}

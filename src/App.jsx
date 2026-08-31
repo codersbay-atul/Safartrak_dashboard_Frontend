@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import "./App.css";
 
@@ -34,9 +34,15 @@ import BillandPayment from "./pages/BillandPayment";
 import UnderConstruction from "./pages/UnderConstruction";
 import IotSim from "./pages/IotSim";
 import AssignVehicle from "./pages/AssignVehicle";
+import MobileUnsupported from "./components/common/MobileUnsupported";
+import useIsMobileScreen from "./hooks/useIsMobileScreen";
+
+const MOBILE_ALLOWED_PATHS = ["/login"];
 
 function AppContent() {
   const dispatch = useDispatch();
+  const { pathname } = useLocation();
+  const isMobile = useIsMobileScreen();
 
   useEffect(() => {
     const handleTokensUpdated = (event) => {
@@ -51,6 +57,10 @@ function AppContent() {
       window.removeEventListener("auth:tokens-updated", handleTokensUpdated);
     };
   }, [dispatch]);
+
+  if (isMobile && !MOBILE_ALLOWED_PATHS.includes(pathname)) {
+    return <MobileUnsupported />;
+  }
 
   return (
     <div className="min-h-screen w-full bg-[#0B0F19] overflow-x-hidden">

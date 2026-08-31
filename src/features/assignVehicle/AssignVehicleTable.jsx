@@ -343,25 +343,25 @@ export default function AssignVehicleTable({
                 border="cardBorder"
                 className="border-b w-full"
               >
-                <MainTableHeader className="w-[16%] py-3 px-4 pl-5">
+                <MainTableHeader color="title" className="w-[16%] py-3 px-4 pl-5">
                   Trip ID
                 </MainTableHeader>
-                <MainTableHeader className="w-[14%] py-3 px-4">
+                <MainTableHeader color="title" className="w-[14%] py-3 px-4">
                   Vehicle Number
                 </MainTableHeader>
-                <MainTableHeader className="w-[16%] py-3 px-4">
+                <MainTableHeader color="title" className="w-[16%] py-3 px-4">
                   Driver
                 </MainTableHeader>
-                <MainTableHeader className="w-[13%] py-3 px-4">
+                <MainTableHeader color="title" className="w-[13%] py-3 px-4">
                   Status
                 </MainTableHeader>
-                <MainTableHeader className="w-[13%] py-3 px-4">
+                <MainTableHeader color="title" className="w-[13%] py-3 px-4">
                   Pickup Time
                 </MainTableHeader>
-                <MainTableHeader className="w-[14%] py-3 px-4">
+                <MainTableHeader color="title" className="w-[14%] py-3 px-4">
                   Delivery Date
                 </MainTableHeader>
-                <MainTableHeader className="w-[14%] py-3 px-4 pr-5">
+                <MainTableHeader color="title" className="w-[14%] py-3 px-4 pr-5">
                   Temp Abuse
                 </MainTableHeader>
               </MainLayoutColor>

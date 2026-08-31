@@ -1,11 +1,11 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { MapPin, Plus, Search, X } from "lucide-react";
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import { GripVertical, MapPin, Plus, Search, X } from "lucide-react";
 import FormSlider from "../../components/Ui/MainLayoutUI/FormSlider";
 import MainDropDown from "../../components/Ui/MainLayoutUI/MainDropDown";
 import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
 import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
 import MainHeaderActionButton from "../../components/Ui/MainLayoutUI/MainHeaderActionButton";
-import { toast } from "../../components/Ui/toast";
 import {
   ASSIGN_VEHICLE_OPTIONS,
   CHECKPOINT_SUGGESTIONS,
@@ -13,29 +13,29 @@ import {
 
 const STEPS = [
   { id: "form", label: "Trip details" },
-  { id: "review", label: "Review and finish" },
+  { id: "review", label: "Review" },
 ];
 
-const TRIP_TYPES = [
-  { label: "Intra City", value: "intra" },
-  { label: "Inter City", value: "inter" },
-];
+// const TRIP_TYPES = [
+//   { label: "Intra City", value: "intra" },
+//   { label: "Inter City", value: "inter" },
+// ];
 
 const INPUT_BASE =
-  "w-full bg-[#18181b]/60 border focus:border-[var(--color-yellow,#ffd60a)] rounded-xl px-3 py-2.5 text-white text-[12px] font-medium placeholder-[#52525b] focus:outline-none transition-all [color-scheme:dark]";
+  "w-full bg-[#18181b]/60 border focus:border-[var(--color-yellow,#FDB914)] rounded-xl px-3 py-2.5 text-white text-[12px] font-medium placeholder-[#52525b] focus:outline-none transition-all [color-scheme:dark]";
 
 const DROPDOWN_BASE =
-  "w-full justify-between rounded-xl bg-[#18181b]/60 py-2.5 px-3 text-white text-[12px] font-medium focus:border-[var(--color-yellow,#ffd60a)]";
+  "w-full justify-between rounded-xl bg-[#18181b]/60 py-2.5 px-3 text-white text-[12px] font-medium focus:border-[var(--color-yellow,#FDB914)]";
 
 function inputClass(hasError) {
   return `${INPUT_BASE} ${
-    hasError ? "!border-rose-500 ring-1 ring-rose-500/50" : "border-[#27272a]"
+    hasError ? "border-[#EF4444]" : "border-[#27272a]"
   }`;
 }
 
 function dropdownClass(hasError) {
   return `${DROPDOWN_BASE} ${
-    hasError ? "!border-rose-500 ring-1 ring-rose-500/50" : "border-[#27272a]"
+    hasError ? "!border-[#EF4444]" : "border-[#27272a]"
   }`;
 }
 
@@ -55,7 +55,7 @@ function emptyForm() {
     vehicle: "",
     reportingStart: "",
     reportingEnd: "",
-    tripType: "",
+    // tripType: "",
     temperatureEnabled: false,
     tempMin: "",
     tempMax: "",
@@ -67,6 +67,31 @@ function emptyForm() {
 
 function isFilled(value) {
   return String(value || "").trim() !== "";
+}
+
+function sanitizeCoordinate(value) {
+  let dotted = false;
+  let result = "";
+
+  for (const char of String(value ?? "")) {
+    if (char >= "0" && char <= "9") {
+      result += char;
+      continue;
+    }
+    if (char === "." && !dotted) {
+      result += char;
+      dotted = true;
+    }
+  }
+
+  return result;
+}
+
+function isValidCoordinate(value) {
+  if (!isFilled(value)) return false;
+  const trimmed = String(value).trim();
+  if (trimmed === ".") return false;
+  return Number.isFinite(Number(trimmed));
 }
 
 function formatDateTime(value) {
@@ -82,9 +107,25 @@ function formatDateTime(value) {
   });
 }
 
+/** datetime-local value (YYYY-MM-DDTHH:mm) from a Date */
+function toDateTimeLocalValue(date) {
+  if (!(date instanceof Date) || Number.isNaN(date.getTime())) return "";
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+}
+
+function getNowLocalValue() {
+  return toDateTimeLocalValue(new Date());
+}
+
+function isEndAfterStart(start, end) {
+  if (!isFilled(start) || !isFilled(end)) return true;
+  return new Date(end) > new Date(start);
+}
+
 function FieldLabel({ children, optional = false, required = false }) {
   return (
-    <div className="flex items-center justify-between gap-2 mb-2">
+    <div className="flex items-center justify-start gap-2 mb-2">
       <MainLayoutColor
         as={MainLayoutTextSize}
         color="subtitle"
@@ -92,10 +133,10 @@ function FieldLabel({ children, optional = false, required = false }) {
         className="font-medium"
       >
         {children}
-        {required ? <span className="text-rose-500"> *</span> : null}
+        {/* {required ? <span className="text-rose-500"> *</span> : null} */}
       </MainLayoutColor>
       {optional ? (
-        <span className="text-[11px] text-[#71717a] italic font-medium">Optional</span>
+        <span className="text-[11px] text-[#71717a] italic font-medium">(Optional)</span>
       ) : null}
     </div>
   );
@@ -104,7 +145,9 @@ function FieldLabel({ children, optional = false, required = false }) {
 function ErrorText({ message }) {
   if (!message) return null;
   return (
-    <p className="text-rose-500 text-[10px] mt-1 leading-tight">{message}</p>
+    <p className="text-[#EF4444] text-[11px] mt-1.5 leading-tight font-medium">
+      {message}
+    </p>
   );
 }
 
@@ -125,30 +168,19 @@ function SectionHeader({ title, action }) {
 }
 
 function FooterButton({ variant = "primary", children, ...props }) {
-  const isSecondary = variant === "secondary";
   return (
     <MainHeaderActionButton
       type="button"
-      variant={isSecondary ? "secondary" : "primary"}
-      className={
-        isSecondary
-          ? "h-8 min-w-[84px] px-3.5 rounded-lg bg-[#18181b] hover:bg-[#27272a] text-[#a1a1aa] hover:text-white border border-[#27272a] cursor-pointer disabled:opacity-50"
-          : "h-8 min-w-[84px] px-3.5 rounded-lg text-black bg-[var(--color-yellow,#ffd60a)] hover:bg-[var(--color-yellow-hover,#e6c200)] border border-[var(--color-yellow,#ffd60a)] cursor-pointer disabled:opacity-60"
-      }
+      variant={variant}
+      className="min-w-[84px]"
       {...props}
     >
-      <span
-        className={`text-[13px] font-medium whitespace-nowrap leading-none ${
-          isSecondary ? "" : "text-black"
-        }`}
-      >
-        {children}
-      </span>
+      {children}
     </MainHeaderActionButton>
   );
 }
 
-function CheckpointSearch({ value, onChange, onSelect, error }) {
+function CheckpointSearch({ value, onChange, onSelect, onCreate, error }) {
   const [isOpen, setIsOpen] = useState(false);
   const wrapRef = useRef(null);
   const query = value.trim().toLowerCase();
@@ -161,6 +193,19 @@ function CheckpointSearch({ value, onChange, onSelect, error }) {
         item.search.toLowerCase().includes(query),
     ).slice(0, 6);
   }, [query]);
+
+  const hasExactMatch = useMemo(
+    () =>
+      CHECKPOINT_SUGGESTIONS.some(
+        (item) =>
+          item.name.toLowerCase() === query ||
+          item.search.toLowerCase() === query,
+      ),
+    [query],
+  );
+
+  const showCreate = Boolean(query) && !hasExactMatch;
+  const showMenu = isOpen && (matches.length > 0 || showCreate);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -186,11 +231,18 @@ function CheckpointSearch({ value, onChange, onSelect, error }) {
           setIsOpen(true);
         }}
         onFocus={() => setIsOpen(true)}
-        placeholder="Search checkpoint"
+        onKeyDown={(event) => {
+          if (event.key === "Enter" && showCreate) {
+            event.preventDefault();
+            onCreate(value.trim());
+            setIsOpen(false);
+          }
+        }}
+        placeholder="Search or enter a new checkpoint"
         className={`${inputClass(error)} pl-8`}
       />
-      {isOpen && matches.length > 0 ? (
-        <div className="absolute left-0 right-0 mt-1.5 z-30 rounded-xl border border-[#22252B] bg-[#0f1115] shadow-2xl overflow-hidden max-h-48 overflow-y-auto custom-scrollbar">
+      {showMenu ? (
+        <div className="absolute left-0 right-0 mt-1.5 z-30 rounded-xl border border-[#22252B] bg-[#0f1115] shadow-2xl overflow-hidden max-h-56 overflow-y-auto custom-scrollbar">
           {matches.map((item) => (
             <button
               key={`${item.name}-${item.lat}`}
@@ -219,22 +271,66 @@ function CheckpointSearch({ value, onChange, onSelect, error }) {
               </MainLayoutColor>
             </button>
           ))}
+          {showCreate ? (
+            <button
+              type="button"
+              onClick={() => {
+                onCreate(value.trim());
+                setIsOpen(false);
+              }}
+              className="w-full text-left px-3 py-2 hover:bg-[#18181b] transition-colors cursor-pointer border-t border-[#22252B]"
+            >
+              <span className="flex items-center gap-1.5">
+                <MainLayoutColor as={Plus} color="yellow" className="shrink-0" size={13} />
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="yellow"
+                  size="subInfoText"
+                  className="font-medium"
+                >
+                  Add “{value.trim()}” as a new point
+                </MainLayoutColor>
+              </span>
+              <MainLayoutColor
+                as={MainLayoutTextSize}
+                color="muted"
+                size="captionText"
+                className="block mt-0.5 font-normal"
+              >
+                Enter latitude, longitude and name below
+              </MainLayoutColor>
+            </button>
+          ) : null}
         </div>
       ) : null}
     </div>
   );
 }
 
-function PointCard({ title, point, onChange, onRemove, errors = {} }) {
+function PointCard({
+  title,
+  point,
+  onChange,
+  onRemove,
+  errors = {},
+  dragHandle = null,
+  isDragging = false,
+  isDropTarget = false,
+}) {
   function update(patch) {
     onChange({ ...point, ...patch });
   }
 
   return (
-    <div className="rounded-xl border border-[#27272a] bg-[#18181b]/40 p-4 flex flex-col gap-4">
+    <div
+      className={`rounded-xl border bg-[#18181b]/40 p-4 flex flex-col gap-4 transition-opacity ${
+        isDropTarget ? "border-[#FDB914]" : "border-[#27272a]"
+      } ${isDragging ? "opacity-40" : ""}`}
+    >
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2 min-w-0">
-          <MapPin size={13} className="text-[#ffd60a] shrink-0" />
+          {dragHandle}
+          <MainLayoutColor as={MapPin} color="yellow" className="shrink-0" size={13} />
           <MainLayoutColor
             as={MainLayoutTextSize}
             color="title"
@@ -257,20 +353,40 @@ function PointCard({ title, point, onChange, onRemove, errors = {} }) {
       </div>
 
       <div>
-        <FieldLabel required>Search checkpoint</FieldLabel>
+        <FieldLabel optional>Search checkpoint</FieldLabel>
         <CheckpointSearch
           value={point.search}
           error={errors.search}
-          onChange={(search) => update({ search })}
+          onChange={(search) => {
+            const next = { search };
+            if (!isFilled(point.name) || point.name === point.search) {
+              next.name = search;
+            }
+            update(next);
+          }}
           onSelect={(item) =>
             update({
               search: item.search,
               name: item.name,
-              lat: item.lat,
-              lng: item.lng,
+              lat: sanitizeCoordinate(item.lat),
+              lng: sanitizeCoordinate(item.lng),
+            })
+          }
+          onCreate={(query) =>
+            update({
+              search: query,
+              name: isFilled(point.name) && point.name !== point.search ? point.name : query,
             })
           }
         />
+        <MainLayoutColor
+          as={MainLayoutTextSize}
+          color="muted"
+          size="captionText"
+          className="block mt-1.5 font-normal"
+        >
+          Pick a suggestion or add a new point with name and coordinates
+        </MainLayoutColor>
         <ErrorText message={errors.search} />
       </div>
 
@@ -280,8 +396,9 @@ function PointCard({ title, point, onChange, onRemove, errors = {} }) {
           <input
             type="text"
             inputMode="decimal"
+            pattern="[0-9.]*"
             value={point.lat}
-            onChange={(event) => update({ lat: event.target.value })}
+            onChange={(event) => update({ lat: sanitizeCoordinate(event.target.value) })}
             placeholder="28.6139"
             className={inputClass(errors.lat)}
           />
@@ -292,8 +409,9 @@ function PointCard({ title, point, onChange, onRemove, errors = {} }) {
           <input
             type="text"
             inputMode="decimal"
+            pattern="[0-9.]*"
             value={point.lng}
-            onChange={(event) => update({ lng: event.target.value })}
+            onChange={(event) => update({ lng: sanitizeCoordinate(event.target.value) })}
             placeholder="77.2090"
             className={inputClass(errors.lng)}
           />
@@ -316,43 +434,86 @@ function PointCard({ title, point, onChange, onRemove, errors = {} }) {
   );
 }
 
-function ReviewError({ message }) {
+function StopDragHandle({ disabled, isDragging, onPointerDown }) {
+  if (disabled) return null;
+
   return (
-    <div className="flex items-center gap-2 rounded-lg bg-[#450A0A] border border-[#7f1d1d]/60 px-3 py-2">
-      <span className="flex h-4 w-4 items-center justify-center rounded-full bg-[#ef4444] text-white shrink-0">
-        <X size={9} strokeWidth={3} />
-      </span>
-      <span className="text-[12px] text-[#FCA5A5] font-medium leading-tight">
-        {message}
-      </span>
+    <span
+      role="button"
+      tabIndex={0}
+      aria-label="Drag to reorder stop"
+      title="Drag to reorder"
+      onPointerDown={onPointerDown}
+      className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-md touch-none ${
+        isDragging
+          ? "cursor-grabbing text-white bg-white/10"
+          : "cursor-grab text-[#71717a] hover:text-white hover:bg-white/5"
+      }`}
+    >
+      <GripVertical size={14} />
+    </span>
+  );
+}
+
+function StopDragGhost({ stop, title, width, x, y, ghostRef }) {
+  if (!stop) return null;
+
+  return createPortal(
+    <div
+      ref={ghostRef}
+      className="fixed top-0 left-0 z-[1200] pointer-events-none will-change-transform"
+      style={{
+        width,
+        transform: `translate3d(${x}px, ${y}px, 0) scale(1.03) rotate(1deg)`,
+      }}
+    >
+      <div className="rounded-xl border border-[#FDB914] bg-[#1a1a1e] p-4 shadow-[0_20px_50px_rgba(0,0,0,0.55)]">
+        <div className="flex items-center gap-2 min-w-0">
+          <MainLayoutColor as={GripVertical} color="yellow" className="shrink-0" size={14} />
+          <MainLayoutColor as={MapPin} color="yellow" className="shrink-0" size={13} />
+          <span className="text-white text-[12px] font-medium truncate">{title}</span>
+        </div>
+        <p className="mt-2 text-[12px] text-[#a1a1aa] truncate">
+          {stop.name || stop.search || "New stop"}
+        </p>
+        {isFilled(stop.lat) || isFilled(stop.lng) ? (
+          <p className="mt-1 text-[11px] text-[#71717a]">
+            {stop.lat || "—"}, {stop.lng || "—"}
+          </p>
+        ) : null}
+      </div>
+    </div>,
+    document.body,
+  );
+}
+
+function ReviewRow({ label, value, error }) {
+  return (
+    <div className="py-1.5">
+      <div className="flex items-start justify-between gap-4">
+        <MainLayoutColor
+          as={MainLayoutTextSize}
+          color="muted"
+          size="subInfoText"
+          className="font-normal shrink-0"
+        >
+          {label}
+        </MainLayoutColor>
+        <MainLayoutColor
+          as={MainLayoutTextSize}
+          color={error ? "expiredText" : "title"}
+          size="subInfoText"
+          className="text-right"
+        >
+          {error ? "—" : value || "—"}
+        </MainLayoutColor>
+      </div>
+      <ErrorText message={error} />
     </div>
   );
 }
 
-function ReviewRow({ label, value }) {
-  return (
-    <div className="flex items-start justify-between gap-4 py-1.5">
-      <MainLayoutColor
-        as={MainLayoutTextSize}
-        color="muted"
-        size="subInfoText"
-        className="font-normal shrink-0"
-      >
-        {label}
-      </MainLayoutColor>
-      <MainLayoutColor
-        as={MainLayoutTextSize}
-        color="title"
-        size="subInfoText"
-        className="text-right"
-      >
-        {value || "—"}
-      </MainLayoutColor>
-    </div>
-  );
-}
-
-function ReviewSection({ title, onEdit, errors = [], children }) {
+function ReviewSection({ title, onEdit, children }) {
   return (
     <div className="pb-5 mb-5 border-b border-[#27272a] last:border-b-0 last:mb-0 last:pb-0">
       <div className="flex items-center justify-between gap-2 mb-3">
@@ -367,20 +528,19 @@ function ReviewSection({ title, onEdit, errors = [], children }) {
         <button
           type="button"
           onClick={onEdit}
-          className="text-[#ffd60a] text-[12px] font-medium hover:underline underline-offset-2 cursor-pointer"
+          className="hover:underline underline-offset-2 cursor-pointer"
         >
-          Edit
+          <MainLayoutColor
+            as={MainLayoutTextSize}
+            color="yellow"
+            size="subInfoText"
+            className="font-medium"
+          >
+            Edit
+          </MainLayoutColor>
         </button>
       </div>
-      {errors.length > 0 ? (
-        <div className="flex flex-col gap-1.5 mb-3">
-          {errors.map((message) => (
-            <ReviewError key={message} message={message} />
-          ))}
-        </div>
-      ) : (
-        children
-      )}
+      {children}
     </div>
   );
 }
@@ -388,46 +548,61 @@ function ReviewSection({ title, onEdit, errors = [], children }) {
 function collectErrors(form) {
   const errors = {};
 
-  if (!isFilled(form.vehicle)) errors.vehicle = "Please provide a vehicle.";
+  if (!isFilled(form.vehicle)) errors.vehicle = "Vehicle is required";
   if (!isFilled(form.reportingStart)) {
-    errors.reportingStart = "Please provide a data reporting start time.";
+    errors.reportingStart = "Start date & time is required";
   }
   if (!isFilled(form.reportingEnd)) {
-    errors.reportingEnd = "Please provide a data reporting end time.";
+    errors.reportingEnd = "End date & time is required";
   }
   if (
     isFilled(form.reportingStart) &&
     isFilled(form.reportingEnd) &&
-    new Date(form.reportingEnd) <= new Date(form.reportingStart)
+    !isEndAfterStart(form.reportingStart, form.reportingEnd)
   ) {
-    errors.reportingEnd = "End time must be after the start time.";
+    errors.reportingEnd = "End date & time must be after the start";
   }
-  if (!isFilled(form.tripType)) errors.tripType = "Please select a trip type.";
+  if (
+    isFilled(form.reportingStart) &&
+    new Date(form.reportingStart) < new Date(Date.now() - 60_000)
+  ) {
+    errors.reportingStart = "Start date & time cannot be in the past";
+  }
+  // if (!isFilled(form.tripType)) errors.tripType = "Trip type is required";
 
   if (form.temperatureEnabled) {
-    if (!isFilled(form.tempMin)) errors.tempMin = "Please provide a minimum temperature.";
-    if (!isFilled(form.tempMax)) errors.tempMax = "Please provide a maximum temperature.";
+    if (!isFilled(form.tempMin)) errors.tempMin = "Min temperature is required";
+    if (!isFilled(form.tempMax)) errors.tempMax = "Max temperature is required";
     if (
       isFilled(form.tempMin) &&
       isFilled(form.tempMax) &&
       Number(form.tempMax) <= Number(form.tempMin)
     ) {
-      errors.tempMax = "Maximum must be greater than minimum.";
+      errors.tempMax = "Max must be greater than min";
     }
   }
 
-  function pointErrors(point, prefix) {
-    if (!isFilled(point.search) && !isFilled(point.name)) {
-      errors[`${prefix}.search`] = "Please search or name this checkpoint.";
+  function pointErrors(point, prefix, label) {
+    if (!isFilled(point.lat)) {
+      errors[`${prefix}.lat`] = `${label} latitude is required`;
+    } else if (!isValidCoordinate(point.lat)) {
+      errors[`${prefix}.lat`] = `${label} latitude must be a number`;
     }
-    if (!isFilled(point.lat)) errors[`${prefix}.lat`] = "Please provide latitude.";
-    if (!isFilled(point.lng)) errors[`${prefix}.lng`] = "Please provide longitude.";
-    if (!isFilled(point.name)) errors[`${prefix}.name`] = "Please provide a name.";
+    if (!isFilled(point.lng)) {
+      errors[`${prefix}.lng`] = `${label} longitude is required`;
+    } else if (!isValidCoordinate(point.lng)) {
+      errors[`${prefix}.lng`] = `${label} longitude must be a number`;
+    }
+    if (!isFilled(point.name)) {
+      errors[`${prefix}.name`] = `${label} name is required`;
+    }
   }
 
-  pointErrors(form.startPoint, "startPoint");
-  pointErrors(form.endPoint, "endPoint");
-  form.stops.forEach((stop, index) => pointErrors(stop, `stops.${index}`));
+  pointErrors(form.startPoint, "startPoint", "Start point");
+  pointErrors(form.endPoint, "endPoint", "End point");
+  form.stops.forEach((stop, index) =>
+    pointErrors(stop, `stops.${index}`, `Stop ${index + 1}`),
+  );
 
   return errors;
 }
@@ -450,6 +625,50 @@ function formatPoint(point) {
   return `${point.name || point.search}${coords}`;
 }
 
+function reorderList(list, fromIndex, toIndex) {
+  if (
+    fromIndex === toIndex ||
+    fromIndex < 0 ||
+    toIndex < 0 ||
+    fromIndex >= list.length ||
+    toIndex >= list.length
+  ) {
+    return list;
+  }
+  const next = [...list];
+  const [item] = next.splice(fromIndex, 1);
+  next.splice(toIndex, 0, item);
+  return next;
+}
+
+function remapStopFieldErrors(errors, fromIndex, toIndex, stopCount) {
+  if (fromIndex === toIndex || stopCount < 2) return errors;
+  const fields = ["search", "lat", "lng", "name"];
+  const hasStopErrors = Object.keys(errors).some((key) =>
+    key.startsWith("stops."),
+  );
+  if (!hasStopErrors) return errors;
+
+  const groups = Array.from({ length: stopCount }, (_, index) => {
+    const group = {};
+    for (const field of fields) {
+      group[field] = errors[`stops.${index}.${field}`];
+    }
+    return group;
+  });
+  const nextGroups = reorderList(groups, fromIndex, toIndex);
+  const next = { ...errors };
+  for (const key of Object.keys(next)) {
+    if (key.startsWith("stops.")) delete next[key];
+  }
+  nextGroups.forEach((group, index) => {
+    for (const field of fields) {
+      if (group[field]) next[`stops.${index}.${field}`] = group[field];
+    }
+  });
+  return next;
+}
+
 export default function AssignVehicleFormSlider({
   isOpen,
   onClose,
@@ -460,6 +679,15 @@ export default function AssignVehicleFormSlider({
   const [errors, setErrors] = useState({});
   const [showStepErrors, setShowStepErrors] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [dragState, setDragState] = useState(null);
+  const stopListRef = useRef(null);
+  const stopsRef = useRef([]);
+  const draggingStopIdRef = useRef(null);
+  const dragStateRef = useRef(null);
+  const ghostRef = useRef(null);
+  const itemRectsRef = useRef(new Map());
+
+  stopsRef.current = form.stops;
 
   useEffect(() => {
     if (!isOpen) return;
@@ -468,16 +696,51 @@ export default function AssignVehicleFormSlider({
     setErrors({});
     setShowStepErrors(false);
     setIsSubmitting(false);
+    setDragState(null);
+    draggingStopIdRef.current = null;
+    dragStateRef.current = null;
+    itemRectsRef.current.clear();
   }, [isOpen]);
 
   function patchForm(patch) {
     setForm((prev) => ({ ...prev, ...patch }));
   }
 
+  function clearFilledPointErrors(prefix, point) {
+    setErrors((prev) => {
+      const next = { ...prev };
+      let changed = false;
+
+      if (prev[`${prefix}.lat`] && isFilled(point.lat) && isValidCoordinate(point.lat)) {
+        next[`${prefix}.lat`] = "";
+        changed = true;
+      }
+      if (prev[`${prefix}.lng`] && isFilled(point.lng) && isValidCoordinate(point.lng)) {
+        next[`${prefix}.lng`] = "";
+        changed = true;
+      }
+      if (prev[`${prefix}.name`] && isFilled(point.name)) {
+        next[`${prefix}.name`] = "";
+        changed = true;
+      }
+      if (prev[`${prefix}.search`] && isFilled(point.search)) {
+        next[`${prefix}.search`] = "";
+        changed = true;
+      }
+
+      return changed ? next : prev;
+    });
+  }
+
   function goToReview() {
     const nextErrors = collectErrors(form);
     setErrors(nextErrors);
     setShowStepErrors(true);
+
+    if (Object.keys(nextErrors).length > 0) {
+      return;
+    }
+
     setStep(1);
   }
 
@@ -485,13 +748,163 @@ export default function AssignVehicleFormSlider({
     setStep(0);
   }
 
+  function resetStopDrag() {
+    draggingStopIdRef.current = null;
+    dragStateRef.current = null;
+    itemRectsRef.current.clear();
+    const container = stopListRef.current;
+    if (container) {
+      container.querySelectorAll("[data-stop-id]").forEach((node) => {
+        node.style.transition = "";
+        node.style.transform = "";
+      });
+    }
+    setDragState(null);
+  }
+
+  function snapshotStopRects() {
+    const container = stopListRef.current;
+    if (!container) return;
+    const next = new Map();
+    container.querySelectorAll("[data-stop-id]").forEach((node) => {
+      next.set(node.dataset.stopId, node.getBoundingClientRect());
+    });
+    itemRectsRef.current = next;
+  }
+
+  function getInsertIndex(clientY) {
+    const draggingId = draggingStopIdRef.current;
+    const stops = stopsRef.current;
+    const container = stopListRef.current;
+    if (!draggingId || !container || stops.length < 2) return -1;
+
+    const fromIndex = stops.findIndex((stop) => stop.id === draggingId);
+    if (fromIndex < 0) return -1;
+
+    const nodes = Array.from(container.querySelectorAll("[data-stop-id]"));
+    for (const node of nodes) {
+      const id = node.dataset.stopId;
+      if (id === draggingId) continue;
+      const rect = node.getBoundingClientRect();
+      if (clientY < rect.top + rect.height / 2) {
+        const index = stops.findIndex((stop) => stop.id === id);
+        if (index < 0) continue;
+        return index > fromIndex ? index - 1 : index;
+      }
+    }
+
+    return stops.length - 1;
+  }
+
+  function moveStop(fromIndex, toIndex) {
+    snapshotStopRects();
+    setForm((prev) => {
+      const nextStops = reorderList(prev.stops, fromIndex, toIndex);
+      if (nextStops === prev.stops) return prev;
+      return { ...prev, stops: nextStops };
+    });
+    setErrors((prev) =>
+      remapStopFieldErrors(prev, fromIndex, toIndex, stopsRef.current.length),
+    );
+  }
+
+  function handleStopPointerDown(event, stopId) {
+    if (stopsRef.current.length < 2) return;
+    if (event.button !== undefined && event.button !== 0) return;
+
+    const card = event.currentTarget.closest("[data-stop-id]");
+    if (!card) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    const rect = card.getBoundingClientRect();
+    const nextState = {
+      id: stopId,
+      width: rect.width,
+      height: rect.height,
+      x: rect.left,
+      y: rect.top,
+      grabX: event.clientX - rect.left,
+      grabY: event.clientY - rect.top,
+    };
+
+    draggingStopIdRef.current = stopId;
+    dragStateRef.current = nextState;
+    setDragState(nextState);
+  }
+
+  useLayoutEffect(() => {
+    if (!dragState) return;
+    const container = stopListRef.current;
+    if (!container) return;
+
+    container.querySelectorAll("[data-stop-id]").forEach((node) => {
+      const first = itemRectsRef.current.get(node.dataset.stopId);
+      if (!first) return;
+      const last = node.getBoundingClientRect();
+      const dy = first.top - last.top;
+      if (Math.abs(dy) < 1) return;
+      node.style.transition = "none";
+      node.style.transform = `translateY(${dy}px)`;
+      void node.offsetHeight;
+      node.style.transition = "transform 220ms cubic-bezier(0.2, 0, 0, 1)";
+      node.style.transform = "translateY(0)";
+    });
+  }, [form.stops, dragState]);
+
+  useEffect(() => {
+    if (!dragState) return;
+
+    const previousCursor = document.body.style.cursor;
+    const previousSelect = document.body.style.userSelect;
+    document.body.style.cursor = "grabbing";
+    document.body.style.userSelect = "none";
+
+    function onMove(event) {
+      const state = dragStateRef.current;
+      if (!state) return;
+
+      const x = event.clientX - state.grabX;
+      const y = event.clientY - state.grabY;
+      state.x = x;
+      state.y = y;
+
+      if (ghostRef.current) {
+        ghostRef.current.style.transform = `translate3d(${x}px, ${y}px, 0) scale(1.03) rotate(1deg)`;
+      }
+
+      const fromIndex = stopsRef.current.findIndex((stop) => stop.id === state.id);
+      const toIndex = getInsertIndex(event.clientY);
+      if (fromIndex >= 0 && toIndex >= 0 && fromIndex !== toIndex) {
+        moveStop(fromIndex, toIndex);
+      }
+    }
+
+    function onUp() {
+      document.body.style.cursor = previousCursor;
+      document.body.style.userSelect = previousSelect;
+      resetStopDrag();
+    }
+
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+    window.addEventListener("pointercancel", onUp);
+    return () => {
+      document.body.style.cursor = previousCursor;
+      document.body.style.userSelect = previousSelect;
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+      window.removeEventListener("pointercancel", onUp);
+    };
+  }, [dragState?.id]);
+
   async function handleFinish() {
     const nextErrors = collectErrors(form);
     setErrors(nextErrors);
     setShowStepErrors(true);
 
     if (Object.keys(nextErrors).length > 0) {
-      toast.error("Please fix the highlighted fields before finishing.");
       return;
     }
 
@@ -500,7 +913,7 @@ export default function AssignVehicleFormSlider({
       vehicle: form.vehicle,
       reportingStart: form.reportingStart,
       reportingEnd: form.reportingEnd,
-      tripType: form.tripType,
+      // tripType: form.tripType,
       temperature: form.temperatureEnabled
         ? { min: Number(form.tempMin), max: Number(form.tempMax) }
         : null,
@@ -512,39 +925,25 @@ export default function AssignVehicleFormSlider({
     try {
       setIsSubmitting(true);
       await onSubmit?.(payload);
-      toast.success("Vehicle assigned successfully.");
       onClose?.();
-    } catch (error) {
-      toast.error(error?.message || "Failed to assign vehicle.");
+    } catch {
     } finally {
       setIsSubmitting(false);
     }
   }
 
-  const hasFormErrors = Object.keys(errors).length > 0;
+  const hasFormErrors = Object.values(errors).some(Boolean);
   const errorStepIds = showStepErrors && hasFormErrors ? ["form"] : [];
-  const tripTypeLabel =
-    TRIP_TYPES.find((item) => item.value === form.tripType)?.label || "";
-
-  const routeErrors = [
-    errors["startPoint.search"] || errors["startPoint.name"]
-      ? "Please provide a start point."
-      : null,
-    errors["endPoint.search"] || errors["endPoint.name"]
-      ? "Please provide an end point."
-      : null,
-    ...form.stops.map((_, index) =>
-      errors[`stops.${index}.search`] || errors[`stops.${index}.name`]
-        ? `Please complete stop ${index + 1}.`
-        : null,
-    ),
-  ].filter(Boolean);
+  // const tripTypeLabel =
+  //   TRIP_TYPES.find((item) => item.value === form.tripType)?.label || "";
 
   return (
     <FormSlider
       title="Assign Vehicle"
       isOpen={isOpen}
       onClose={onClose}
+      closeConfirmTitle="Are you sure you want to close?"
+      closeConfirmMessage="All the info you've entered for this vehicle assignment will be lost."
       steps={STEPS}
       currentStep={step}
       errorStepIds={errorStepIds}
@@ -574,60 +973,97 @@ export default function AssignVehicleFormSlider({
             <div className="flex flex-col gap-5">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <FieldLabel required>Data reporting start</FieldLabel>
+                  <FieldLabel required>Start Date & Time</FieldLabel>
                   <input
                     type="datetime-local"
                     value={form.reportingStart}
+                    min={getNowLocalValue()}
+                    max={form.reportingEnd || undefined}
                     onChange={(event) => {
-                      patchForm({ reportingStart: event.target.value });
-                      if (errors.reportingStart) {
-                        setErrors((prev) => ({ ...prev, reportingStart: "" }));
+                      const reportingStart = event.target.value;
+                      const next = { reportingStart };
+                      const nextErrors = { ...errors, reportingStart: "" };
+
+                      if (
+                        isFilled(reportingStart) &&
+                        isFilled(form.reportingEnd) &&
+                        !isEndAfterStart(reportingStart, form.reportingEnd)
+                      ) {
+                        next.reportingEnd = "";
+                        nextErrors.reportingEnd = "";
                       }
+
+                      patchForm(next);
+                      setErrors(nextErrors);
                     }}
                     className={inputClass(errors.reportingStart)}
                   />
                   <ErrorText message={errors.reportingStart} />
                 </div>
                 <div>
-                  <FieldLabel required>Data reporting end</FieldLabel>
+                  <FieldLabel required>End Date & Time</FieldLabel>
                   <input
                     type="datetime-local"
                     value={form.reportingEnd}
+                    min={form.reportingStart || getNowLocalValue()}
+                    disabled={!isFilled(form.reportingStart)}
                     onChange={(event) => {
-                      patchForm({ reportingEnd: event.target.value });
-                      if (errors.reportingEnd) {
-                        setErrors((prev) => ({ ...prev, reportingEnd: "" }));
+                      const reportingEnd = event.target.value;
+
+                      if (
+                        isFilled(form.reportingStart) &&
+                        isFilled(reportingEnd) &&
+                        !isEndAfterStart(form.reportingStart, reportingEnd)
+                      ) {
+                        setErrors((prev) => ({
+                          ...prev,
+                          reportingEnd: "End date & time must be after the start",
+                        }));
+                        return;
                       }
+
+                      patchForm({ reportingEnd });
+                      setErrors((prev) => ({ ...prev, reportingEnd: "" }));
                     }}
-                    className={inputClass(errors.reportingEnd)}
+                    className={`${inputClass(errors.reportingEnd)} disabled:opacity-50 disabled:cursor-not-allowed`}
                   />
                   <ErrorText message={errors.reportingEnd} />
+                  {!isFilled(form.reportingStart) ? (
+                    <MainLayoutColor
+                      as={MainLayoutTextSize}
+                      color="muted"
+                      size="captionText"
+                      className="block mt-1.5 font-normal"
+                    >
+                      Select a start date & time first
+                    </MainLayoutColor>
+                  ) : null}
                 </div>
+                {/* <div>
+                  <FieldLabel required>Trip type</FieldLabel>
+                  <MainDropDown
+                    fullWidth
+                    label="Select trip type"
+                    options={TRIP_TYPES}
+                    selectedValue={form.tripType}
+                    onSelect={(tripType) => {
+                      patchForm({ tripType });
+                      if (errors.tripType) {
+                        setErrors((prev) => ({ ...prev, tripType: "" }));
+                      }
+                    }}
+                    className={dropdownClass(errors.tripType)}
+                  />
+                  <ErrorText message={errors.tripType} />
+                </div> */}
               </div>
 
-              <div>
-                <FieldLabel required>Trip type</FieldLabel>
-                <MainDropDown
-                  fullWidth
-                  label="Select trip type"
-                  options={TRIP_TYPES}
-                  selectedValue={form.tripType}
-                  onSelect={(tripType) => {
-                    patchForm({ tripType });
-                    if (errors.tripType) {
-                      setErrors((prev) => ({ ...prev, tripType: "" }));
-                    }
-                  }}
-                  className={dropdownClass(errors.tripType)}
-                />
-                <ErrorText message={errors.tripType} />
-              </div>
             </div>
           </section>
 
           <section>
             <SectionHeader title="Assignment" />
-            <div className="flex flex-col gap-5">
+            <div className="grid grid-cols-2 gap-4">
               <div>
                 <FieldLabel required>Vehicle</FieldLabel>
                 <MainDropDown
@@ -679,7 +1115,7 @@ export default function AssignVehicleFormSlider({
                     }
                     className="sr-only peer"
                   />
-                  <div className="w-8 h-4.5 bg-[#27272a] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:bg-[var(--color-yellow,#ffd60a)]" />
+                  <div className="w-8 h-4.5 bg-[#27272a] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:bg-[var(--color-yellow,#FDB914)]" />
                 </label>
               </div>
 
@@ -719,47 +1155,107 @@ export default function AssignVehicleFormSlider({
                 <button
                   type="button"
                   onClick={() => patchForm({ stops: [...form.stops, createPoint()] })}
-                  className="inline-flex items-center gap-1.5 text-[#ffd60a] text-[12px] font-medium hover:underline underline-offset-2 cursor-pointer"
+                  className="inline-flex items-center gap-1.5 hover:underline underline-offset-2 cursor-pointer"
                 >
-                  <Plus size={13} />
-                  Add Stop
+                  <MainLayoutColor as={Plus} color="yellow" className="shrink-0" size={13} />
+                  <MainLayoutColor
+                    as={MainLayoutTextSize}
+                    color="yellow"
+                    size="subInfoText"
+                    className="font-medium"
+                  >
+                    Add Stop
+                  </MainLayoutColor>
                 </button>
               }
             />
-            <div className="flex flex-col gap-5">
+            {form.stops.length > 1 ? (
+              <MainLayoutColor
+                as={MainLayoutTextSize}
+                color="muted"
+                size="captionText"
+                className="block -mt-2 mb-4 font-normal"
+              >
+                Drag stops to reorder. Start and end points stay fixed.
+              </MainLayoutColor>
+            ) : null}
+            <div ref={stopListRef} className="flex flex-col gap-5">
               <PointCard
                 title="Start Point"
                 point={form.startPoint}
                 errors={pointFieldErrors(errors, "startPoint")}
-                onChange={(startPoint) => patchForm({ startPoint })}
+                onChange={(startPoint) => {
+                  patchForm({ startPoint });
+                  clearFilledPointErrors("startPoint", startPoint);
+                }}
               />
 
-              {form.stops.map((stop, index) => (
-                <PointCard
-                  key={stop.id}
-                  title={`Stop ${index + 1}`}
-                  point={stop}
-                  errors={pointFieldErrors(errors, `stops.${index}`)}
-                  onChange={(updated) => {
-                    const next = [...form.stops];
-                    next[index] = updated;
-                    patchForm({ stops: next });
-                  }}
-                  onRemove={() =>
-                    patchForm({
-                      stops: form.stops.filter((_, stopIndex) => stopIndex !== index),
-                    })
-                  }
-                />
-              ))}
+              {form.stops.map((stop, index) => {
+                const isDragging = dragState?.id === stop.id;
+
+                return (
+                  <div
+                    key={stop.id}
+                    data-stop-id={stop.id}
+                    className={isDragging ? "relative z-10" : ""}
+                  >
+                    {isDragging ? (
+                      <div
+                        className="rounded-xl border border-dashed border-[#FDB914]/45 bg-[#FDB914]/5"
+                        style={{ height: dragState.height }}
+                        aria-hidden="true"
+                      />
+                    ) : (
+                      <PointCard
+                        title={`Stop ${index + 1}`}
+                        point={stop}
+                        errors={pointFieldErrors(errors, `stops.${index}`)}
+                        dragHandle={
+                          <StopDragHandle
+                            disabled={form.stops.length < 2}
+                            isDragging={false}
+                            onPointerDown={(event) =>
+                              handleStopPointerDown(event, stop.id)
+                            }
+                          />
+                        }
+                        onChange={(updated) => {
+                          const next = [...form.stops];
+                          next[index] = updated;
+                          patchForm({ stops: next });
+                          clearFilledPointErrors(`stops.${index}`, updated);
+                        }}
+                        onRemove={() =>
+                          patchForm({
+                            stops: form.stops.filter((_, stopIndex) => stopIndex !== index),
+                          })
+                        }
+                      />
+                    )}
+                  </div>
+                );
+              })}
 
               <PointCard
                 title="End Point"
                 point={form.endPoint}
                 errors={pointFieldErrors(errors, "endPoint")}
-                onChange={(endPoint) => patchForm({ endPoint })}
+                onChange={(endPoint) => {
+                  patchForm({ endPoint });
+                  clearFilledPointErrors("endPoint", endPoint);
+                }}
               />
             </div>
+            {dragState ? (
+              <StopDragGhost
+                ghostRef={ghostRef}
+                stop={form.stops.find((stop) => stop.id === dragState.id)}
+                title={`Stop ${(form.stops.findIndex((stop) => stop.id === dragState.id) + 1) || ""}`}
+                width={dragState.width}
+                x={dragState.x}
+                y={dragState.y}
+              />
+            ) : null}
           </section>
         </form>
       ) : (
@@ -779,66 +1275,95 @@ export default function AssignVehicleFormSlider({
               size="subInfoText"
               className="mt-1 block"
             >
-              Review all the info and settings for this trip before you finish assigning the vehicle.
+              Review the trip details and confirm the vehicle and driver assignment before finishing.
             </MainLayoutColor>
           </div>
 
-          <ReviewSection
-            title="Vehicle and driver"
-            onEdit={goToForm}
-            errors={[errors.vehicle].filter(Boolean)}
-          >
-            <ReviewRow label="Vehicle" value={form.vehicle} />
+          <ReviewSection title="Vehicle and driver" onEdit={goToForm}>
+            <ReviewRow
+              label="Vehicle"
+              value={form.vehicle}
+              error={errors.vehicle}
+            />
             <ReviewRow label="Driver" value={form.driver || "Not assigned"} />
           </ReviewSection>
 
-          <ReviewSection
-            title="Reporting window"
-            onEdit={goToForm}
-            errors={[errors.reportingStart, errors.reportingEnd].filter(Boolean)}
-          >
+          <ReviewSection title="Reporting window" onEdit={goToForm}>
             <ReviewRow
               label="Start"
               value={formatDateTime(form.reportingStart)}
+              error={errors.reportingStart}
             />
-            <ReviewRow label="End" value={formatDateTime(form.reportingEnd)} />
+            <ReviewRow
+              label="End"
+              value={formatDateTime(form.reportingEnd)}
+              error={errors.reportingEnd}
+            />
           </ReviewSection>
 
-          <ReviewSection
-            title="Trip type"
-            onEdit={goToForm}
-            errors={[errors.tripType].filter(Boolean)}
-          >
-            <ReviewRow label="Type" value={tripTypeLabel} />
-          </ReviewSection>
+          {/* <ReviewSection title="Trip type" onEdit={goToForm}>
+            <ReviewRow
+              label="Type"
+              value={tripTypeLabel}
+              error={errors.tripType}
+            />
+          </ReviewSection> */}
 
-          <ReviewSection
-            title="Temperature"
-            onEdit={goToForm}
-            errors={[errors.tempMin, errors.tempMax].filter(Boolean)}
-          >
+          <ReviewSection title="Temperature" onEdit={goToForm}>
             <ReviewRow
               label="Monitoring"
               value={form.temperatureEnabled ? "On" : "Off"}
             />
             {form.temperatureEnabled ? (
-              <ReviewRow
-                label="Range"
-                value={`${form.tempMin || "—"}°C to ${form.tempMax || "—"}°C`}
-              />
+              <>
+                <ReviewRow
+                  label="Min"
+                  value={form.tempMin ? `${form.tempMin}°C` : "—"}
+                  error={errors.tempMin}
+                />
+                <ReviewRow
+                  label="Max"
+                  value={form.tempMax ? `${form.tempMax}°C` : "—"}
+                  error={errors.tempMax}
+                />
+              </>
             ) : null}
           </ReviewSection>
 
-          <ReviewSection title="Route" onEdit={goToForm} errors={routeErrors}>
-            <ReviewRow label="Start" value={formatPoint(form.startPoint)} />
+          <ReviewSection title="Route" onEdit={goToForm}>
+            <ReviewRow
+              label="Start"
+              value={formatPoint(form.startPoint)}
+              error={
+                errors["startPoint.search"] ||
+                errors["startPoint.name"] ||
+                errors["startPoint.lat"] ||
+                errors["startPoint.lng"]
+              }
+            />
             {form.stops.map((stop, index) => (
               <ReviewRow
                 key={stop.id}
                 label={`Stop ${index + 1}`}
                 value={formatPoint(stop)}
+                error={
+                  errors[`stops.${index}.search`] ||
+                  errors[`stops.${index}.name`] ||
+                  errors[`stops.${index}.lat`] ||
+                  errors[`stops.${index}.lng`]
+                }
               />
             ))}
-            <ReviewRow label="End" value={formatPoint(form.endPoint)} />
+            <ReviewRow
+              label="End"
+              value={formatPoint(form.endPoint)}
+              error={
+                errors["endPoint.search"] ||
+                errors["endPoint.name"] ||
+                errors["endPoint.lat"] ||
+                errors["endPoint.lng"]
+              }
+            />
           </ReviewSection>
         </div>
       )}

@@ -5,7 +5,7 @@ import MainLayoutTextSize from "./MainLayoutTextSize";
 export default function MainTableHeader({
   children,
   background, // optional override
-  color = "subtitle",
+  color = "title",
   size = "tableHeader",
   align = "left",
   className = "",

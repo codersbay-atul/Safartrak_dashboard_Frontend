@@ -314,31 +314,31 @@ export default function ProductsTable({ onHelpClick }) {
           <table className="w-full table-fixed text-left border-collapse min-w-[1000px]">
             <thead className="sticky top-0 z-10 shadow-sm">
               <tr className="bg-[#121214] border-b border-[#232329] w-full">
-                <th className="w-[11.11%] py-3 px-4 pl-5 text-[#a1a1aa] text-[12px] font-semibold truncate">
+                <th className="w-[11.11%] py-3 px-4 pl-5 text-[#a1a1aa] text-[12px] font-semibold truncate text-white">
                   Product Name
                 </th>
-                <th className="w-[11.11%] py-3 px-4 text-[#a1a1aa] text-[12px] font-semibold truncate">
+                <th className="w-[11.11%] py-3 px-4 text-[#a1a1aa] text-[12px] font-semibold truncate text-white">
                   Assigned
                 </th>
-                <th className="w-[11.11%] py-3 px-4 text-[#a1a1aa] text-[12px] font-semibold truncate">
+                <th className="w-[11.11%] py-3 px-4 text-[#a1a1aa] text-[12px] font-semibold truncate text-white">
                   Available
                 </th>
-                <th className="w-[11.11%] py-3 px-4 text-[#a1a1aa] text-[12px] font-semibold truncate">
+                <th className="w-[11.11%] py-3 px-4 text-[#a1a1aa] text-[12px] font-semibold truncate text-white">
                   Status
                 </th>
-                <th className="w-[11.11%] py-3 px-4 text-[#a1a1aa] text-[12px] font-semibold truncate">
+                <th className="w-[11.11%] py-3 px-4 text-[#a1a1aa] text-[12px] font-semibold truncate text-white">
                   Renewal Date
                 </th>
-                <th className="w-[11.11%] py-3 px-4 text-[#a1a1aa] text-[12px] font-semibold truncate">
+                <th className="w-[11.11%] py-3 px-4 text-[#a1a1aa] text-[12px] font-semibold truncate text-white">
                   Billing Profile
                 </th>
-                <th className="w-[11.11%] py-3 px-4 text-[#a1a1aa] text-[12px] font-semibold truncate">
+                <th className="w-[11.11%] py-3 px-4 text-[#a1a1aa] text-[12px] font-semibold truncate text-white">
                   Purchase Channel
                 </th>
-                <th className="w-[11.11%] py-3 px-4 text-[#a1a1aa] text-[12px] font-semibold truncate">
+                <th className="w-[11.11%] py-3 px-4 text-[#a1a1aa] text-[12px] font-semibold truncate text-white">
                   Product Type
                 </th>
-                <th className="w-[11.11%] py-3 px-4 pr-5 text-[#a1a1aa] text-[12px] font-semibold truncate">
+                <th className="w-[11.11%] py-3 px-4 pr-5 text-[#a1a1aa] text-[12px] font-semibold truncate text-white">
                   Pricing Model
                 </th>
               </tr>

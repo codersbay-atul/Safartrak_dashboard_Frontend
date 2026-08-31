@@ -56,8 +56,8 @@ export default function VehiclesDetails() {
   };
 
   return (
-    <MainLayout activeTab="Vehicles" allowPageScroll>
-      <div className="flex-1 flex flex-col gap-4 xl:gap-5 min-h-0 min-w-0 text-gray-200 overflow-y-auto pr-0.5 custom-scrollbar">
+    <MainLayout activeTab="Vehicles">
+      <div className="flex-1 flex flex-col gap-4 xl:gap-5 min-h-0 min-w-0 text-gray-200 overflow-hidden">
         <div className="shrink-0">
           <VehicleDetailsHeader
             onImportClick={handleImport}
@@ -69,10 +69,10 @@ export default function VehiclesDetails() {
           <VehiclesDetailsStatsCard uniqueId={selectedVehicle} />
         </div>
 
-          <MainSectionHeader icon={Truck} title="Vehicle Information" />
+        <MainSectionHeader icon={Truck} title="Vehicle Information" />
 
-        <div className="flex flex-col lg:grid lg:grid-cols-12 gap-4 xl:gap-5 min-h-[70vh] overflow-visible pb-4">
-          <div className="lg:col-span-3 w-full h-[520px] lg:h-[70vh] min-h-0 rounded-xl border border-gray-800/80 bg-[#0d0f12] overflow-hidden flex flex-col shrink-0 self-stretch">
+        <div className="flex-1 min-h-0 flex gap-4 xl:gap-5 overflow-hidden">
+          <div className="w-[min(32%,340px)] shrink-0 h-full min-h-0 rounded-xl border border-gray-800/80 bg-[#0d0f12] overflow-hidden flex flex-col">
             <VehiclesDetailsInfo
               selectedVehicle={selectedVehicle}
               onSelectVehicle={setSelectedVehicle}
@@ -82,22 +82,22 @@ export default function VehiclesDetails() {
             />
           </div>
 
-          <div className="lg:col-span-9 w-full flex flex-col gap-3 h-auto self-start">
-            <div className="shrink-0 w-full min-w-0 overflow-x-auto">
+          <div className="flex-1 min-w-0 min-h-0 h-full flex flex-col gap-3 overflow-hidden">
+            <div className="shrink-0 w-full min-w-0">
               <VehiclesQuickStats uniqueId={selectedVehicle} />
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-              <div className="lg:col-span-8 w-full h-[440px] lg:h-[min(520px,55vh)] min-h-0">
+            <div className="flex-1 min-h-0 grid grid-cols-12 gap-4 overflow-hidden">
+              <div className="col-span-8 min-h-0 h-full overflow-hidden">
                 <VehiclesAndDriverInfo />
               </div>
 
-              <div className="lg:col-span-4 w-full h-[400px] lg:h-[min(520px,55vh)] min-h-0">
+              <div className="col-span-4 min-h-0 h-full overflow-hidden">
                 <VehiclesLastKnownLocation />
               </div>
             </div>
 
-            <div className="shrink-0 w-full">
+            <div className="shrink-0 w-full min-w-0">
               <VehiclesActionButtons />
             </div>
           </div>

@@ -16,7 +16,6 @@ const ACCENT_STYLES = {
 function buildCards(summary, { isLoading = false } = {}) {
   const values = summary ?? {};
   const valueOrLoading = (formatted) => (isLoading ? "Loading..." : formatted);
-  console.log(values);
 
   return [
     {

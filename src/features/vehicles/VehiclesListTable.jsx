@@ -97,7 +97,7 @@ export default function VehicleListTable() {
         as="div"
         background="surface"
         border="cardBorder"
-        className="w-full h-[80vh] min-h-0 flex flex-col rounded-2xl overflow-hidden shadow-2xl"
+        className="w-full h-[50vh] min-h-0 flex flex-col rounded-2xl overflow-hidden shadow-2xl"
       >
         {/* Card Header Toolbar Area */}
         <MainLayoutColor
