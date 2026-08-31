@@ -146,7 +146,7 @@ function AppContent() {
           }
         />
         <Route
-          path="/assign-vehicle"
+          path="/trip"
           element={
             <ProtectedRoute>
               <AssignVehicle />

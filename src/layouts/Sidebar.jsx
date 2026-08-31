@@ -78,7 +78,7 @@ export default function Sidebar() {
     Users: "/users",
 
     Contact: "/contact",
-    "Assign Vehicle": "/assign-vehicle",
+    "Trip": "/trip",
 
     "API Credentials": "/api-credentials",
 
@@ -143,7 +143,7 @@ export default function Sidebar() {
       items: [
         {
           icon: ClipboardCheck,
-          label: "Assign Vehicle",
+          label: "Trip",
         },
         {
           icon: Truck,

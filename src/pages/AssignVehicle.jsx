@@ -51,13 +51,13 @@ export default function AssignVehicle() {
       },
       {
         icon: Clock,
-        header: "Pickup Time",
-        content: "The scheduled pickup time for this trip.",
+        header: "Pickup Date & Time",
+        content: "The scheduled pickup date and time for this trip.",
       },
       {
         icon: Calendar,
-        header: "Delivery Date",
-        content: "The planned delivery date for this trip.",
+        header: "Delivery Date & Time",
+        content: "The planned delivery date and time for this trip.",
       },
       {
         icon: Thermometer,
@@ -70,7 +70,7 @@ export default function AssignVehicle() {
   );
 
   return (
-    <MainLayout InactiveTab="Assign Vehicle" allowPageScroll>
+    <MainLayout InactiveTab="Trip" allowPageScroll>
       <div className="flex-1 flex flex-col gap-4 xl:gap-5 min-h-0 min-w-0 overflow-y-auto overflow-x-hidden no-scrollbar pr-0.5">
         <div className="shrink-0">
           <AssignVehicleHeader onAssignVehicle={() => setIsAssignOpen(true)} />

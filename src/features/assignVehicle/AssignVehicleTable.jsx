@@ -355,11 +355,11 @@ export default function AssignVehicleTable({
                 <MainTableHeader color="title" className="w-[13%] py-3 px-4">
                   Status
                 </MainTableHeader>
-                <MainTableHeader color="title" className="w-[13%] py-3 px-4">
-                  Pickup Time
+                <MainTableHeader color="title" className="w-[16%] py-3 px-4">
+                  Pickup Date & Time
                 </MainTableHeader>
-                <MainTableHeader color="title" className="w-[14%] py-3 px-4">
-                  Delivery Date
+                <MainTableHeader color="title" className="w-[16%] py-3 px-4">
+                  Delivery Date & Time
                 </MainTableHeader>
                 <MainTableHeader color="title" className="w-[14%] py-3 px-4 pr-5">
                   Temp Abuse
@@ -389,7 +389,7 @@ export default function AssignVehicleTable({
                   return (
                     <tr
                       key={item.id}
-                      className="hover:bg-[#1f2025] transition-colors align-middle cursor-pointer w-full h-[52px]"
+                      className="hover:bg-[#1f2025] transition-colors align-middle cursor-pointer w-full"
                     >
                       <td className="py-2 px-4 pl-5 truncate">
                         <div className="flex items-center gap-1.5 group w-fit">
@@ -436,18 +436,26 @@ export default function AssignVehicleTable({
                         />
                       </td>
 
-                      <td className="py-2 px-4 truncate">
+                      <td className="py-2 px-4">
                         <MainLayoutColor
                           as={MainLayoutTextSize}
                           color="subtitle"
                           size="sectionTitle"
                           className="font-normal block truncate"
                         >
+                          {item.pickupDate}
+                        </MainLayoutColor>
+                        <MainLayoutColor
+                          as={MainLayoutTextSize}
+                          color="muted"
+                          size="subInfoText"
+                          className="font-normal block truncate"
+                        >
                           {item.pickupTime}
                         </MainLayoutColor>
                       </td>
 
-                      <td className="py-2 px-4 truncate">
+                      <td className="py-2 px-4">
                         <MainLayoutColor
                           as={MainLayoutTextSize}
                           color="subtitle"
@@ -455,6 +463,14 @@ export default function AssignVehicleTable({
                           className="font-normal block truncate"
                         >
                           {item.deliveryDate}
+                        </MainLayoutColor>
+                        <MainLayoutColor
+                          as={MainLayoutTextSize}
+                          color="muted"
+                          size="subInfoText"
+                          className="font-normal block truncate"
+                        >
+                          {item.deliveryTime}
                         </MainLayoutColor>
                       </td>
 

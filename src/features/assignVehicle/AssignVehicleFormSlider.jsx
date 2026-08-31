@@ -118,6 +118,32 @@ function getNowLocalValue() {
   return toDateTimeLocalValue(new Date());
 }
 
+function isSameCalendarDay(a, b) {
+  return (
+    a.getFullYear() === b.getFullYear() &&
+    a.getMonth() === b.getMonth() &&
+    a.getDate() === b.getDate()
+  );
+}
+
+/** If the picker lands on AM while that clock time is already past, use PM instead. */
+function resolveDateTimeValue(value, minValue) {
+  if (!isFilled(value) || !isFilled(minValue)) return value;
+
+  const selected = new Date(value);
+  const min = new Date(minValue);
+  if (Number.isNaN(selected.getTime()) || Number.isNaN(min.getTime())) return value;
+  if (selected >= min) return value;
+
+  if (isSameCalendarDay(selected, min) && selected.getHours() < 12) {
+    const pm = new Date(selected);
+    pm.setHours(selected.getHours() + 12);
+    if (pm >= min) return toDateTimeLocalValue(pm);
+  }
+
+  return minValue;
+}
+
 function isEndAfterStart(start, end) {
   if (!isFilled(start) || !isFilled(end)) return true;
   return new Date(end) > new Date(start);
@@ -939,11 +965,11 @@ export default function AssignVehicleFormSlider({
 
   return (
     <FormSlider
-      title="Assign Vehicle"
+      title="Schedule Trip"
       isOpen={isOpen}
       onClose={onClose}
       closeConfirmTitle="Are you sure you want to close?"
-      closeConfirmMessage="All the info you've entered for this vehicle assignment will be lost."
+      closeConfirmMessage="All the info you've entered for this trip will be lost."
       steps={STEPS}
       currentStep={step}
       errorStepIds={errorStepIds}
@@ -980,7 +1006,10 @@ export default function AssignVehicleFormSlider({
                     min={getNowLocalValue()}
                     max={form.reportingEnd || undefined}
                     onChange={(event) => {
-                      const reportingStart = event.target.value;
+                      const reportingStart = resolveDateTimeValue(
+                        event.target.value,
+                        getNowLocalValue(),
+                      );
                       const next = { reportingStart };
                       const nextErrors = { ...errors, reportingStart: "" };
 
@@ -1008,7 +1037,10 @@ export default function AssignVehicleFormSlider({
                     min={form.reportingStart || getNowLocalValue()}
                     disabled={!isFilled(form.reportingStart)}
                     onChange={(event) => {
-                      const reportingEnd = event.target.value;
+                      const reportingEnd = resolveDateTimeValue(
+                        event.target.value,
+                        form.reportingStart || getNowLocalValue(),
+                      );
 
                       if (
                         isFilled(form.reportingStart) &&
@@ -1035,7 +1067,7 @@ export default function AssignVehicleFormSlider({
                       size="captionText"
                       className="block mt-1.5 font-normal"
                     >
-                      Select a start date & time first
+                      Select a pickup date & time first
                     </MainLayoutColor>
                   ) : null}
                 </div>
@@ -1288,14 +1320,14 @@ export default function AssignVehicleFormSlider({
             <ReviewRow label="Driver" value={form.driver || "Not assigned"} />
           </ReviewSection>
 
-          <ReviewSection title="Reporting window" onEdit={goToForm}>
+          <ReviewSection title="Pickup and delivery" onEdit={goToForm}>
             <ReviewRow
-              label="Start"
+              label="Pickup"
               value={formatDateTime(form.reportingStart)}
               error={errors.reportingStart}
             />
             <ReviewRow
-              label="End"
+              label="Delivery"
               value={formatDateTime(form.reportingEnd)}
               error={errors.reportingEnd}
             />

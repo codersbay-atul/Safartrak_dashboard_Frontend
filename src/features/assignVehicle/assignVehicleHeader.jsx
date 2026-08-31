@@ -3,8 +3,8 @@ import { Plus } from "lucide-react";
 import MainLayoutHeader from "../../components/Ui/MainLayoutUI/MainLayoutHeader";
 
 export default function AssignVehicleHeader({
-  title = "Assign Vehicles",
-  subtitle = "Assign and manage vehicles routes and assignments",
+  title = "Trips",
+  subtitle = "Assign trips to vehicles and drivers, and manage existing trip assignments.",
   onAssignVehicle,
 }) {
   return (
@@ -16,7 +16,7 @@ export default function AssignVehicleHeader({
       showFilters={false}
       actionButtons={[
         {
-          label: "Assign Vehicle",
+          label: "Schedule Trip",
           icon: Plus,
           iconPosition: "right",
           onClick: onAssignVehicle,
