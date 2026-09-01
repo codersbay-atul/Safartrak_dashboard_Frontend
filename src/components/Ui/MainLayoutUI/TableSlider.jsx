@@ -1,9 +1,10 @@
 import { isValidElement, useEffect, useId, useState } from "react";
 import { createPortal } from "react-dom";
-import { ArrowRight, ExternalLink, Info } from "lucide-react";
+import { ArrowRight, ExternalLink, Info, X } from "lucide-react";
 import MainLayoutColor from "./MainLayoutColor";
 import MainLayoutTextSize from "./MainLayoutTextSize";
 import MainLayoutIcon from "./MainLayoutIcon";
+import MainHeaderActionButton from "./MainHeaderActionButton";
 import MainStatusBadge from "./MainStatusBadge";
 
 const SLIDE_MS = 360;
@@ -253,14 +254,14 @@ function TableSliderPanel({
             {title}
           </MainLayoutColor>
 
-          <button
-            type="button"
+          <MainHeaderActionButton
+            variant="secondary"
+            icon={X}
             onClick={onClose}
             aria-label="Close"
-            className="flex h-7 w-7 items-center justify-center rounded-lg text-[#a1a1aa] hover:text-white hover:bg-white/5 transition-colors cursor-pointer shrink-0"
-          >
-            <MainLayoutIcon name="close" size="close" />
-          </button>
+            title="Close"
+            className="w-8 !px-0"
+          />
         </div>
 
         <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar px-4 py-4">

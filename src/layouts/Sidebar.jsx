@@ -67,7 +67,7 @@ export default function Sidebar() {
     Analytics: "/analytics",
     Reports: "/reports",
 
-    "Mobilize / Immobilize": "/mobilize",
+    // "Mobilize / Immobilize": "/mobilize",
     Alerts: "/alerts",
 
     "Saved Places": "/saved-places",
@@ -78,7 +78,7 @@ export default function Sidebar() {
     Users: "/users",
 
     Contact: "/contact",
-    "Trip": "/trip",
+    "Trip Schedules": "/trip-schedules",
 
     "API Credentials": "/api-credentials",
 
@@ -113,10 +113,10 @@ export default function Sidebar() {
     {
       title: "ACTIONS & EVENTS",
       items: [
-        {
-          icon: Power,
-          label: "Mobilize / Immobilize",
-        },
+        // {
+        //   icon: Power,
+        //   label: "Mobilize / Immobilize",
+        // },
         {
           icon: TriangleAlert,
           label: "Alerts",
@@ -143,7 +143,7 @@ export default function Sidebar() {
       items: [
         {
           icon: ClipboardCheck,
-          label: "Trip",
+          label: "Trip Schedules",
         },
         {
           icon: Truck,

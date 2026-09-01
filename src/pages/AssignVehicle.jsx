@@ -70,7 +70,7 @@ export default function AssignVehicle() {
   );
 
   return (
-    <MainLayout InactiveTab="Trip" allowPageScroll>
+    <MainLayout InactiveTab="Trip Schedules" allowPageScroll>
       <div className="flex-1 flex flex-col gap-4 xl:gap-5 min-h-0 min-w-0 overflow-y-auto overflow-x-hidden no-scrollbar pr-0.5">
         <div className="shrink-0">
           <AssignVehicleHeader onAssignVehicle={() => setIsAssignOpen(true)} />

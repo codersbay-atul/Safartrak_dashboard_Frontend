@@ -295,7 +295,7 @@ export default function CreateAOI({
                   value={lat}
                   onChange={(e) => handleLatChange(e.target.value)}
                   placeholder="28.6139"
-                  className="w-full px-3.5 py-2 rounded-xl bg-[#1c1c20] border border-[#2a2a30] text-[12px] text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-emerald-500/60 transition-colors"
+                  className="w-full px-3.5 py-2 rounded-xl bg-[#1c1c20] border border-[#2a2a30] text-[12px] text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-[#FDBB24] transition-colors"
                 />
               </div>
               <div className="flex flex-col gap-1.5">
@@ -313,7 +313,7 @@ export default function CreateAOI({
                   value={lng}
                   onChange={(e) => handleLngChange(e.target.value)}
                   placeholder="77.209"
-                  className="w-full px-3.5 py-2 rounded-xl bg-[#1c1c20] border border-[#2a2a30] text-[12px] text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-emerald-500/60 transition-colors"
+                  className="w-full px-3.5 py-2 rounded-xl bg-[#1c1c20] border border-[#2a2a30] text-[12px] text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-[#FDBB24] transition-colors"
                 />
               </div>
             </div>
@@ -332,7 +332,7 @@ export default function CreateAOI({
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Enter Place Name"
-                className="w-full px-3.5 py-2 rounded-xl bg-[#1c1c20] border border-[#2a2a30] text-[12px] text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-emerald-500/60 transition-colors"
+                className="w-full px-3.5 py-2 rounded-xl bg-[#1c1c20] border border-[#2a2a30] text-[12px] text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-[#FDBB24] transition-colors"
               />
             </div>
 

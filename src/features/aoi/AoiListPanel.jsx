@@ -25,7 +25,7 @@ export default function AoiListPanel({
       as="div"
       background="surface"
       border="cardBorder"
-      className="w-full h-full rounded-xl sm:rounded-2xl p-3 sm:p-4 flex flex-col select-none overflow-hidden font-sans min-w-0"
+      className="w-full h-full rounded-xl sm:rounded-2xl p-4 sm:p-5 flex flex-col select-none overflow-hidden font-sans min-w-0"
     >
       {/* 14px Header Title */}
       <MainLayoutColor

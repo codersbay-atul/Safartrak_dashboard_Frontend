@@ -27,7 +27,7 @@ export default function AoiDetailsPanel({
         as="div"
         background="surface"
         border="cardBorder"
-        className="w-full h-full rounded-xl sm:rounded-2xl p-3 sm:p-4 flex items-center justify-center select-none min-w-0"
+        className="w-full h-full rounded-xl sm:rounded-2xl p-4 sm:p-5 flex items-center justify-center select-none min-w-0"
       >
         <MainLayoutColor
           as={MainLayoutTextSize}
@@ -116,7 +116,7 @@ export default function AoiDetailsPanel({
       as="div"
       background="surface"
       border="cardBorder"
-      className="w-full h-full rounded-xl sm:rounded-2xl p-3 sm:p-4 flex flex-col select-none overflow-hidden font-sans min-w-0"
+      className="w-full h-full rounded-xl sm:rounded-2xl p-4 sm:p-5 flex flex-col select-none overflow-hidden font-sans min-w-0"
     >
       {/* Top Header: AOI Name and Status Badge in Single Row */}
       <div className="flex items-center justify-between gap-2 sm:gap-3 shrink-0 mb-3 sm:mb-4 min-w-0">

@@ -1,5 +1,6 @@
 import React from "react";
 import { Trash2 } from "lucide-react";
+import MainLayoutButton from "../../components/Ui/MainLayoutUI/MainLayoutButton";
 
 function DeleteConfirmationModal({
   isOpen = true,
@@ -26,20 +27,24 @@ function DeleteConfirmationModal({
         </div>
 
         <div className="flex items-center gap-2.5">
-          <button
+          <MainLayoutButton
             type="button"
+            variant="outlineMuted"
+            size="md"
             onClick={onClose}
-            className="w-1/2 py-2 rounded-xl bg-[#25252a] hover:bg-[#2e2e34] text-zinc-300 hover:text-white font-medium text-xs transition-colors cursor-pointer"
+            className="w-1/2"
           >
             Cancel
-          </button>
-          <button
+          </MainLayoutButton>
+          <MainLayoutButton
             type="button"
+            variant="solidYellow"
+            size="md"
             onClick={onConfirm}
-            className="w-1/2 py-2 rounded-xl bg-[#e12626] hover:bg-[#c81e1e] text-white font-semibold text-xs transition-colors cursor-pointer shadow-lg shadow-red-600/20"
+            className="w-1/2"
           >
             Confirm
-          </button>
+          </MainLayoutButton>
         </div>
       </div>
     </div>

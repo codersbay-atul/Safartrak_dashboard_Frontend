@@ -3,8 +3,8 @@ import { Plus } from "lucide-react";
 import MainLayoutHeader from "../../components/Ui/MainLayoutUI/MainLayoutHeader";
 
 export default function AssignVehicleHeader({
-  title = "Trips",
-  subtitle = "Assign trips to vehicles and drivers, and manage existing trip assignments.",
+  title = "Trip Schedules",
+  subtitle = "Schedule trips, assign vehicles and drivers, and manage existing trip assignments.",
   onAssignVehicle,
 }) {
   return (

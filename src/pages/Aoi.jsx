@@ -438,7 +438,7 @@ export default function Aoi() {
 
         <MainSectionHeader icon={MapPinned} title="Places" className="!mt-0" />
 
-        <div className="grid w-full min-h-0 min-w-0 flex-1 grid-cols-1 grid-rows-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1.2fr)] items-stretch gap-3.5 overflow-hidden sm:gap-4 md:grid-cols-2 md:grid-rows-[minmax(0,1fr)_minmax(0,1.1fr)] xl:grid-cols-[minmax(260px,300px)_minmax(300px,1fr)_minmax(280px,300px)] xl:grid-rows-[minmax(0,1fr)] xl:gap-5">
+        <div className="grid w-full min-h-0 min-w-0 flex-1 grid-cols-1 grid-rows-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1.2fr)] items-stretch gap-3.5 overflow-hidden sm:gap-3 md:grid-cols-2 md:grid-rows-[minmax(0,1fr)_minmax(0,1.1fr)] xl:grid-cols-[minmax(300px,360px)_minmax(0,1fr)_minmax(320px,380px)] xl:grid-rows-[minmax(0,1fr)]  2xl:grid-cols-[minmax(340px,400px)_minmax(0,1fr)_minmax(360px,420px)]">
           <div className="order-1 h-full min-h-0 min-w-0 overflow-hidden">
             <AoiListPanel
               aois={formattedAois}

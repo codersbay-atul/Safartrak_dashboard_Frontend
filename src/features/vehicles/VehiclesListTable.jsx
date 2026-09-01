@@ -4,6 +4,8 @@ import {
   AlertCircle,
   RefreshCw,
   Truck,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 
 import useVehiclesList from "../../hooks/useVehiclesList";
@@ -41,6 +43,8 @@ const STATUS_TABS = [
   { id: "unassigned", label: "Unassigned" },
 ];
 
+const PAGE_SIZE = 25;
+
 export default function VehicleListTable() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFleet, setSelectedFleet] = useState("");
@@ -64,8 +68,22 @@ export default function VehicleListTable() {
     vehicleType: selectedVehicleType,
     trackingStatus: selectedTrackingStatus,
     page,
-    pageSize: 25,
+    pageSize: PAGE_SIZE,
   });
+
+  const totalItems = total;
+  const totalPages = Math.max(1, Math.ceil(totalItems / PAGE_SIZE));
+  const startIndex = (page - 1) * PAGE_SIZE;
+  const endIndex =
+    totalItems === 0 ? 0 : Math.min(startIndex + vehicles.length, totalItems);
+
+  const handlePageChange = (nextPage) => {
+    if (nextPage >= 1 && nextPage <= totalPages) {
+      setPage(nextPage);
+    }
+  };
+
+
 
   return (
     <div className="w-full flex flex-col font-sans select-none gap-4">
@@ -97,7 +115,7 @@ export default function VehicleListTable() {
         as="div"
         background="surface"
         border="cardBorder"
-        className="w-full h-[50vh] min-h-0 flex flex-col rounded-2xl overflow-hidden shadow-2xl"
+        className="w-full  min-h-0 flex flex-col rounded-2xl shadow-2xl"
       >
         {/* Card Header Toolbar Area */}
         <MainLayoutColor
@@ -107,7 +125,7 @@ export default function VehicleListTable() {
         >
           {/* Status tabs on the left, filters + search on the right */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+            <div className="flex items-center gap-1.5  no-scrollbar">
               {STATUS_TABS.map((tab) => {
                 const isSelected = activeTab === tab.id;
                 return (
@@ -362,6 +380,56 @@ export default function VehicleListTable() {
             </table>
           )}
         </div>
+
+        <MainLayoutColor
+          as="div"
+          border="cardBorder"
+          background="surface"
+          className="px-4 py-2.5 border-t flex flex-col sm:flex-row items-center justify-between gap-2 shrink-0"
+        >
+          <MainLayoutColor
+            as={MainLayoutTextSize}
+            color="subtitle"
+            size="subInfoText"
+            className="text-[12px]"
+          >
+            {totalItems > 0
+              ? `Showing ${endIndex} of ${totalItems} vehicles`
+              : "Showing 0 of 0 vehicles"}
+          </MainLayoutColor>
+
+          {/* <div className="flex items-center gap-1.5">
+            <MainLayoutColor
+              as="button"
+              type="button"
+              border="cardBorder"
+              borderHover="cardBorderHover"
+              color="subtitle"
+              disabled={page === 1 || totalItems === 0}
+              onClick={() => handlePageChange(page - 1)}
+              className="w-8 h-8 shrink-0 flex items-center justify-center rounded-md disabled:opacity-30 disabled:cursor-not-allowed transition cursor-pointer hover:text-white"
+            >
+              <ChevronLeft size={13} />
+            </MainLayoutColor>
+
+            <div className="flex items-center gap-1.5">
+              {renderPaginationButtons()}
+            </div>
+
+            <MainLayoutColor
+              as="button"
+              type="button"
+              border="cardBorder"
+              borderHover="cardBorderHover"
+              color="subtitle"
+              disabled={page === totalPages || totalItems === 0}
+              onClick={() => handlePageChange(page + 1)}
+              className="w-8 h-8 shrink-0 flex items-center justify-center rounded-md disabled:opacity-30 disabled:cursor-not-allowed transition cursor-pointer hover:text-white"
+            >
+              <ChevronRight size={13} />
+            </MainLayoutColor>
+          </div> */}
+        </MainLayoutColor>
       </MainLayoutColor>
     </div>
   );

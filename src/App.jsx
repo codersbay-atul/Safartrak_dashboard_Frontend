@@ -113,14 +113,14 @@ function AppContent() {
             </ProtectedRoute>
           }
         />
-        <Route
+        {/* <Route
           path="/mobilize"
           element={
             <ProtectedRoute>
               <Mobilize />
             </ProtectedRoute>
           }
-        />
+        /> */}
         <Route
           path="/alerts"
           element={
@@ -146,7 +146,7 @@ function AppContent() {
           }
         />
         <Route
-          path="/trip"
+          path="/trip-schedules"
           element={
             <ProtectedRoute>
               <AssignVehicle />
