@@ -6,6 +6,10 @@ import {
   shouldShowNoActiveTrip,
 } from "../route-details/routeVehicleDisplay";
 import useLiveTrackLocations from "../../hooks/useLiveTrackLocations";
+import {
+  DUMMY_MAP_ROUTE,
+  getDummyMapStops,
+} from "./routeHistoryData";
 
 const FALLBACK_CENTER = [20.5937, 78.9629];
 
@@ -31,11 +35,12 @@ function resolvePosition(vehicle) {
   return null;
 }
 
-export default function LiveMap({ selectedVehicle, showRoutePath }) {
+export default function LiveMap({ selectedVehicle, showRoutePath, focusedStop = null }) {
   const containerRef = useRef(null);
   const leafletMapRef = useRef(null);
   const markersLayerRef = useRef(null);
   const markersMapRef = useRef(null);
+  const stopRouteLayerRef = useRef(null);
   const lastBboxRef = useRef("");
   
   const [leafletLoaded, setLeafletLoaded] = useState(false);
@@ -385,6 +390,111 @@ export default function LiveMap({ selectedVehicle, showRoutePath }) {
     };
   }, [leafletLoaded, liveVehicles, position, bboxParams, showRoutePath]);
 
+  useEffect(() => {
+    const L = window.L;
+    const map = leafletMapRef.current;
+    if (!L || !map || !leafletLoaded) return undefined;
+
+    if (stopRouteLayerRef.current) {
+      try {
+        map.removeLayer(stopRouteLayerRef.current);
+      } catch {
+        /* ignore */
+      }
+      stopRouteLayerRef.current = null;
+    }
+
+    if (!showRoutePath) return undefined;
+
+    const layer = L.layerGroup().addTo(map);
+    const fullPath = DUMMY_MAP_ROUTE;
+    const dummyStops = getDummyMapStops();
+
+    L.polyline(fullPath, {
+      color: "#22c55e",
+      weight: 4,
+      opacity: 0.9,
+    }).addTo(layer);
+
+    dummyStops.forEach((stop) => {
+      const isFocused = focusedStop?.id === stop.id;
+      const marker = L.circleMarker([stop.lat, stop.lng], {
+        radius: isFocused ? 9 : 6,
+        color: "#ef4444",
+        weight: isFocused ? 3 : 2,
+        fillColor: "#ef4444",
+        fillOpacity: 1,
+      });
+      marker.bindTooltip(stop.title || `Stop ${stop.stopNumber}`, {
+        direction: "top",
+        offset: [0, -8],
+      });
+      marker.addTo(layer);
+
+      if (isFocused && Array.isArray(stop.routePath) && stop.routePath.length >= 2) {
+        L.polyline(stop.routePath, {
+          color: "#FDB914",
+          weight: 5,
+          opacity: 1,
+        }).addTo(layer);
+      }
+    });
+
+    const start = fullPath[0];
+    const end = fullPath[fullPath.length - 1];
+    L.circleMarker(start, {
+      radius: 6,
+      color: "#22c55e",
+      fillColor: "#22c55e",
+      fillOpacity: 1,
+      weight: 2,
+    })
+      .bindTooltip("Start", { direction: "top", offset: [0, -8] })
+      .addTo(layer);
+    L.circleMarker(end, {
+      radius: 6,
+      color: "#FDB914",
+      fillColor: "#FDB914",
+      fillOpacity: 1,
+      weight: 2,
+    })
+      .bindTooltip("End", { direction: "top", offset: [0, -8] })
+      .addTo(layer);
+
+    stopRouteLayerRef.current = layer;
+
+    try {
+      const focusPath =
+        focusedStop?.routePath?.length >= 2
+          ? focusedStop.routePath
+          : focusedStop?.lat != null && focusedStop?.lng != null
+            ? [[focusedStop.lat, focusedStop.lng]]
+            : fullPath;
+
+      if (focusPath.length >= 2) {
+        map.fitBounds(L.latLngBounds(focusPath), {
+          padding: [40, 40],
+          maxZoom: focusedStop ? 15 : 13,
+        });
+      } else if (focusPath.length === 1) {
+        map.setView(focusPath[0], 15);
+      }
+    } catch {
+      /* ignore */
+    }
+
+    return () => {
+      if (stopRouteLayerRef.current) {
+        try {
+          map.removeLayer(stopRouteLayerRef.current);
+        } catch {
+          /* ignore */
+        }
+        stopRouteLayerRef.current = null;
+      }
+    };
+  }, [showRoutePath, focusedStop, leafletLoaded]);
+
   const handleToggleMaximize = async () => {
     const el = containerRef.current;
     if (!el) return;
@@ -424,12 +534,8 @@ export default function LiveMap({ selectedVehicle, showRoutePath }) {
       {showRoutePath ? (
         <>
           {/* Top-Right Mini Trip Card */}
-          <div className="absolute top-2 right-11 w-[125px] sm:w-[135px] bg-[#17171C]/95 backdrop-blur-sm border border-[#2A2A2F] rounded-lg p-2 shadow-xl z-[1000] animate-in fade-in duration-300">
-            {noActiveTrip ? (
-              <p className="text-[8.5px] text-zinc-400 font-medium text-center py-0.5">
-                No active trip
-              </p>
-            ) : (
+          {/* <div className="absolute top-2 right-11 w-[125px] sm:w-[135px] bg-[#17171C]/95 backdrop-blur-sm border border-[#2A2A2F] rounded-lg p-2 shadow-xl z-[1000] animate-in fade-in duration-300">
+            
               <>
                 <div className="grid grid-cols-2 gap-1 border-b border-zinc-800/50 pb-1 mb-1">
                   <div>
@@ -458,11 +564,11 @@ export default function LiveMap({ selectedVehicle, showRoutePath }) {
                   </p>
                 </div>
               </>
-            )}
-          </div>
+            
+          </div> */}
 
           {/* Bottom-Left Mini Route Card */}
-          <div className="absolute bottom-2 left-2 w-[140px] sm:w-[155px] bg-[#17171C]/95 backdrop-blur-sm border border-[#2A2A2F] rounded-lg p-2 shadow-xl z-[1000] animate-in fade-in duration-300">
+          {/* <div className="absolute bottom-2 left-2 w-[140px] sm:w-[155px] bg-[#17171C]/95 backdrop-blur-sm border border-[#2A2A2F] rounded-lg p-2 shadow-xl z-[1000] animate-in fade-in duration-300">
             {noActiveTrip ? (
               <p className="text-[8.5px] text-zinc-400 font-medium text-center py-0.5">
                 No active trip
@@ -511,7 +617,7 @@ export default function LiveMap({ selectedVehicle, showRoutePath }) {
                 </div>
               </>
             )}
-          </div>
+          </div> */}
         </>
       ) : (
         <>

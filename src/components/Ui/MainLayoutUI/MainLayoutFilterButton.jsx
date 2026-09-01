@@ -19,7 +19,7 @@ export default function MainLayoutFilterButton({
       border={isActive ? "filterActiveBorder" : "filterBorder"}
       borderHover="filterBorderHover"
       color={isActive ? "filterActiveText" : "filterText"}
-      className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full transition-all select-none cursor-pointer font-medium outline-none focus:outline-none ring-0 focus:ring-0 ${className}`.trim()}
+      className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full whitespace-nowrap shrink-0 transition-all select-none cursor-pointer font-medium outline-none focus:outline-none ring-0 focus:ring-0 ${className}`.trim()}
       {...props}
     >
       {children ? (

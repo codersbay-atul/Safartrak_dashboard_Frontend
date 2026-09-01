@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
@@ -35,6 +35,7 @@ export default function CreateAOI({
   // const [aoiType, setAoiType] = useState("polygon");
   const [mapCenter, setMapCenter] = useState([28.6139, 77.209]);
   const [mapZoom, setMapZoom] = useState(11);
+  const skipGeocodeRef = useRef(false);
 
   const applyCoordinates = (nextLat, nextLng, zoom = 13) => {
     const parsedLat = Number(nextLat);
@@ -88,55 +89,63 @@ export default function CreateAOI({
       // ),
     // });
 
-    // const assignedVehicles = Array.isArray(raw.assigned_vehicles)
-    //   ? raw.assigned_vehicles
-    //   : Array.isArray(raw.assignedVehicles)
-    //     ? raw.assignedVehicles
-    //     : Array.isArray(raw.vehicles)
-    //       ? raw.vehicles
-    //       : [];
-
-    // setSelectedVehicles(
-    //   assignedVehicles.length > 0
-    //     ? [
-    //       typeof assignedVehicles[0] === "string"
-    //         ? assignedVehicles[0]
-    //         : assignedVehicles[0]?.plate ||
-    //         assignedVehicles[0]?.vehicle_number ||
-    //         assignedVehicles[0]?.id ||
-    //         "",
-    //     ]
-    //     : []
-    // );
-
-    // const shape = raw.geometry?.shape || raw.shape || "polygon";
-    // setAoiType(shape === "circle" ? "circle" : "polygon");
+    const nextLat = Number(
+      raw.lat ??
+        initialData.lat ??
+        raw.geometry?.center?.lat ??
+        raw.center?.[0],
+    );
+    const nextLng = Number(
+      raw.lng ??
+        initialData.lng ??
+        raw.geometry?.center?.lng ??
+        raw.center?.[1],
+    );
+    const hasCoords = !Number.isNaN(nextLat) && !Number.isNaN(nextLng);
+    const nextSearch =
+      initialData.address ||
+      initialData.searchLocation ||
+      raw.address ||
+      raw.searchLocation ||
+      "";
 
     const parsedGeo =
       typeof raw.geo_position === "string"
         ? raw.geo_position.split(",").map(Number)
         : null;
-    if (
-      parsedGeo?.length === 2 &&
-      !Number.isNaN(parsedGeo[0]) &&
-      !Number.isNaN(parsedGeo[1])
-    ) {
-      applyCoordinates(parsedGeo[0], parsedGeo[1]);
-      setSearchLocation(raw.geo_position || `${parsedGeo[0]},${parsedGeo[1]}`);
-    } else if (Array.isArray(raw.center) && raw.center.length >= 2) {
-      const [nextLat, nextLng] = raw.center.map(Number);
-      if (!Number.isNaN(nextLat) && !Number.isNaN(nextLng)) {
-        applyCoordinates(nextLat, nextLng);
-        setSearchLocation(`${nextLat},${nextLng}`);
-      }
-    } else {
-      setSearchLocation("");
+    const geoLat = parsedGeo?.[0];
+    const geoLng = parsedGeo?.[1];
+    const resolvedLat = hasCoords
+      ? nextLat
+      : !Number.isNaN(Number(geoLat))
+        ? Number(geoLat)
+        : NaN;
+    const resolvedLng = hasCoords
+      ? nextLng
+      : !Number.isNaN(Number(geoLng))
+        ? Number(geoLng)
+        : NaN;
+    const resolvedHasCoords =
+      !Number.isNaN(resolvedLat) && !Number.isNaN(resolvedLng);
+
+    if (resolvedHasCoords) {
+      skipGeocodeRef.current = Boolean(nextSearch);
+      applyCoordinates(resolvedLat, resolvedLng);
     }
+
+    setSearchLocation(
+      nextSearch ||
+        (resolvedHasCoords ? `${resolvedLat},${resolvedLng}` : ""),
+    );
   }, [isOpen, initialData]);
 
   useEffect(() => {
     const trimmedLocation = searchLocation.trim();
     if (!isOpen || !trimmedLocation) return;
+    if (skipGeocodeRef.current) {
+      skipGeocodeRef.current = false;
+      return;
+    }
 
     const timer = setTimeout(async () => {
       try {

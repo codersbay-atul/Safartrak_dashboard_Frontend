@@ -7,6 +7,7 @@ import MainLayoutTextSize from '../../components/Ui/MainLayoutUI/MainLayoutTextS
 
 export default function LivePositions({
   selectedVehicle,
+  focusedStop = null,
   showRoutePath,
   onViewMap,
   openInNewTab = true,
@@ -85,7 +86,11 @@ export default function LivePositions({
       </div>
 
       <div className="flex-1 min-h-0 w-full relative overflow-hidden bg-[#161619]">
-        <LiveMap selectedVehicle={selectedVehicle} showRoutePath={showRoutePath} />
+        <LiveMap
+          selectedVehicle={selectedVehicle}
+          focusedStop={focusedStop}
+          showRoutePath={showRoutePath}
+        />
       </div>
     </MainLayoutColor>
   );

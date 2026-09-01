@@ -5,6 +5,27 @@
 
 import { formatLastSeen } from "../../utils/formatLastSeen";
 
+export function getVehicleApiId(vehicle) {
+  if (!vehicle) return "";
+
+  const raw = vehicle.raw ?? {};
+  const candidates = [
+    raw.unique_id,
+    raw.uniqueId,
+    vehicle.statsId,
+    vehicle.id,
+    vehicle.uniqueId,
+  ];
+
+  for (const value of candidates) {
+    if (value == null) continue;
+    const next = String(value).trim();
+    if (next && next !== "Not Available") return next;
+  }
+
+  return "";
+}
+
 const STATUS_TEXT_CLASS = {
   Running: "text-[#10b981]",
   Idle: "text-[#f59e0b]",

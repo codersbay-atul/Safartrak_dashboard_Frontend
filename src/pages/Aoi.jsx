@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { MapPinned } from "lucide-react";
 import MainLayout from "../layouts/MainLayout";
@@ -104,12 +105,14 @@ const normalizeAssignedVehicles = (aoi = {}) => {
 
 export default function Aoi() {
   const queryClient = useQueryClient();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [selectedId, setSelectedId] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [editingAoi, setEditingAoi] = useState(null);
+  const [createPrefill, setCreatePrefill] = useState(null);
 
   const { aois = [], isLoading, isError, error } = useAoiList({
     search: searchQuery,
@@ -388,13 +391,32 @@ export default function Aoi() {
     },
   });
 
+  useEffect(() => {
+    if (searchParams.get("create") !== "1") return;
+
+    const lat = Number(searchParams.get("lat"));
+    const lng = Number(searchParams.get("lng"));
+
+    setEditingAoi(null);
+    setCreatePrefill({
+      name: "",
+      address: searchParams.get("address") || "",
+      lat: Number.isNaN(lat) ? undefined : lat,
+      lng: Number.isNaN(lng) ? undefined : lng,
+    });
+    setIsCreateModalOpen(true);
+    setSearchParams({}, { replace: true });
+  }, [searchParams, setSearchParams]);
+
   const handleOpenCreateModal = () => {
     setEditingAoi(null);
+    setCreatePrefill(null);
     setIsCreateModalOpen(true);
   };
 
   const handleEditClick = (aoi) => {
     if (!aoi) return;
+    setCreatePrefill(null);
     setEditingAoi(aoi);
     setIsCreateModalOpen(true);
   };
@@ -402,6 +424,7 @@ export default function Aoi() {
   const handleCloseCreateModal = () => {
     setIsCreateModalOpen(false);
     setEditingAoi(null);
+    setCreatePrefill(null);
   };
 
   const handleCreateSubmit = (newAoiData) => {
@@ -467,7 +490,7 @@ export default function Aoi() {
 
       <CreateAOI
         isOpen={isCreateModalOpen}
-        initialData={editingAoi}
+        initialData={editingAoi || createPrefill}
         mode={editingAoi ? "edit" : "create"}
         onClose={handleCloseCreateModal}
         onSubmit={handleCreateSubmit}
