@@ -5,7 +5,7 @@ import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextS
 import MainStatusBadge from "../../components/Ui/MainLayoutUI/MainStatusBadge";
 import MainSearchInput from "../../components/Ui/MainLayoutUI/MainSearchInput";
 
-const TABS = ["Overview", "Vehicle", "Alerts", "Activity"];
+// const TABS = ["Overview", "Vehicle", "Alerts", "Activity"];
 
 export default function AoiDetailsPanel({
   aoi,
@@ -136,7 +136,26 @@ export default function AoiDetailsPanel({
 
       {/* Tabs */}
       <div className="flex items-center border-b border-[#1f1f23] mb-3 sm:mb-4 shrink-0 w-full overflow-x-auto no-scrollbar">
-        {TABS.map((tab) => {
+        
+            {/* <MainLayoutColor
+              // key={tab}
+              type="button"
+              // onClick={() => setActiveTab(tab)}
+              className={`flex-1 min-w-[4.5rem] py-2 transition-all text-center relative cursor-pointer text-[#ffffff]`}
+            > */}
+              <MainLayoutTextSize
+                as={MainLayoutColor}
+                color="title"
+                size="sectionTitle"
+                className="font-medium block whitespace-nowrap"
+              >
+                Overview
+              </MainLayoutTextSize>
+                {/* {isSelected && (
+                  <span className="absolute bottom-0 left-0 w-full h-[2px] bg-[#f59e0b] rounded-full" />
+                )} */}
+            {/* </button> */}
+        {/* {TABS.map((tab) => {
           const isSelected = activeTab === tab;
           return (
             <button
@@ -160,7 +179,7 @@ export default function AoiDetailsPanel({
               )}
             </button>
           );
-        })}
+        })} */}
       </div>
 
       <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar pr-1">

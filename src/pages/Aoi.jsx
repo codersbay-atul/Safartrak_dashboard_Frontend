@@ -168,13 +168,22 @@ export default function Aoi() {
     formattedAois.find((aoi) => aoi.id === selectedId) || null;
 
   const buildCreatePayload = (formData = {}) => {
-    const baseCenter = { lat: 28.6139, lng: 77.209 };
+    const parsedLat = Number(formData.lat);
+    const parsedLng = Number(formData.lng);
+    const fromGeo =
+      typeof formData.geo_position === "string"
+        ? formData.geo_position.split(",").map(Number)
+        : [];
+    const baseCenter = {
+      lat: !Number.isNaN(parsedLat) ? parsedLat : !Number.isNaN(fromGeo[0]) ? fromGeo[0] : 28.6139,
+      lng: !Number.isNaN(parsedLng) ? parsedLng : !Number.isNaN(fromGeo[1]) ? fromGeo[1] : 77.209,
+    };
     const shape = formData.aoiType === "circle" ? "circle" : "polygon";
     const points = [
-      { lat: 28.6139 + 0.01, lng: 77.209 - 0.01 },
-      { lat: 28.6139 + 0.015, lng: 77.209 + 0.01 },
-      { lat: 28.6139 - 0.01, lng: 77.209 + 0.015 },
-      { lat: 28.6139 - 0.005, lng: 77.209 - 0.005 },
+      { lat: baseCenter.lat + 0.01, lng: baseCenter.lng - 0.01 },
+      { lat: baseCenter.lat + 0.015, lng: baseCenter.lng + 0.01 },
+      { lat: baseCenter.lat - 0.01, lng: baseCenter.lng + 0.015 },
+      { lat: baseCenter.lat - 0.005, lng: baseCenter.lng - 0.005 },
     ];
 
     const assignedVehicles = (formData.assigned_vehicles ?? formData.selectedVehicles ?? [])
@@ -417,20 +426,20 @@ export default function Aoi() {
   };
 
   return (
-    <MainLayout activeTab="Saved Places" allowPageScroll>
-      <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-3.5 overflow-x-hidden pr-0.5 text-white sm:gap-4 xl:gap-5">
+    <MainLayout activeTab="Saved Places">
+      <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-3.5 overflow-hidden text-white sm:gap-4 xl:gap-5">
         <div className="shrink-0 w-full min-w-0">
           <AoiHeader onCreateClick={handleOpenCreateModal} />
         </div>
 
-        <div className="shrink-0">
+        {/* <div className="shrink-0">
           <AoiStats />
-        </div>
+        </div> */}
 
-        <MainSectionHeader icon={MapPinned} title="Places" />
+        <MainSectionHeader icon={MapPinned} title="Places" className="!mt-0" />
 
-        <div className="grid w-full min-w-0 grid-cols-1 items-stretch gap-3.5 sm:gap-4 md:grid-cols-2 xl:min-h-120 xl:flex-1 xl:grid-cols-[minmax(260px,320px)_minmax(340px,1fr)_minmax(280px,320px)] xl:gap-5">
-          <div className="order-1 h-90 min-h-0 min-w-0 overflow-hidden sm:h-100 md:h-110 xl:h-full">
+        <div className="grid w-full min-h-0 min-w-0 flex-1 grid-cols-1 grid-rows-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1.2fr)] items-stretch gap-3.5 overflow-hidden sm:gap-4 md:grid-cols-2 md:grid-rows-[minmax(0,1fr)_minmax(0,1.1fr)] xl:grid-cols-[minmax(260px,300px)_minmax(300px,1fr)_minmax(280px,300px)] xl:grid-rows-[minmax(0,1fr)] xl:gap-5">
+          <div className="order-1 h-full min-h-0 min-w-0 overflow-hidden">
             <AoiListPanel
               aois={formattedAois}
               selectedId={selectedId}
@@ -442,11 +451,11 @@ export default function Aoi() {
             />
           </div>
 
-          <div className="order-2 h-90 min-h-0 min-w-0 overflow-hidden sm:h-105 md:order-3 md:col-span-2 md:h-120 xl:order-2 xl:col-span-1 xl:h-full">
+          <div className="order-2 h-full min-h-0 min-w-0 overflow-hidden md:order-3 md:col-span-2 xl:order-2 xl:col-span-1">
             <AoiMap aois={formattedAois} selectedAoi={selectedAoi} />
           </div>
 
-          <div className="order-3 h-130 min-h-0 min-w-0 overflow-hidden md:order-2 md:h-110 xl:order-3 xl:h-full">
+          <div className="order-3 h-full min-h-0 min-w-0 overflow-hidden md:order-2 xl:order-3">
             <AoiDetailsPanel
               aoi={selectedAoi}
               onEdit={() => handleEditClick(selectedAoi)}

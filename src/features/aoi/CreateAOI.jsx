@@ -4,9 +4,10 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
 import MainSearchInput from "../../components/Ui/MainLayoutUI/MainSearchInput";
-import MainDropDown from "../../components/Ui/MainLayoutUI/MainDropDown";
+// import MainDropDown from "../../components/Ui/MainLayoutUI/MainDropDown";
 import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
 import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
+import MainLayoutButton from "../../components/Ui/MainLayoutUI/MainLayoutButton";
 
 function MapController({ center, zoom }) {
   const map = useMap();
@@ -25,20 +26,35 @@ export default function CreateAOI({
   onClose,
   onSubmit,
 }) {
-  const [name, setName] = useState("");
-  const [alerts, setAlerts] = useState({ entry: false, exit: false });
-  const [selectedVehicles, setSelectedVehicles] = useState([]);
-  const [aoiType, setAoiType] = useState("polygon");
   const [searchLocation, setSearchLocation] = useState("");
+  const [lat, setLat] = useState("28.6139");
+  const [lng, setLng] = useState("77.209");
+  const [name, setName] = useState("");
+  // const [alerts, setAlerts] = useState({ entry: false, exit: false });
+  // const [selectedVehicles, setSelectedVehicles] = useState([]);
+  // const [aoiType, setAoiType] = useState("polygon");
   const [mapCenter, setMapCenter] = useState([28.6139, 77.209]);
   const [mapZoom, setMapZoom] = useState(11);
 
+  const applyCoordinates = (nextLat, nextLng, zoom = 13) => {
+    const parsedLat = Number(nextLat);
+    const parsedLng = Number(nextLng);
+    if (Number.isNaN(parsedLat) || Number.isNaN(parsedLng)) return;
+
+    setLat(String(nextLat));
+    setLng(String(nextLng));
+    setMapCenter([parsedLat, parsedLng]);
+    setMapZoom(zoom);
+  };
+
   const resetForm = () => {
-    setName("");
-    setAlerts({ entry: false, exit: false });
-    setSelectedVehicles([]);
-    setAoiType("polygon");
     setSearchLocation("");
+    setLat("28.6139");
+    setLng("77.209");
+    setName("");
+    // setAlerts({ entry: false, exit: false });
+    // setSelectedVehicles([]);
+    // setAoiType("polygon");
     setMapCenter([28.6139, 77.209]);
     setMapZoom(11);
   };
@@ -57,44 +73,44 @@ export default function CreateAOI({
     const raw = initialData.raw || initialData;
 
     setName(raw.name || initialData.name || "");
-    setAlerts({
-      entry: Boolean(
-        raw.entry_alert ??
-          raw.entryAlert ??
-          raw.alerts?.entry ??
-          initialData.alerts?.entry
-      ),
-      exit: Boolean(
-        raw.exit_alert ??
-          raw.exitAlert ??
-          raw.alerts?.exit ??
-          initialData.alerts?.exit
-      ),
-    });
+    // setAlerts({
+      // entry: Boolean(
+      //   raw.entry_alert ??
+      //   raw.entryAlert ??
+      //   raw.alerts?.entry ??
+      //   initialData.alerts?.entry
+      // ),
+      // exit: Boolean(
+        // raw.exit_alert ??
+        // raw.exitAlert ??
+      //   raw.alerts?.exit ??
+      //   initialData.alerts?.exit
+      // ),
+    // });
 
-    const assignedVehicles = Array.isArray(raw.assigned_vehicles)
-      ? raw.assigned_vehicles
-      : Array.isArray(raw.assignedVehicles)
-      ? raw.assignedVehicles
-      : Array.isArray(raw.vehicles)
-      ? raw.vehicles
-      : [];
+    // const assignedVehicles = Array.isArray(raw.assigned_vehicles)
+    //   ? raw.assigned_vehicles
+    //   : Array.isArray(raw.assignedVehicles)
+    //     ? raw.assignedVehicles
+    //     : Array.isArray(raw.vehicles)
+    //       ? raw.vehicles
+    //       : [];
 
-    setSelectedVehicles(
-      assignedVehicles.length > 0
-        ? [
-            typeof assignedVehicles[0] === "string"
-              ? assignedVehicles[0]
-              : assignedVehicles[0]?.plate ||
-                assignedVehicles[0]?.vehicle_number ||
-                assignedVehicles[0]?.id ||
-                "",
-          ]
-        : []
-    );
+    // setSelectedVehicles(
+    //   assignedVehicles.length > 0
+    //     ? [
+    //       typeof assignedVehicles[0] === "string"
+    //         ? assignedVehicles[0]
+    //         : assignedVehicles[0]?.plate ||
+    //         assignedVehicles[0]?.vehicle_number ||
+    //         assignedVehicles[0]?.id ||
+    //         "",
+    //     ]
+    //     : []
+    // );
 
-    const shape = raw.geometry?.shape || raw.shape || "polygon";
-    setAoiType(shape === "circle" ? "circle" : "polygon");
+    // const shape = raw.geometry?.shape || raw.shape || "polygon";
+    // setAoiType(shape === "circle" ? "circle" : "polygon");
 
     const parsedGeo =
       typeof raw.geo_position === "string"
@@ -105,15 +121,13 @@ export default function CreateAOI({
       !Number.isNaN(parsedGeo[0]) &&
       !Number.isNaN(parsedGeo[1])
     ) {
-      setMapCenter([parsedGeo[0], parsedGeo[1]]);
-      setMapZoom(13);
-      setSearchLocation(raw.geo_position || "");
+      applyCoordinates(parsedGeo[0], parsedGeo[1]);
+      setSearchLocation(raw.geo_position || `${parsedGeo[0]},${parsedGeo[1]}`);
     } else if (Array.isArray(raw.center) && raw.center.length >= 2) {
-      const [lat, lng] = raw.center.map(Number);
-      if (!Number.isNaN(lat) && !Number.isNaN(lng)) {
-        setMapCenter([lat, lng]);
-        setMapZoom(13);
-        setSearchLocation(`${lat},${lng}`);
+      const [nextLat, nextLng] = raw.center.map(Number);
+      if (!Number.isNaN(nextLat) && !Number.isNaN(nextLng)) {
+        applyCoordinates(nextLat, nextLng);
+        setSearchLocation(`${nextLat},${nextLng}`);
       }
     } else {
       setSearchLocation("");
@@ -134,12 +148,11 @@ export default function CreateAOI({
         const data = await response.json();
 
         if (data?.[0]) {
-          const lat = parseFloat(data[0].lat);
-          const lng = parseFloat(data[0].lon);
+          const nextLat = parseFloat(data[0].lat);
+          const nextLng = parseFloat(data[0].lon);
 
-          if (!Number.isNaN(lat) && !Number.isNaN(lng)) {
-            setMapCenter([lat, lng]);
-            setMapZoom(13);
+          if (!Number.isNaN(nextLat) && !Number.isNaN(nextLng)) {
+            applyCoordinates(nextLat, nextLng);
           }
         }
       } catch (error) {
@@ -159,29 +172,51 @@ export default function CreateAOI({
     if (onSubmit) {
       onSubmit({
         name: name.trim(),
-        alerts,
-        selectedVehicles,
-        aoiType,
         searchLocation: searchLocation.trim(),
-        entry_alert: alerts.entry,
-        exit_alert: alerts.exit,
-        assigned_vehicles: selectedVehicles,
+        lat: Number(lat),
+        lng: Number(lng),
         geo_position: `${mapCenter[0]},${mapCenter[1]}`,
+        // alerts,
+        // selectedVehicles,
+        // aoiType,
+        // entry_alert: alerts.entry,
+        // exit_alert: alerts.exit,
+        // assigned_vehicles: selectedVehicles,
       });
     }
     onClose?.();
   };
 
-  const vehicleOptions = [
-    { label: "Select vehicles...", value: "" },
-    { label: "Vehicle 01 (DL-01-AB-1234)", value: "Vehicle 01" },
-    { label: "Vehicle 02 (DL-02-CD-5678)", value: "Vehicle 02" },
-  ];
+  // const vehicleOptions = [
+  //   { label: "Select vehicles...", value: "" },
+  //   { label: "Vehicle 01 (DL-01-AB-1234)", value: "Vehicle 01" },
+  //   { label: "Vehicle 02 (DL-02-CD-5678)", value: "Vehicle 02" },
+  // ];
 
-  const aoiTypeOptions = [
-    { label: "Circle", value: "circle" },
-    { label: "Polygon", value: "polygon" },
-  ];
+  // const aoiTypeOptions = [
+  //   { label: "Circle", value: "circle" },
+  //   { label: "Polygon", value: "polygon" },
+  // ];
+
+  const handleLatChange = (value) => {
+    setLat(value);
+    const parsedLat = parseFloat(value);
+    const parsedLng = parseFloat(lng);
+    if (!Number.isNaN(parsedLat) && !Number.isNaN(parsedLng)) {
+      setMapCenter([parsedLat, parsedLng]);
+      setMapZoom(13);
+    }
+  };
+
+  const handleLngChange = (value) => {
+    setLng(value);
+    const parsedLat = parseFloat(lat);
+    const parsedLng = parseFloat(value);
+    if (!Number.isNaN(parsedLat) && !Number.isNaN(parsedLng)) {
+      setMapCenter([parsedLat, parsedLng]);
+      setMapZoom(13);
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-sm p-3 sm:p-4">
@@ -233,6 +268,63 @@ export default function CreateAOI({
                 size="subInfoText"
                 className="font-medium tracking-wide block"
               >
+                Search Location
+              </MainLayoutColor>
+              <MainSearchInput
+                value={searchLocation}
+                onChange={(e) => setSearchLocation(e.target.value)}
+                placeholder="Search address or location..."
+                containerClassName="w-full"
+                className="w-full rounded-full bg-[#05070B] border-[#22252B]"
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div className="flex flex-col gap-1.5">
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="subInfoText"
+                  className="font-medium tracking-wide block"
+                >
+                  Latitude
+                </MainLayoutColor>
+                <input
+                  type="text"
+                  inputMode="decimal"
+                  value={lat}
+                  onChange={(e) => handleLatChange(e.target.value)}
+                  placeholder="28.6139"
+                  className="w-full px-3.5 py-2 rounded-xl bg-[#1c1c20] border border-[#2a2a30] text-[12px] text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-emerald-500/60 transition-colors"
+                />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="subInfoText"
+                  className="font-medium tracking-wide block"
+                >
+                  Longitude
+                </MainLayoutColor>
+                <input
+                  type="text"
+                  inputMode="decimal"
+                  value={lng}
+                  onChange={(e) => handleLngChange(e.target.value)}
+                  placeholder="77.209"
+                  className="w-full px-3.5 py-2 rounded-xl bg-[#1c1c20] border border-[#2a2a30] text-[12px] text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-emerald-500/60 transition-colors"
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <MainLayoutColor
+                as={MainLayoutTextSize}
+                color="subtitle"
+                size="subInfoText"
+                className="font-medium tracking-wide block"
+              >
                 Place Name
               </MainLayoutColor>
               <input
@@ -244,7 +336,7 @@ export default function CreateAOI({
               />
             </div>
 
-            <div className="flex flex-col gap-1.5">
+            {/* <div className="flex flex-col gap-1.5">
               <MainLayoutColor
                 as={MainLayoutTextSize}
                 color="subtitle"
@@ -287,9 +379,9 @@ export default function CreateAOI({
                   </MainLayoutTextSize>
                 </label>
               </div>
-            </div>
+            </div> */}
 
-            <div className="flex flex-col gap-1.5">
+            {/* <div className="flex flex-col gap-1.5">
               <MainLayoutColor
                 as={MainLayoutTextSize}
                 color="subtitle"
@@ -325,25 +417,7 @@ export default function CreateAOI({
                 onSelect={setAoiType}
                 className="w-full justify-between rounded-full bg-[#05070B] border-[#22252B]"
               />
-            </div>
-
-            <div className="flex flex-col gap-1.5 mt-auto">
-              <MainLayoutColor
-                as={MainLayoutTextSize}
-                color="subtitle"
-                size="subInfoText"
-                className="font-medium tracking-wide block"
-              >
-                Search Location
-              </MainLayoutColor>
-              <MainSearchInput
-                value={searchLocation}
-                onChange={(e) => setSearchLocation(e.target.value)}
-                placeholder="Search address or location..."
-                containerClassName="w-full"
-                className="w-full rounded-full bg-[#05070B] border-[#22252B]"
-              />
-            </div>
+            </div> */}
           </div>
 
           <div className="md:col-span-7 relative bg-[#0b0f19] min-h-[240px] md:min-h-[300px]">
@@ -367,24 +441,25 @@ export default function CreateAOI({
 
         {/* Footer Actions */}
         <div className="px-4 py-3 border-t border-[#232328] flex items-center justify-between gap-3 shrink-0">
-          <button
+          <MainLayoutButton
             type="button"
+            variant="outlineMuted"
+            size="md"
             onClick={onClose}
-            className="w-1/2 py-2 rounded-xl bg-[#222226] hover:bg-[#2a2a30] text-zinc-300 hover:text-white transition-colors cursor-pointer"
+            className="w-1/2"
           >
-            <MainLayoutTextSize size="headerButtonText">
-              Cancel
-            </MainLayoutTextSize>
-          </button>
-          <button
+            Cancel
+          </MainLayoutButton>
+          <MainLayoutButton
             type="button"
+            variant="solidYellow"
+            size="md"
+            disabled={!name.trim() || !searchLocation.trim() || !lat || !lng}
             onClick={handleSubmit}
-            className="w-1/2 py-2 rounded-xl bg-[#10b981] hover:bg-[#059669] text-black transition-colors cursor-pointer shadow-lg shadow-emerald-500/10"
+            className="w-1/2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#FDB914]"
           >
-            <MainLayoutTextSize size="headerButtonText">
-              {mode === "edit" ? "Save Changes" : "Create Place"}
-            </MainLayoutTextSize>
-          </button>
+            {mode === "edit" ? "Save Changes" : "Create Place"}
+          </MainLayoutButton>
         </div>
       </MainLayoutColor>
     </div>

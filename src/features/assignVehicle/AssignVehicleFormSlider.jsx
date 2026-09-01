@@ -94,6 +94,68 @@ function isValidCoordinate(value) {
   return Number.isFinite(Number(trimmed));
 }
 
+const CONSECUTIVE_LOCATION_ERROR =
+  "Consecutive points cannot have the same coordinates";
+
+function areSameCoordinates(a, b) {
+  if (!a || !b) return false;
+  if (!isValidCoordinate(a.lat) || !isValidCoordinate(a.lng)) return false;
+  if (!isValidCoordinate(b.lat) || !isValidCoordinate(b.lng)) return false;
+  return Number(a.lat) === Number(b.lat) && Number(a.lng) === Number(b.lng);
+}
+
+function getRoutePoints(form) {
+  return [
+    { point: form.startPoint, prefix: "startPoint" },
+    ...form.stops.map((stop, index) => ({
+      point: stop,
+      prefix: `stops.${index}`,
+    })),
+    { point: form.endPoint, prefix: "endPoint" },
+  ];
+}
+
+function consecutiveLocationErrors(form) {
+  const errors = {};
+  const route = getRoutePoints(form);
+
+  for (let index = 1; index < route.length; index += 1) {
+    const previous = route[index - 1];
+    const current = route[index];
+    if (!areSameCoordinates(previous.point, current.point)) continue;
+
+    errors[`${previous.prefix}.lat`] = CONSECUTIVE_LOCATION_ERROR;
+    errors[`${previous.prefix}.lng`] = CONSECUTIVE_LOCATION_ERROR;
+    errors[`${current.prefix}.lat`] = CONSECUTIVE_LOCATION_ERROR;
+    errors[`${current.prefix}.lng`] = CONSECUTIVE_LOCATION_ERROR;
+  }
+
+  return errors;
+}
+
+function mergeConsecutiveErrors(errors, form) {
+  const next = { ...errors };
+
+  for (const { prefix } of getRoutePoints(form)) {
+    for (const field of ["lat", "lng"]) {
+      const key = `${prefix}.${field}`;
+      if (next[key] === CONSECUTIVE_LOCATION_ERROR) next[key] = "";
+    }
+  }
+
+  return { ...next, ...consecutiveLocationErrors(form) };
+}
+
+function neighborDuplicateMessage(candidate, previousPoint, nextPoint) {
+  if (previousPoint && areSameCoordinates(candidate, previousPoint)) {
+    return "Cannot select the same location as the previous point";
+  }
+  if (nextPoint && areSameCoordinates(candidate, nextPoint)) {
+    return "Cannot select the same location as the next point";
+  }
+  return "";
+}
+
 function formatDateTime(value) {
   if (!value) return "—";
   const date = new Date(value);
@@ -206,10 +268,21 @@ function FooterButton({ variant = "primary", children, ...props }) {
   );
 }
 
-function CheckpointSearch({ value, onChange, onSelect, onCreate, error }) {
+function CheckpointSearch({
+  value,
+  onChange,
+  onSelect,
+  onCreate,
+  error,
+  blockedPoints = [],
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const wrapRef = useRef(null);
   const query = value.trim().toLowerCase();
+
+  function isBlocked(item) {
+    return blockedPoints.some((point) => areSameCoordinates(item, point));
+  }
 
   const matches = useMemo(() => {
     if (!query) return CHECKPOINT_SUGGESTIONS.slice(0, 6);
@@ -269,34 +342,45 @@ function CheckpointSearch({ value, onChange, onSelect, onCreate, error }) {
       />
       {showMenu ? (
         <div className="absolute left-0 right-0 mt-1.5 z-30 rounded-xl border border-[#22252B] bg-[#0f1115] shadow-2xl overflow-hidden max-h-56 overflow-y-auto custom-scrollbar">
-          {matches.map((item) => (
-            <button
-              key={`${item.name}-${item.lat}`}
-              type="button"
-              onClick={() => {
-                onSelect(item);
-                setIsOpen(false);
-              }}
-              className="w-full text-left px-3 py-2 hover:bg-[#18181b] transition-colors cursor-pointer"
-            >
-              <MainLayoutColor
-                as={MainLayoutTextSize}
-                color="title"
-                size="subInfoText"
-                className="block"
+          {matches.map((item) => {
+            const blocked = isBlocked(item);
+            return (
+              <button
+                key={`${item.name}-${item.lat}`}
+                type="button"
+                disabled={blocked}
+                onClick={() => {
+                  if (blocked) return;
+                  onSelect(item);
+                  setIsOpen(false);
+                }}
+                className={`w-full text-left px-3 py-2 transition-colors ${
+                  blocked
+                    ? "opacity-45 cursor-not-allowed"
+                    : "hover:bg-[#18181b] cursor-pointer"
+                }`}
               >
-                {item.name}
-              </MainLayoutColor>
-              <MainLayoutColor
-                as={MainLayoutTextSize}
-                color="muted"
-                size="captionText"
-                className="block mt-0.5 font-normal"
-              >
-                {item.search} · {item.lat}, {item.lng}
-              </MainLayoutColor>
-            </button>
-          ))}
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="title"
+                  size="subInfoText"
+                  className="block"
+                >
+                  {item.name}
+                </MainLayoutColor>
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="muted"
+                  size="captionText"
+                  className="block mt-0.5 font-normal"
+                >
+                  {blocked
+                    ? "Same coordinates as the previous or next point"
+                    : `${item.search} · ${item.lat}, ${item.lng}`}
+                </MainLayoutColor>
+              </button>
+            );
+          })}
           {showCreate ? (
             <button
               type="button"
@@ -338,6 +422,9 @@ function PointCard({
   point,
   onChange,
   onRemove,
+  onDuplicateSelect,
+  previousPoint = null,
+  nextPoint = null,
   errors = {},
   dragHandle = null,
   isDragging = false,
@@ -383,6 +470,7 @@ function PointCard({
         <CheckpointSearch
           value={point.search}
           error={errors.search}
+          blockedPoints={[previousPoint, nextPoint].filter(Boolean)}
           onChange={(search) => {
             const next = { search };
             if (!isFilled(point.name) || point.name === point.search) {
@@ -390,14 +478,20 @@ function PointCard({
             }
             update(next);
           }}
-          onSelect={(item) =>
-            update({
+          onSelect={(item) => {
+            const next = {
               search: item.search,
               name: item.name,
               lat: sanitizeCoordinate(item.lat),
               lng: sanitizeCoordinate(item.lng),
-            })
-          }
+            };
+            const duplicate = neighborDuplicateMessage(next, previousPoint, nextPoint);
+            if (duplicate) {
+              onDuplicateSelect?.(duplicate);
+              return;
+            }
+            update(next);
+          }}
           onCreate={(query) =>
             update({
               search: query,
@@ -630,6 +724,8 @@ function collectErrors(form) {
     pointErrors(stop, `stops.${index}`, `Stop ${index + 1}`),
   );
 
+  Object.assign(errors, consecutiveLocationErrors(form));
+
   return errors;
 }
 
@@ -707,12 +803,14 @@ export default function AssignVehicleFormSlider({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [dragState, setDragState] = useState(null);
   const stopListRef = useRef(null);
+  const formRef = useRef(form);
   const stopsRef = useRef([]);
   const draggingStopIdRef = useRef(null);
   const dragStateRef = useRef(null);
   const ghostRef = useRef(null);
   const itemRectsRef = useRef(new Map());
 
+  formRef.current = form;
   stopsRef.current = form.stops;
 
   useEffect(() => {
@@ -732,30 +830,64 @@ export default function AssignVehicleFormSlider({
     setForm((prev) => ({ ...prev, ...patch }));
   }
 
-  function clearFilledPointErrors(prefix, point) {
+  function syncRouteErrors(nextForm, changedPrefix, changedPoint) {
     setErrors((prev) => {
       const next = { ...prev };
-      let changed = false;
 
-      if (prev[`${prefix}.lat`] && isFilled(point.lat) && isValidCoordinate(point.lat)) {
-        next[`${prefix}.lat`] = "";
-        changed = true;
-      }
-      if (prev[`${prefix}.lng`] && isFilled(point.lng) && isValidCoordinate(point.lng)) {
-        next[`${prefix}.lng`] = "";
-        changed = true;
-      }
-      if (prev[`${prefix}.name`] && isFilled(point.name)) {
-        next[`${prefix}.name`] = "";
-        changed = true;
-      }
-      if (prev[`${prefix}.search`] && isFilled(point.search)) {
-        next[`${prefix}.search`] = "";
-        changed = true;
+      if (changedPrefix && changedPoint) {
+        if (
+          next[`${changedPrefix}.lat`] &&
+          isFilled(changedPoint.lat) &&
+          isValidCoordinate(changedPoint.lat)
+        ) {
+          next[`${changedPrefix}.lat`] = "";
+        }
+        if (
+          next[`${changedPrefix}.lng`] &&
+          isFilled(changedPoint.lng) &&
+          isValidCoordinate(changedPoint.lng)
+        ) {
+          next[`${changedPrefix}.lng`] = "";
+        }
+        if (next[`${changedPrefix}.name`] && isFilled(changedPoint.name)) {
+          next[`${changedPrefix}.name`] = "";
+        }
+        if (next[`${changedPrefix}.search`] && isFilled(changedPoint.search)) {
+          next[`${changedPrefix}.search`] = "";
+        }
       }
 
-      return changed ? next : prev;
+      return mergeConsecutiveErrors(next, nextForm);
     });
+  }
+
+  function handlePointChange(kind, updated, stopIndex) {
+    const current = formRef.current;
+    let nextForm = current;
+    let prefix = "startPoint";
+
+    if (kind === "start") {
+      nextForm = { ...current, startPoint: updated };
+      prefix = "startPoint";
+    } else if (kind === "end") {
+      nextForm = { ...current, endPoint: updated };
+      prefix = "endPoint";
+    } else {
+      const nextStops = [...current.stops];
+      nextStops[stopIndex] = updated;
+      nextForm = { ...current, stops: nextStops };
+      prefix = `stops.${stopIndex}`;
+    }
+
+    setForm(nextForm);
+    syncRouteErrors(nextForm, prefix, updated);
+  }
+
+  function handleDuplicateSelect(prefix, message) {
+    setErrors((prev) => ({
+      ...prev,
+      [`${prefix}.search`]: message,
+    }));
   }
 
   function goToReview() {
@@ -824,13 +956,17 @@ export default function AssignVehicleFormSlider({
 
   function moveStop(fromIndex, toIndex) {
     snapshotStopRects();
-    setForm((prev) => {
-      const nextStops = reorderList(prev.stops, fromIndex, toIndex);
-      if (nextStops === prev.stops) return prev;
-      return { ...prev, stops: nextStops };
-    });
+    const currentStops = stopsRef.current;
+    const nextStops = reorderList(currentStops, fromIndex, toIndex);
+    if (nextStops === currentStops) return;
+
+    const nextForm = { ...formRef.current, stops: nextStops };
+    setForm((prev) => ({ ...prev, stops: nextStops }));
     setErrors((prev) =>
-      remapStopFieldErrors(prev, fromIndex, toIndex, stopsRef.current.length),
+      mergeConsecutiveErrors(
+        remapStopFieldErrors(prev, fromIndex, toIndex, currentStops.length),
+        nextForm,
+      ),
     );
   }
 
@@ -1215,11 +1351,13 @@ export default function AssignVehicleFormSlider({
               <PointCard
                 title="Start Point"
                 point={form.startPoint}
+                previousPoint={null}
+                nextPoint={form.stops[0] || form.endPoint}
                 errors={pointFieldErrors(errors, "startPoint")}
-                onChange={(startPoint) => {
-                  patchForm({ startPoint });
-                  clearFilledPointErrors("startPoint", startPoint);
-                }}
+                onChange={(startPoint) => handlePointChange("start", startPoint)}
+                onDuplicateSelect={(message) =>
+                  handleDuplicateSelect("startPoint", message)
+                }
               />
 
               {form.stops.map((stop, index) => {
@@ -1241,6 +1379,14 @@ export default function AssignVehicleFormSlider({
                       <PointCard
                         title={`Stop ${index + 1}`}
                         point={stop}
+                        previousPoint={
+                          index === 0 ? form.startPoint : form.stops[index - 1]
+                        }
+                        nextPoint={
+                          index === form.stops.length - 1
+                            ? form.endPoint
+                            : form.stops[index + 1]
+                        }
                         errors={pointFieldErrors(errors, `stops.${index}`)}
                         dragHandle={
                           <StopDragHandle
@@ -1251,17 +1397,20 @@ export default function AssignVehicleFormSlider({
                             }
                           />
                         }
-                        onChange={(updated) => {
-                          const next = [...form.stops];
-                          next[index] = updated;
-                          patchForm({ stops: next });
-                          clearFilledPointErrors(`stops.${index}`, updated);
-                        }}
-                        onRemove={() =>
-                          patchForm({
-                            stops: form.stops.filter((_, stopIndex) => stopIndex !== index),
-                          })
+                        onChange={(updated) =>
+                          handlePointChange("stop", updated, index)
                         }
+                        onDuplicateSelect={(message) =>
+                          handleDuplicateSelect(`stops.${index}`, message)
+                        }
+                        onRemove={() => {
+                          const nextStops = form.stops.filter(
+                            (_, stopIndex) => stopIndex !== index,
+                          );
+                          const nextForm = { ...form, stops: nextStops };
+                          patchForm({ stops: nextStops });
+                          syncRouteErrors(nextForm);
+                        }}
                       />
                     )}
                   </div>
@@ -1271,11 +1420,15 @@ export default function AssignVehicleFormSlider({
               <PointCard
                 title="End Point"
                 point={form.endPoint}
+                previousPoint={
+                  form.stops[form.stops.length - 1] || form.startPoint
+                }
+                nextPoint={null}
                 errors={pointFieldErrors(errors, "endPoint")}
-                onChange={(endPoint) => {
-                  patchForm({ endPoint });
-                  clearFilledPointErrors("endPoint", endPoint);
-                }}
+                onChange={(endPoint) => handlePointChange("end", endPoint)}
+                onDuplicateSelect={(message) =>
+                  handleDuplicateSelect("endPoint", message)
+                }
               />
             </div>
             {dragState ? (

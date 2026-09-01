@@ -7,9 +7,8 @@ import MainStatusBadge from "../../components/Ui/MainLayoutUI/MainStatusBadge";
 
 const AOI_FILTERS = [
   { label: "All", value: "all", dotBg: "filterDotAll" },
-  { label: "Mobilized", value: "mobilized", dotBg: "filterDotMoving" },
-  { label: "Immobilized", value: "immobilized", dotBg: "filterDotIdle" },
-  { label: "Offline", value: "offline", dotBg: "filterDotOffline" },
+  { label: "Active", value: "active", dotBg: "filterDotMoving" },
+  { label: "Inactive", value: "inactive", dotBg: "filterDotIdle" },
 ];
 
 export default function AoiListPanel({
