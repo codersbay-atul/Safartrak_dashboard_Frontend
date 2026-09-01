@@ -1,8 +1,10 @@
 import React from "react";
-import { Truck, Circle, LocateOff } from "lucide-react";
+import { Truck, Circle, LocateOff, ChevronUp, ChevronDown } from "lucide-react";
 import { useDashboardSummary } from "../../hooks/useDashboardSummary";
 import { useNavigate } from "react-router-dom";
 import { MainStatsCard } from "../../components/Ui/MainLayoutUI/MainStatsCard";
+import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
+import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
 import {
   DASHBOARD_SUMMARY_PLACEHOLDER,
   mapDashboardSummary,
@@ -52,7 +54,6 @@ function buildStatsData(summary, { isLoading = false } = {}) {
       title: "Idle",
       bgIcon: "bg-[#3B2A00]",
       colorIcon: "text-[#ffd60a]",
-      
     },
     {
       id: "offline_vehicles",
@@ -62,7 +63,6 @@ function buildStatsData(summary, { isLoading = false } = {}) {
       title: "Offline",
       bgIcon: "bg-[#450A0A]",
       colorIcon: "text-[#B91C1C]",
-      
     },
     {
       id: "no-gps",
@@ -72,12 +72,96 @@ function buildStatsData(summary, { isLoading = false } = {}) {
       title: "No GPS",
       bgIcon: "bg-[#172554]",
       colorIcon: "text-[#3b82f6]",
-      
     },
   ];
 }
 
-export default function StatsCard() {
+export function KpiToggleButton({ expanded, onClick }) {
+  const Icon = expanded ? ChevronUp : ChevronDown;
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-expanded={expanded}
+      className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-lg border border-[#FDB914]/70 text-[#FDB914] bg-transparent hover:bg-[#FDB914]/10 transition-colors duration-150 font-medium cursor-pointer shrink-0 select-none"
+    >
+      <MainLayoutTextSize size="buttonText">
+        {expanded ? "Collapse KPIs" : "Expand KPIs"}
+      </MainLayoutTextSize>
+      <Icon
+        size={14}
+        strokeWidth={2.25}
+        className="shrink-0 transition-transform duration-300 ease-in-out"
+      />
+    </button>
+  );
+}
+
+function CollapsedKpiBar({ statsData, onCardClick, onExpand }) {
+  return (
+    <MainLayoutColor
+      as="div"
+      background="surface"
+      border="cardBorder"
+      className="flex items-center w-full min-w-0 rounded-xl border px-2 sm:px-3 py-2 gap-1 overflow-x-auto no-scrollbar"
+    >
+      {statsData.map((card, index) => {
+        const Icon = card.icon;
+        const clickable = typeof onCardClick === "function" && card.id === "Inactive_vehicles";
+
+        return (
+          <React.Fragment key={card.id}>
+            {index > 0 && (
+              <span
+                className="hidden sm:block w-px h-5 bg-[#27272A] mx-1.5 xl:mx-2 shrink-0"
+                aria-hidden="true"
+              />
+            )}
+            <MainLayoutColor
+              as={clickable ? "button" : "div"}
+              type={clickable ? "button" : undefined}
+              onClick={clickable ? () => onCardClick(card) : undefined}
+              className={`flex items-center gap-2 min-w-0 flex-1 px-1.5 sm:px-2 py-0.5 rounded-lg ${
+                clickable ? "cursor-pointer hover:bg-white/5" : "cursor-default"
+              }`}
+            >
+              <div
+                className={`w-6 h-6 rounded-md flex items-center justify-center shrink-0 ${card.bgIcon}`}
+              >
+                {Icon ? <Icon size={12} className={card.colorIcon} /> : null}
+              </div>
+              <div className="flex items-center gap-1.5 min-w-0">
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="title"
+                  size="sectionTitle"
+                  className="font-bold leading-none shrink-0"
+                >
+                  {card.value}
+                </MainLayoutColor>
+                <MainLayoutColor
+                  as={MainLayoutTextSize}
+                  color="subtitle"
+                  size="subInfoText"
+                  className="truncate leading-none"
+                >
+                  {card.title}
+                </MainLayoutColor>
+              </div>
+            </MainLayoutColor>
+          </React.Fragment>
+        );
+      })}
+
+      <div className="pl-2 ml-auto shrink-0">
+        <KpiToggleButton expanded={false} onClick={onExpand} />
+      </div>
+    </MainLayoutColor>
+  );
+}
+
+export default function StatsCard({ isExpanded = true, onExpand }) {
   const { summary, isLoading, isError, data } = useDashboardSummary();
   const navigate = useNavigate();
 
@@ -93,18 +177,53 @@ export default function StatsCard() {
     isLoading: showLoadingSkeleton,
   });
 
+  const handleCardClick = (card) => {
+    if (card.id === "Inactive_vehicles") navigate("/vehicles");
+  };
+
   return (
-    <div className="grid grid-cols-[repeat(5,minmax(0,1fr))] gap-3 min-[1152px]:gap-3.5 xl:gap-4 mt-0 pt-0 select-none w-full shrink-0 min-w-0">
-      {statsData.map((card) => (
-        <div key={card.id} className="min-h-[112px] xl:min-h-[124px] min-w-0 [&>*]:h-full">
-          <MainStatsCard
-            {...card}
-            padding="p-3 min-[1152px]:p-3.5 xl:p-4"
-            footerSpacing="pt-2.5 mt-2"
-            onClick={card.id === "Inactive_vehicles" ? () => navigate("/vehicles") : card.onClick}
-          />
+    <div
+      className={`grid w-full min-w-0 select-none transition-[grid-template-rows] duration-300 ease-in-out ${
+        isExpanded ? "grid-rows-[1fr_0fr]" : "grid-rows-[0fr_1fr]"
+      }`}
+    >
+      <div
+        className={`min-h-0 overflow-hidden transition-opacity duration-300 ease-in-out ${
+          isExpanded ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
+      >
+        <div className="grid grid-cols-[repeat(5,minmax(0,1fr))] gap-3 min-[1152px]:gap-3.5 xl:gap-4 mt-0 pt-0 w-full min-w-0">
+          {statsData.map((card) => (
+            <div
+              key={card.id}
+              className="min-h-[112px] xl:min-h-[124px] min-w-0 [&>*]:h-full"
+            >
+              <MainStatsCard
+                {...card}
+                padding="p-3 min-[1152px]:p-3.5 xl:p-4"
+                footerSpacing="pt-2.5 mt-2"
+                onClick={
+                  card.id === "Inactive_vehicles"
+                    ? () => handleCardClick(card)
+                    : card.onClick
+                }
+              />
+            </div>
+          ))}
         </div>
-      ))}
+      </div>
+
+      <div
+        className={`min-h-0 overflow-hidden transition-opacity duration-300 ease-in-out ${
+          isExpanded ? "opacity-0 pointer-events-none" : "opacity-100"
+        }`}
+      >
+        <CollapsedKpiBar
+          statsData={statsData}
+          onCardClick={handleCardClick}
+          onExpand={onExpand}
+        />
+      </div>
     </div>
   );
 }

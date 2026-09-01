@@ -1,3 +1,4 @@
+// Unused while react-hot-toast is active. Re-enable from src/main.jsx if needed.
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AlertTriangle, Check, Info, X } from "lucide-react";
 import { TOAST_EVENT } from "./toast";

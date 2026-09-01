@@ -3,6 +3,46 @@ import { ArrowRight, Truck } from "lucide-react";
 import MainLayoutColor from "./MainLayoutColor";
 import MainLayoutTextSize from "./MainLayoutTextSize";
 
+const COMING_SOON_TITLES = [
+  "distance",
+  "distance report",
+  "ignition",
+  "harsh barking",
+  "harsh braking",
+  "harsh acderation",
+  "harsh acceleration",
+  "towing",
+  "sos",
+  "sos report",
+  "low battery",
+  "power cut",
+];
+
+function normalizeTitle(value) {
+  return String(value ?? "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, " ");
+}
+
+function titleKey(value) {
+  return normalizeTitle(value).replace(/ report$/, "").trim();
+}
+
+function isNewReport(title) {
+  const key = titleKey(title);
+  const full = normalizeTitle(title);
+  return key === "trip" || full === "trip report";
+}
+
+function isComingSoonReport(title) {
+  const full = normalizeTitle(title);
+  const key = titleKey(title);
+  return COMING_SOON_TITLES.some(
+    (item) => full === item || key === item || key.includes(item),
+  );
+}
+
 export default function MainReportCard({
   title,
   description,
@@ -11,53 +51,80 @@ export default function MainReportCard({
   onClick,
   className = "",
 }) {
+  const isComingSoon = isComingSoonReport(title);
+  const isNew = isNewReport(title) && !isComingSoon;
+  const interactiveProps = isComingSoon ? {} : { type: "button", onClick };
+
+  const badge = isComingSoon ? (
+    <span className="inline-flex items-center rounded-full border border-[#3F3F46] bg-[#27272A] px-2 py-1 text-[11px] font-bold uppercase tracking-wide text-[#E4E4E7] leading-none shrink-0">
+      Coming Soon
+    </span>
+  ) : isNew ? (
+    <span className="inline-flex items-center rounded-full bg-[#22C55E] px-2 py-1 text-[11px] font-bold uppercase tracking-wide text-white leading-none shrink-0">
+      New
+    </span>
+  ) : null;
+
   return (
     <MainLayoutColor
-      as="button"
+      as={isComingSoon ? "div" : "button"}
       background="surface"
       border="cardBorder"
-      borderHover="cardBorderHover"
-      type="button"
-      onClick={onClick}
-      className={`group relative flex flex-col text-left w-full border rounded-xl p-3.5 sm:p-4 shadow-lg select-none cursor-pointer transition-all duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FDBB24]/50 ${className}`}
+      borderHover={isComingSoon ? undefined : "cardBorderHover"}
+      {...interactiveProps}
+      className={`group relative flex flex-col text-left w-full h-full min-h-[168px] border rounded-xl p-4 shadow-lg select-none transition-all duration-200 ${
+        isComingSoon
+          ? "cursor-default"
+          : "cursor-pointer hover:-translate-y-0.5 hover:border-[#FDBB24]/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FDBB24]/50"
+      } ${className}`}
     >
-      <div className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-lg bg-[#FDBB24] shrink-0 shadow-sm shadow-[#FDBB24]/20">
-        <Icon size={15} strokeWidth={2.25} className="text-[#121214]" />
+      <div className="flex items-start gap-2.5 w-full">
+        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#FDBB24] shrink-0 shadow-sm shadow-[#FDBB24]/20">
+          <Icon size={16} strokeWidth={2.25} className="text-[#121214]" />
+        </div>
+
+        <div className="flex-1 min-w-0">
+          <div className="flex items-start justify-between gap-2">
+            <MainLayoutColor
+              as={MainLayoutTextSize}
+              color="title"
+              size="title"
+              className="font-bold tracking-tight leading-snug block"
+            >
+              {title}
+            </MainLayoutColor>
+            {badge}
+          </div>
+
+          <MainLayoutColor
+            as={MainLayoutTextSize}
+            color="subtitle"
+            size="subtitle"
+            className="mt-1.5 leading-relaxed line-clamp-3 block"
+          >
+            {description}
+          </MainLayoutColor>
+        </div>
       </div>
 
-      <MainLayoutColor
-        as={MainLayoutTextSize}
-        color="title"
-        size="sectionTitle"
-        className="mt-3 font-bold tracking-tight leading-tight block"
-      >
-        {title}
-      </MainLayoutColor>
+      {!isComingSoon && (
+        <div className="mt-auto pt-4 flex items-center justify-between gap-2 w-full">
+          <MainLayoutColor
+            as={MainLayoutTextSize}
+            color="yellow"
+            size="headerButtonText"
+            className="font-medium"
+          >
+            {actionLabel}
+          </MainLayoutColor>
 
-      <MainLayoutColor
-        as={MainLayoutTextSize}
-        color="subtitle"
-        size="subInfoText"
-        className="mt-1.5 leading-relaxed line-clamp-2 min-h-[2.5rem] block"
-      >
-        {description}
-      </MainLayoutColor>
-
-      <div className="mt-auto pt-3.5 flex items-center justify-between gap-2 w-full">
-        <MainLayoutColor
-          as="span"
-          color="kpiTitle"
-          className="text-[13px] font-medium"
-        >
-          {actionLabel}
-        </MainLayoutColor>
-
-        <ArrowRight
-          size={14}
-          strokeWidth={2.25}
-          className="text-[#9D6F00] shrink-0 transition-transform duration-200 group-hover:translate-x-0.5"
-        />
-      </div>
+          <ArrowRight
+            size={16}
+            strokeWidth={2.25}
+            className="text-[#FDB914] shrink-0 transition-transform duration-200 group-hover:translate-x-0.5"
+          />
+        </div>
+      )}
     </MainLayoutColor>
   );
 }

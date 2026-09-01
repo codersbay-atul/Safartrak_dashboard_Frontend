@@ -6,7 +6,8 @@ import "./index.css";
 import App from "./App.jsx";
 import { store } from "./store";
 import { setupApiClient } from "./api/client";
-import ToastHost from "./components/Ui/ToastHost";
+import { Toaster } from "react-hot-toast";
+// import ToastHost from "./components/Ui/ToastHost";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -32,7 +33,8 @@ createRoot(document.getElementById("root")).render(
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <App />
-        <ToastHost />
+        <Toaster position="top-center" />
+        {/* <ToastHost /> */}
       </QueryClientProvider>
     </Provider>
   </StrictMode>

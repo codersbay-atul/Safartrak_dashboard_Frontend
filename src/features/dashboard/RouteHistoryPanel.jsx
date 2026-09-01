@@ -163,11 +163,11 @@ export default function RouteHistoryPanel({
             onClick={onPlayRoute}
             title="Play route"
           />
-          <IconCircleButton
+          {/* <IconCircleButton
             icon={Download}
             onClick={handleExport}
             title="Download"
-          />
+          /> */}
         </div>
       </div>
 
@@ -177,9 +177,8 @@ export default function RouteHistoryPanel({
           type="button"
           onClick={() => setListFilter("all")}
           background="selectedRowBg"
-          className={`rounded-lg p-2.5 text-left cursor-pointer ${
-            listFilter === "all" ? "border border-[#FDB914]" : "border border-[#232329]"
-          }`}
+          className={`rounded-lg p-2.5 text-left cursor-pointer ${listFilter === "all" ? "border border-[#FDBB24]/40" : "border border-[#232329]"
+            }`}
         >
           <MainLayoutColor
             as={MainLayoutTextSize}
@@ -200,7 +199,7 @@ export default function RouteHistoryPanel({
           <MainLayoutColor
             as={MainLayoutTextSize}
             color="subtitle"
-            size="captionText"
+            size="subInfoText"
             className="mt-0.5 block font-normal"
           >
             {summary.runningTime}
@@ -212,19 +211,17 @@ export default function RouteHistoryPanel({
           type="button"
           onClick={() => setListFilter("stopped")}
           background="selectedRowBg"
-          className={`rounded-lg p-2.5 text-left cursor-pointer ${
-            listFilter === "stopped"
-              ? "border border-[#FDB914]"
+          className={`rounded-lg p-2.5 text-left cursor-pointer ${listFilter === "stopped"
+              ? "border border-[#FDBB24]/40"
               : "border border-[#232329]"
-          }`}
+            }`}
         >
           <MainLayoutColor
             as={MainLayoutTextSize}
             color="title"
             size="subInfoText"
-            className={`font-semibold block ${
-              listFilter === "stopped" ? "text-[#FDB914]" : ""
-            }`}
+            className={`font-semibold block ${listFilter === "stopped" ? "text-[#FDB914]" : ""
+              }`}
           >
             Stopped
           </MainLayoutColor>
@@ -240,7 +237,7 @@ export default function RouteHistoryPanel({
             <MainLayoutColor
               as={MainLayoutTextSize}
               color="subtitle"
-              size="captionText"
+              size="subInfoText"
               className="font-normal"
             >
               {summary.stoppedTime}

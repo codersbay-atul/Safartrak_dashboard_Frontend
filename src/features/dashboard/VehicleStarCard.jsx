@@ -47,7 +47,9 @@ export default function VehicleStarCard({
   onSavePlace,
 }) {
   const plate = formatDisplayValue(vehicle?.plate);
-  const speed = formatDisplayValue(vehicle?.speed, "0 kmph");
+  const speedDisplay = formatDisplayValue(vehicle?.speed, "0");
+  const speedMatch = String(speedDisplay).match(/-?\d+(\.\d+)?/);
+  const speedNumber = speedMatch ? speedMatch[0] : "0";
   const lastUpdated = formatDisplayValue(
     vehicle?.lastUpdated || vehicle?.info,
     "Not Available",
@@ -112,12 +114,8 @@ export default function VehicleStarCard({
       ) : null} */}
       <div className="flex items-start justify-between gap-2">
         <div className="flex items-center gap-2 min-w-0">
-          <div className="w-8 h-8 rounded-md bg-[#FDB914] text-black flex items-center justify-center shrink-0 relative">
-            {speed === "Not Available" ? "0" : speed.replace("km/h", "")}
-            {/* <Truck size={14} className="text-black" /> */}
-            {/* <span className="absolute -bottom-1 -right-1 min-w-[14px] h-[14px] px-0.5 rounded-[3px] bg-[#141414] border border-[#FDB914] text-[9px] font-bold text-[#FDB914] flex items-center justify-center">
-              {index + 1}
-            </span> */}
+          <div className="min-w-8 h-8 px-1 rounded-md bg-[#FDB914] text-black flex items-center justify-center shrink-0 text-[11px] font-bold leading-none tabular-nums whitespace-nowrap overflow-hidden">
+            {speedNumber}
           </div>
           <MainLayoutColor
             as={MainLayoutTextSize}
@@ -209,14 +207,14 @@ export default function VehicleStarCard({
           {todayLabel} | {activityLine}
         </MainLayoutColor>
 
-        <span className="relative inline-flex items-center justify-center w-8 h-8 rounded-full bg-[#ef4444]/20 shrink-0">
+        {/* <span className="relative inline-flex items-center justify-center w-8 h-8 rounded-full bg-[#ef4444]/20 shrink-0">
           <FileText size={14} className="text-[#ef4444]" />
           {alertCount > 0 && (
             <span className="absolute -top-1 -right-1 min-w-[14px] h-[14px] px-0.5 rounded-full bg-[#ef4444] text-[8px] font-bold text-white flex items-center justify-center">
               {alertCount}
             </span>
           )}
-        </span>
+        </span> */}
       </div>
     </MainLayoutColor>
   );

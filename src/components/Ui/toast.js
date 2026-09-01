@@ -1,3 +1,32 @@
+import hotToast from "react-hot-toast";
+
+function toMessage(message, description) {
+  const msg = String(message ?? "");
+  const desc =
+    description != null && String(description).trim()
+      ? String(description).trim()
+      : "";
+  return desc ? `${msg}\n${desc}` : msg;
+}
+
+export const toast = {
+  success(message, description) {
+    hotToast.success(toMessage(message, description));
+  },
+  error(message, description) {
+    hotToast.error(toMessage(message, description));
+  },
+  warning(message, description) {
+    hotToast(toMessage(message, description), { icon: "⚠️" });
+  },
+  info(message, description) {
+    hotToast(toMessage(message, description), { icon: "ℹ️" });
+  },
+};
+
+export const TOAST_EVENT = "safartrak:toast";
+
+/*
 const TOAST_EVENT = "safartrak:toast";
 
 function emitToast(type, message, description) {
@@ -16,7 +45,6 @@ function emitToast(type, message, description) {
   );
 }
 
-
 export const toast = {
   error(message, description) {
     emitToast("error", message, description);
@@ -33,3 +61,4 @@ export const toast = {
 };
 
 export { TOAST_EVENT };
+*/

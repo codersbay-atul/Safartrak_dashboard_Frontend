@@ -1,5 +1,5 @@
 import React from "react";
-import { Square, Navigation } from "lucide-react";
+import { Square, Navigation2 } from "lucide-react";
 import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
 import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
 
@@ -62,7 +62,7 @@ export default function RouteHistoryTimeline({
                 {isStop ? (
                   <Square size={16} className="text-[#ef4444]" fill="#ef4444" />
                 ) : (
-                  <Navigation
+                  <Navigation2
                     size={16}
                     className="text-[#22c55e]"
                     fill="#22c55e"
@@ -109,7 +109,7 @@ export default function RouteHistoryTimeline({
                         }}
                         className="shrink-0 h-7 px-2.5 rounded-lg bg-[#27272a] text-white hover:bg-[#3f3f46] cursor-pointer"
                       >
-                        <MainLayoutTextSize size="captionText" className="font-medium">
+                        <MainLayoutTextSize size="subInfoText" className="font-medium">
                           + Save
                         </MainLayoutTextSize>
                       </button>
@@ -132,7 +132,7 @@ export default function RouteHistoryTimeline({
                   <MainLayoutColor
                     as={MainLayoutTextSize}
                     color="muted"
-                    size="captionText"
+                    size="subInfoText"
                     className="mt-1.5 block font-normal"
                   >
                     ({event.timeRange})

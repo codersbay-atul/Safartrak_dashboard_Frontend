@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
-import StatsCard from "../features/dashboard/StatsCard";
+import StatsCard, { KpiToggleButton } from "../features/dashboard/StatsCard";
 import DashboardHeader from "../features/dashboard/DashboardHeader";
 import LivePositions from "../features/dashboard/LivePositions";
 import DashboardVehicleCards from "../features/dashboard/DashboardVehicleCards";
@@ -32,6 +32,7 @@ export default function Dashboard() {
   const [focusedStop, setFocusedStop] = useState(null);
   const [vehicleSearch, setVehicleSearch] = useState("");
   const [isFullMapView, setIsFullMapView] = useState(false);
+  const [kpisExpanded, setKpisExpanded] = useState(true);
 
   // Old dashboard state:
   // const [isRouteView, setIsRouteView] = useState(false);
@@ -164,10 +165,26 @@ export default function Dashboard() {
             />
           </div>
           <div className="shrink-0">
-            <StatsCard />
+            <StatsCard
+              isExpanded={kpisExpanded}
+              onExpand={() => setKpisExpanded(true)}
+            />
           </div>
 
-          <MainSectionHeader icon={Truck} title="Vehicles" />
+          <MainSectionHeader icon={Truck} title="Vehicles" className="mt-0">
+            <div
+              className={`transition-opacity duration-300 ease-in-out ${
+                kpisExpanded
+                  ? "opacity-100"
+                  : "opacity-0 pointer-events-none"
+              }`}
+            >
+              <KpiToggleButton
+                expanded
+                onClick={() => setKpisExpanded(false)}
+              />
+            </div>
+          </MainSectionHeader>
 
           <div className="flex flex-col min-[1152px]:flex-row gap-4 min-[1152px]:gap-4 xl:gap-5 items-stretch w-full flex-1 min-h-[40vh] overflow-y-auto no-scrollbar min-[1152px]:overflow-hidden">
             <div className="w-full min-[1152px]:w-[clamp(300px,30%,380px)] xl:w-[360px] 2xl:w-[400px] h-[440px] min-[1152px]:h-full min-h-0 overflow-hidden transition-all duration-300 shrink-0">

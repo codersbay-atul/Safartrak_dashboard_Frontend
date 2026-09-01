@@ -54,7 +54,8 @@ body {
 /* Thumb - Default state is subtle and merges with dark bg */
 .custom-scrollbar::-webkit-scrollbar-thumb {
   border-radius: 999px;
-  background: rgba(156, 163, 175, 0.15); /* Clean, ultra-subtle grey */
+  background: rgba(156, 163, 175, 0.15);
+  /* Clean, ultra-subtle grey */
   transition: background .25s ease;
 
   /* Minimum height of the scrollbar pill */
@@ -82,12 +83,14 @@ body {
 }
 
 .no-scrollbar {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;     /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 .no-scrollbar::-webkit-scrollbar {
-  display: none !important;  
+  display: none !important;
   width: 0 !important;
   height: 0 !important;
 }
@@ -125,6 +128,7 @@ body {
     opacity: 0;
     transform: translateX(18px) translateY(-6px) scale(0.96);
   }
+
   to {
     opacity: 1;
     transform: translateX(0) translateY(0) scale(1);
@@ -136,6 +140,7 @@ body {
     opacity: 1;
     transform: translateX(0) scale(1);
   }
+
   to {
     opacity: 0;
     transform: translateX(16px) scale(0.96);
