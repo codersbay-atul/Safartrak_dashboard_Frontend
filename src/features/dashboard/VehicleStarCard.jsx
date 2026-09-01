@@ -104,12 +104,12 @@ export default function VehicleStarCard({
       className={`relative group w-full text-left rounded-xl p-3 min-h-[210px] transition-all duration-150 cursor-pointer shrink-0 overflow-hidden ${isSelected ? "" : "hover:bg-[#1a1a1d]"
         }`}
     >
-      {isSelected ? (
+      {/* {isSelected ? (
         <span
           aria-hidden="true"
           className="absolute left-0 top-0 bottom-0 w-0.5 bg-[#ffd60a]"
         />
-      ) : null}
+      ) : null} */}
       <div className="flex items-start justify-between gap-2">
         <div className="flex items-center gap-2 min-w-0">
           <div className="w-8 h-8 rounded-md bg-[#FDB914] text-black flex items-center justify-center shrink-0 relative">
