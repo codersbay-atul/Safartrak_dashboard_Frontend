@@ -5,9 +5,14 @@ import tailwindcss from '@tailwindcss/vite'
 
 const apiProxy = {
   '/v1': {
-    target: 'https://web.backend.safartrak.zevon.systems',
+    target: 'http://localhost:5000/api',
     changeOrigin: true,
-    secure: true,
+    secure: false,
+  },
+  '/admin': {
+    target: 'http://localhost:5000',
+    changeOrigin: true,
+    secure: false,
   },
 }
 
@@ -49,6 +54,7 @@ export default defineConfig({
     appVersionPlugin(),
   ],
   server: {
+    port: 3000,
     proxy: apiProxy,
   },
   preview: {

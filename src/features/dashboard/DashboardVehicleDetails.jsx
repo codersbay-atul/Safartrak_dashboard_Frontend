@@ -78,7 +78,6 @@ export default function DashboardVehicleDetails({
       background="surface"
       className="w-full h-full border border-[#1f1f23] rounded-xl p-2.5 xl:p-3 flex flex-col justify-between select-none overflow-hidden min-w-0"
     >
-      {/* Header with Title, Status Badge, Refresh & Close Icons */}
       <div className="flex items-center justify-between pb-1.5 shrink-0 border-b border-zinc-800/40">
         <div className="flex items-center gap-1.5 min-w-0">
           <MainLayoutColor

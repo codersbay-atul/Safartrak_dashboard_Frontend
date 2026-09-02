@@ -1,8 +1,11 @@
 import apiClient from "./client";
 
 export async function loginRequest(credentials) {
+  const usernameValue =
+    credentials?.username || credentials?.email || "";
+
   const response = await apiClient.post("/v1/auth/login", {
-    username: String(credentials?.username ?? "").trim(),
+    username: String(usernameValue).trim(),
     password: credentials?.password ?? "",
   });
 
@@ -22,12 +25,16 @@ export async function loginRequest(credentials) {
     };
   }
 
-  // Check if user is active
   if (user) {
     const userStatus = String(user.status ?? "").toLowerCase();
-    if (userStatus === "inactive" || userStatus === "deactivated" || userStatus === "disabled") {
+    if (
+      userStatus === "inactive" ||
+      userStatus === "deactivated" ||
+      userStatus === "disabled"
+    ) {
       throw {
-        message: "Your account has been deactivated. Please contact administrator for assistance.",
+        message:
+          "Your account has been deactivated. Please contact administrator for assistance.",
         status: 403,
         code: "USER_DEACTIVATED",
         details: { user },
@@ -42,17 +49,61 @@ export async function loginRequest(credentials) {
   };
 }
 
+export async function adminLoginRequest(credentials) {
+  const emailValue =
+    credentials?.email || credentials?.username || "";
+
+  const response = await apiClient.post("/api/admin/auth/login", {
+    email: String(emailValue).trim(),
+    password: credentials?.password ?? "",
+  });
+
+  const payload = response?.data?.data ?? response?.data ?? {};
+
+  const accessToken =
+    payload.access_token ?? payload.accessToken ?? payload.token ?? null;
+  const refreshToken = payload.refresh_token ?? payload.refreshToken ?? null;
+  const admin = payload.admin ?? null;
+
+  if (!accessToken) {
+    throw {
+      message: "Admin login succeeded but no access token was returned.",
+      status: response?.status ?? 200,
+      code: "MISSING_ACCESS_TOKEN",
+      details: payload,
+    };
+  }
+
+  return {
+    accessToken,
+    refreshToken,
+    admin,
+  };
+}
+
+export async function adminLogoutRequest() {
+  try {
+    const response = await apiClient.post("/api/admin/auth/logout");
+    return response?.data?.data ?? response?.data ?? {};
+  } catch (error) {
+    console.warn("Admin logout API call failed:", error);
+    return {};
+  }
+}
+
 export async function forgotPasswordRequest(payload) {
+  const usernameValue = payload?.username ?? payload?.email ?? "";
   const response = await apiClient.post("/v1/auth/forgot-password", {
-    username: String(payload?.username ?? payload?.email ?? "").trim(),
+    username: String(usernameValue).trim(),
   });
 
   return response?.data?.data ?? response?.data ?? {};
 }
 
 export async function verifyOtpRequest(payload) {
+  const usernameValue = payload?.username ?? payload?.email ?? "";
   const response = await apiClient.post("/v1/auth/verify-otp", {
-    username: String(payload?.username ?? payload?.email ?? "").trim(),
+    username: String(usernameValue).trim(),
     otp: String(payload?.otp ?? "").trim(),
   });
 
@@ -69,8 +120,11 @@ export async function resetPasswordRequest(payload) {
 }
 
 export async function refreshTokenRequest(payload) {
+  const refreshTokenValue =
+    payload?.refresh_token ?? payload?.refreshToken ?? "";
+
   const response = await apiClient.post("/v1/auth/refresh", {
-    refresh_token: String(payload?.refresh_token ?? payload?.refreshToken ?? "").trim(),
+    refresh_token: String(refreshTokenValue).trim(),
   });
 
   return response?.data?.data ?? response?.data ?? {};
