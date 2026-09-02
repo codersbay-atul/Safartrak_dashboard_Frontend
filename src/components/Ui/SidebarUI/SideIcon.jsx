@@ -6,7 +6,7 @@ const SLIDER_ICON_SRC = "/images/sliderIcon.svg";
 export default function SideIcon({
   icon: Icon,
   src = SLIDER_ICON_SRC,
-  size = 24,
+  size = 16,
   strokeWidth = 2,
   className = "",
   alt = "",
