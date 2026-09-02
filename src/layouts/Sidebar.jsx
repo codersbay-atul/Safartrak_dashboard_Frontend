@@ -369,7 +369,7 @@ export default function Sidebar() {
                   <div className="h-px bg-[#2A2A2F] mx-1 mb-1" />
                 ) : null}
 
-                <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-2">
                   {section.items.map((item) => {
                     if (item.expandable) {
                       const isProductRoute =
