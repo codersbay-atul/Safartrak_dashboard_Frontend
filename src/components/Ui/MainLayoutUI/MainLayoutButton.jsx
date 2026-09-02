@@ -5,6 +5,8 @@ export default function MainLayoutButton({
   children,
   variant = "outlineYellow",
   size = "xs",
+  icon: Icon,
+  iconPosition = "right",
   className = "",
   onClick,
   ...props
@@ -18,6 +20,8 @@ export default function MainLayoutButton({
   const variantClasses = {
     outlineYellow:
       "border border-[#FDB914]/70 text-[#FDB914] bg-transparent hover:bg-[#FDB914]/10 transition-colors duration-150 font-medium",
+    outlineGray:
+      "border border-[#A8A8A8]/70 text-[#A8A8A8] bg-transparent hover:bg-[#A8A8A8]/10 hover:border-[#A8A8A8] transition-colors duration-150 font-medium",
     solidYellow:
       "bg-[#FDB914] text-black hover:bg-[#FDB914]/90 transition-colors duration-150 font-semibold",
     primary:
@@ -28,17 +32,22 @@ export default function MainLayoutButton({
 
   const chosenSize = sizeClasses[size] || sizeClasses.xs;
   const chosenVariant = variantClasses[variant] || variantClasses.outlineYellow;
+  const iconEl = Icon ? (
+    <Icon size={14} strokeWidth={2.25} className="shrink-0" />
+  ) : null;
 
   return (
     <button
       type="button"
       onClick={onClick}
-      className={`inline-flex items-center justify-center cursor-pointer select-none whitespace-nowrap focus:outline-none ${chosenSize} ${chosenVariant} ${className}`.trim()}
+      className={`inline-flex items-center justify-center gap-1.5 cursor-pointer select-none whitespace-nowrap focus:outline-none ${chosenSize} ${chosenVariant} ${className}`.trim()}
       {...props}
     >
-      <MainLayoutTextSize size="buttonText">
-        {children}
-      </MainLayoutTextSize>
+      {iconEl && iconPosition === "left" ? iconEl : null}
+      {children ? (
+        <MainLayoutTextSize size="buttonText">{children}</MainLayoutTextSize>
+      ) : null}
+      {iconEl && iconPosition === "right" ? iconEl : null}
     </button>
   );
 }

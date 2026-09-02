@@ -32,7 +32,7 @@ export default function Dashboard() {
   const [focusedStop, setFocusedStop] = useState(null);
   const [vehicleSearch, setVehicleSearch] = useState("");
   const [isFullMapView, setIsFullMapView] = useState(false);
-  const [kpisExpanded, setKpisExpanded] = useState(true);
+  const [kpisExpanded, setKpisExpanded] = useState(false);
 
   // Old dashboard state:
   // const [isRouteView, setIsRouteView] = useState(false);
@@ -164,59 +164,61 @@ export default function Dashboard() {
               onAddVehicleClick={() => navigate("/vehicles")}
             />
           </div>
-          <div className="shrink-0">
-            <StatsCard
-              isExpanded={kpisExpanded}
-              onExpand={() => setKpisExpanded(true)}
-            />
-          </div>
-
-          <MainSectionHeader icon={Truck} title="Vehicles" className="mt-0">
-            <div
-              className={`transition-opacity duration-300 ease-in-out ${
-                kpisExpanded
-                  ? "opacity-100"
-                  : "opacity-0 pointer-events-none"
-              }`}
-            >
-              <KpiToggleButton
-                expanded
-                onClick={() => setKpisExpanded(false)}
+          <div className="flex-1 min-h-0 grid grid-rows-[auto_auto_minmax(0,1fr)] gap-4 xl:gap-5">
+            <div className="min-w-0">
+              <StatsCard
+                isExpanded={kpisExpanded}
+                onExpand={() => setKpisExpanded(!kpisExpanded)}
               />
             </div>
-          </MainSectionHeader>
 
-          <div className="flex flex-col min-[1152px]:flex-row gap-4 min-[1152px]:gap-4 xl:gap-5 items-stretch w-full flex-1 min-h-[40vh] overflow-y-auto no-scrollbar min-[1152px]:overflow-hidden">
-            <div className="w-full min-[1152px]:w-[clamp(300px,30%,380px)] xl:w-[360px] 2xl:w-[400px] h-[440px] min-[1152px]:h-full min-h-0 overflow-hidden transition-all duration-300 shrink-0">
-              <DashboardVehicleCards
-                search={vehicleSearch}
-                selectedVehicle={selectedVehicle}
-                onSelectVehicle={handleSelectVehicle}
-                onOpenVehicle={handleOpenVehicle}
-                onSavePlace={handleSavePlaceFromVehicle}
+            <MainSectionHeader icon={Truck} title="Vehicles" className="mt-0">
+              <div
+                className={`transition-opacity duration-[280ms] ease-in-out ${
+                  kpisExpanded
+                    ? "opacity-100"
+                    : "opacity-0 pointer-events-none"
+                }`}
+              >
+                <KpiToggleButton
+                  expanded
+                  onClick={() => setKpisExpanded(!kpisExpanded)}
                 />
-            </div>
+              </div>
+            </MainSectionHeader>
 
-            <RouteHistorySlider
-              vehicle={selectedVehicle}
-              onClose={() => {
-                setSelectedVehicle(null);
-                setFocusedStop(null);
-              }}
-              onPlayRoute={handleOpenFullMap}
-              onSaveStop={handleSaveStop}
-              onSelectStop={handleSelectStop}
-              selectedStopId={focusedStop?.id}
-            />
+            <div className="dashboard-vehicle-section flex flex-col min-[1152px]:flex-row gap-4 min-[1152px]:gap-4 xl:gap-5 items-stretch w-full overflow-y-auto no-scrollbar min-[1152px]:overflow-hidden">
+              <div className="w-full min-[1152px]:w-[clamp(300px,30%,380px)] xl:w-[360px] 2xl:w-[400px] h-[440px] min-[1152px]:h-full min-h-0 overflow-hidden shrink-0">
+                <DashboardVehicleCards
+                  search={vehicleSearch}
+                  selectedVehicle={selectedVehicle}
+                  onSelectVehicle={handleSelectVehicle}
+                  onOpenVehicle={handleOpenVehicle}
+                  onSavePlace={handleSavePlaceFromVehicle}
+                />
+              </div>
 
-            <div className="w-full shrink-0 h-[440px] min-[1152px]:flex-1 min-[1152px]:h-full min-w-0 min-[1152px]:min-w-[240px] min-h-0 overflow-hidden">
-              <DashboardMapPanel
-                selectedVehicle={selectedVehicle}
-                focusedStop={focusedStop}
-                showRoutePath={Boolean(selectedVehicle)}
-                onViewMap={handleOpenFullMap}
+              <RouteHistorySlider
+                vehicle={selectedVehicle}
+                onClose={() => {
+                  setSelectedVehicle(null);
+                  setFocusedStop(null);
+                }}
                 onPlayRoute={handleOpenFullMap}
+                onSaveStop={handleSaveStop}
+                onSelectStop={handleSelectStop}
+                selectedStopId={focusedStop?.id}
               />
+
+              <div className="w-full shrink-0 h-[440px] min-[1152px]:flex-1 min-[1152px]:h-full min-w-0 min-[1152px]:min-w-[240px] min-h-0 overflow-hidden">
+                <DashboardMapPanel
+                  selectedVehicle={selectedVehicle}
+                  focusedStop={focusedStop}
+                  showRoutePath={Boolean(selectedVehicle)}
+                  onViewMap={handleOpenFullMap}
+                  onPlayRoute={handleOpenFullMap}
+                />
+              </div>
             </div>
           </div>
         </div>

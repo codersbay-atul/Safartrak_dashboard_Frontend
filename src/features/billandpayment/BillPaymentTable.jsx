@@ -3,6 +3,7 @@ import {
   RotateCw,
   Upload,
   Download,
+  ArrowDownToLine,
   ChevronRight,
   Receipt,
   HelpCircleIcon,
@@ -66,6 +67,7 @@ export default function BillPaymentTable({ onPayNow, onHelpClick }) {
   const [selectedStatus, setSelectedStatus] = useState("All");
   const [selectedBillingProfile, setSelectedBillingProfile] = useState("All");
   const [selectedTimespan, setSelectedTimespan] = useState("All");
+  const [isDownloading, setIsDownloading] = useState(false);
 
   const filteredInvoices = INVOICES_DATA.filter((item) => {
     const matchesSearch = item.id.toLowerCase().includes(searchTerm.toLowerCase());
@@ -297,16 +299,31 @@ export default function BillPaymentTable({ onPayNow, onHelpClick }) {
                     </td>
 
                     <td className="w-[14.28%] py-3.5 px-4 truncate">
-                      <button
-                        type="button"
-                        className="inline-flex items-center gap-1.5 hover:opacity-80 transition cursor-pointer"
-                      >
-                        <MainLayoutColor as={MainLayoutTextSize} color="yellow" size="sectionTitle">
-                          Download
-                        </MainLayoutColor>
-                        <MainLayoutColor as={Download} color="yellow" size={13} />
-                      </button>
-                    </td>
+                        <button
+                          type="button"
+                          // onClick={(event) => handleDownloadInvoice(event, item)}
+                          disabled={isDownloading}
+                          className={`inline-flex items-center gap-1.5 transition ${
+                            isDownloading
+                              ? "cursor-not-allowed"
+                              : "hover:opacity-80 cursor-pointer"
+                          }`}
+                          title={isDownloading ? "Downloading" : "Download invoice"}
+                        >
+                          <MainLayoutColor
+                            as={ArrowDownToLine}
+                            color={isDownloading ? "muted" : "yellow"}
+                            size={13}
+                          />
+                          <MainLayoutColor
+                            as={MainLayoutTextSize}
+                            color="yellow"
+                            size="sectionTitle"
+                          >
+                            {isDownloading ? "Downloading" : "Download"}
+                          </MainLayoutColor>
+                        </button>
+                      </td>
                   </tr>
                 ))
               ) : (

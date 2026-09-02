@@ -3,6 +3,7 @@ import { Truck, Circle, LocateOff, ChevronUp, ChevronDown } from "lucide-react";
 import { useDashboardSummary } from "../../hooks/useDashboardSummary";
 import { useNavigate } from "react-router-dom";
 import { MainStatsCard } from "../../components/Ui/MainLayoutUI/MainStatsCard";
+import MainLayoutButton from "../../components/Ui/MainLayoutUI/MainLayoutButton";
 import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
 import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
 import {
@@ -80,21 +81,17 @@ export function KpiToggleButton({ expanded, onClick }) {
   const Icon = expanded ? ChevronUp : ChevronDown;
 
   return (
-    <button
-      type="button"
+    <MainLayoutButton
+      variant={expanded ? "outlineYellow" : "outlineGray"}
+      size="xs"
+      icon={Icon}
+      iconPosition="right"
       onClick={onClick}
       aria-expanded={expanded}
-      className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-lg border border-[#FDB914]/70 text-[#FDB914] bg-transparent hover:bg-[#FDB914]/10 transition-colors duration-150 font-medium cursor-pointer shrink-0 select-none"
+      className="shrink-0"
     >
-      <MainLayoutTextSize size="buttonText">
-        {expanded ? "Collapse KPIs" : "Expand KPIs"}
-      </MainLayoutTextSize>
-      <Icon
-        size={14}
-        strokeWidth={2.25}
-        className="shrink-0 transition-transform duration-300 ease-in-out"
-      />
-    </button>
+      {expanded ? "Collapse KPIs" : "Expand KPIs"}
+    </MainLayoutButton>
   );
 }
 
@@ -182,47 +179,47 @@ export default function StatsCard({ isExpanded = true, onExpand }) {
   };
 
   return (
-    <div
-      className={`grid w-full min-w-0 select-none transition-[grid-template-rows] duration-300 ease-in-out ${
-        isExpanded ? "grid-rows-[1fr_0fr]" : "grid-rows-[0fr_1fr]"
-      }`}
-    >
-      <div
-        className={`min-h-0 overflow-hidden transition-opacity duration-300 ease-in-out ${
-          isExpanded ? "opacity-100" : "opacity-0 pointer-events-none"
-        }`}
-      >
-        <div className="grid grid-cols-[repeat(5,minmax(0,1fr))] gap-3 min-[1152px]:gap-3.5 xl:gap-4 mt-0 pt-0 w-full min-w-0">
-          {statsData.map((card) => (
-            <div
-              key={card.id}
-              className="min-h-[112px] xl:min-h-[124px] min-w-0 [&>*]:h-full"
-            >
-              <MainStatsCard
-                {...card}
-                padding="p-3 min-[1152px]:p-3.5 xl:p-4"
-                footerSpacing="pt-2.5 mt-2"
-                onClick={
-                  card.id === "Inactive_vehicles"
-                    ? () => handleCardClick(card)
-                    : card.onClick
-                }
-              />
-            </div>
-          ))}
+    <div className="w-full min-w-0 select-none">
+      <div className={`dashboard-expand-panel ${isExpanded ? "is-open" : ""}`}>
+        <div
+          className={`dashboard-expand-panel-inner transition-opacity duration-[280ms] ease-in-out ${
+            isExpanded ? "opacity-100" : "opacity-0 pointer-events-none"
+          }`}
+        >
+          <div className="grid grid-cols-[repeat(5,minmax(0,1fr))] gap-3 min-[1152px]:gap-3.5 xl:gap-4 mt-0 pt-0 w-full min-w-0">
+            {statsData.map((card) => (
+              <div
+                key={card.id}
+                className="min-h-[112px] xl:min-h-[124px] min-w-0 [&>*]:h-full"
+              >
+                <MainStatsCard
+                  {...card}
+                  padding="p-3 min-[1152px]:p-3.5 xl:p-4"
+                  footerSpacing="pt-2.5 mt-2"
+                  onClick={
+                    card.id === "Inactive_vehicles"
+                      ? () => handleCardClick(card)
+                      : card.onClick
+                  }
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
-      <div
-        className={`min-h-0 overflow-hidden transition-opacity duration-300 ease-in-out ${
-          isExpanded ? "opacity-0 pointer-events-none" : "opacity-100"
-        }`}
-      >
-        <CollapsedKpiBar
-          statsData={statsData}
-          onCardClick={handleCardClick}
-          onExpand={onExpand}
-        />
+      <div className={`dashboard-expand-panel ${isExpanded ? "" : "is-open"}`}>
+        <div
+          className={`dashboard-expand-panel-inner transition-opacity duration-[280ms] ease-in-out ${
+            isExpanded ? "opacity-0 pointer-events-none" : "opacity-100"
+          }`}
+        >
+          <CollapsedKpiBar
+            statsData={statsData}
+            onCardClick={handleCardClick}
+            onExpand={onExpand}
+          />
+        </div>
       </div>
     </div>
   );

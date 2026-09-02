@@ -20,54 +20,54 @@ export default function AssignVehicle() {
   const isLoading = false;
   const trips = ASSIGN_VEHICLE_TRIPS_DUMMY;
 
-  const TRIP_HELP_ITEMS = useMemo(
-    () => [
-      {
-        icon: ClipboardCheck,
-        header: "Trip ID",
-        content:
-          "Unique trip identifier in YYMMDD + SFT + sequence format. Example: 260731SFT0001. You can copy it using the copy icon.",
-      },
-      {
-        icon: Truck,
-        header: "Vehicle Number",
-        content: "The registered number of the vehicle assigned to this trip.",
-      },
-      {
-        icon: User,
-        header: "Driver",
-        content: "The driver assigned to complete this trip.",
-      },
-      {
-        icon: CircleDot,
-        header: "Status",
-        content: "Shows the current state of the trip assignment.",
-        statuses: [
-          { status: "Upcoming", content: "Trip is scheduled and has not started." },
-          { status: "Ongoing", content: "Trip is currently in progress." },
-          { status: "Delivered", content: "Trip has been completed successfully." },
-          { status: "Expired", content: "Trip window has passed without completion." },
-        ],
-      },
-      {
-        icon: Clock,
-        header: "Pickup Date & Time",
-        content: "The scheduled pickup date and time for this trip.",
-      },
-      {
-        icon: Calendar,
-        header: "Delivery Date & Time",
-        content: "The planned delivery date and time for this trip.",
-      },
-      {
-        icon: Thermometer,
-        header: "Temp Abuse",
-        content:
-          "Shows whether the temperature went outside the allowed range during the trip.",
-      },
-    ],
-    [],
-  );
+  // const TRIP_HELP_ITEMS = useMemo(
+  //   () => [
+  //     {
+  //       icon: ClipboardCheck,
+  //       header: "Trip ID",
+  //       content:
+  //         "Unique trip identifier in YYMMDD + SFT + sequence format. Example: 260731SFT0001. You can copy it using the copy icon.",
+  //     },
+  //     {
+  //       icon: Truck,
+  //       header: "Vehicle Number",
+  //       content: "The registered number of the vehicle assigned to this trip.",
+  //     },
+  //     {
+  //       icon: User,
+  //       header: "Driver",
+  //       content: "The driver assigned to complete this trip.",
+  //     },
+  //     {
+  //       icon: CircleDot,
+  //       header: "Status",
+  //       content: "Shows the current state of the trip assignment.",
+  //       statuses: [
+  //         { status: "Upcoming", content: "Trip is scheduled and has not started." },
+  //         { status: "Ongoing", content: "Trip is currently in progress." },
+  //         { status: "Delivered", content: "Trip has been completed successfully." },
+  //         { status: "Expired", content: "Trip window has passed without completion." },
+  //       ],
+  //     },
+  //     {
+  //       icon: Clock,
+  //       header: "Pickup Date & Time",
+  //       content: "The scheduled pickup date and time for this trip.",
+  //     },
+  //     {
+  //       icon: Calendar,
+  //       header: "Delivery Date & Time",
+  //       content: "The planned delivery date and time for this trip.",
+  //     },
+  //     {
+  //       icon: Thermometer,
+  //       header: "Temp Abuse",
+  //       content:
+  //         "Shows whether the temperature went outside the allowed range during the trip.",
+  //     },
+  //   ],
+  //   [],
+  // );
 
   return (
     <MainLayout InactiveTab="Trip Schedules" allowPageScroll>
@@ -81,12 +81,12 @@ export default function AssignVehicle() {
         </div>
 
         <div className="shrink-0 w-full overflow-visible">
-          <TableSlider
+          {/* <TableSlider
             isOpen={isTableHelpOpen}
             onOpen={() => setIsTableHelpOpen(true)}
             onClose={() => setIsTableHelpOpen(false)}
             items={TRIP_HELP_ITEMS}
-          />
+          /> */}
           <AssignVehicleTable
             trips={trips}
             isLoading={isLoading}

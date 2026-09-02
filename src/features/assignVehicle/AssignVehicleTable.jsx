@@ -7,6 +7,8 @@ import {
   Check,
   ClipboardCheck,
   HelpCircleIcon,
+  Download,
+  ArrowDownToLine,
 } from "lucide-react";
 import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
 import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
@@ -21,6 +23,7 @@ import {
   TRIP_STATUSES,
   getDriverInitials,
 } from "./assignVehicleData";
+import { toast } from "../../components/Ui/toast";
 
 const AVATAR_PALETTE = [
   "bg-[#172554] text-[#3B82F6]",
@@ -28,11 +31,41 @@ const AVATAR_PALETTE = [
   "bg-[#450A0A] text-[#F87171]",
 ];
 
+function csvCell(value) {
+  return `"${String(value ?? "").replace(/"/g, '""')}"`;
+}
 
-
-function isTempAbuse(value) {
-  const normalized = String(value || "").trim().toLowerCase();
-  return normalized !== "" && normalized !== "none" && normalized !== "-";
+function downloadTripReport(item) {
+  const headers = [
+    "Trip ID",
+    "Vehicle Number",
+    "Driver",
+    "Status",
+    "Pickup Date",
+    "Pickup Time",
+    "Delivery Date",
+    "Delivery Time",
+  ];
+  const row = [
+    item.tripId,
+    item.vehicleNumber,
+    item.driverName || "Unassigned",
+    item.status,
+    item.pickupDate,
+    item.pickupTime,
+    item.deliveryDate,
+    item.deliveryTime,
+  ];
+  const csv = [headers, row].map((cols) => cols.map(csvCell).join(",")).join("\n");
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `trip-report-${item.tripId || "export"}.csv`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  window.URL.revokeObjectURL(url);
 }
 
 const TRIP_STATUS_BADGE = {
@@ -56,8 +89,8 @@ export default function AssignVehicleTable({
   const [currentPage, setCurrentPage] = useState(1);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [copiedId, setCopiedId] = useState(null);
+  const [downloadingId, setDownloadingId] = useState(null);
   const itemsPerPage = 8;
-
   const [filters, setFilters] = useState({
     status: [],
   });
@@ -67,6 +100,23 @@ export default function AssignVehicleTable({
     navigator.clipboard.writeText(text);
     setCopiedId(id);
     setTimeout(() => setCopiedId(null), 1500);
+  };
+
+  const handleDownloadReport = async (e, item) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const id = item.id ?? item.tripId;
+    if (downloadingId === id) return;
+    setDownloadingId(id);
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 800));
+      downloadTripReport(item);
+      toast.success("Trip report download started");
+    } catch (err) {
+      toast.error(err?.message || "Unable to download trip report");
+    } finally {
+      setDownloadingId(null);
+    }
   };
 
   const toggleFilter = (category, value) => {
@@ -349,9 +399,9 @@ export default function AssignVehicleTable({
                 <MainTableHeader color="title" className="w-[14%] py-3 px-4">
                   Vehicle Number
                 </MainTableHeader>
-                <MainTableHeader color="title" className="w-[16%] py-3 px-4">
+                {/* <MainTableHeader color="title" className="w-[16%] py-3 px-4">
                   Driver
-                </MainTableHeader>
+                </MainTableHeader> */}
                 <MainTableHeader color="title" className="w-[13%] py-3 px-4">
                   Status
                 </MainTableHeader>
@@ -362,7 +412,7 @@ export default function AssignVehicleTable({
                   Delivery Date & Time
                 </MainTableHeader>
                 <MainTableHeader color="title" className="w-[14%] py-3 px-4 pr-5">
-                  Temp Abuse
+                  Download Report
                 </MainTableHeader>
               </MainLayoutColor>
             </thead>
@@ -384,22 +434,29 @@ export default function AssignVehicleTable({
                 currentTrips.map((item) => {
                   const driverName = item.driverName || "Unassigned";
                   const initials = getDriverInitials(driverName);
-                  const abuse = item.tempAbuse || "None";
+                  const isDownloading = downloadingId === (item.id ?? item.tripId);
 
                   return (
                     <tr
                       key={item.id}
-                      className="hover:bg-[#1f2025] transition-colors align-middle cursor-pointer w-full"
+                      className="hover:bg-[#1f2025] transition-colors align-middle w-full"
                     >
                       <td className="py-2 px-4 pl-5 truncate">
-                        <div className="flex items-center gap-1.5 group w-fit">
+                        <div className="flex items-center gap-1.5 group w-fit max-w-full">
                           <MainLayoutColor
                             as={MainLayoutTextSize}
-                            color="subtitle"
+                            color="title"
                             size="sectionTitle"
                             className="font-medium block truncate"
                           >
-                            {item.tripId}
+                            <a
+                              href={`#download-${item.tripId}`}
+                              onClick={(event) => handleDownloadReport(event, item)}
+                              className="hover:underline no-underline hover:text-[#FDB914] cursor-pointer"
+                              title="Download trip report"
+                            >
+                              {item.tripId}
+                            </a>
                           </MainLayoutColor>
                         </div>
                       </td>
@@ -415,7 +472,7 @@ export default function AssignVehicleTable({
                         </MainLayoutColor>
                       </td>
 
-                      <td className="py-2 px-4 truncate">
+                      {/* <td className="py-2 px-4 truncate">
                         <div className="flex items-center gap-2.5 min-w-0">
                           <MainLayoutColor
                             as={MainLayoutTextSize}
@@ -426,7 +483,7 @@ export default function AssignVehicleTable({
                             {driverName}
                           </MainLayoutColor>
                         </div>
-                      </td>
+                      </td> */}
 
                       <td className="py-2 px-4 truncate">
                         <MainStatusBadge
@@ -437,22 +494,15 @@ export default function AssignVehicleTable({
                       </td>
 
                       <td className="py-2 px-4">
-                        <MainLayoutColor
-                          as={MainLayoutTextSize}
-                          color="subtitle"
-                          size="sectionTitle"
-                          className="font-normal block truncate"
-                        >
-                          {item.pickupDate}
-                        </MainLayoutColor>
-                        <MainLayoutColor
-                          as={MainLayoutTextSize}
-                          color="muted"
-                          size="subInfoText"
-                          className="font-normal block truncate"
-                        >
-                          {item.pickupTime}
-                        </MainLayoutColor>
+                          <MainLayoutColor
+                            as={MainLayoutTextSize}
+                            color="subtitle"
+                            size="sectionTitle"
+                            className="font-normal block truncate"
+                          >
+                            {item.pickupDate}{", "}
+                            {item.pickupTime}
+                          </MainLayoutColor>
                       </td>
 
                       <td className="py-2 px-4">
@@ -462,27 +512,36 @@ export default function AssignVehicleTable({
                           size="sectionTitle"
                           className="font-normal block truncate"
                         >
-                          {item.deliveryDate}
-                        </MainLayoutColor>
-                        <MainLayoutColor
-                          as={MainLayoutTextSize}
-                          color="muted"
-                          size="subInfoText"
-                          className="font-normal block truncate"
-                        >
+                          {item.deliveryDate}{", "}
                           {item.deliveryTime}
                         </MainLayoutColor>
                       </td>
 
                       <td className="py-2 px-4 pr-5 truncate">
-                        <MainLayoutColor
-                          as={MainLayoutTextSize}
-                          color={isTempAbuse(abuse) ? "expiredText" : "subtitle"}
-                          size="sectionTitle"
-                          className="font-normal block truncate"
+                        <button
+                          type="button"
+                          onClick={(event) => handleDownloadReport(event, item)}
+                          disabled={isDownloading}
+                          className={`inline-flex items-center gap-1.5 transition ${
+                            isDownloading
+                              ? "cursor-not-allowed"
+                              : "hover:opacity-80 cursor-pointer"
+                          }`}
+                          title={isDownloading ? "Downloading" : "Download trip report"}
                         >
-                          {abuse}
-                        </MainLayoutColor>
+                          <MainLayoutColor
+                            as={ArrowDownToLine}
+                            color={isDownloading ? "muted" : "yellow"}
+                            size={13}
+                          />
+                          <MainLayoutColor
+                            as={MainLayoutTextSize}
+                            color="yellow"
+                            size="sectionTitle"
+                          >
+                            {isDownloading ? "Downloading" : "Download"}
+                          </MainLayoutColor>
+                        </button>
                       </td>
                     </tr>
                   );

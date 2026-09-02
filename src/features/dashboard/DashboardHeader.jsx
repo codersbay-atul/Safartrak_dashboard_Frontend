@@ -55,12 +55,13 @@ export default function DashboardHeader({
       subtitle="Monitor vehicle locations, movement and fleet status in real time."
       searchPlaceholder="Search"
       searchIconPosition="right"
-      dateRangeOptions={FILTER_OPTIONS.dateRange}
-      regionOptions={FILTER_OPTIONS.region}
-      statusOptions={FILTER_OPTIONS.status}
+      // dateRangeOptions={FILTER_OPTIONS.dateRange}
+      // regionOptions={FILTER_OPTIONS.region}
+      // statusOptions={FILTER_OPTIONS.status}
       onSearch={onSearch}
-      onFilterChange={handleFilterChange}
-      onExportClick={(exportPayload) => onExportClick?.(exportPayload ?? filters)}
+    // onFilterChange={handleFilterChange}
+    // onExportClick={(exportPayload) => onExportClick?.(exportPayload ?? filters)}
+    showExport={false}
     />
   );
 }

@@ -56,7 +56,10 @@ export default function MainReportCard({
   const interactiveProps = isComingSoon ? {} : { type: "button", onClick };
 
   const badge = isComingSoon ? (
-    <span className="inline-flex items-center rounded-full border border-[#3F3F46] bg-[#27272A] px-2 py-1 text-[11px] font-bold uppercase tracking-wide text-[#E4E4E7] leading-none shrink-0">
+    <span
+      className="inline-flex items-center rounded-md border border-dashed border-[#A3A3A3] bg-[#0A0A0A] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-[#C8C8C8] leading-none shrink-0 whitespace-nowrap"
+      style={{ textShadow: "0 0 8px rgba(200, 200, 200, 0.4)" }}
+    >
       Coming Soon
     </span>
   ) : isNew ? (
