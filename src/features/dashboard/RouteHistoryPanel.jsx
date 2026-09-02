@@ -58,8 +58,7 @@ export default function RouteHistoryPanel({
     const apiEvents = Array.isArray(activityList?.activities)
       ? activityList.activities
       : [];
-    const hasMappedEvents =
-      apiEvents.length > 0 && Boolean(apiEvents[0]?.kind);
+    const hasMappedEvents = apiEvents.length > 0 && Boolean(apiEvents[0]?.kind);
 
     if (hasMappedEvents) {
       return {
@@ -130,28 +129,15 @@ export default function RouteHistoryPanel({
         >
           Route History
         </MainLayoutColor>
-        <MainHeaderActionButton
-          variant="secondary"
-          icon={X}
-          onClick={onClose}
-          aria-label="Close"
-          title="Close"
-          className="w-8 !px-0"
-        />
-
-      </div>
-      <hr className="my-2 border-white/10" />
-      <div className="flex items-center justify-between gap-2 px-3 pt-2 pb-2 shrink-0">
-        <div className="w-[110px]">
-          <MainDropDown
-            label="Today"
-            options={PERIOD_OPTIONS}
-            selectedValue={period}
-            onSelect={setPeriod}
-          />
-        </div>
-
         <div className="flex items-center gap-2">
+          <div className="w-[110px]">
+            <MainDropDown
+              label="Today"
+              options={PERIOD_OPTIONS}
+              selectedValue={period}
+              onSelect={setPeriod}
+            />
+          </div>
           <IconCircleButton
             icon={RefreshCw}
             onClick={() => refetch()}
@@ -163,6 +149,30 @@ export default function RouteHistoryPanel({
             onClick={onPlayRoute}
             title="Play route"
           />
+          {/* <MainHeaderActionButton
+            variant="secondary"
+            icon={X}
+            onClick={onClose}
+            aria-label="Close"
+            title="Close"
+            className="w-8 !px-0"
+          /> */}
+        </div>
+      </div>
+      <hr className="my-2 border-white/10" />
+      <div className="flex items-center justify-between gap-2 px-3 pt-2 pb-2 shrink-0">
+        <div className="flex items-center gap-2">
+          {/* <IconCircleButton
+            icon={RefreshCw}
+            onClick={() => refetch()}
+            title="Refresh"
+            spinning={isFetching}
+          />
+          <IconCircleButton
+            icon={Play}
+            onClick={onPlayRoute}
+            title="Play route"
+          /> */}
           {/* <IconCircleButton
             icon={Download}
             onClick={handleExport}
@@ -177,8 +187,11 @@ export default function RouteHistoryPanel({
           type="button"
           onClick={() => setListFilter("all")}
           background="selectedRowBg"
-          className={`rounded-lg p-2.5 text-left cursor-pointer ${listFilter === "all" ? "border border-[#FDBB24]/40" : "border border-[#232329]"
-            }`}
+          className={`rounded-lg p-2.5 text-left cursor-pointer ${
+            listFilter === "all"
+              ? "border border-[#FDBB24]/40"
+              : "border border-[#232329]"
+          }`}
         >
           <MainLayoutColor
             as={MainLayoutTextSize}
@@ -211,17 +224,19 @@ export default function RouteHistoryPanel({
           type="button"
           onClick={() => setListFilter("stopped")}
           background="selectedRowBg"
-          className={`rounded-lg p-2.5 text-left cursor-pointer ${listFilter === "stopped"
+          className={`rounded-lg p-2.5 text-left cursor-pointer ${
+            listFilter === "stopped"
               ? "border border-[#FDBB24]/40"
               : "border border-[#232329]"
-            }`}
+          }`}
         >
           <MainLayoutColor
             as={MainLayoutTextSize}
             color="title"
             size="subInfoText"
-            className={`font-semibold block ${listFilter === "stopped" ? "text-[#FDB914]" : ""
-              }`}
+            className={`font-semibold block ${
+              listFilter === "stopped" ? "text-[#FDB914]" : ""
+            }`}
           >
             Stopped
           </MainLayoutColor>

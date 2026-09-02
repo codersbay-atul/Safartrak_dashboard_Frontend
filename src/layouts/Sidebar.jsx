@@ -298,15 +298,15 @@ export default function Sidebar() {
               onClick={() => navigate("/")}
               className="cursor-pointer flex items-center overflow-hidden"
             >
-              <img
-                src={isExpanded ? Logo : "/favicon.ico"}
-                alt="SafarTrak"
-                className={
-                  isExpanded
-                    ? "h-5 w-auto object-contain object-left max-w-none"
-                    : "h-5 w-5 object-contain"
-                }
-              />
+              {isExpanded ? (
+                <img
+                  src={Logo}
+                  alt="SafarTrak"
+                  className="h-5 w-auto object-contain object-left max-w-none"
+                />
+              ) : (
+                <SideIcon size={32} alt="SafarTrak" />
+              )}
             </div>
 
             {isOpen && (
@@ -369,7 +369,7 @@ export default function Sidebar() {
                   <div className="h-px bg-[#2A2A2F] mx-1 mb-1" />
                 ) : null}
 
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-3">
                   {section.items.map((item) => {
                     if (item.expandable) {
                       const isProductRoute =
