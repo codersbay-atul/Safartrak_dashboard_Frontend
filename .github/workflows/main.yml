@@ -1,70 +1,70 @@
-name: Deploy React App to AWS EC2
+# name: Deploy React App to AWS EC2
 
-on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
+# on:
+#   push:
+#     branches:
+#       - main
+#   workflow_dispatch:
 
-jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
+# jobs:
+#   build-and-deploy:
+#     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+#     steps:
+#       - name: Checkout Repository
+#         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          cache: "npm"
+#       - name: Setup Node.js
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: "20"
+#           cache: "npm"
 
-      - name: Clean npm cache
-        run: |
-          npm cache clean --force
+#       - name: Clean npm cache
+#         run: |
+#           npm cache clean --force
 
-      - name: Install dependencies
-        run: |
-          rm -rf node_modules package-lock.json
-          npm install --include=optional
-          npm install @rolldown/binding-linux-x64-gnu --save-dev
+#       - name: Install dependencies
+#         run: |
+#           rm -rf node_modules package-lock.json
+#           npm install --include=optional
+#           npm install @rolldown/binding-linux-x64-gnu --save-dev
 
-      - name: Verify Rolldown binding
-        run: |
-          npm ls rolldown
-          npm ls @rolldown/binding-linux-x64-gnu
+#       - name: Verify Rolldown binding
+#         run: |
+#           npm ls rolldown
+#           npm ls @rolldown/binding-linux-x64-gnu
 
-      - name: Build React App
-        env:
-          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
-        run: npm run build
+#       - name: Build React App
+#         env:
+#           VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+#         run: npm run build
 
-      - name: Deploy to AWS EC2
-        env:
-          HOST: ${{ secrets.HOST_MAIN1 }}
-          USER: ${{ secrets.NEW_USER }}
-          SSH_KEY: ${{ secrets.SSH_KEY }}
-        run: |
-          echo "$SSH_KEY" > deploy-key.pem
-          chmod 400 deploy-key.pem
+#       - name: Deploy to AWS EC2
+#         env:
+#           HOST: ${{ secrets.HOST_MAIN1 }}
+#           USER: ${{ secrets.NEW_USER }}
+#           SSH_KEY: ${{ secrets.SSH_KEY }}
+#         run: |
+#           echo "$SSH_KEY" > deploy-key.pem
+#           chmod 400 deploy-key.pem
 
-          sudo apt-get update
-          sudo apt-get install -y rsync
+#           sudo apt-get update
+#           sudo apt-get install -y rsync
 
-          ssh -o StrictHostKeyChecking=no -i deploy-key.pem $USER@$HOST "
-            sudo mkdir -p /var/www/html &&
-            sudo chown -R $USER:$USER /var/www/html
-          "
+#           ssh -o StrictHostKeyChecking=no -i deploy-key.pem $USER@$HOST "
+#             sudo mkdir -p /var/www/html &&
+#             sudo chown -R $USER:$USER /var/www/html
+#           "
 
-          rsync -avz --delete \
-            -e "ssh -o StrictHostKeyChecking=no -i deploy-key.pem" \
-            dist/ $USER@$HOST:/var/www/html/
+#           rsync -avz --delete \
+#             -e "ssh -o StrictHostKeyChecking=no -i deploy-key.pem" \
+#             dist/ $USER@$HOST:/var/www/html/
 
-          ssh -o StrictHostKeyChecking=no -i deploy-key.pem $USER@$HOST "
-            sudo systemctl restart nginx
-          "
+#           ssh -o StrictHostKeyChecking=no -i deploy-key.pem $USER@$HOST "
+#             sudo systemctl restart nginx
+#           "
 
-      - name: Cleanup
-        if: always()
-        run: rm -f deploy-key.pem
+#       - name: Cleanup
+#         if: always()
+#         run: rm -f deploy-key.pem
