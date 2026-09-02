@@ -1,134 +1,99 @@
 /**
- * Map GET /v1/vehicles payload → VehiclesList UI shape.
- * Keep display fields compatible with existing list / details / map consumers.
+ * Map GET /api/client/dashboard/vehicles payload.
  */
-
-import { formatLastSeen } from "../../utils/formatLastSeen";
 
 export function getVehicleApiId(vehicle) {
   if (!vehicle) return "";
 
-  const raw = vehicle.raw ?? {};
-  const candidates = [
-    raw.unique_id,
-    raw.uniqueId,
-    vehicle.statsId,
-    vehicle.id,
-    vehicle.uniqueId,
-  ];
+  const candidates = [vehicle.id, vehicle.externalDeviceId];
 
   for (const value of candidates) {
     if (value == null) continue;
     const next = String(value).trim();
-    if (next && next !== "Not Available") return next;
+    if (next) return next;
   }
 
   return "";
 }
 
-const STATUS_TEXT_CLASS = {
-  Running: "text-[#10b981]",
-  Idle: "text-[#f59e0b]",
-  Critical: "text-[#f97316]",
-  Offline: "text-[#ef4444]",
-};
-
-function normalizeStatusLabel(status) {
-  const raw = String(status ?? "").trim();
+function statusLabel(liveStatus) {
+  const raw = String(liveStatus ?? "").trim();
   if (!raw) return "Offline";
 
-  const lower = raw.toLowerCase();
-  if (lower.includes("idle")) return "Idle";
+  const lower = raw.toLowerCase().replace(/[_-]+/g, " ");
+  if (lower === "moving" || lower === "running") return "Moving";
+  if (lower === "idle" || lower === "stopped") return "Idle";
   if (lower.includes("crit")) return "Critical";
+  if (lower.includes("no gps") || lower === "nogps") return "No GPS";
   if (lower.includes("off")) return "Offline";
-  if (
-    lower.includes("run") ||
-    lower.includes("mov") ||
-    lower.includes("active") ||
-    lower.includes("track")
-  ) {
-    return "Running";
+  if (lower === "online" || lower === "active" || lower === "tracking") {
+    return "Moving";
   }
 
   return raw.charAt(0).toUpperCase() + raw.slice(1);
 }
 
-function formatSpeed(speedKmh) {
-  if (speedKmh == null || speedKmh === "" || speedKmh === "-") {
-    return "Not Available";
-  }
-  const n = Number(speedKmh);
-  if (Number.isNaN(n)) return String(speedKmh);
-  return `${n} km/h`;
+function formatAgo(lastSeenAt) {
+  if (lastSeenAt == null || lastSeenAt === "") return null;
+
+  const past = new Date(lastSeenAt).getTime();
+  if (Number.isNaN(past)) return null;
+
+  const diffInSec = Math.max(0, Math.floor((Date.now() - past) / 1000));
+  if (diffInSec < 60) return `${diffInSec} sec ago`;
+
+  const diffInMin = Math.floor(diffInSec / 60);
+  if (diffInMin < 60) return `${diffInMin} min ago`;
+
+  const hours = Math.floor(diffInMin / 60);
+  if (hours < 24) return `${hours} hour${hours === 1 ? "" : "s"} ago`;
+
+  const days = Math.floor(hours / 24);
+  return `${days} day${days === 1 ? "" : "s"} ago`;
 }
 
-function displayOrDash(value) {
-  if (value == null) return "Not Available";
+function resolveLiveStatus(device) {
+  const explicit =
+    device.liveStatus ?? device.live_status ?? device.status ?? null;
+  if (explicit != null && String(explicit).trim() !== "") return explicit;
 
-  if (typeof value === "string") {
-    const normalizedValue = value.trim();
-    if (normalizedValue === "" || normalizedValue === "-") {
-      return "Not Available";
-    }
-  }
+  const speed = device.lastSpeed != null ? Number(device.lastSpeed) : 0;
+  if (!Number.isNaN(speed) && speed > 0) return "moving";
+  if (device.lastLat == null || device.lastLng == null) return "no_gps";
+  return "idle";
+}
 
-  return String(value);
+function toCoord(value) {
+  if (value == null || value === "") return null;
+  const n = Number(value);
+  return Number.isNaN(n) ? null : n;
 }
 
 /**
- * @param {object} item - Single API vehicle row
+ * @param {object} item - Single API vehicle/device row
  */
 export function mapVehicleItem(item) {
   if (!item || typeof item !== "object") return null;
 
-  const status = normalizeStatusLabel(item.status);
-  const lat = item.lat != null ? Number(item.lat) : null;
-  const lng = item.lng != null ? Number(item.lng) : null;
-  const hasPosition =
-    lat != null &&
-    lng != null &&
-    !Number.isNaN(lat) &&
-    !Number.isNaN(lng);
-
-  const uniqueId = item.unique_id ?? item.uniqueId ?? null;
-  const vehicleNumber = item.vehicle_number ?? item.vehicleNumber ?? null;
-  const driverName = item.driver_name ?? item.driverName ?? null;
-  const fleetGroup = item.fleet_group ?? item.fleetGroup ?? null;
-  const vehicleType = item.vehicle_type ?? item.vehicleType ?? null;
-  const model = item.model ?? null;
-  const deviceStatus = item.device_status ?? item.deviceStatus ?? null;
-  const inMaintenance = item.in_maintenance ?? item.inMaintenance;
-  const lastUpdatedSec = item.last_updated_sec ?? item.lastUpdatedSec;
-  const speedKmh = item.speed_kmh ?? item.speedKmh;
+  const device = item;
+  const liveStatus = resolveLiveStatus(device);
 
   return {
-    id: uniqueId ?? vehicleNumber ?? item.id,
-    statsId: uniqueId ?? item.id,
-    uniqueId: displayOrDash(uniqueId),
-    plate: displayOrDash(vehicleNumber),
-    status,
-    statusColor: STATUS_TEXT_CLASS[status] || "text-[#a1a1aa]",
-    driver: displayOrDash(driverName),
-    info: formatLastSeen(lastUpdatedSec),
-    lastUpdated: formatLastSeen(lastUpdatedSec),
-    speed: formatSpeed(speedKmh),
-    location: displayOrDash(fleetGroup),
-    fleetGroup: displayOrDash(fleetGroup),
-    type: displayOrDash(vehicleType),
-    model: displayOrDash(model),
-    deviceStatus: displayOrDash(deviceStatus),
-    inMaintenance:
-      typeof inMaintenance === "boolean"
-        ? inMaintenance
-          ? "Yes"
-          : "No"
-        : "Not Available",
-    lat: hasPosition ? lat : null,
-    lng: hasPosition ? lng : null,
-    latDisplay: hasPosition ? String(lat) : "Not Available",
-    lngDisplay: hasPosition ? String(lng) : "Not Available",
-    position: hasPosition ? [lat, lng] : undefined,
-    raw: item,
+    id: device._id,
+    vehicleNumber: device.vehicleNumber,
+    externalDeviceId: device.externalDeviceId,
+    name: device.name,
+    vehicleType: device.vehicleType,
+    driverName: device.driverName,
+    liveStatus,
+    statusLabel: statusLabel(liveStatus),
+    speed: device.lastSpeed != null ? Number(device.lastSpeed) : 0,
+    city: device.lastCity,
+    address: device.lastAddress,
+    lastSeenAt: device.lastSeenAt,
+    lastSeenAgo: formatAgo(device.lastSeenAt),
+    lat: toCoord(device.lastLat),
+    lng: toCoord(device.lastLng),
   };
 }
 
@@ -136,37 +101,27 @@ export function mapVehicleItem(item) {
  * @param {object|null|undefined} payload - getVehicles() result
  */
 export function mapVehiclesList(payload) {
-  const results =
-    Array.isArray(payload?.results)
+  const results = Array.isArray(payload?.vehicles)
+    ? payload.vehicles
+    : Array.isArray(payload?.results)
       ? payload.results
-      : Array.isArray(payload?.items)
-        ? payload.items
-        : Array.isArray(payload?.data)
-          ? payload.data
-          : Array.isArray(payload?.vehicles)
-            ? payload.vehicles
-            : [];
+      : [];
 
-  const vehicles = results.map(mapVehicleItem).filter(Boolean);
-  const counts =
-    payload?.counts && typeof payload.counts === "object"
-      ? payload.counts
-      : payload?.count && typeof payload.count === "object"
-        ? payload.count
-        : {};
+  const pagination =
+    payload?.pagination && typeof payload.pagination === "object"
+      ? payload.pagination
+      : {};
 
   return {
-    vehicles,
-    counts,
-    total: payload?.total ?? payload?.count ?? vehicles.length,
-    page: payload?.page ?? 1,
-    pageSize: payload?.page_size ?? payload?.pageSize ?? 25,
+    vehicles: results.map(mapVehicleItem).filter(Boolean),
+    total: pagination.total ?? payload?.total ?? 0,
+    page: pagination.page ?? payload?.page ?? 1,
+    pageSize: pagination.limit ?? payload?.page_size ?? payload?.limit ?? 25,
   };
 }
 
 /**
  * Map API counts → existing filter tab labels.
- * Tabs: All, Moving, Idle, Critical, Offline
  */
 export function mapVehicleFilterCounts(counts = {}, total = null) {
   const c = counts && typeof counts === "object" ? counts : {};

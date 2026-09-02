@@ -91,14 +91,9 @@ export default function Dashboard() {
   };
 
   const handleSavePlaceFromVehicle = (vehicle) => {
-    const address =
-      vehicle?.address ||
-      vehicle?.raw?.address ||
-      vehicle?.raw?.formatted_address ||
-      vehicle?.raw?.location_name ||
-      DUMMY_VEHICLE_ADDRESS;
-    const lat = Number(vehicle?.lat ?? vehicle?.raw?.lat);
-    const lng = Number(vehicle?.lng ?? vehicle?.raw?.lng);
+    const address = vehicle?.address || DUMMY_VEHICLE_ADDRESS;
+    const lat = Number(vehicle?.lat);
+    const lng = Number(vehicle?.lng);
     const hasCoords = !Number.isNaN(lat) && !Number.isNaN(lng);
 
     navigateToSavedPlaces({

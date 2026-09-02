@@ -53,10 +53,14 @@ export async function adminLoginRequest(credentials) {
   const emailValue =
     credentials?.email || credentials?.username || "";
 
-  const response = await apiClient.post("/api/admin/auth/login", {
+  const response = await apiClient.post("/api/client/auth/login", {
     email: String(emailValue).trim(),
     password: credentials?.password ?? "",
   });
+  // const response = await apiClient.post("/api/admin/auth/login", {
+  //   email: String(emailValue).trim(),
+  //   password: credentials?.password ?? "",
+  // });
 
   const payload = response?.data?.data ?? response?.data ?? {};
 

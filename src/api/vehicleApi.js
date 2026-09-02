@@ -13,37 +13,43 @@ import apiClient from "./client";
 export async function getVehicles(params = {}) {
   const search = String(params.search ?? "").trim();
   const page = params.page ?? 1;
-  const page_size = params.page_size ?? 25;
-  const tab = params.tab ?? "all";
-  const fleet = params.fleet ?? params.fleetGroup ?? "";
-  const type = params.type ?? params.vehicleType ?? "";
-  const tracking_status = params.tracking_status ?? params.trackingStatus ?? "";
+  const limit = params.limit ?? params.page_size ?? 25;
+  const status = params.status ??  "all";
 
-  const response = await apiClient.get("/v1/vehicles", {
+  const response = await apiClient.get("/api/client/dashboard/vehicles", {
     params: {
-      ...(search ? { search } : {}),
-      ...(tab ? { tab } : {}),
-      ...(fleet ? { fleet } : {}),
-      ...(type ? { type } : {}),
-      ...(tracking_status ? { tracking_status } : {}),
       page,
-      page_size,
+      limit,
+      status,
+      search,
     },
-
   });
-  console.log(response);
 
   const payload = response?.data?.data ?? response?.data ?? {};
+  const pagination =
+    payload.pagination && typeof payload.pagination === "object"
+      ? payload.pagination
+      : {};
+
+  const results = Array.isArray(payload.vehicles)
+    ? payload.vehicles
+    : Array.isArray(payload.results)
+      ? payload.results
+      : [];
 
   return {
-    results: Array.isArray(payload.results) ? payload.results : [],
+    results,
+    vehicles: results,
     counts:
       payload.counts && typeof payload.counts === "object"
         ? payload.counts
         : {},
-    total: payload.total ?? 0,
-    page: payload.page ?? page,
-    page_size: payload.page_size ?? page_size,
+    total: pagination.total ?? payload.total ?? 0,
+    page: pagination.page ?? payload.page ?? page,
+    page_size: pagination.limit ?? payload.page_size ?? payload.limit ?? limit,
+    pages: pagination.pages ?? 0,
+    hasNext: Boolean(pagination.hasNext),
+    hasPrev: Boolean(pagination.hasPrev),
   };
 }
 
@@ -74,52 +80,53 @@ export async function getVehiclesExport(params = {}) {
 /**
  * Build possible stats endpoints for a vehicle identifier payload.
  */
- function resolveVehicleStatsIds(vehicleOrId) {
-   if (!vehicleOrId) return [];
-   if (typeof vehicleOrId === "string") {
-     return [vehicleOrId];
-   }
+function resolveVehicleStatsIds(vehicleOrId) {
+  if (!vehicleOrId) return [];
+  if (typeof vehicleOrId === "string") {
+    return [vehicleOrId];
+  }
 
-   const ids = new Set();
-   ids.add(vehicleOrId.statsId ?? null);
-   ids.add(vehicleOrId.id ?? null);
-   ids.add(vehicleOrId.raw?.unique_id ?? null);
-   ids.add(vehicleOrId.raw?.uniqueId ?? null);
-   ids.add(vehicleOrId.raw?.id ?? null);
-   ids.add(vehicleOrId.raw?.vehicle_number ?? null);
-   ids.add(vehicleOrId.raw?.vehicleNumber ?? null);
-   ids.add(vehicleOrId.plate ?? null);
+  const ids = new Set();
+  ids.add(vehicleOrId.statsId ?? null);
+  ids.add(vehicleOrId.id ?? null);
+  ids.add(vehicleOrId.raw?.unique_id ?? null);
+  ids.add(vehicleOrId.raw?.uniqueId ?? null);
+  ids.add(vehicleOrId.raw?.id ?? null);
+  ids.add(vehicleOrId.raw?.vehicle_number ?? null);
+  ids.add(vehicleOrId.raw?.vehicleNumber ?? null);
+  ids.add(vehicleOrId.plate ?? null);
 
-   return [...ids].filter(Boolean);
- }
+  return [...ids].filter(Boolean);
+}
 
- /**
-  * GET /v1/vehicles/{uniqueId}/stats
-  * @param {string|object} uniqueId
-  * @returns {Promise<object>} stats payload
-  */
- export async function getVehicleStats(uniqueId) {
-   if (!uniqueId) throw new Error("uniqueId is required for getVehicleStats");
+/**
+ * GET /v1/vehicles/{uniqueId}/stats
+ * @param {string|object} uniqueId
+ * @returns {Promise<object>} stats payload
+ */
+export async function getVehicleStats(uniqueId) {
+  if (!uniqueId) throw new Error("uniqueId is required for getVehicleStats");
 
-   const ids = resolveVehicleStatsIds(uniqueId);
-   if (ids.length === 0) {
-     throw new Error("No valid vehicle identifier could be derived for getVehicleStats");
-   }
+  const ids = resolveVehicleStatsIds(uniqueId);
+  if (ids.length === 0) {
+    throw new Error(
+      "No valid vehicle identifier could be derived for getVehicleStats",
+    );
+  }
 
-   let lastError = null;
-   for (const id of ids) {
-     try {
-       const response = await apiClient.get(`/v1/vehicles/${id}/stats`);
-       return response?.data ?? {};
-     } catch (error) {
-       lastError = error;
-       if (error?.status === 404 || error?.status === 400) {
-         continue;
-       }
-       throw error;
-     }
-   }
+  let lastError = null;
+  for (const id of ids) {
+    try {
+      const response = await apiClient.get(`/v1/vehicles/${id}/stats`);
+      return response?.data ?? {};
+    } catch (error) {
+      lastError = error;
+      if (error?.status === 404 || error?.status === 400) {
+        continue;
+      }
+      throw error;
+    }
+  }
 
-   throw lastError || new Error("Failed to load vehicle stats");
- }
-
+  throw lastError || new Error("Failed to load vehicle stats");
+}

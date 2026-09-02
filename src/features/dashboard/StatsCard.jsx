@@ -21,6 +21,7 @@ const VALUE_SKELETON = (
 function buildStatsData(summary, { isLoading = false } = {}) {
   const values = summary ?? DASHBOARD_SUMMARY_PLACEHOLDER;
   const valueOrSkeleton = (value) => (isLoading ? VALUE_SKELETON : value);
+  const inactiveCount = values.totalVehicles;
 
   return [
     {
@@ -28,39 +29,38 @@ function buildStatsData(summary, { isLoading = false } = {}) {
       icon: Truck,
       value: valueOrSkeleton(values.totalVehicles),
       subtitle:
-        values.InactiveVehicles === "Not Available" ||
-        values.InactiveVehicles === "-"
+        inactiveCount === "Not Available" || inactiveCount === "-"
           ? "Inactive Vehicles"
-          : `${values.InactiveVehicles} Inactive Vehicles`,
+          : `${inactiveCount} Inactive Vehicles`,
       title: "Total Vehicles",
       bgIcon: "bg-[#3B2A00]",
       colorIcon: "text-[#ffd60a]",
       showArrow: false,
     },
     {
-      id: "Inactive_vehicles",
+      id: "moving",
       icon: Circle,
-      value: valueOrSkeleton(values.InactiveVehicles),
-      subtitle: "69% of Total Fleet",
+      value: valueOrSkeleton(values.moving),
+      subtitle: values.movingSubtitle,
       title: "Inactive Vehicle",
       bgIcon: "bg-[#052E16]",
       colorIcon: "text-[#16A34A]",
       showArrow: true,
     },
     {
-      id: "maintenance-due",
+      id: "idle",
       icon: Circle,
-      value: valueOrSkeleton(values.maintenanceDue),
-      subtitle: "6% of Total Fleet",
+      value: valueOrSkeleton(values.idle),
+      subtitle: values.idleSubtitle,
       title: "Idle",
       bgIcon: "bg-[#3B2A00]",
       colorIcon: "text-[#ffd60a]",
     },
     {
-      id: "offline_vehicles",
+      id: "offline",
       icon: Circle,
-      value: valueOrSkeleton(values.noGps),
-      subtitle: "Need Attention",
+      value: valueOrSkeleton(values.offline),
+      subtitle: values.offlineSubtitle,
       title: "Offline",
       bgIcon: "bg-[#450A0A]",
       colorIcon: "text-[#B91C1C]",
@@ -69,7 +69,7 @@ function buildStatsData(summary, { isLoading = false } = {}) {
       id: "no-gps",
       icon: LocateOff,
       value: valueOrSkeleton(values.noGps),
-      subtitle: "Last Sync: 12 sec ago",
+      subtitle: values.noGpsSubtitle,
       title: "No GPS",
       bgIcon: "bg-[#172554]",
       colorIcon: "text-[#3b82f6]",
@@ -105,7 +105,7 @@ function CollapsedKpiBar({ statsData, onCardClick, onExpand }) {
     >
       {statsData.map((card, index) => {
         const Icon = card.icon;
-        const clickable = typeof onCardClick === "function" && card.id === "Inactive_vehicles";
+        const clickable = typeof onCardClick === "function" && card.id === "moving";
 
         return (
           <React.Fragment key={card.id}>
@@ -175,7 +175,7 @@ export default function StatsCard({ isExpanded = true, onExpand }) {
   });
 
   const handleCardClick = (card) => {
-    if (card.id === "Inactive_vehicles") navigate("/vehicles");
+    if (card.id === "moving") navigate("/vehicles");
   };
 
   return (
@@ -197,7 +197,7 @@ export default function StatsCard({ isExpanded = true, onExpand }) {
                   padding="p-3 min-[1152px]:p-3.5 xl:p-4"
                   footerSpacing="pt-2.5 mt-2"
                   onClick={
-                    card.id === "Inactive_vehicles"
+                    card.id === "moving"
                       ? () => handleCardClick(card)
                       : card.onClick
                   }

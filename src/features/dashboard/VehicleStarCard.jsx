@@ -46,19 +46,16 @@ export default function VehicleStarCard({
   onOpenVehicle,
   onSavePlace,
 }) {
-  const plate = formatDisplayValue(vehicle?.plate);
+  const plate = formatDisplayValue(vehicle?.vehicleNumber || vehicle?.name);
   const speedDisplay = formatDisplayValue(vehicle?.speed, "0");
   const speedMatch = String(speedDisplay).match(/-?\d+(\.\d+)?/);
   const speedNumber = speedMatch ? speedMatch[0] : "0";
   const lastUpdated = formatDisplayValue(
-    vehicle?.lastUpdated || vehicle?.info,
+    vehicle?.lastSeenAgo,
     "Not Available",
   );
   const address = formatDisplayValue(
-    vehicle?.address ||
-    vehicle?.raw?.address ||
-    vehicle?.raw?.formatted_address ||
-    vehicle?.raw?.location_name,
+    vehicle?.address,
     "57 M From Sri Ranganatha Swamy Tours & Travel, Bangalore Bellary Road, Hunasamaranahalli, Yelahanka, Bengaluru, Bengaluru Urban District, Karnataka, 562157, India",
   );
   const todayDistance = vehicle?.todayDistance || "116 km today";
@@ -68,8 +65,10 @@ export default function VehicleStarCard({
   const stoppedSince = vehicle?.stoppedSince || "1 hrs : 6 min";
   const drivingFor = vehicle?.drivingFor || "8 min : 54 sec";
   const isRunning =
-    String(vehicle?.status ?? "").toLowerCase() === "running" ||
-    String(vehicle?.status ?? "").toLowerCase() === "moving";
+    String(vehicle?.liveStatus ?? vehicle?.statusLabel ?? "")
+      .toLowerCase() === "running" ||
+    String(vehicle?.liveStatus ?? vehicle?.statusLabel ?? "")
+      .toLowerCase() === "moving";
   const ignition = isRunning ? "ON" : "OFF";
   const alertCount = vehicle?.alertCount ?? 3;
   const activityLine = isRunning

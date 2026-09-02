@@ -14,13 +14,14 @@ import {
 export function useVehiclesList({
   search = "",
   page = 1,
-  pageSize = 25,
-  tab = "all",
-  fleetGroup = "",
-  vehicleType = "",
-  trackingStatus = "",
+  pageSize,
+  limit,
+  status,
+  tab,
 } = {}) {
   const [debouncedSearch, setDebouncedSearch] = useState(search);
+  const resolvedPageSize = limit ?? pageSize ?? 25;
+  const resolvedStatus = status ?? tab ?? "all";
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -33,21 +34,15 @@ export function useVehiclesList({
     queryKey: queryKeys.vehicles.list({
       search: debouncedSearch,
       page,
-      pageSize,
-      tab,
-      fleetGroup,
-      vehicleType,
-      trackingStatus,
+      pageSize: resolvedPageSize,
+      status: resolvedStatus,
     }),
     queryFn: () =>
       getVehiclesList({
         search: debouncedSearch,
         page,
-        page_size: pageSize,
-        tab,
-        fleet: fleetGroup,
-        type: vehicleType,
-        tracking_status: trackingStatus,
+        limit: resolvedPageSize,
+        status: resolvedStatus,
       }),
     staleTime: 30_000,
     gcTime: 5 * 60_000,
@@ -76,7 +71,7 @@ export function useVehiclesList({
     filterCounts,
     total: mapped?.total ?? 0,
     page: mapped?.page ?? page,
-    pageSize: mapped?.pageSize ?? pageSize,
+    pageSize: mapped?.pageSize ?? resolvedPageSize,
   };
 }
 

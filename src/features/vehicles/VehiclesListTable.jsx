@@ -63,10 +63,7 @@ export default function VehicleListTable() {
     refetch,
   } = useVehiclesList({
     search: searchQuery,
-    tab: activeTab,
-    fleetGroup: selectedFleet,
-    vehicleType: selectedVehicleType,
-    trackingStatus: selectedTrackingStatus,
+    status: activeTab,
     page,
     pageSize: PAGE_SIZE,
   });
@@ -255,14 +252,14 @@ export default function VehicleListTable() {
 
               <tbody className="divide-y divide-[#1d1d20]/50">
                 {vehicles.map((item, index) => {
-                  const vehicleId = item.id || item.plate || item.uniqueId || index;
-                  const vehicleNumber = item.plate || item.vehicleNumber || item.raw?.vehicle_number || "--";
-                  const vehicleType = item.type || item.raw?.vehicle_type || item.raw?.vehicleCategory || "Unknown";
-                  const fleetGroup = item.fleetGroup || item.location || item.raw?.fleet_group || "--";
-                  const driverName = item.driver || item.raw?.driver_name || "Unassigned";
-                  const deviceStatus = item.deviceStatus || item.raw?.device_status || "Disconnected";
-                  const lastUpdated = item.lastUpdated || item.info || item.raw?.last_updated || item.raw?.lastUpdated || "N/A";
-                  const statusLabel = item.status || item.raw?.status || "Offline";
+                  const vehicleId = item.id || item.externalDeviceId || index;
+                  const vehicleNumber = item.vehicleNumber || item.name || "--";
+                  const vehicleType = item.vehicleType || "Unknown";
+                  const fleetGroup = item.city || "--";
+                  const driverName = item.driverName || "Unassigned";
+                  const deviceStatus = item.statusLabel || item.liveStatus || "Disconnected";
+                  const lastUpdated = item.lastSeenAgo || "N/A";
+                  const statusLabel = item.statusLabel || item.liveStatus || "Offline";
 
                   return (
                     <tr key={vehicleId} className="hover:bg-[#1f2025] transition-colors">
@@ -285,7 +282,7 @@ export default function VehicleListTable() {
                               size="subInfoText"
                               className="font-medium block"
                             >
-                              {item.model || item.raw?.model || "Unknown"}
+                              {item.name || "Unknown"}
                             </MainLayoutColor>
                           </div>
                         </div>
@@ -354,7 +351,7 @@ export default function VehicleListTable() {
                             size="subInfoText"
                             className="font-medium block"
                           >
-                            {item.speed || item.raw?.speed_kmh || "0 km/h"}
+                            {item.speed ?? 0} km/h
                           </MainLayoutColor>
                         </div>
                       </td>

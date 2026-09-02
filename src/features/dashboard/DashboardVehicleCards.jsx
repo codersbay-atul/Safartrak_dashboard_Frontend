@@ -17,12 +17,10 @@ const FILTER_DEFS = [
 function matchesVehicleFilter(vehicle, filterLabel) {
   if (filterLabel === "All") return true;
 
-  const raw = vehicle?.raw ?? {};
-  const status = String(raw.status ?? vehicle?.status ?? "").toLowerCase();
-  const deviceStatus = String(
-    raw.device_status ?? raw.deviceStatus ?? vehicle?.deviceStatus ?? "",
+  const status = String(
+    vehicle?.liveStatus ?? vehicle?.statusLabel ?? "",
   ).toLowerCase();
-  const speed = Number(raw.speed_kmh ?? raw.speedKmh ?? vehicle?.speedKmh ?? 0);
+  const speed = Number(vehicle?.speed ?? 0);
 
   switch (filterLabel) {
     case "Running":
@@ -35,35 +33,24 @@ function matchesVehicleFilter(vehicle, filterLabel) {
       return (
         status === "idle" ||
         status === "stopped" ||
-        (speed === 0 &&
-          status !== "offline" &&
-          deviceStatus !== "disconnected" &&
-          deviceStatus !== "offline" &&
-          deviceStatus !== "no signal")
+        (speed === 0 && status !== "offline" && status !== "no gps")
       );
     case "No Signal":
-      return (
-        status === "offline" ||
-        deviceStatus === "disconnected" ||
-        deviceStatus === "offline" ||
-        deviceStatus === "no signal"
-      );
+      return status === "offline" || status === "no gps" || status === "no_gps";
     case "Scheduled":
-      return vehicle?.scheduled === true;
+      return false;
     default:
       return true;
   }
 }
 
 function getVehicleSortPriority(vehicle) {
-  const rawStatus = String(
-    vehicle?.raw?.status ?? vehicle?.status ?? "",
+  const status = String(
+    vehicle?.liveStatus ?? vehicle?.statusLabel ?? "",
   ).toLowerCase();
-  const speed = Number(
-    vehicle?.raw?.speed_kmh ?? vehicle?.raw?.speedKmh ?? vehicle?.speedKmh ?? 0,
-  );
+  const speed = Number(vehicle?.speed ?? 0);
   const isRunning =
-    rawStatus === "moving" || rawStatus === "running" || speed > 0;
+    status === "moving" || status === "running" || speed > 0;
   return isRunning ? 0 : 1;
 }
 
@@ -80,7 +67,8 @@ export default function DashboardVehicleCards({
   const { vehicles, filterCounts, isLoading } = useVehiclesList({
     search,
     page: 1,
-    pageSize: 100,
+    limit: 100,
+    status: "all",
   });
 
   const filteredVehicles = useMemo(() => {

@@ -23,11 +23,9 @@ export default function LivePositions({
     }
     const vehicleId =
       selectedVehicle?.id ||
-      selectedVehicle?.unique_id ||
-      selectedVehicle?.vehicle_id ||
-      selectedVehicle?.reg_no;
+      selectedVehicle?.externalDeviceId;
 
-    const plate = selectedVehicle?.plate || selectedVehicle?.reg_no || "";
+    const plate = selectedVehicle?.vehicleNumber || selectedVehicle?.name || "";
 
     const url = vehicleId
       ? `/full-map?vehicleId=${vehicleId}&plate=${plate}`
