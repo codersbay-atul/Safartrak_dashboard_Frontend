@@ -1,15 +1,16 @@
 /**
- * Collapsible sidebar: icon rail that expands on hover.
- * Previous full-width sidebar is preserved in ./Sidebar.legacy.jsx
+ * Previous full-width sidebar — kept for reference, not imported.
+ * The active sidebar is ./Sidebar.jsx (collapsed rail + hover expand).
  */
 
-import { useState, useRef, useLayoutEffect, useEffect } from "react";
+import { useState, useRef, useLayoutEffect } from "react";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 
 import {
   LayoutDashboard,
   BarChart3,
   Clock3,
+  Power,
   TriangleAlert,
   ScanSearch,
   Send,
@@ -33,25 +34,24 @@ import SideIcon from "../components/Ui/SidebarUI/SideIcon";
 import SideTextSize from "../components/Ui/SidebarUI/SideTextSize";
 import SideNavDrawerItem from "../components/Ui/SidebarUI/SideNavDrawerItem";
 
-let globalSidebarScrollTop = 0;
 
-const COLLAPSED_WIDTH = 64;
-const EXPANDED_WIDTH = 240;
-const HOVER_EXPAND_DELAY_MS = 80;
-const HOVER_COLLAPSE_DELAY_MS = 180;
+
+let globalSidebarScrollTop = 0;
 
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isHoverExpanded, setIsHoverExpanded] = useState(false);
+
+  // Your Products expand/collapse
   const [isProductsOpen, setIsProductsOpen] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
 
   const scrollContainerRef = useRef(null);
-  const hoverTimerRef = useRef(null);
 
-  const isExpanded = isOpen || isHoverExpanded;
+  /* =========================================
+     SIDEBAR SCROLL
+  ========================================= */
 
   const handleScroll = (e) => {
     globalSidebarScrollTop = e.currentTarget.scrollTop;
@@ -63,113 +63,156 @@ export default function Sidebar() {
     }
   });
 
-  const clearHoverTimer = () => {
-    if (hoverTimerRef.current) {
-      clearTimeout(hoverTimerRef.current);
-      hoverTimerRef.current = null;
-    }
-  };
-
-  const isDesktop = () =>
-    typeof window !== "undefined" && window.innerWidth >= 1024;
-
-  const handleSidebarMouseEnter = () => {
-    if (!isDesktop()) return;
-    clearHoverTimer();
-    hoverTimerRef.current = setTimeout(() => {
-      setIsHoverExpanded(true);
-    }, HOVER_EXPAND_DELAY_MS);
-  };
-
-  const handleSidebarMouseLeave = () => {
-    if (!isDesktop()) return;
-    clearHoverTimer();
-    hoverTimerRef.current = setTimeout(() => {
-      setIsHoverExpanded(false);
-    }, HOVER_COLLAPSE_DELAY_MS);
-  };
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (!isDesktop()) {
-        clearHoverTimer();
-        setIsHoverExpanded(false);
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      clearHoverTimer();
-    };
-  }, []);
+  /* =========================================
+     ROUTES
+  ========================================= */
 
   const routeMap = {
     Dashboard: "/dashboard",
     Analytics: "/analytics",
     Reports: "/reports",
+
+    // "Mobilize / Immobilize": "/mobilize",
     Alerts: "/alerts",
+
     "Saved Places": "/saved-places",
     Activity: "/activity",
+
     Vehicles: "/vehicles",
     "Vehicle Details": "/vehicle-overview",
     Users: "/users",
+
     Contact: "/contact",
     "Trip Schedules": "/trip-schedules",
+
     "API Credentials": "/api-credentials",
+
     "Your Products": "/products",
+
     "Bills & Payments": "/billing",
   };
+
+  /* =========================================
+     SIDEBAR SECTIONS
+  ========================================= */
 
   const sections = [
     {
       title: "HOME",
       items: [
-        { icon: LayoutDashboard, label: "Dashboard" },
-        { icon: BarChart3, label: "Analytics" },
-        { icon: Clock3, label: "Reports" },
+        {
+          icon: LayoutDashboard,
+          label: "Dashboard",
+        },
+        {
+          icon: BarChart3,
+          label: "Analytics",
+        },
+        {
+          icon: Clock3,
+          label: "Reports",
+        },
       ],
     },
+
     {
       title: "ACTIONS & EVENTS",
-      items: [{ icon: TriangleAlert, label: "Alerts" }],
+      items: [
+        // {
+        //   icon: Power,
+        //   label: "Mobilize / Immobilize",
+        // },
+        {
+          icon: TriangleAlert,
+          label: "Alerts",
+        },
+      ],
     },
+
     {
       title: "GEO SERVICES",
       items: [
-        { icon: ScanSearch, label: "Saved Places" },
-        { icon: Send, label: "Activity" },
+        {
+          icon: ScanSearch,
+          label: "Saved Places",
+        },
+        {
+          icon: Send,
+          label: "Activity",
+        },
       ],
     },
+
     {
       title: "MANAGEMENT",
       items: [
-        { icon: ClipboardCheck, label: "Trip Schedules" },
-        { icon: Truck, label: "Vehicles" },
-        { icon: FileSearch, label: "Vehicle Details" },
-        { icon: Users, label: "Users" },
+        {
+          icon: ClipboardCheck,
+          label: "Trip Schedules",
+        },
+        {
+          icon: Truck,
+          label: "Vehicles",
+        },
+        {
+          icon: FileSearch,
+          label: "Vehicle Details",
+        },
+        {
+          icon: Users,
+          label: "Users",
+        },
       ],
     },
+
     {
       title: "DEVELOPER SETTINGS",
-      items: [{ icon: Key, label: "API Credentials" }],
+      items: [
+        {
+          icon: Key,
+          label: "API Credentials",
+          // badge: "New",
+        },
+      ],
     },
+
     {
       title: "BILLING",
       items: [
-        { icon: ShoppingCart, label: "Your Products", expandable: true },
-        { icon: CreditCard, label: "Bills & Payments" },
+        {
+          icon: ShoppingCart,
+          label: "Your Products",
+          // badge: "New",
+          expandable: true,
+        },
+        {
+          icon: CreditCard,
+          label: "Bills & Payments",
+          // badge: "New",
+        },
       ],
     },
   ];
+
+  /* =========================================
+     NORMAL NAVIGATION
+  ========================================= */
 
   const handleNavigation = () => {
     setIsOpen(false);
   };
 
+  /* =========================================
+     YOUR PRODUCTS TOGGLE
+  ========================================= */
+
   const handleProductsToggle = () => {
     setIsProductsOpen((prev) => !prev);
   };
+
+  /* =========================================
+     AUTO OPEN IF INSIDE PRODUCT ROUTE
+  ========================================= */
 
   useLayoutEffect(() => {
     if (
@@ -180,29 +223,12 @@ export default function Sidebar() {
     }
   }, [location.pathname]);
 
-  const navItemClass = (isActive) =>
-    `
-      flex
-      items-center
-      h-8
-      rounded-lg
-      transition-colors
-      ${isExpanded ? "gap-2.5 w-full px-2" : "justify-center w-full px-0"}
-      ${isActive ? "bg-[#232328] text-white" : "text-[#D4D4D4] hover:bg-[#232328]"}
-    `;
-
-  const labelClass = `
-    flex-1
-    min-w-0
-    truncate
-    whitespace-nowrap
-    transition-opacity
-    duration-200
-    ${isExpanded ? "opacity-100" : "hidden"}
-  `;
-
   return (
     <>
+      {/* =================================================
+          MOBILE MENU BUTTON
+      ================================================= */}
+
       {!isOpen && (
         <div className="lg:hidden fixed top-2.5 left-2.5 z-50">
           <button
@@ -229,6 +255,10 @@ export default function Sidebar() {
         </div>
       )}
 
+      {/* =================================================
+          MOBILE OVERLAY
+      ================================================= */}
+
       {isOpen && (
         <div
           onClick={() => setIsOpen(false)}
@@ -243,25 +273,21 @@ export default function Sidebar() {
         />
       )}
 
-      {/* Keeps main content from shifting while the rail expands on hover */}
-      <div
-        className="hidden lg:block shrink-0 h-full"
-        style={{ width: COLLAPSED_WIDTH }}
-        aria-hidden="true"
-      />
+      {/* =================================================
+          SIDEBAR
+      ================================================= */}
 
       <SideColor
         as="aside"
         bg="background"
-        aria-expanded={isExpanded}
-        onMouseEnter={handleSidebarMouseEnter}
-        onMouseLeave={handleSidebarMouseLeave}
         className={`
           fixed
-          lg:absolute
+          lg:static
           top-0
           left-0
           z-45
+          w-56
+          xl:w-60
           h-screen
           lg:h-full
           border-r
@@ -272,40 +298,41 @@ export default function Sidebar() {
           overflow-hidden
           select-none
           py-3
-          transition-[width,transform,box-shadow]
-          duration-200
-          ease-out
+          transition-transform
+          duration-300
+          ease-in-out
 
           ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
-          ${isHoverExpanded ? "lg:shadow-[8px_0_28px_rgba(0,0,0,0.45)]" : ""}
         `}
-        style={{
-          width: isExpanded ? EXPANDED_WIDTH : COLLAPSED_WIDTH,
-        }}
       >
         <div className="flex flex-col flex-1 min-h-0">
+          {/* =================================================
+              LOGO
+          ================================================= */}
+
           <div
-            className={`
+            className="
               h-8
               flex
               items-center
+              justify-between
+              px-4
               mb-8
               shrink-0
-              ${isExpanded ? "px-4 justify-between" : "px-0 justify-center"}
-            `}
+            "
           >
             <div
               onClick={() => navigate("/")}
-              className="cursor-pointer flex items-center overflow-hidden"
+              className="
+                cursor-pointer
+                flex
+                items-center
+              "
             >
               <img
-                src={isExpanded ? Logo : "/favicon.ico"}
+                src={Logo}
                 alt="SafarTrak"
-                className={
-                  isExpanded
-                    ? "h-5 w-auto object-contain object-left max-w-none"
-                    : "h-5 w-5 object-contain"
-                }
+                className="h-5 w-auto object-contain"
               />
             </div>
 
@@ -332,69 +359,63 @@ export default function Sidebar() {
             )}
           </div>
 
+          {/* =================================================
+              SCROLL AREA
+          ================================================= */}
+
           <div
             ref={scrollContainerRef}
             onScroll={handleScroll}
             style={{ scrollBehavior: "auto" }}
-            className={`
+            className="
+              px-3
               overflow-y-auto
               flex-1
               flex
               flex-col
               gap-4
               custom-scrollbar
-              ${isExpanded ? "px-3" : "px-2"}
-            `}
+            "
           >
-            {sections.map((section, sectionIndex) => (
+            {sections.map((section) => (
               <div key={section.title} className="flex flex-col gap-0.5">
-                {isExpanded ? (
-                  <SideColor
-                    as="h4"
-                    color="title"
-                    className="
-                      text-[10px]
-                      font-semibold
-                      leading-[10px]
-                      tracking-wider
-                      uppercase
-                      mb-1
-                      px-1
-                      whitespace-nowrap
-                    "
-                  >
-                    {section.title}
-                  </SideColor>
-                ) : sectionIndex > 0 ? (
-                  <div className="h-px bg-[#2A2A2F] mx-1 mb-1" />
-                ) : null}
+                {/* =========================================
+                    SECTION TITLE
+                ========================================= */}
+
+                <SideColor
+                  as="h4"
+                  color="title"
+                  className="
+                    text-[10px]
+                    font-semibold
+                    leading-[10px]
+                    tracking-wider
+                    uppercase
+                    mb-1
+                    px-1
+                  "
+                >
+                  {section.title}
+                </SideColor>
 
                 <div className="flex flex-col gap-2">
                   {section.items.map((item) => {
+                    /* =====================================
+                       YOUR PRODUCTS
+                    ===================================== */
+
                     if (item.expandable) {
                       const isProductRoute =
                         location.pathname.startsWith("/products") ||
                         location.pathname.startsWith("/your-products");
 
-                      if (!isExpanded) {
-                        return (
-                          <NavLink
-                            key={item.label}
-                            to={routeMap[item.label] || "/products"}
-                            preventScrollReset
-                            onClick={handleNavigation}
-                            className={navItemClass(isProductRoute)}
-                          >
-                            <SideIcon
-                              icon={item.icon}
-                              strokeWidth={isProductRoute ? 2.5 : 2}
-                            />
-                          </NavLink>
-                        );
-                      }
-
                       return (
                         <div key={item.label}>
+                          {/* =================================
+                              YOUR PRODUCTS PARENT
+                          ================================= */}
+
                           <div
                             className={`
                               flex
@@ -420,18 +441,50 @@ export default function Sidebar() {
                               onClick={handleProductsToggle}
                               className="flex min-w-0 flex-1 items-center gap-2.5"
                             >
+                              {/* Product icon */}
+
                               <SideIcon
                                 icon={item.icon}
                                 strokeWidth={isProductRoute ? 2.5 : 2}
                               />
 
+                              {/* Product text */}
+
                               <SideColor
                                 as={SideTextSize}
                                 color="text"
-                                className="flex-1 min-w-0 truncate text-left"
+                                className="
+                                flex-1
+                                min-w-0
+                                truncate
+                                text-left
+                              "
                               >
                                 {item.label}
                               </SideColor>
+
+                              {/* New */}
+
+                              {item.badge && (
+                                <span
+                                  className="
+                                  inline-flex
+                                  items-center
+                                  px-2
+                                  py-0.5
+                                  rounded-full
+                                  text-[11px]
+                                  font-semibold
+                                  bg-[#2A1F00]
+                                  text-[#F5B700]
+                                  shrink-0
+                                  leading-none
+                                  whitespace-nowrap
+                                "
+                                >
+                                  {item.badge}
+                                </span>
+                              )}
                             </NavLink>
 
                             <button
@@ -450,6 +503,7 @@ export default function Sidebar() {
                                   text-[#FDB914]
                                   transition-transform
                                   duration-200
+
                                   ${isProductsOpen ? "rotate-180" : "rotate-0"}
                                 `}
                               />
@@ -463,6 +517,10 @@ export default function Sidebar() {
                       );
                     }
 
+                    /* =====================================
+                       NORMAL SIDEBAR ITEM
+                    ===================================== */
+
                     const targetPath = routeMap[item.label] || "/";
 
                     return (
@@ -471,8 +529,27 @@ export default function Sidebar() {
                         to={targetPath}
                         preventScrollReset
                         onClick={handleNavigation}
-                        className={({ isActive }) => navItemClass(isActive)}
+                        className={({ isActive }) =>
+                          `
+                            flex
+                            items-center
+                            gap-2.5
+                            w-full
+                            h-8
+                            px-2
+                            rounded-lg
+                            transition-colors
+
+                            ${
+                              isActive
+                                ? "bg-[#232328] text-white"
+                                : "hover:bg-[#232328]"
+                            }
+                          `
+                        }
                       >
+                        {/* Icon */}
+
                         <SideIcon
                           icon={item.icon}
                           strokeWidth={
@@ -480,13 +557,42 @@ export default function Sidebar() {
                           }
                         />
 
+                        {/* Text */}
+
                         <SideColor
                           as={SideTextSize}
                           color="text"
-                          className={labelClass}
+                          className="
+                            flex-1
+                            min-w-0
+                            truncate
+                          "
                         >
                           {item.label}
                         </SideColor>
+
+                        {/* Badge */}
+
+                        {item.badge && (
+                          <span
+                            className="
+                              inline-flex
+                              items-center
+                              px-2
+                              py-0.5
+                              rounded-full
+                              text-[11px]
+                              font-semibold
+                              bg-[#2A1F00]
+                              text-[#F5B700]
+                              shrink-0
+                              leading-none
+                              whitespace-nowrap
+                            "
+                          >
+                            {item.badge}
+                          </span>
+                        )}
                       </NavLink>
                     );
                   })}
@@ -496,43 +602,40 @@ export default function Sidebar() {
           </div>
         </div>
 
-        <div className={`mt-2 shrink-0 ${isExpanded ? "px-4" : "px-2"}`}>
+        {/* =================================================
+            NEED HELP
+        ================================================= */}
+
+        <div className="px-4 mt-2 shrink-0">
           <button
             type="button"
             onClick={() => navigate("/contact")}
-            className={`
+            className="
               w-full
               rounded-lg
               border
               border-[#303036]
               bg-[#121214]
+              px-3
+              py-1.5
               flex
               items-center
+              justify-between
+              text-left
               hover:border-[#4d5563]
               hover:bg-[#1f2025]
               transition-colors
-              ${isExpanded ? "px-3 py-1.5 justify-between text-left" : "h-8 justify-center"}
-            `}
+            "
           >
-            {isExpanded ? (
-              <>
-                <div>
-                  <p className="text-[14px] font-semibold text-white">
-                    Need Help?
-                  </p>
-                  <p className="text-[13px] text-[#9CA3AF]">
-                    Contact support
-                  </p>
-                </div>
-                <SideColor color="icon">
-                  <Headphones size={16} />
-                </SideColor>
-              </>
-            ) : (
-              <SideColor color="icon">
-                <Headphones size={16} />
-              </SideColor>
-            )}
+            <div>
+              <p className="text-[14px] font-semibold text-white">Need Help?</p>
+
+              <p className="text-[13px] text-[#9CA3AF]">Contact support</p>
+            </div>
+
+            <SideColor color="icon">
+              <Headphones size={16} />
+            </SideColor>
           </button>
         </div>
       </SideColor>
