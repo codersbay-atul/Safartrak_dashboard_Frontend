@@ -151,7 +151,10 @@ apiClient.interceptors.response.use(
         localStorage.getItem("refresh_token") ||
         localStorage.getItem("refreshToken");
 
-      const isRefreshRequest = originalRequest.url?.includes("/v1/auth/refresh");
+      const isRefreshRequest =
+        originalRequest.url?.includes("/v1/client/auth/refresh") ||
+        originalRequest.url?.includes("/v1/auth/refresh") ||
+        originalRequest.url?.includes("/v1/admin/refresh");
 
       // Agar refresh request khud 401 de rahi hai toh logout karein
       if (isRefreshRequest) {
@@ -175,21 +178,35 @@ apiClient.interceptors.response.use(
         isRefreshing = true;
 
         try {
-          // Backend body compatibility ke liye dono keys bheji gayi hain
-          const res = await axios.post(
+          const refreshBody = {
+            refresh_token: refreshToken,
+            refreshToken: refreshToken,
+          };
+          const refreshHeaders = {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          };
+
+          let res;
+          const refreshPaths = [
+            "/v1/client/auth/refresh",
             "/v1/auth/refresh",
-            {
-              refresh_token: refreshToken,
-              refreshToken: refreshToken,
-            },
-            {
-              baseURL: BASE_URL,
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-              },
+            "/v1/admin/refresh",
+          ];
+          let lastRefreshError;
+          for (const refreshPath of refreshPaths) {
+            try {
+              res = await axios.post(refreshPath, refreshBody, {
+                baseURL: BASE_URL,
+                headers: refreshHeaders,
+              });
+              lastRefreshError = null;
+              break;
+            } catch (refreshAttemptError) {
+              lastRefreshError = refreshAttemptError;
             }
-          );
+          }
+          if (!res) throw lastRefreshError;
 
           const data = res?.data?.data ?? res?.data ?? {};
           const newAccessToken =

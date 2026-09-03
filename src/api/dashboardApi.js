@@ -25,8 +25,7 @@ function unwrapPayload(response) {
  * @returns {Promise<object>} Raw/unwrapped API payload
  */
 export async function getDashboardSummary() {
-  const response = await apiClient.get("/api/client/dashboard/summary");
-  // const response = await apiClient.get("/v1/dashboard/summary");
+  const response = await apiClient.get("/v1/dashboard/summary");
   return unwrapPayload(response);
 }
 

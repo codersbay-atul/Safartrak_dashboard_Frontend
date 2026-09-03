@@ -1,7 +1,7 @@
 /**
  * Dashboard summary → StatsCard value mapping.
  *
- * GET /api/client/dashboard/summary
+ * GET /v1/dashboard/summary
  * Unwrapped payload: { summary: { totalVehicles, moving, idle, offline, noGps, ... } }
  */
 

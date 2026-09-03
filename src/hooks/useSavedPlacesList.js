@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { queryKeys } from "../api/queryKeys";
-import { getAoiList } from "../services/aoiService";
+import { getSavedPlacesList } from "../services/savedPlacesService";
 
-export function useAoiList({ search = "", status = "all", geometry = false } = {}) {
+export function useSavedPlacesList({ search = "", status = "all", geometry = true } = {}) {
   const [debouncedSearch, setDebouncedSearch] = useState(String(search ?? "").trim());
 
   useEffect(() => {
@@ -17,13 +17,13 @@ export function useAoiList({ search = "", status = "all", geometry = false } = {
   const normalizedStatus = status === "all" ? "all" : status;
 
   const query = useQuery({
-    queryKey: queryKeys.aoi.list({
+    queryKey: queryKeys.savedPlaces.list({
       search: debouncedSearch,
       status: normalizedStatus,
       geometry,
     }),
     queryFn: () =>
-      getAoiList({
+      getSavedPlacesList({
         search: debouncedSearch,
         status: normalizedStatus,
         geometry,
@@ -38,10 +38,14 @@ export function useAoiList({ search = "", status = "all", geometry = false } = {
 
   return {
     ...query,
-    aois: Array.isArray(query.data?.areas) ? query.data.areas : [],
+    places: Array.isArray(query.data?.areas)
+      ? query.data.areas
+      : Array.isArray(query.data?.results)
+        ? query.data.results
+        : [],
     count: query.data?.count ?? 0,
     total: query.data?.total ?? 0,
   };
 }
 
-export default useAoiList;
+export default useSavedPlacesList;

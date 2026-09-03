@@ -5,20 +5,23 @@ import MainLayoutFilterButton from "../../components/Ui/MainLayoutUI/MainLayoutF
 import MainSearchInput from "../../components/Ui/MainLayoutUI/MainSearchInput";
 import MainStatusBadge from "../../components/Ui/MainLayoutUI/MainStatusBadge";
 
-const AOI_FILTERS = [
+const PLACE_FILTERS = [
   { label: "All", value: "all", dotBg: "filterDotAll" },
   { label: "Active", value: "active", dotBg: "filterDotMoving" },
   { label: "Inactive", value: "inactive", dotBg: "filterDotIdle" },
 ];
 
-export default function AoiListPanel({
-  aois = [],
+export default function SavedPlacesListPanel({
+  places = [],
   selectedId,
   onSelect,
   searchQuery = "",
   onSearchChange,
   statusFilter = "all",
   onFilterChange,
+  isLoading = false,
+  isError = false,
+  errorMessage = "",
 }) {
   return (
     <MainLayoutColor
@@ -40,7 +43,7 @@ export default function AoiListPanel({
       {/* Full Width Search Box with Custom Sizing */}
       <div className="w-full mb-3 shrink-0">
         <MainSearchInput
-          placeholder="Search vehicles..."
+          placeholder="Search places..."
           value={searchQuery}
           onChange={onSearchChange}
           iconPosition="right"
@@ -51,7 +54,7 @@ export default function AoiListPanel({
 
       {/* Filter Tabs */}
       <div className="flex items-center gap-2 overflow-x-auto pb-2 mb-2 shrink-0 no-scrollbar flex-nowrap w-full">
-        {AOI_FILTERS.map((filter) => {
+        {PLACE_FILTERS.map((filter) => {
           const isSelected = statusFilter === filter.value;
           return (
             <MainLayoutFilterButton
@@ -76,17 +79,37 @@ export default function AoiListPanel({
 
       {/* Places List */}
       <div className="flex flex-col overflow-y-auto flex-1 custom-scrollbar min-h-0 space-y-2">
-        {aois.length > 0 ? (
-          aois.map((aoi) => {
-            const isSelected = selectedId === aoi.id;
-            const currentStatus = aoi.status || "Inactive";
+        {isLoading ? (
+          <div className="flex flex-1 items-center justify-center rounded-xl border border-dashed border-[#27272a] px-4 py-8 my-2 min-h-[140px]">
+            <MainLayoutColor
+              as={MainLayoutTextSize}
+              color="subtitle"
+              size="subInfoText"
+            >
+              Loading saved places...
+            </MainLayoutColor>
+          </div>
+        ) : isError ? (
+          <div className="flex flex-1 items-center justify-center rounded-xl border border-dashed border-[#27272a] px-4 py-8 my-2 min-h-[140px]">
+            <MainLayoutColor
+              as={MainLayoutTextSize}
+              color="subtitle"
+              size="subInfoText"
+            >
+              {errorMessage || "Failed to load saved places"}
+            </MainLayoutColor>
+          </div>
+        ) : places.length > 0 ? (
+          places.map((place) => {
+            const isSelected = selectedId === place.id;
+            const currentStatus = place.status || "Inactive";
 
             return (
               <MainLayoutColor
-                key={aoi.id}
+                key={place.id}
                 as="button"
                 type="button"
-                onClick={() => onSelect(aoi)}
+                onClick={() => onSelect(place)}
                 className={`w-full text-left py-3 px-3 sm:px-3.5 transition-all cursor-pointer shrink-0 ${
                   isSelected
                     ? "bg-[#07080a] border-l-2 border-l-[#ffd60a]"
@@ -102,7 +125,7 @@ export default function AoiListPanel({
                         size="sectionTitle"
                         className="font-semibold truncate inline max-w-full"
                       >
-                        {aoi.name}
+                        {place.name}
                       </MainLayoutColor>
 
                       <MainLayoutColor
@@ -111,7 +134,7 @@ export default function AoiListPanel({
                         size="subInfoText"
                         className="shrink-0 font-normal inline"
                       >
-                        {aoi.assignedVehiclesCount ?? aoi.vehicles ?? 0}{" "}
+                        {place.assignedVehiclesCount ?? place.vehicles ?? 0}{" "}
                         Assigned Vehicles
                       </MainLayoutColor>
                     </div>
@@ -122,9 +145,9 @@ export default function AoiListPanel({
                       size="subInfoText"
                       className="mt-0.5 truncate block"
                     >
-                      {aoi.type} • {aoi.size}
+                      {place.type} • {place.size}
                       <span className="mx-1.5">•</span>
-                      {aoi.alertsText ?? "No recent alerts"}
+                      {place.alertsText ?? "No recent alerts"}
                     </MainLayoutColor>
                   </div>
 

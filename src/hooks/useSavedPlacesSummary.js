@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { queryKeys } from "../api/queryKeys";
-import { getAoiSummary } from "../services/aoiService";
+import { getSavedPlacesSummary } from "../services/savedPlacesService";
 
-export function useAoiSummary() {
+export function useSavedPlacesSummary() {
   const query = useQuery({
-    queryKey: queryKeys.aoi.summary,
-    queryFn: getAoiSummary,
+    queryKey: queryKeys.savedPlaces.summary,
+    queryFn: getSavedPlacesSummary,
     staleTime: 30_000,
     gcTime: 5 * 60_000,
     retry: 2,
@@ -20,4 +20,4 @@ export function useAoiSummary() {
   };
 }
 
-export default useAoiSummary;
+export default useSavedPlacesSummary;

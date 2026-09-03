@@ -8,7 +8,7 @@ import Reports from "./pages/Reports";
 import CreateReport from "./pages/CreateReport";
 import Mobilize from "./pages/Mobilize";
 import Alerts from "./pages/Alerts";
-import Aoi from "./pages/Aoi";
+import SavedPlaces from "./pages/SavedPlaces";
 import Activity from "./pages/Activity";
 import Vehicles from "./pages/Vehicles";
 import Login from "./pages/Login";
@@ -133,7 +133,7 @@ function AppContent() {
           path="/saved-places"
           element={
             <ProtectedRoute>
-              <Aoi />
+              <SavedPlaces />
             </ProtectedRoute>
           }
         />

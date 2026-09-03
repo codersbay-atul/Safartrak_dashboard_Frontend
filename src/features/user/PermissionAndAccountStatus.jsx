@@ -15,7 +15,7 @@ const DEFAULT_PERMISSIONS = {
   vehicleDetails: false,
   users: false,
   alerts: false,
-  aoi: false,
+  savedPlaces: false,
   mobilizeImmobilize: false,
 };
 
@@ -50,7 +50,8 @@ export default function PermissionAndAccountStatus({
       vehicles: "vehicles",
       alerts: "alerts",
       users: "users",
-      aoi: "aoi",
+      aoi: "savedPlaces",
+      saved_places: "savedPlaces",
     };
 
     const nextPermissions = { ...DEFAULT_PERMISSIONS };
@@ -109,7 +110,7 @@ export default function PermissionAndAccountStatus({
     { id: "vehicleDetails", label: "Vehicle Details" },
     { id: "users", label: "Users" },
     { id: "alerts", label: "Alerts" },
-    { id: "aoi", label: "AOI" },
+    { id: "savedPlaces", label: "Saved Places" },
     { id: "mobilizeImmobilize", label: "Mobilize / Immobilize" },
   ];
 

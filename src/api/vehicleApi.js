@@ -16,7 +16,7 @@ export async function getVehicles(params = {}) {
   const limit = params.limit ?? params.page_size ?? 25;
   const status = params.status ??  "all";
 
-  const response = await apiClient.get("/api/client/dashboard/vehicles", {
+  const response = await apiClient.get("/v1/vehicles", {
     params: {
       page,
       limit,

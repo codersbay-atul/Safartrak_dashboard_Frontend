@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { adminLoginRequest } from "../../api/authApi";
+import { loginRequest } from "../../api/authApi";
 
 const ACCESS_TOKEN_KEY = "accessToken";
 const AUTH_USER_KEY = "authUser";
@@ -71,7 +71,7 @@ export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async (credentials, { rejectWithValue }) => {
     try {
-      const data = await adminLoginRequest(credentials);
+      const data = await loginRequest(credentials);
       return data;
     } catch (err) {
       const errorMessage =
@@ -115,15 +115,15 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
-        const { accessToken, refreshToken, admin } = action.payload;
-        state.user = admin;
+        const { accessToken, refreshToken, user } = action.payload;
+        state.user = user ?? null;
         state.accessToken = accessToken;
         state.refreshToken = refreshToken ?? null;
         state.isAuthenticated = true;
         state.status = "authenticated";
         state.error = null;
 
-        persistAuth({ accessToken, user: admin });
+        persistAuth({ accessToken, user: user ?? null });
         persistRefreshToken(refreshToken ?? null);
       })
       .addCase(loginUser.rejected, (state, action) => {

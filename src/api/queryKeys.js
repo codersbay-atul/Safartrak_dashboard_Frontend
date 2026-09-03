@@ -47,10 +47,10 @@ export const queryKeys = {
   activity: {
     summary: ["activity-summary"],
   },
-  aoi: {
-    summary: ["aoi-summary"],
-    list: (filters = {}) => ["aoi-list", filters],
-    detail: (id) => ["aoi-detail", id],
+  savedPlaces: {
+    summary: ["saved-places-summary"],
+    list: (filters = {}) => ["saved-places-list", filters],
+    detail: (id) => ["saved-places-detail", id],
   },
   account: {
     profile: ["account-profile"],
@@ -64,5 +64,10 @@ export const queryKeys = {
   reports: {
     all: ["reports"],
     types: ["reports", "types"],
+  },
+  tripSchedules: {
+    summary: ["trip-schedules-summary"],
+    list: () => ["trip-schedules-list"],
+    detail: (id) => ["trip-schedules-detail", id],
   },
 };

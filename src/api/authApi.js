@@ -4,7 +4,8 @@ export async function loginRequest(credentials) {
   const usernameValue =
     credentials?.username || credentials?.email || "";
 
-  const response = await apiClient.post("/v1/auth/login", {
+  const response = await apiClient.post("/v1/client/auth/login", {
+    email: String(usernameValue).trim(),
     username: String(usernameValue).trim(),
     password: credentials?.password ?? "",
   });
@@ -53,14 +54,10 @@ export async function adminLoginRequest(credentials) {
   const emailValue =
     credentials?.email || credentials?.username || "";
 
-  const response = await apiClient.post("/api/client/auth/login", {
+  const response = await apiClient.post("/v1/admin/login", {
     email: String(emailValue).trim(),
     password: credentials?.password ?? "",
   });
-  // const response = await apiClient.post("/api/admin/auth/login", {
-  //   email: String(emailValue).trim(),
-  //   password: credentials?.password ?? "",
-  // });
 
   const payload = response?.data?.data ?? response?.data ?? {};
 
@@ -87,7 +84,7 @@ export async function adminLoginRequest(credentials) {
 
 export async function adminLogoutRequest() {
   try {
-    const response = await apiClient.post("/api/admin/auth/logout");
+    const response = await apiClient.post("/v1/admin/logout");
     return response?.data?.data ?? response?.data ?? {};
   } catch (error) {
     console.warn("Admin logout API call failed:", error);
@@ -127,8 +124,9 @@ export async function refreshTokenRequest(payload) {
   const refreshTokenValue =
     payload?.refresh_token ?? payload?.refreshToken ?? "";
 
-  const response = await apiClient.post("/v1/auth/refresh", {
+  const response = await apiClient.post("/v1/client/auth/refresh", {
     refresh_token: String(refreshTokenValue).trim(),
+    refreshToken: String(refreshTokenValue).trim(),
   });
 
   return response?.data?.data ?? response?.data ?? {};

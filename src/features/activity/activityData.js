@@ -10,7 +10,7 @@ export const EVENT_OPTIONS = [
   { label: "Trip Started", value: "trip_started" },
   { label: "Waypoint", value: "waypoint" },
   { label: "Vehicle Idle", value: "idle" },
-  { label: "Entered AOI", value: "aoi" },
+  { label: "Entered Saved Place", value: "aoi" },
   { label: "Overspeed", value: "overspeed" },
 ];
 
@@ -112,7 +112,7 @@ export const ACTIVITY_EVENTS = [
   {
     id: "evt-5",
     type: "aoi",
-    title: "Entered AOI",
+    title: "Entered Saved Place",
     time: "10:42 AM",
     severity: "alert",
     location: "Restricted Zone — Midc",

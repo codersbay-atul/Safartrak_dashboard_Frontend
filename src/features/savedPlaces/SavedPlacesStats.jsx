@@ -1,6 +1,6 @@
 import React from "react";
 import { ScanSearch, CircleDot, Truck, Bell } from "lucide-react";
-import { useAoiSummary } from "../../hooks/useAoiSummary";
+import { useSavedPlacesSummary } from "../../hooks/useSavedPlacesSummary";
 import { MainStatsCard } from "../../components/Ui/MainLayoutUI/MainStatsCard";
 
 const ACCENT_STYLES = {
@@ -23,30 +23,29 @@ const ACCENT_STYLES = {
 };
 
 const DEFAULT_SUMMARY = {
-  total_aois: 0,
-  Inactive_aois: 0,
-  inInactive_aois: 0,
+  total_places: 0,
+  inactive_places: 0,
   vehicles_covered: 0,
   alerts_today: 0,
 };
 
-export default function AoiStats() {
-  const { summary, isLoading } = useAoiSummary();
+export default function SavedPlacesStats() {
+  const { summary, isLoading } = useSavedPlacesSummary();
   const data = summary && typeof summary === "object" ? summary : DEFAULT_SUMMARY;
 
   const cards = [
     {
       id: "total",
       icon: ScanSearch,
-      value: data.total_aois,
-      subtitle: `${data.inInactive_aois} InInactive`,
+      value: data.total_places,
+      subtitle: `${data.inactive_places} inactive`,
       title: "Total Saved Places",
       accent: "red",
     },
     {
       id: "Inactive",
       icon: CircleDot,
-      value: data.Inactive_aois,
+      value: data.inactive_places,
       subtitle: "Monitoring enabled",
       title: "Inactive Places",
       accent: "orange",

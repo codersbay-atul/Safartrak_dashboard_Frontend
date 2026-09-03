@@ -229,7 +229,7 @@ export function mapAlertStatsCards(summary, count, { isLoading = false } = {}) {
 }
 
 /**
- * Default from/to for geofence (AOI) alerts when no date UI is present.
+ * Default from/to for geofence (saved place) alerts when no date UI is present.
  */
 export function getDefaultGeofenceRange() {
   const to = new Date();

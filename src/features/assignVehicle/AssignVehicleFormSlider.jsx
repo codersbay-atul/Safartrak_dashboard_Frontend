@@ -795,6 +795,7 @@ export default function AssignVehicleFormSlider({
   isOpen,
   onClose,
   onSubmit,
+  vehicleOptions = ASSIGN_VEHICLE_OPTIONS,
 }) {
   const [step, setStep] = useState(0);
   const [form, setForm] = useState(emptyForm);
@@ -1237,7 +1238,7 @@ export default function AssignVehicleFormSlider({
                 <MainDropDown
                   fullWidth
                   label="Select a vehicle"
-                  options={ASSIGN_VEHICLE_OPTIONS}
+                  options={vehicleOptions}
                   selectedValue={form.vehicle}
                   onSelect={(vehicle) => {
                     patchForm({ vehicle });

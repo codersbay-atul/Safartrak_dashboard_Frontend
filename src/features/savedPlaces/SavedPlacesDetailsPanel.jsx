@@ -7,8 +7,8 @@ import MainSearchInput from "../../components/Ui/MainLayoutUI/MainSearchInput";
 
 // const TABS = ["Overview", "Vehicle", "Alerts", "Activity"];
 
-export default function AoiDetailsPanel({
-  aoi,
+export default function SavedPlacesDetailsPanel({
+  place,
   onEdit,
   onDelete,
   onViewVehicle,
@@ -21,7 +21,7 @@ export default function AoiDetailsPanel({
   const [alertSearch, setAlertSearch] = useState("");
   const [alertFilter, setAlertFilter] = useState("all");
 
-  if (!aoi) {
+  if (!place) {
     return (
       <MainLayoutColor
         as="div"
@@ -40,52 +40,52 @@ export default function AoiDetailsPanel({
     );
   }
 
-  const currentStatus = aoi.status || "Inactive";
-  const displayType = aoi.type || aoi.raw?.geometry?.shape || "";
-  const displayRadius = aoi.radius ?? aoi.size ?? "";
+  const currentStatus = place.status || "Inactive";
+  const displayType = place.type || place.raw?.geometry?.shape || "";
+  const displayRadius = place.radius ?? place.size ?? "";
   const displayLocation =
-    aoi.location ||
-    (aoi.center
-      ? `${aoi.center[0]?.toFixed?.(4) ?? aoi.center[0]}°, ${
-          aoi.center[1]?.toFixed?.(4) ?? aoi.center[1]
+    place.location ||
+    (place.center
+      ? `${place.center[0]?.toFixed?.(4) ?? place.center[0]}°, ${
+          place.center[1]?.toFixed?.(4) ?? place.center[1]
         }°`
       : "");
   const displayCreatedBy =
-    aoi.createdBy || aoi.raw?.created_by || aoi.raw?.createdBy || "";
-  const insideCount = aoi.inside ?? aoi.raw?.inside_count ?? 0;
-  const enteredTodayCount = aoi.enteredToday ?? aoi.raw?.entered_today ?? 0;
-  const exitedTodayCount = aoi.exitedToday ?? aoi.raw?.exited_today ?? 0;
+    place.createdBy || place.raw?.created_by || place.raw?.createdBy || "";
+  const insideCount = place.inside ?? place.raw?.inside_count ?? 0;
+  const enteredTodayCount = place.enteredToday ?? place.raw?.entered_today ?? 0;
+  const exitedTodayCount = place.exitedToday ?? place.raw?.exited_today ?? 0;
   const entryAlertStatus =
-    aoi.entryAlertStatus || aoi.raw?.entry_alert_status || "";
+    place.entryAlertStatus || place.raw?.entry_alert_status || "";
   const exitAlertStatus =
-    aoi.exitAlertStatus || aoi.raw?.exit_alert_status || "";
+    place.exitAlertStatus || place.raw?.exit_alert_status || "";
   const assignedVehicles =
-    Array.isArray(aoi.assignedVehicles) && aoi.assignedVehicles.length > 0
-      ? aoi.assignedVehicles
-      : Array.isArray(aoi.raw?.assigned_vehicles)
-      ? aoi.raw.assigned_vehicles
+    Array.isArray(place.assignedVehicles) && place.assignedVehicles.length > 0
+      ? place.assignedVehicles
+      : Array.isArray(place.raw?.assigned_vehicles)
+      ? place.raw.assigned_vehicles
       : [];
 
-  const vehiclesList = Array.isArray(aoi.vehiclesList)
-    ? aoi.vehiclesList
-    : Array.isArray(aoi.raw?.vehicles)
-    ? aoi.raw.vehicles
-    : Array.isArray(aoi.raw?.assigned_vehicles)
-    ? aoi.raw.assigned_vehicles
+  const vehiclesList = Array.isArray(place.vehiclesList)
+    ? place.vehiclesList
+    : Array.isArray(place.raw?.vehicles)
+    ? place.raw.vehicles
+    : Array.isArray(place.raw?.assigned_vehicles)
+    ? place.raw.assigned_vehicles
     : [];
 
-  const alertsList = Array.isArray(aoi.alertsList)
-    ? aoi.alertsList
-    : Array.isArray(aoi.raw?.alerts)
-    ? aoi.raw.alerts
+  const alertsList = Array.isArray(place.alertsList)
+    ? place.alertsList
+    : Array.isArray(place.raw?.alerts)
+    ? place.raw.alerts
     : [];
 
-  const activitiesList = Array.isArray(aoi.activitiesList)
-    ? aoi.activitiesList
-    : Array.isArray(aoi.raw?.activities)
-    ? aoi.raw.activities
-    : Array.isArray(aoi.raw?.activity_log)
-    ? aoi.raw.activity_log
+  const activitiesList = Array.isArray(place.activitiesList)
+    ? place.activitiesList
+    : Array.isArray(place.raw?.activities)
+    ? place.raw.activities
+    : Array.isArray(place.raw?.activity_log)
+    ? place.raw.activity_log
     : [];
 
   const totalInsideVehicles = vehiclesList.filter((item) => item.isInside).length;
@@ -118,7 +118,7 @@ export default function AoiDetailsPanel({
       border="cardBorder"
       className="w-full h-full rounded-xl sm:rounded-2xl p-4 sm:p-5 flex flex-col select-none overflow-hidden font-sans min-w-0"
     >
-      {/* Top Header: AOI Name and Status Badge in Single Row */}
+      {/* Top Header: place name and status badge */}
       <div className="flex items-center justify-between gap-2 sm:gap-3 shrink-0 mb-3 sm:mb-4 min-w-0">
         <MainLayoutColor
           as={MainLayoutTextSize}
@@ -126,7 +126,7 @@ export default function AoiDetailsPanel({
           size="sectionTitle"
           className="font-bold tracking-tight truncate block text-[14px] min-w-0 flex-1"
         >
-          {aoi.name}
+          {place.name}
         </MainLayoutColor>
 
         <div className="shrink-0">

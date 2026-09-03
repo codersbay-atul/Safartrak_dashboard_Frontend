@@ -1,11 +1,17 @@
 /**
- * Map GET /api/client/dashboard/vehicles payload.
+ * Map GET /v1/vehicles payload (unique_id / reg_no / lat / lng).
  */
 
 export function getVehicleApiId(vehicle) {
   if (!vehicle) return "";
 
-  const candidates = [vehicle.id, vehicle.externalDeviceId];
+  const candidates = [
+    vehicle.unique_id,
+    vehicle.id,
+    vehicle.externalDeviceId,
+    vehicle.raw?.unique_id,
+    vehicle.raw?.uniqueId,
+  ];
 
   for (const value of candidates) {
     if (value == null) continue;
@@ -33,6 +39,17 @@ function statusLabel(liveStatus) {
   return raw.charAt(0).toUpperCase() + raw.slice(1);
 }
 
+function lastSeenAtFromRow(device) {
+  if (device.lastSeenAt != null && device.lastSeenAt !== "") {
+    return device.lastSeenAt;
+  }
+  const seconds = Number(device.last_seen_sec);
+  if (Number.isFinite(seconds)) {
+    return new Date(Date.now() - seconds * 1000).toISOString();
+  }
+  return null;
+}
+
 function formatAgo(lastSeenAt) {
   if (lastSeenAt == null || lastSeenAt === "") return null;
 
@@ -57,9 +74,16 @@ function resolveLiveStatus(device) {
     device.liveStatus ?? device.live_status ?? device.status ?? null;
   if (explicit != null && String(explicit).trim() !== "") return explicit;
 
-  const speed = device.lastSpeed != null ? Number(device.lastSpeed) : 0;
+  const speed =
+    device.speed_kmh != null
+      ? Number(device.speed_kmh)
+      : device.lastSpeed != null
+        ? Number(device.lastSpeed)
+        : 0;
   if (!Number.isNaN(speed) && speed > 0) return "moving";
-  if (device.lastLat == null || device.lastLng == null) return "no_gps";
+  const lat = device.lat ?? device.lastLat;
+  const lng = device.lng ?? device.lastLng;
+  if (lat == null || lng == null) return "no_gps";
   return "idle";
 }
 
@@ -76,24 +100,43 @@ export function mapVehicleItem(item) {
   if (!item || typeof item !== "object") return null;
 
   const device = item;
+  const uniqueId =
+    device.unique_id ||
+    device.uniqueId ||
+    device.externalDeviceId ||
+    device._id ||
+    device.id;
   const liveStatus = resolveLiveStatus(device);
+  const lastSeenAt = lastSeenAtFromRow(device);
+  const speed =
+    device.speed_kmh != null
+      ? Number(device.speed_kmh)
+      : device.lastSpeed != null
+        ? Number(device.lastSpeed)
+        : 0;
 
   return {
-    id: device._id,
-    vehicleNumber: device.vehicleNumber,
-    externalDeviceId: device.externalDeviceId,
-    name: device.name,
-    vehicleType: device.vehicleType,
-    driverName: device.driverName,
+    id: uniqueId,
+    unique_id: uniqueId,
+    vehicleNumber:
+      device.reg_no ||
+      device.vehicleNumber ||
+      device.vehicle_number ||
+      device.name,
+    externalDeviceId: uniqueId,
+    name: device.name || device.reg_no || device.vehicleNumber,
+    vehicleType: device.vehicle_type || device.vehicleType,
+    driverName: device.driver_name || device.driverName,
     liveStatus,
     statusLabel: statusLabel(liveStatus),
-    speed: device.lastSpeed != null ? Number(device.lastSpeed) : 0,
-    city: device.lastCity,
-    address: device.lastAddress,
-    lastSeenAt: device.lastSeenAt,
-    lastSeenAgo: formatAgo(device.lastSeenAt),
-    lat: toCoord(device.lastLat),
-    lng: toCoord(device.lastLng),
+    speed: Number.isNaN(speed) ? 0 : speed,
+    city: device.city || device.lastCity,
+    address: device.address || device.lastAddress,
+    lastSeenAt,
+    lastSeenAgo: formatAgo(lastSeenAt),
+    lat: toCoord(device.lat ?? device.lastLat),
+    lng: toCoord(device.lng ?? device.lastLng),
+    raw: device,
   };
 }
 
@@ -114,6 +157,10 @@ export function mapVehiclesList(payload) {
 
   return {
     vehicles: results.map(mapVehicleItem).filter(Boolean),
+    counts:
+      payload?.counts && typeof payload.counts === "object"
+        ? payload.counts
+        : {},
     total: pagination.total ?? payload?.total ?? 0,
     page: pagination.page ?? payload?.page ?? 1,
     pageSize: pagination.limit ?? payload?.page_size ?? payload?.limit ?? 25,

@@ -26,7 +26,7 @@ function resolveAdminLoginErrorMessage(error) {
 
 /**
  * React Query mutation for admin login.
- * Handles admin authentication via /admin/auth/login endpoint
+ * Handles admin authentication via POST /v1/admin/login
  */
 export function useAdminLogin() {
   const dispatch = useDispatch();

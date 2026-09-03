@@ -1,28 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
+import { Marker } from "@react-google-maps/api";
 
 import MainSearchInput from "../../components/Ui/MainLayoutUI/MainSearchInput";
-// import MainDropDown from "../../components/Ui/MainLayoutUI/MainDropDown";
 import MainLayoutColor from "../../components/Ui/MainLayoutUI/MainLayoutColor";
 import MainLayoutTextSize from "../../components/Ui/MainLayoutUI/MainLayoutTextSize";
 import MainLayoutButton from "../../components/Ui/MainLayoutUI/MainLayoutButton";
+import GoogleMapView from "../../components/Ui/GoogleMapView";
+import { consumeMapsQuota } from "../../api/mapsApi";
 
-function MapController({ center, zoom }) {
-  const map = useMap();
-
-  useEffect(() => {
-    map.setView(center, zoom);
-  }, [center, zoom, map]);
-
-  return null;
-}
-
-export default function CreateAOI({
+export default function CreateSavedPlace({
   isOpen = true,
   initialData = null,
   mode = "create",
+  isSubmitting = false,
   onClose,
   onSubmit,
 }) {
@@ -32,7 +23,7 @@ export default function CreateAOI({
   const [name, setName] = useState("");
   // const [alerts, setAlerts] = useState({ entry: false, exit: false });
   // const [selectedVehicles, setSelectedVehicles] = useState([]);
-  // const [aoiType, setAoiType] = useState("polygon");
+  // const [placeType, setPlaceType] = useState("polygon");
   const [mapCenter, setMapCenter] = useState([28.6139, 77.209]);
   const [mapZoom, setMapZoom] = useState(11);
   const skipGeocodeRef = useRef(false);
@@ -55,7 +46,7 @@ export default function CreateAOI({
     setName("");
     // setAlerts({ entry: false, exit: false });
     // setSelectedVehicles([]);
-    // setAoiType("polygon");
+    // setPlaceType("polygon");
     setMapCenter([28.6139, 77.209]);
     setMapZoom(11);
   };
@@ -149,25 +140,18 @@ export default function CreateAOI({
 
     const timer = setTimeout(async () => {
       try {
-        const response = await fetch(
-          `https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q=${encodeURIComponent(
-            trimmedLocation
-          )}`
-        );
-        const data = await response.json();
-
-        if (data?.[0]) {
-          const nextLat = parseFloat(data[0].lat);
-          const nextLng = parseFloat(data[0].lon);
-
-          if (!Number.isNaN(nextLat) && !Number.isNaN(nextLng)) {
-            applyCoordinates(nextLat, nextLng);
-          }
-        }
+        if (!window.google?.maps?.Geocoder) return;
+        await consumeMapsQuota(1).catch(() => null);
+        const geocoder = new window.google.maps.Geocoder();
+        geocoder.geocode({ address: trimmedLocation }, (results, status) => {
+          if (status !== "OK" || !results?.[0]) return;
+          const loc = results[0].geometry.location;
+          applyCoordinates(loc.lat(), loc.lng());
+        });
       } catch (error) {
         console.error("Failed to geocode place location", error);
       }
-    }, 600);
+    }, 700);
 
     return () => clearTimeout(timer);
   }, [isOpen, searchLocation]);
@@ -178,6 +162,8 @@ export default function CreateAOI({
     e.preventDefault();
     if (!name.trim()) return;
 
+    if (isSubmitting) return;
+
     if (onSubmit) {
       onSubmit({
         name: name.trim(),
@@ -187,13 +173,12 @@ export default function CreateAOI({
         geo_position: `${mapCenter[0]},${mapCenter[1]}`,
         // alerts,
         // selectedVehicles,
-        // aoiType,
+        // placeType,
         // entry_alert: alerts.entry,
         // exit_alert: alerts.exit,
         // assigned_vehicles: selectedVehicles,
       });
     }
-    onClose?.();
   };
 
   // const vehicleOptions = [
@@ -202,7 +187,7 @@ export default function CreateAOI({
   //   { label: "Vehicle 02 (DL-02-CD-5678)", value: "Vehicle 02" },
   // ];
 
-  // const aoiTypeOptions = [
+  // const placeTypeOptions = [
   //   { label: "Circle", value: "circle" },
   //   { label: "Polygon", value: "polygon" },
   // ];
@@ -421,30 +406,29 @@ export default function CreateAOI({
               </MainLayoutColor>
               <MainDropDown
                 label="Select type"
-                options={aoiTypeOptions}
-                selectedValue={aoiType}
-                onSelect={setAoiType}
+                options={placeTypeOptions}
+                selectedValue={placeType}
+                onSelect={setPlaceType}
                 className="w-full justify-between rounded-full bg-[#05070B] border-[#22252B]"
               />
             </div> */}
           </div>
 
           <div className="md:col-span-7 relative bg-[#0b0f19] min-h-[240px] md:min-h-[300px]">
-            <MapContainer
+            <GoogleMapView
               center={mapCenter}
               zoom={mapZoom}
-              zoomControl={false}
-              className="h-full w-full z-0 min-h-[240px] md:min-h-[300px]"
+              followCenter
+              className="h-full w-full min-h-[240px] md:min-h-[300px]"
+              onClick={(event) => {
+                const latLng = event?.latLng;
+                if (!latLng) return;
+                applyCoordinates(latLng.lat(), latLng.lng());
+                setSearchLocation(`${latLng.lat().toFixed(5)}, ${latLng.lng().toFixed(5)}`);
+              }}
             >
-              <MapController center={mapCenter} zoom={mapZoom} />
-              <TileLayer
-                url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-                attribution="&copy; OpenStreetMap"
-              />
-              <Marker position={mapCenter}>
-                <Popup>{searchLocation.trim() || "Selected location"}</Popup>
-              </Marker>
-            </MapContainer>
+              <Marker position={{ lat: Number(lat), lng: Number(lng) }} title={searchLocation.trim() || "Selected location"} />
+            </GoogleMapView>
           </div>
         </div>
 
@@ -463,11 +447,15 @@ export default function CreateAOI({
             type="button"
             variant="solidYellow"
             size="md"
-            disabled={!name.trim() || !searchLocation.trim() || !lat || !lng}
+            disabled={isSubmitting || !name.trim() || !searchLocation.trim() || !lat || !lng}
             onClick={handleSubmit}
             className="w-1/2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#FDB914]"
           >
-            {mode === "edit" ? "Save Changes" : "Create Place"}
+            {isSubmitting
+              ? "Saving..."
+              : mode === "edit"
+                ? "Save Changes"
+                : "Create Place"}
           </MainLayoutButton>
         </div>
       </MainLayoutColor>
