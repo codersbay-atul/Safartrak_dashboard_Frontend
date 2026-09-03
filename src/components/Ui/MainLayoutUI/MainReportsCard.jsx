@@ -92,7 +92,7 @@ export default function MainReportCard({
               as={MainLayoutTextSize}
               color="title"
               size="title"
-              className="font-bold tracking-tight leading-snug block"
+              className="font-bold tracking-tight leading-snug block !text-[14px] !leading-[20px]"
             >
               {title}
             </MainLayoutColor>
@@ -103,7 +103,7 @@ export default function MainReportCard({
             as={MainLayoutTextSize}
             color="subtitle"
             size="subtitle"
-            className="mt-1.5 leading-relaxed line-clamp-3 block"
+            className="mt-1.5 leading-relaxed line-clamp-3 block !text-[12px] !leading-[18px]"
           >
             {description}
           </MainLayoutColor>
@@ -116,7 +116,7 @@ export default function MainReportCard({
             as={MainLayoutTextSize}
             color="yellow"
             size="headerButtonText"
-            className="font-medium"
+            className="font-medium !text-[13px] !leading-[20px]"
           >
             {actionLabel}
           </MainLayoutColor>

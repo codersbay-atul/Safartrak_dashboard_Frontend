@@ -23,6 +23,7 @@ import {
   TRIP_STATUSES,
   getDriverInitials,
 } from "./assignVehicleData";
+import { downloadTripReportPdf } from "./downloadTripReportPdf";
 import { toast } from "../../components/Ui/toast";
 
 const AVATAR_PALETTE = [
@@ -31,42 +32,6 @@ const AVATAR_PALETTE = [
   "bg-[#450A0A] text-[#F87171]",
 ];
 
-function csvCell(value) {
-  return `"${String(value ?? "").replace(/"/g, '""')}"`;
-}
-
-function downloadTripReport(item) {
-  const headers = [
-    "Trip ID",
-    "Vehicle Number",
-    "Driver",
-    "Status",
-    "Pickup Date",
-    "Pickup Time",
-    "Delivery Date",
-    "Delivery Time",
-  ];
-  const row = [
-    item.tripId,
-    item.vehicleNumber,
-    item.driverName || "Unassigned",
-    item.status,
-    item.pickupDate,
-    item.pickupTime,
-    item.deliveryDate,
-    item.deliveryTime,
-  ];
-  const csv = [headers, row].map((cols) => cols.map(csvCell).join(",")).join("\n");
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-  const url = window.URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = `trip-report-${item.tripId || "export"}.csv`;
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  window.URL.revokeObjectURL(url);
-}
 
 const TRIP_STATUS_BADGE = {
   upcoming: "Idle",
@@ -109,8 +74,7 @@ export default function AssignVehicleTable({
     if (downloadingId === id) return;
     setDownloadingId(id);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 800));
-      downloadTripReport(item);
+      await downloadTripReportPdf(item);
       toast.success("Trip report download started");
     } catch (err) {
       toast.error(err?.message || "Unable to download trip report");
@@ -452,7 +416,7 @@ export default function AssignVehicleTable({
                             <a
                               href={`#download-${item.tripId}`}
                               onClick={(event) => handleDownloadReport(event, item)}
-                              className="hover:underline no-underline hover:text-[#FDB914] cursor-pointer"
+                              className="hover:underline no-underline cursor-pointer"
                               title="Download trip report"
                             >
                               {item.tripId}

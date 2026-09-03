@@ -13,6 +13,10 @@ export default function MainLayout({
   isRouteView,
   onExitRouteView,
   allowPageScroll = false,
+  headerTitle,
+  headerSubtitle,
+  onHeaderSearch,
+  headerSearchPlaceholder,
 }) {
   const authUser = useSelector(selectAuthUser);
 
@@ -29,6 +33,10 @@ export default function MainLayout({
             onExitRouteView={onExitRouteView}
             InactiveTab={InactiveTab || activeTab}
             user={authUser}
+            headerTitle={headerTitle}
+            headerSubtitle={headerSubtitle}
+            onHeaderSearch={onHeaderSearch}
+            headerSearchPlaceholder={headerSearchPlaceholder}
           />
           <main
             className={`flex-1 p-3.5 min-[1152px]:p-4 xl:p-4 bg-[#000000] flex flex-col gap-4 min-[1152px]:gap-4 min-h-0 ${

@@ -1,17 +1,20 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import MainLayout from "../layouts/MainLayout";
 import StatsCard, { KpiToggleButton } from "../features/dashboard/StatsCard";
-import DashboardHeader from "../features/dashboard/DashboardHeader";
+// import DashboardHeader from "../features/dashboard/DashboardHeader";
 import LivePositions from "../features/dashboard/LivePositions";
 import DashboardVehicleCards from "../features/dashboard/DashboardVehicleCards";
 import RouteHistorySlider from "../features/dashboard/RouteHistorySlider";
 import DashboardMapPanel from "../features/dashboard/DashboardMapPanel";
 import { getVehicleApiId } from "../features/dashboard/mapVehiclesList";
-import { getDashboardExport } from "../services/dashboardService";
-import { toast } from "../components/Ui/toast";
+// import { getDashboardExport } from "../services/dashboardService";
+// import { toast } from "../components/Ui/toast";
 import { Truck } from "lucide-react";
 import MainSectionHeader from "../components/Ui/MainLayoutUI/MainSectionHeader";
+import { selectAuthUser } from "../store/slices/authSlice";
+import useAccountProfile from "../hooks/useAccountProfile";
 
 const DUMMY_VEHICLE_ADDRESS =
   "57 M From Sri Ranganatha Swamy Tours & Travel, Bangalore Bellary Road, Hunasamaranahalli, Yelahanka, Bengaluru, Bengaluru Urban District, Karnataka, 562157, India";
@@ -25,8 +28,21 @@ const DUMMY_VEHICLE_LNG = 77.6184;
 // import VehiclesList from "../features/dashboard/VehiclesList";
 // import VehiclesDetail from "../features/dashboard/VehiclesDetail";
 
+function getGreeting(d = new Date()) {
+  const h = d.getHours();
+  if (h >= 5 && h < 12) return "Good morning";
+  if (h >= 12 && h < 17) return "Good afternoon";
+  return "Good evening";
+}
+
 export default function Dashboard() {
   const navigate = useNavigate();
+  const authUser = useSelector(selectAuthUser);
+  const { profile: accountProfile } = useAccountProfile();
+  const displayName = authUser?.name ?? accountProfile?.name ?? "";
+  const headerTitle = displayName
+    ? `${getGreeting()}, ${displayName}`
+    : getGreeting();
 
   const [selectedVehicle, setSelectedVehicle] = useState(null);
   const [focusedStop, setFocusedStop] = useState(null);
@@ -103,6 +119,7 @@ export default function Dashboard() {
     });
   };
 
+  /*
   const handleExport = async (opts = {}) => {
     try {
       const { dateRange, region, status, fleet, search } = opts || {};
@@ -141,9 +158,16 @@ export default function Dashboard() {
       toast.error(err?.message || "Dashboard export failed");
     }
   };
+  */
 
   return (
-    <MainLayout activeTab="Dashboard">
+    <MainLayout
+      activeTab="Dashboard"
+      headerTitle={headerTitle}
+      headerSubtitle="Monitor vehicle locations, movement and fleet status in real time."
+      onHeaderSearch={setVehicleSearch}
+      headerSearchPlaceholder="Search"
+    >
       <div className="relative flex-1 min-h-0 overflow-hidden flex flex-col">
         <div
           className={`absolute inset-0 flex flex-col gap-4 xl:gap-5 overflow-y-auto overflow-x-hidden no-scrollbar min-h-0 ${
@@ -152,6 +176,7 @@ export default function Dashboard() {
               : "visible pointer-events-auto"
           }`}
         >
+          {/* Old in-page header — greeting, subtitle and search now live in the navbar.
           <div className="shrink-0">
             <DashboardHeader
               onSearch={setVehicleSearch}
@@ -159,6 +184,7 @@ export default function Dashboard() {
               onAddVehicleClick={() => navigate("/vehicles")}
             />
           </div>
+          */}
           <div className="flex-1 min-h-0 grid grid-rows-[auto_auto_minmax(0,1fr)] gap-4 xl:gap-5">
             <div className="min-w-0">
               <StatsCard

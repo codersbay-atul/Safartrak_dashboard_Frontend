@@ -1,5 +1,7 @@
 import hotToast from "react-hot-toast";
 
+const toastStyle = { fontSize: "14px" };
+
 function toMessage(message, description) {
   const msg = String(message ?? "");
   const desc =
@@ -11,16 +13,16 @@ function toMessage(message, description) {
 
 export const toast = {
   success(message, description) {
-    hotToast.success(toMessage(message, description));
+    hotToast.success(toMessage(message, description), { style: toastStyle });
   },
   error(message, description) {
-    hotToast.error(toMessage(message, description));
+    hotToast.error(toMessage(message, description), { style: toastStyle });
   },
   warning(message, description) {
-    hotToast(toMessage(message, description), { icon: "⚠️" });
+    hotToast(toMessage(message, description), { icon: "⚠️", style: toastStyle });
   },
   info(message, description) {
-    hotToast(toMessage(message, description), { icon: "ℹ️" });
+    hotToast(toMessage(message, description), { icon: "ℹ️", style: toastStyle });
   },
 };
 

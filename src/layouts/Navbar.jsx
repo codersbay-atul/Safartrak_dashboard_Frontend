@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import MainSearchInput from "../components/Ui/MainLayoutUI/MainSearchInput";
 import {
   LayoutDashboard,
   BarChart3,
@@ -100,6 +101,10 @@ export default function Navbar({
   isRouteView,
   onExitRouteView,
   user,
+  headerTitle,
+  headerSubtitle,
+  onHeaderSearch,
+  headerSearchPlaceholder = "Search",
 }) {
   const InactiveIcon = iconMap[InactiveTab] || LayoutDashboard;
   const dispatch = useDispatch();
@@ -119,6 +124,8 @@ export default function Navbar({
   const [beforeCursor, setBeforeCursor] = useState(null);
   const [InactivePopover, setInactivePopover] = useState(null);
   const [isAnnouncementOpen, setIsAnnouncementOpen] = useState(false);
+  const [headerSearch, setHeaderSearch] = useState("");
+  const showPageHeader = Boolean(headerTitle);
 
   const {
     notifications,
@@ -173,12 +180,50 @@ export default function Navbar({
       color=""
       className="flex items-center justify-between px-2.5 min-[1152px]:px-3 py-2.5 xl:py-3 border-b border-[#1f1f23] sticky top-0 z-30 select-none gap-2 min-w-0 font-sans"
     >
-      <div className="flex items-center gap-2 xl:gap-2.5 min-w-0 flex-1">
+      <div className="flex items-center gap-2 xl:gap-3 min-w-0 flex-1">
         <div className="w-10 h-1 shrink-0 lg:hidden" />
-        <InactiveIcon size={20} className="text-[#71717a] shrink-0" />
-        <div className="flex items-center gap-1.5 min-w-0">
-          <NavBreadcrumb items={breadcrumbItems} />
-        </div>
+        {showPageHeader ? (
+          <>
+            <div className="min-w-0 max-w-[min(100%,560px)]">
+              <NavTextSize
+                as="p"
+                size="moduleName"
+                className="truncate leading-5"
+              >
+                <NavTextColor color="navbarText">{headerTitle}</NavTextColor>
+              </NavTextSize>
+              {headerSubtitle ? (
+                <NavTextSize
+                  as="p"
+                  size="monthText"
+                  className="mt-0.5 truncate hidden sm:block"
+                >
+                  <NavTextColor color="monthText">{headerSubtitle}</NavTextColor>
+                </NavTextSize>
+              ) : null}
+            </div>
+            {onHeaderSearch ? (
+              <MainSearchInput
+                value={headerSearch}
+                onChange={(event) => {
+                  const value = event.target.value;
+                  setHeaderSearch(value);
+                  onHeaderSearch(value);
+                }}
+                placeholder={headerSearchPlaceholder}
+                iconPosition="right"
+                containerClassName="w-[150px] sm:w-[170px] xl:w-[210px] shrink-0 ml-auto"
+              />
+            ) : null}
+          </>
+        ) : (
+          <>
+            <InactiveIcon size={20} className="text-[#71717a] shrink-0" />
+            <div className="flex items-center gap-1.5 min-w-0">
+              <NavBreadcrumb items={breadcrumbItems} />
+            </div>
+          </>
+        )}
       </div>
 
       <div className="flex items-center gap-2 xl:gap-2.5 shrink-0">
